@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,36 +17,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIPROPERTYSUBEDITOR_H
-#define KEXIPROPERTYSUBEDITOR_H
+#ifndef PROPERTYBUFFER_H
+#define PROPERTYBUFFER_H
 
-#include <qwidget.h>
+#include <qobject.h>
+#include "kexiproperty.h"
 
-class KexiProperty;
+//class PropertyBufferItem;
 
-class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
+typedef QMap<QString, KexiProperty> PropertyBuffer;
+
+class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public PropertyBuffer
 {
 	Q_OBJECT
 
 	public:
-		KexiPropertySubEditor(QWidget *parent, KexiProperty *property, const char *name=0);
-		~KexiPropertySubEditor();
+		KexiPropertyBuffer(QObject *parent, const char *name=0);
+		~KexiPropertyBuffer();
+		
+		void add(KexiProperty &property);
 
-		virtual bool		eventFilter(QObject* watched, QEvent* e);
-		virtual QVariant	getValue();
-
-		void			setWidget(QWidget *w);
+		void	changeProperty(const char *property, const QVariant &value);
 
 	signals:
-		void			accept(KexiPropertySubEditor *);
-		void			reject(KexiPropertySubEditor *);
-		void			changed(KexiPropertySubEditor *);
-
-	protected:
-		virtual void		resizeEvent(QResizeEvent *ev);
-
-	private:
-		QWidget			*m_childWidget;
+		void	propertyChanged(const char *property, const QVariant &value);
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,47 +18,42 @@
    Boston, MA 02111-1307, USA.
 */
 
-/*
-   this file contains all editor-classes using comboboxes
-*/
+#include <qstringlist.h>
+#include <kdebug.h>
+#include "kexiproperty.h"
 
-#ifndef PROPERTYEDITORLIST_H
-#define PROPERTYEDITORLIST_H
 
-#include "kexipropertysubeditor.h"
-
-class QComboBox;
-class QStringList;
-class KexiProperty;
-
-class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEditor
+KexiProperty::KexiProperty(const QString &name, QVariant value)
 {
-	Q_OBJECT
+	m_name = name;
+	m_value = value;
+	m_list = 0;
+}
 
-	public:
-		PropertyEditorList(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorList() {;}
-
-		virtual QVariant	getValue();
-		
-		void setList(QStringList l);
-
-	protected slots:
-		void valueChanged();
-
-	protected:
-		QComboBox		*m_combo;
-};
-
-class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public PropertyEditorList
+KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringList &list)
 {
-	Q_OBJECT
+	m_name = name;
+	m_value = value;
+	m_list = new QStringList(list);
+	kdDebug() << "creating stringlist property" << endl;
+}
 
-	public:
-		PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorBool() {;}
+/*KexiProperty::KexiProperty(const QString &name, QVariant value, QStringList *list)
+{
+	m_name = name;
+	m_value = value;
+	m_list = list;
+}*/
 
-		virtual QVariant	getValue();
-};
+QVariant::Type  KexiProperty::type()
+{
+	if(m_list)
+		return QVariant::StringList;
+	else
+		return m_value.type();
+}
 
-#endif
+KexiProperty::~KexiProperty()
+{
+	delete m_list;
+}
