@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,9 @@
 #define KEXIPROPERTYEDITORVIEW_H
 
 #include "kexiviewbase.h"
-#include "kexipropertyeditor.h"
+
+class KexiPropertyBuffer;
+class KexiPropertyEditor;
 
 /*! The container (acts as a dock window) for KexiPropertyEditor
 */
@@ -36,15 +38,18 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorView : public KexiViewBase
 
 		virtual QSize sizeHint() const;
 		virtual QSize minimumSizeHint() const;
-
-		KexiPropertyEditor *editor() const { return m_editor; }
+		KexiPropertyEditor *editor() const;
 
 	public slots:
 		virtual void setGeometry( const QRect &r );
-		virtual void resize ( int w, int h );
+		virtual void resize( int w, int h );
+
+	protected slots:
+		void slotBufferChanged(KexiPropertyBuffer* );
 
 	protected:
-		KexiPropertyEditor   *m_editor;
+		class Private;
+		Private *d;
 };
 
 #endif
