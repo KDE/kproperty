@@ -22,8 +22,4 @@
 
 #include "koproperty_export.h"
 
-//convenience defines
-#define kopropertydbg  kDebug(30007)
-#define kopropertywarn kWarning(30007)
-
 #endif

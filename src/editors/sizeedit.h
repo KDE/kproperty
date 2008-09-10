@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,34 +22,29 @@
 #ifndef KPROPERTY_SIZEEDIT_H
 #define KPROPERTY_SIZEEDIT_H
 
-#include "../widget.h"
-
-#include <QVariant>
-
-class QLabel;
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT SizeEdit : public Widget
+class KOPROPERTY_EXPORT SizeComposedProperty : public ComposedPropertyInterface
 {
-    Q_OBJECT
-
 public:
-    explicit SizeEdit(Property *property, QWidget *parent = 0);
-    virtual ~SizeEdit();
+    explicit SizeComposedProperty(Property *parent);
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual void setValue(Property *property, 
+        const QVariant &value, bool rememberOldValue);
 
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void childValueChanged(Property *child, 
+        const QVariant &value, bool rememberOldValue);
+};
 
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-
-private:
-    QLabel *m_edit;
-    QVariant m_value;
+class KOPROPERTY_EXPORT SizeDelegate : public LabelCreator, 
+                                       public ComposedPropertyCreator<SizeComposedProperty>
+{
+public:
+    SizeDelegate() {}
+    virtual QString displayText( const QVariant& value ) const;
 };
 
 }

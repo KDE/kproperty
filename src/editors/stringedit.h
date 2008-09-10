@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,32 +22,45 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
 
-class QLineEdit;
+#include <QtCore/QVariant>
+#include <KLineEdit>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT StringEdit : public Widget
+class KOPROPERTY_EXPORT StringEdit : public KLineEdit
 {
     Q_OBJECT
-
+    Q_PROPERTY(QString value READ value WRITE setValue USER true)
 public:
-    explicit StringEdit(Property *property, QWidget *parent = 0);
-    virtual ~StringEdit();
+    StringEdit(QWidget *parent = 0);
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    ~StringEdit();
 
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+    QString value() const;
 
-protected slots:
-    void slotValueChanged(const QString&);
+signals:
+    void commitData( QWidget * editor );
 
-protected:
-    QLineEdit *m_edit;
+public slots:
+    void setValue(const QString& value);
+
+private slots:
+    void slotTextChanged( const QString & text );
+
+private:
+    bool m_slotTextChangedEnabled;
+};
+
+class KOPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
+{
+public:
+    StringDelegate() {}
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 }

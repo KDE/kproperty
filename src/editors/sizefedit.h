@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,46 +19,32 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_PROPERTYWIDGETPROXY_H
-#define KPROPERTY_PROPERTYWIDGETPROXY_H
+#ifndef KPROPERTY_SIZEFEDIT_H
+#define KPROPERTY_SIZEFEDIT_H
 
-#include <QWidget>
-#include "koproperty_global.h"
-
-class QVariant;
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {
 
-class WidgetProxyPrivate;
-
-/*! \brief
-  \author Cedric Pasteur <cedric.pasteur@free.fr>
-   \author Alexander Dymo <cloudtemple@mskat.net>
-*/
-class KOPROPERTY_EXPORT WidgetProxy : public QWidget
+class KOPROPERTY_EXPORT SizeFComposedProperty : public ComposedPropertyInterface
 {
-    Q_OBJECT
-
 public:
-    explicit WidgetProxy(QWidget *parent, const char *name = 0);
-    WidgetProxy();
-    virtual ~WidgetProxy();
+    explicit SizeFComposedProperty(Property *parent);
 
-    void setPropertyType(int propertyType);
-    int propertyType() const;
+    virtual void setValue(Property *property, 
+        const QVariant &value, bool rememberOldValue);
 
-    QVariant value() const;
-    void setValue(const QVariant &value);
+    virtual void childValueChanged(Property *child, 
+        const QVariant &value, bool rememberOldValue);
+};
 
-    virtual bool setProperty(const char *name, const QVariant &value);
-    virtual QVariant property(const char *name) const;
-
-protected:
-    void setWidget();
-
-private:
-    WidgetProxyPrivate * const d;
+class KOPROPERTY_EXPORT SizeFDelegate : public LabelCreator, 
+                                       public ComposedPropertyCreator<SizeFComposedProperty>
+{
+public:
+    SizeFDelegate() {}
+    virtual QString displayText( const QVariant& value ) const;
 };
 
 }

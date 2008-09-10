@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,13 +22,10 @@
 #ifndef KPROPERTY_PROPERTY_H
 #define KPROPERTY_PROPERTY_H
 
-#include <QVariant>
-#include <QStringList>
-#include <QByteArray>
+#include <QtCore/QVariant>
+#include <QtCore/QStringList>
+#include <QtCore/QByteArray>
 #include "koproperty_global.h"
-
-template<class U> class Q3AsciiDict;
-template<class U> class Q3AsciiDictIterator;
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
@@ -39,23 +36,21 @@ template<class U> class Q3AsciiDictIterator;
     Every property has its own row displayed using EditorItem object, within Editor widget.
     Widget class provides editing feature for EditorItem objects if a user selects a given item.
 
- KoProperty framework also supports adding custom property types
- and custom property editor types using Custom Property and CustomPropertyFactory.
-  If you cannot store your value type in a QVariant, consider using composed properties
- (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue()
-  set to true.
+ KoProperty framework also supports adding composed and property types
+ and custom property editor types.
 
- Take a look at the test application, available in /koproperty/test to see how to use KoProperty.
+ Take a look at the test application, available in koproperty/test/ directory 
+ to see example uses of the framework.
 
- \author Cedric Pasteur <cedric.pasteur@free.fr>
- \author Alexander Dymo <cloudtemple@mskat.net>
- \author Jarosław Staniek <staniek@kde.org>
+ @author Cedric Pasteur <cedric.pasteur@free.fr>
+ @author Alexander Dymo <cloudtemple@mskat.net>
+ @author Jarosław Staniek <staniek@kde.org>
 */
 namespace KoProperty
 {
 
 class PropertyPrivate;
-class CustomProperty;
+class ComposedPropertyInterface;
 class Set;
 
 ///*! Helper function to create a value list from two string lists. */
@@ -68,42 +63,56 @@ should have a type number >= UserDefined .*/
 enum PropertyType {
     //standard supported QVariant types
     Auto = 0x00ffffff,
-    Invalid = QVariant::Invalid   /**<invalid property type*/,
-    Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
-    List = QVariant::List         /**<QList<QVariant>*/,
-    String = QVariant::String     /**<string*/,
-    StringList = QVariant::StringList  /**<string list*/,
-    Font = QVariant::Font         /**<font*/,
-    Pixmap = QVariant::Pixmap     /**<pixmap*/,
-    //! @todo implement QVariant::Brush
-    Rect = QVariant::Rect         /**<rectangle (x,y, width, height)*/,
-    Size = QVariant::Size         /**<size (width, height)*/,
-    Color = QVariant::Color       /**<color*/,
-    //! \todo implement QVariant::Palette
-    //! \todo implement QVariant::ColorGroup
-    //! \todo implement QVariant::IconSet
-    Point = QVariant::Point       /**<point (x,y)*/,
-    //! \todo implement QVariant::Image
-    Integer = QVariant::Int       /**<integer*/,
-    //! \todo implement QVariant::UInt
-    Boolean = QVariant::Bool      /**<boolean*/,
-    Double = QVariant::Double     /**<double*/,
-    CString = QVariant::CString   /** latin-1 string*/,
-    //! @todo implement QVariant::PointArray
-    //! @todo implement QVariant::Region
-    //! @todo implement QVariant::Bitmap
-    Cursor = QVariant::Cursor     /**<cursor*/,
-    SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
-    Date = QVariant::Date         /**<date*/,
-    Time = QVariant::Time         /**<time*/,
-    DateTime = QVariant::DateTime /**<date and time*/,
-    //! @todo implement QVariant::ByteArray
-    //! @todo implement QVariant::BitArray
-    //! @todo implement QVariant::KeySequence
+    Invalid = QVariant::Invalid,
+    BitArray = QVariant::BitArray,
+    Bitmap = QVariant::Bitmap,
+    Bool = QVariant::Bool,
+    Brush = QVariant::Brush,
+    ByteArray = QVariant::ByteArray,
+    Char = QVariant::Char,
+    Color = QVariant::Color,
+    Cursor = QVariant::Cursor,
+    Date = QVariant::Date,
+    DateTime = QVariant::DateTime,
+    Double = QVariant::Double,
+    Font = QVariant::Font,
+    Icon = QVariant::Icon,
+    Image = QVariant::Image,
+    Int = QVariant::Int,
+    KeySequence = QVariant::KeySequence,
+    Line = QVariant::Line,
+    LineF = QVariant::LineF,
+    List = QVariant::List,
+    Locale = QVariant::Locale,
+    LongLong = QVariant::LongLong,
+    Map = QVariant::Map,
+    Matrix = QVariant::Matrix,
+    Transform = QVariant::Transform,
+    Palette = QVariant::Palette,
+    Pen = QVariant::Pen,
+    Pixmap = QVariant::Pixmap,
+    Point = QVariant::Point,
+    PointF = QVariant::PointF,
+    Polygon = QVariant::Polygon,
+    Rect = QVariant::Rect,
+    RectF = QVariant::RectF,
+    RegExp = QVariant::RegExp,
+    Region = QVariant::Region,
+    Size = QVariant::Size,
+    SizeF = QVariant::SizeF,
+    SizePolicy = QVariant::SizePolicy,
+    String = QVariant::String,
+    StringList = QVariant::StringList,
+    TextFormat = QVariant::TextFormat,
+    TextLength = QVariant::TextLength,
+    Time = QVariant::Time,
+    UInt = QVariant::UInt,
+    ULongLong = QVariant::ULongLong,
+    Url = QVariant::Url,
 
     //predefined custom types
-    ValueFromList = 2000          /**<string value from a list*/,
-    Symbol = 2001                 /**<unicode symbol code*/,
+    ValueFromList = 1000          /**<string value from a list*/,
+    Symbol                        /**<unicode symbol code*/,
     FontName                      /**<font name, e.g. "times new roman"*/,
     FileURL                       /**<url of a file*/,
     PictureFileURL                /**<url of a pixmap*/,
@@ -111,7 +120,7 @@ enum PropertyType {
     LineStyle                     /**<line style*/,
 
     // Child property types
-    Size_Height = 3001,
+/*    Size_Height = 3001,
     Size_Width,
     Point_X,
     Point_Y,
@@ -119,10 +128,10 @@ enum PropertyType {
     Rect_Y,
     Rect_Width,
     Rect_Height,
-    SizePolicy_HorData,
-    SizePolicy_VerData,
-    SizePolicy_HorStretch,
-    SizePolicy_VerStretch,
+    SizePolicy_HorizontalPolicy,
+    SizePolicy_VerticalPolicy,
+    SizePolicy_HorizontalStretch,
+    SizePolicy_VerticalStretch,*/
 
     UserDefined = 4000            /**<plugin defined properties should start here*/
 };
@@ -131,15 +140,15 @@ enum PropertyType {
 
   It can hold a property of any type supported by QVariant. You can also create you own property
   types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
-  use \ref CustomProperty instead. \n
-  Each property stores old value to allow undo. It has a name (a QCString), a caption (i18n'ed name
+  use \ref ComposedPropertyInterface instead. \n
+  Each property stores old value to allow undo. It has a name (a QByteArray), a caption (i18n'ed name
   shown in Editor) and a description (also i18n'ed). \n
   It also supports setting arbitrary number of options (of type option=value).
   See Editor for a list of options, and their meaning.
 
   \code
   // To create a property
-  property = Property(name, value, caption, description); // name is a QCString,
+  property = Property(name, value, caption, description); // name is a QByteArray,
   // value is whatever type QVariant supports
 
   // To create a valueFromList property (matching strings with strings)
@@ -177,9 +186,6 @@ class KOPROPERTY_EXPORT Property
 public:
     //! A contant for null property
     QT_STATIC_CONST Property null;
-
-    typedef Q3AsciiDict<Property> Dict;
-    typedef Q3AsciiDictIterator<Property> DictIterator;
 
     /*! Data container for properties of list type. */
     class KOPROPERTY_EXPORT ListData
@@ -220,20 +226,20 @@ public:
      these with spaces. captionForDisplaying() is used to get original caption text usable
      (with newline, if any) for displaying within a property editor. */
     Property(const QByteArray &name, const QVariant &value = QVariant(),
-             const QString &caption = QString::null, const QString &description = QString::null,
+             const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, Property* parent = 0);
 
     /*! Constructs property of \ref ValueFromList type. */
     Property(const QByteArray &name, const QStringList &keys, const QStringList &strings,
              const QVariant &value = QVariant(),
-             const QString &caption = QString::null, const QString &description = QString::null,
+             const QString &caption = QString(), const QString &description = QString(),
              int type = ValueFromList, Property* parent = 0);
 
     /*! Constructs property of \ref ValueFromList type.
      This is overload of the above ctor added for convenience. */
     Property(const QByteArray &name, ListData* listData,
              const QVariant &value = QVariant(),
-             const QString &caption = QString::null, const QString &description = QString::null,
+             const QString &caption = QString(), const QString &description = QString(),
              int type = ValueFromList, Property* parent = 0);
 
     /*! Constructs a deep copy of \a prop property. */
@@ -278,8 +284,10 @@ public:
     /*! Gets the previous property value.*/
     QVariant oldValue() const;
 
+    void childValueChanged(Property *child, const QVariant &value, bool rememberOldValue);
+
     /*! Sets the value of the property.*/
-    void setValue(const QVariant &value, bool rememberOldValue = true, bool useCustomProperty = true);
+    void setValue(const QVariant &value, bool rememberOldValue = true, bool useComposedProperty = true);
 
     /*! Resets the value of the property to the old value.
      @see oldValue() */
@@ -315,19 +323,15 @@ public:
     /*! \return parent property for this property, or NULL if there is no parent property. */
     Property* parent() const;
 
-    /*! \return the custom property for this property.or NULL if there was
-    no custom property defined. */
-    CustomProperty* customProperty() const;
+    /*! \return the composed property for this property, or NULL if there was
+    no composed property defined. */
+    ComposedPropertyInterface* composedProperty() const;
 
-    /*! Sets custom property \a prop for this property.
-     @see CustomPropertyFactory */
-    void setCustomProperty(CustomProperty *prop);
+    /*! Sets composed property \a prop for this property. */
+    void setComposedProperty(ComposedPropertyInterface *prop);
 
     /*! \return true if this property is null. Null properties have empty names. */
     bool isNull() const;
-
-    /*! Equivalent to !isNull() */
-    operator bool () const;
 
     //! \return true if this property value is changed.
     bool isModified() const;
@@ -383,8 +387,9 @@ public:
     */
     void setOption(const char* name, const QVariant& val);
 
-    /*! \return a value for option \a name or null value if there is no such option set. */
-    QVariant option(const char* name) const;
+    /*! \return a value for option \a name or null value if there is no such option set. 
+     If there is no such value, @a defaultValue is returned. */
+    QVariant option(const char* name, const QVariant& defaultValue = QVariant()) const;
 
     /*! \return true if at least one option is defined for this property. */
     bool hasOptions() const;
@@ -398,11 +403,13 @@ public:
     /*! Compares two properties.*/
     bool operator ==(const Property &prop) const;
 
+#if 0
     /*! \return a key used for sorting.
-     Usually its set by Set::addProperty() and Property::addChild() t oa unique value,
+     Usually its set by Set::addProperty() and Property::addChild() to a unique value,
      so that this property can be sorted in a property editor in original order.
      \see EditorItem::compare() */
     int sortingKey() const;
+#endif
 
 protected:
     /*! Adds \a prop as a child of this property.
@@ -412,8 +419,10 @@ protected:
     /*! Adds \a set to this property. */
     void addSet(Set *set);
 
+#if 0
     /*! Sets a key used for sorting. */
     void setSortingKey(int key);
+#endif
 
     /*! \return a list of related properties for this property. */
     const QList<Property*>* related() const;
@@ -427,15 +436,23 @@ protected:
     void emitPropertyChanged();
 
     /*! Outputs debug string for this property. */
-    void debug();
+    void debug() const;
+
+    /*! For operator <<. */
+    const QMap<QByteArray, QVariant>& options() const;
 
     //! @internal
     PropertyPrivate * const d;
 
     friend class Set;
+    friend class SetPrivate;
     friend class Buffer;
-    friend class CustomProperty;
+    friend class ComposedPropertyInterface;
+    friend KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 };
+
+//! kDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
+KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 
 }
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,61 +21,51 @@
 
 #include "stringedit.h"
 
-#include <QLayout>
-#include <QLineEdit>
-#include <QVariant>
-#include <QHBoxLayout>
-
 using namespace KoProperty;
 
-StringEdit::StringEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+StringEdit::StringEdit(QWidget *parent)
+ : KLineEdit(parent)
+ , m_slotTextChangedEnabled(true)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
-
-    m_edit = new QLineEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-// m_edit->setMargin(1);
-    m_edit->setMinimumHeight(5);
-    setPlainWidgetStyle(m_edit);
-
-    l->addWidget(m_edit);
-    setFocusWidget(m_edit);
-
-    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
+    setFrame(false);
+    setContentsMargins(0,1,0,0);
+    setClearButtonShown(true);
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
 StringEdit::~StringEdit()
-{}
-
-QVariant
-StringEdit::value() const
 {
-    return m_edit->text();
 }
 
-void
-StringEdit::setValue(const QVariant &value, bool emitChange)
+QString StringEdit::value() const
 {
-    m_edit->blockSignals(true);
-    m_edit->setText(value.toString());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+    return text();
 }
 
-void
-StringEdit::slotValueChanged(const QString &)
+void StringEdit::setValue(const QString& value)
 {
-    emit valueChanged(this);
+    m_slotTextChangedEnabled = false;
+    setText(value);
+    m_slotTextChangedEnabled = true;
+/*    deselect();
+    end(false);*/
 }
 
-void
-StringEdit::setReadOnlyInternal(bool readOnly)
+void StringEdit::slotTextChanged( const QString & text )
 {
-    m_edit->setReadOnly(readOnly);
+    Q_UNUSED(text)
+    if (!m_slotTextChangedEnabled)
+        return;
+    emit commitData(this);
+}
+
+QWidget* StringDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    return new StringEdit(parent);
 }
 
 #include "stringedit.moc"

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,37 +22,23 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include "../widget.h"
-//Added by qt3to4:
-#include <QEvent>
+#include "koproperty/Factory.h"
 
-class FontEditRequester;
+#include <QtCore/QVariant>
+#include <KLineEdit>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT FontEdit : public Widget
+class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface, 
+                                       public ValuePainterInterface
 {
-    Q_OBJECT
-
 public:
-    explicit FontEdit(Property *property, QWidget *parent = 0);
-    virtual ~FontEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-    virtual bool eventFilter(QObject* watched, QEvent* e);
-
-protected slots:
-    void  slotValueChanged(const QFont &font);
-
-private:
-    FontEditRequester *m_edit;
+    FontDelegate() {}
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 }

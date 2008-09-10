@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,129 +18,155 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #include "combobox.h"
+#include "koproperty/EditorDataModel.h"
+#include "koproperty/EditorView.h"
+#include "koproperty/Property.h"
 
-#include <QLayout>
-#include <QMap>
-#include <QVariant>
-#include <QPainter>
-#include <QHBoxLayout>
-
-#include <kcombobox.h>
-#include <kdebug.h>
-
-#include "property.h"
+#include <KColorScheme>
+#include <KDebug>
 
 using namespace KoProperty;
 
-ComboBox::ComboBox(Property *property, QWidget *parent)
-        : Widget(property, parent)
-        , m_setValueEnabled(true)
+ComboBox::Options::Options()
+ : iconProvider(0)
+ , extraValueAllowed(false)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
-    m_edit = new KComboBox(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
+}
+
+ComboBox::Options::Options(const ComboBox::Options& other)
+{
+    *this = other;
+    if (other.iconProvider)
+        iconProvider = other.iconProvider->clone();
+}
+
+ComboBox::Options::~Options()
+{
+    delete iconProvider;
+}
+
+ComboBox::ComboBox(const Property::ListData& listData, const Options& options, QWidget *parent)
+        : KComboBox(parent)
+        , m_options(options)
+{
+//    QHBoxLayout *l = new QHBoxLayout(this);
+//    l->setMargin(0);
+//    l->setSpacing(0);
+//    m_edit = new KComboBox(this);
+//    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    m_edit->setMinimumHeight(5);
     //setPlainWidgetStyle(m_edit);
 
-    l->addWidget(m_edit);
-    m_extraValueAllowed = false;
+//    l->addWidget(m_edit);
 
-    if (property->option("extraValueAllowed").toBool()) {
-        m_extraValueAllowed = true;
-    }
+    setEditable( m_options.extraValueAllowed );
+    setInsertPolicy(QComboBox::NoInsert);
+//    m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
+    setAutoCompletion(true);
+    setContextMenuPolicy(Qt::NoContextMenu);
 
-    if (m_extraValueAllowed) {
-        m_edit->setEditable(true);
-    } else {
-        m_edit->setEditable(false);
-    }
-
-    m_edit->setInsertPolicy(QComboBox::NoInsert);
-    m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
-    m_edit->setAutoCompletion(true);
-    m_edit->setContextMenuPolicy(Qt::NoContextMenu);
-
-    if (this->property()->listData()) {
-        fillBox();
-    }
+//    if (listData)
+    setListData(listData);
+//    if (property->listData()) {
+  //      fillValues(property);
+    //}
 //not needed for combo setLeavesTheSpaceForRevertButton(true);
 
-    setFocusWidget(m_edit);
-    connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
+//    setFocusWidget(m_edit);
+    connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
+    
+    setFrame(false);
+/*    QList<QWidget*> children( findChildren<QWidget*>() );
+    foreach (QWidget* w, children) {
+        kDebug() << w->objectName() << w->metaObject()->className();
+        w->setStyleSheet(QString());
+    }*/
+    //QComboBoxPrivateContainer
+    
+    
+    //Set the stylesheet to a plain style
+    QString styleSheet;
+    KColorScheme cs(QPalette::Active);
+    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+
+    styleSheet = QString("QComboBox { \
+    border: 1px solid %1; \
+    border-radius: 0px; \
+    padding: 0px 18px; }").arg(focus.name());
+   
+    setStyleSheet(styleSheet);
 }
 
 ComboBox::~ComboBox()
 {
 }
 
-QVariant
-ComboBox::value() const
+bool ComboBox::listDataKeysAvailable() const
 {
-    if (!property()->listData()) {
-        kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
-        return QVariant();
+    if (m_listData.keys.isEmpty()) {
+        kWarning() << "property listData not available!";
+        return false;
     }
-    const int idx = m_edit->currentIndex();
-    kDebug(30007) << "**********" << idx;
-    if (idx < 0 || idx >= (int)property()->listData()->keys.count() || property()->listData()->names[idx] != m_edit->currentText().trimmed()) {
-        if (!m_extraValueAllowed || m_edit->currentText().isEmpty())
-            return QVariant();
-        return QVariant(m_edit->currentText().trimmed());//trimmed 4 safety
-    }
-    return QVariant(property()->listData()->keys[idx]);
-// if(property()->listData() && property()->listData()->contains(m_edit->currentText()))
-//  return (*(property()->valueList()))[m_edit->currentText()];
-// return QVariant();
+    return true;
 }
 
-void
-ComboBox::setValue(const QVariant &value, bool emitChange)
+QVariant ComboBox::value() const
 {
-    if (!property() || !property()->listData()) {
-        kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
-        return;
+    if (!listDataKeysAvailable())
+        return QVariant();
+
+    const int idx = currentIndex();
+    if (idx < 0 || idx >= (int)m_listData.keys.count() || m_listData.names[idx] != currentText().trimmed()) {
+        if (!m_options.extraValueAllowed || currentText().isEmpty())
+            return QVariant();
+        return QVariant(currentText().trimmed());//trimmed 4 safety
     }
+    return QVariant(m_listData.keys[idx]);
+}
+
+void ComboBox::setValue(const QVariant &value)
+{
+    if (!listDataKeysAvailable())
+        return;
+
     if (!m_setValueEnabled)
         return;
-    int idx = property()->listData()->keys.indexOf(value.toString());
-    kDebug(30007) << "**********" << idx << "" << value.toString();
-    if (idx >= 0 && idx < m_edit->count()) {
-        m_edit->setCurrentIndex(idx);
-    } else {
+    int idx = m_listData.keys.indexOf(value.toString());
+//    kDebug(30007) << "**********" << idx << "" << value.toString();
+    if (idx >= 0 && idx < count()) {
+        setCurrentIndex(idx);
+    }
+    else {
         if (idx < 0) {
-            if (m_extraValueAllowed) {
-                m_edit->setCurrentIndex(-1);
-                m_edit->setEditText(value.toString());
+            if (m_options.extraValueAllowed) {
+                setCurrentIndex(-1);
+                setEditText(value.toString());
             }
-            kopropertywarn << "ComboBox::setValue(): NO SUCH KEY '" << value.toString()
-            << "' (property '" << property()->name() << "')" << endl;
+            kWarning() << "NO SUCH KEY:" << value.toString()
+                << "property=" << objectName();
         } else {
             QStringList list;
-            for (int i = 0; i < m_edit->count(); i++)
-                list += m_edit->itemText(i);
-            kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx
-            << " count=" << m_edit->count() << " value='" << value.toString()
-            << "' (property '" << property()->name() << "')\nActual combobox contents: "
-            << list << endl;
+            for (int i = 0; i < count(); i++)
+                list += itemText(i);
+            kWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+                << "count=" << count() << "value=" << value.toString()
+                << "property=" << objectName() << "\nActual combobox contents"
+                << list;
         }
-        m_edit->setItemText(m_edit->currentIndex(), QString::null);
+        setItemText(currentIndex(), QString());
     }
 
     if (value.isNull())
         return;
 
-// m_edit->blockSignals(true);
-// m_edit->setCurrentText(keyForValue(value));
-// m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+//??    if (emitChange)
+//??        emit valueChanged(this);
 }
 
-void
-ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+/*
+void ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
     QString txt;
     if (property()->listData()) {
@@ -152,54 +179,74 @@ ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
         txt = m_edit->currentText();
     }
 
-    Widget::drawViewer(p, cg, r, txt); //keyForValue(value));
+//    Widget::drawViewer(p, cg, r, txt); //keyForValue(value));
 // p->eraseRect(r);
 // p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, keyForValue(value));
-}
+}*/
 
-void
-ComboBox::fillBox()
+void ComboBox::fillValues()
 {
-    m_edit->clear();
+    clear();
     //m_edit->clearContents();
 
-    if (!property())
+//    if (!m_property)
+//        return;
+    if (!listDataKeysAvailable())
         return;
-    if (!property()->listData()) {
-        kopropertywarn << "ComboBox::fillBox(): propery listData not available!" << endl;
-        return;
-    }
 
-    m_edit->insertItems(0, property()->listData()->names);
-    KCompletion *comp = m_edit->completionObject();
-    comp->insertItems(property()->listData()->names);
+//    m_keys = m_property->listData()->keys;
+    int index = 0;
+    foreach( const QString& itemName, m_listData.names ) {
+        addItem(itemName);
+        if (m_options.iconProvider) {
+            QIcon icon = m_options.iconProvider->icon(index);
+            setItemIcon(index, icon);
+        }
+        index++;
+    }
+    KCompletion *comp = completionObject();
+    comp->insertItems(m_listData.names);
     comp->setCompletionMode(KGlobalSettings::CompletionShell);
 }
 
-void
-ComboBox::setProperty(Property *prop)
+/*
+void ComboBox::setProperty( const Property *property )
 {
-    const bool b = (property() == prop);
-    m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
-    Widget::setProperty(prop);
-    m_setValueEnabled = true;
-    if (!b)
-        fillBox();
-    if (prop)
-        setValue(prop->value(), false); //now the value can be set
+//    const bool b = (property() == prop);
+//    m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
+//    Widget::setProperty(prop);
+//    m_setValueEnabled = true;
+//    if (!b)
+//    m_property = property;
+    m_listData = *property->listData();
+    fillValues();
+//    if (prop)
+//        setValue(prop->value(), false); //now the value can be set
+}*/
+
+void ComboBox::setListData(const Property::ListData & listData)
+{
+    m_listData = listData;
+    fillValues();
 }
 
-void
-ComboBox::slotValueChanged(int)
+void ComboBox::slotValueChanged(int)
 {
-    emit valueChanged(this);
+//    emit valueChanged(this);
+    emit commitData( this );
 }
 
-void
-ComboBox::setReadOnlyInternal(bool readOnly)
+void ComboBox::paintEvent( QPaintEvent * event )
+{
+    KComboBox::paintEvent(event);
+    Factory::paintTopGridLine(this);
+}
+
+/*
+void ComboBox::setReadOnlyInternal(bool readOnly)
 {
     setVisibleFlag(!readOnly);
-}
+}*/
 
 
 /*QString
@@ -221,6 +268,50 @@ ComboBox::keyForValue(const QVariant &value)
   return QString();
 }*/
 
+//-----------------------
+
+ComboBoxDelegate::ComboBoxDelegate()
+{
+    options.removeBorders = false;
+}
+
+QString ComboBoxDelegate::displayTextForProperty( const Property* property ) const
+{
+    Property::ListData *listData = property->listData();
+    if (!listData)
+        return property->value().toString();
+    if (property->value().isNull())
+        return QString();
+    //kDebug() << "property->value()==" << property->value();
+    const int idx = listData->keys.indexOf( property->value() );
+    //kDebug() << "idx==" << idx;
+    if (idx == -1) {
+      if (!property->option("extraValueAllowed").toBool())
+        return QString();
+      else
+        return property->value().toString();
+    }
+    return property->listData()->names[ idx ];
+}
+
+QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *property = editorModel->propertyForItem(index);
+    ComboBox::Options options;
+    options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
+    ComboBox *cb = new ComboBox(*property->listData(), options, parent);
+    return cb;
+}
+
+/*void ComboBoxDelegate::paint( QPainter * painter, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+}*/
+
 
 #include "combobox.moc"
-

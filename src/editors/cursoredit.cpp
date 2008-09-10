@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,48 +20,82 @@
 */
 
 #include "cursoredit.h"
+#include "koproperty/Property.h"
+
+#include "xpm/blank_cursor.xpm"
+#include "xpm/arrow_cursor.xpm"
+#include "xpm/bdiag_cursor.xpm"
+#include "xpm/busy_cursor.xpm"
+#include "xpm/closedhand_cursor.xpm"
+#include "xpm/cross_cursor.xpm"
+#include "xpm/fdiag_cursor.xpm"
+#include "xpm/forbidden_cursor.xpm"
+#include "xpm/hand_cursor.xpm"
+#include "xpm/ibeam_cursor.xpm"
+#include "xpm/openhand_cursor.xpm"
+#include "xpm/sizeall_cursor.xpm"
+#include "xpm/sizehor_cursor.xpm"
+#include "xpm/sizever_cursor.xpm"
+#include "xpm/splith_cursor.xpm"
+#include "xpm/splitv_cursor.xpm"
+#include "xpm/uparrow_cursor.xpm"
+#include "xpm/wait_cursor.xpm"
+#include "xpm/whatsthis_cursor.xpm"
 
 #include <QMap>
 #include <QVariant>
 #include <QCursor>
+#include <QBitmap>
 
-#include <klocale.h>
-#include <kdebug.h>
-
-#include "property.h"
+#include <KLocale>
+#include <KDebug>
+#include <KGlobal>
+#include <KIconLoader>
 
 using namespace KoProperty;
 
-//QMap<QString, QVariant> *CursorEdit::m_spValues = 0;
-Property::ListData *m_cursorListData = 0;
-
-
-CursorEdit::CursorEdit(Property *property, QWidget *parent)
-        : ComboBox(property, parent)
+class CursorListData : public Property::ListData
 {
-    /*
-    if(!m_spValues) {
-      m_spValues = new QMap<QString, QVariant>();
-      (*m_spValues)[i18n("Arrow")] = Qt::ArrowCursor;
-      (*m_spValues)[i18n("Up Arrow")] = Qt::UpArrowCursor;
-      (*m_spValues)[i18n("Cross")] = Qt::CrossCursor;
-      (*m_spValues)[i18n("Waiting")] = Qt::WaitCursor;
-      (*m_spValues)[i18n("iBeam")] = Qt::IbeamCursor;
-      (*m_spValues)[i18n("Size Vertical")] = Qt::SizeVerCursor;
-      (*m_spValues)[i18n("Size Horizontal")] = Qt::SizeHorCursor;
-      (*m_spValues)[i18n("Size Slash")] = Qt::SizeBDiagCursor;
-      (*m_spValues)[i18n("Size Backslash")] = Qt::SizeFDiagCursor;
-      (*m_spValues)[i18n("Size All")] = Qt::SizeAllCursor;
-      (*m_spValues)[i18n("Blank")] = Qt::BlankCursor;
-      (*m_spValues)[i18n("Split Vertical")] = Qt::SplitVCursor;
-      (*m_spValues)[i18n("Split Horizontal")] = Qt::SplitHCursor;
-      (*m_spValues)[i18n("Pointing Hand")] = Qt::PointingHandCursor;
-      (*m_spValues)[i18n("Forbidden")] = Qt::ForbiddenCursor;
-      (*m_spValues)[i18n("What's this")] = Qt::WhatsThisCursor;
-    }*/
+public:
+    CursorListData() : Property::ListData(keysInternal(), stringsInternal())
+    {
+    }
 
-//! @todo NOT THREAD-SAFE
-    if (!m_cursorListData) {
+    Qt::CursorShape indexToShape(int index) const
+    {
+        if (index < 0 || index >= keys.count())
+            return Qt::ArrowCursor;
+        return (Qt::CursorShape)(keys[index].toInt());
+    }
+
+    int shapeToIndex(Qt::CursorShape _shape) const
+    {
+        int index = 0;
+        foreach (const QVariant& shape, keys) {
+            if (shape.toInt() == _shape)
+                return index;
+            index++;
+        }
+        return 0;
+    }
+
+    QPixmap pixmapForIndex(int index, const QPalette& pal, bool transparentBackground = false) const
+    {
+        if (index < 0 || index > 18)
+            index = 0;
+        QPixmap xpm(m_xpms[index]);
+        if (transparentBackground)
+            return xpm;
+        QPixmap px(xpm.size());
+        QColor bg( pal.color(QPalette::Base) ); // paint bg with to avoid invisible black-on-black painting
+        bg.setAlpha(127);
+        px.fill(bg);
+        QPainter p(&px);
+        p.drawPixmap(0, 0, xpm);
+        return px;
+    }
+private:
+    static QList<QVariant> keysInternal() {
         QList<QVariant> keys;
         keys
         << Qt::BlankCursor
@@ -78,61 +113,140 @@ CursorEdit::CursorEdit(Property *property, QWidget *parent)
         << Qt::SplitHCursor
         << Qt::PointingHandCursor
         << Qt::ForbiddenCursor
-        << Qt::WhatsThisCursor;
-        QStringList strings;
-        strings << i18nc("Mouse Cursor Shape", "No Cursor")
-        << i18nc("Mouse Cursor Shape", "Arrow")
-        << i18nc("Mouse Cursor Shape", "Up Arrow")
-        << i18nc("Mouse Cursor Shape", "Cross")
-        << i18nc("Mouse Cursor Shape", "Waiting")
-        << i18nc("Mouse Cursor Shape", "I")
-        << i18nc("Mouse Cursor Shape", "Size Vertical")
-        << i18nc("Mouse Cursor Shape", "Size Horizontal")
-        << i18nc("Mouse Cursor Shape", "Size Slash")
-        << i18nc("Mouse Cursor Shape", "Size Backslash")
-        << i18nc("Mouse Cursor Shape", "Size All")
-        << i18nc("Mouse Cursor Shape", "Split Vertical")
-        << i18nc("Mouse Cursor Shape", "Split Horizontal")
-        << i18nc("Mouse Cursor Shape", "Pointing Hand")
-        << i18nc("Mouse Cursor Shape", "Forbidden")
-        << i18nc("Mouse Cursor Shape", "What's This?");
-        m_cursorListData = new Property::ListData(keys, strings);
+        << Qt::WhatsThisCursor
+        << Qt::BusyCursor
+        << Qt::OpenHandCursor
+        << Qt::ClosedHandCursor;
+        return keys;
     }
 
-    if (property)
-        property->setListData(new Property::ListData(*m_cursorListData));
+    static QStringList stringsInternal() {
+        QStringList strings;
+        strings << i18nc("Mouse Cursor Shape", "No cursor") //0
+        << i18nc("Mouse Cursor Shape", "Arrow") //1
+        << i18nc("Mouse Cursor Shape", "Up arrow") //2
+        << i18nc("Mouse Cursor Shape", "Cross") //3
+        << i18nc("Mouse Cursor Shape", "Waiting") //4
+        << i18nc("Mouse Cursor Shape", "Text cursor") //5
+        << i18nc("Mouse Cursor Shape", "Size vertical") //6
+        << i18nc("Mouse Cursor Shape", "Size horizontal") //7
+        << i18nc("Mouse Cursor Shape", "Size slash") //8
+        << i18nc("Mouse Cursor Shape", "Size backslash") //9
+        << i18nc("Mouse Cursor Shape", "Size all") //10
+        << i18nc("Mouse Cursor Shape", "Split vertical") //11
+        << i18nc("Mouse Cursor Shape", "Split horizontal") //12
+        << i18nc("Mouse Cursor Shape", "Pointing hand") //13
+        << i18nc("Mouse Cursor Shape", "Forbidden") //14
+        << i18nc("Mouse Cursor Shape", "What's this?") //15
+        << i18nc("Mouse Cursor Shape", "Busy") //16
+        << i18nc("Mouse Cursor Shape", "Open hand") //17
+        << i18nc("Mouse Cursor Shape", "Closed hand"); //18
+        return strings;
+    }
+    static const char ** m_xpms[];
+};
+
+const char ** CursorListData::m_xpms[] =
+{
+    blank_cursor_xpm,
+    arrow_cursor_xpm,
+    uparrow_cursor_xpm,
+    cross_cursor_xpm,
+    wait_cursor_xpm,
+    ibeam_cursor_xpm,
+    sizever_cursor_xpm,
+    sizehor_cursor_xpm,
+    bdiag_cursor_xpm,
+    fdiag_cursor_xpm,
+    sizeall_cursor_xpm,
+    splitv_cursor_xpm,
+    splith_cursor_xpm,
+    hand_cursor_xpm,
+    forbidden_cursor_xpm,
+    whatsthis_cursor_xpm,
+    busy_cursor_xpm,
+    openhand_cursor_xpm,
+    closedhand_cursor_xpm
+};
+
+K_GLOBAL_STATIC(CursorListData, s_cursorListData)
+
+//----------------------
+class CursorIconProvider : public ComboBox::Options::IconProviderInterface
+{
+public:
+    CursorIconProvider(QWidget* parent) : m_parent(parent) {}
+    virtual QIcon icon(int index) const
+    {
+          return s_cursorListData->pixmapForIndex(index, m_parent->palette());
+    }
+    virtual IconProviderInterface* clone() const
+    {
+        return new CursorIconProvider(m_parent);
+    }
+    QPointer<QWidget> m_parent;
+};
+
+//----------------------
+
+ComboBox::Options initComboBoxOptions( QWidget* parent )
+{
+    ComboBox::Options options;
+    options.iconProvider = new CursorIconProvider(parent);
+    return options;
+}
+
+CursorEdit::CursorEdit(QWidget *parent)
+        : ComboBox(*s_cursorListData, initComboBoxOptions( this ), parent)
+{
 }
 
 CursorEdit::~CursorEdit()
 {
-    delete m_cursorListData;
-    m_cursorListData = 0;
 }
 
-QVariant
-CursorEdit::value() const
+QCursor CursorEdit::cursorValue() const
 {
-    return QCursor((Qt::CursorShape)ComboBox::value().toInt());
+    return QCursor( (Qt::CursorShape)ComboBox::value().toInt() );
 }
 
-void
-CursorEdit::setValue(const QVariant &value, bool emitChange)
+void CursorEdit::setCursorValue(const QCursor &value)
 {
-    ComboBox::setValue(value.value<QCursor>().shape(), emitChange);
+    ComboBox::setValue( value.shape() );
 }
 
-void
-CursorEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+//---------------
+
+CursorDelegate::CursorDelegate()
 {
-    ComboBox::drawViewer(p, cg, r, value.value<QCursor>().shape());
+    options.removeBorders = false;
 }
 
-void
-CursorEdit::setProperty(Property *prop)
+QWidget * CursorDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    if (prop && prop != property())
-        prop->setListData(new Property::ListData(*m_cursorListData));
-    ComboBox::setProperty(prop);
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    return new CursorEdit(parent);
+}
+
+void CursorDelegate::paint( QPainter * painter, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    painter->save();
+    int comboIndex = s_cursorListData->shapeToIndex( index.data(Qt::EditRole).value<QCursor>().shape() );
+    int pmSize = (option.rect.height() >= 32) ? 32 : 16;
+    const QPixmap pm( s_cursorListData->pixmapForIndex(comboIndex, option.palette)
+        .scaled(pmSize, pmSize, Qt::KeepAspectRatio, Qt::SmoothTransformation) );
+    QPoint pmPoint(option.rect.topLeft());
+    pmPoint.setX(pmPoint.x() + 2);
+    painter->drawPixmap(pmPoint, pm);
+    QRect r(option.rect);
+    r.setLeft(2 + r.left() + 1 + pm.width());
+    painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, 
+        s_cursorListData->names[ comboIndex ] );
+    painter->restore();
 }
 
 #include "cursoredit.moc"

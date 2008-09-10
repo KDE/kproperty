@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,90 +18,77 @@
 */
 
 #include "coloredit.h"
+#include "koproperty/Utils_p.h"
 
 #include <QVariant>
 #include <QLayout>
 #include <QColor>
 #include <QPainter>
 
-#include <kcolorcombo.h>
-#include <kcolorscheme.h>
+#include <KGlobal>
+#include <KColorCombo>
+#include <KColorCollection>
 
 using namespace KoProperty;
 
-ColorButton::ColorButton(Property *property, QWidget *parent)
-        : Widget(property, parent)
+K_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, ("Oxygen.colors"))
+
+ColorCombo::ColorCombo(QWidget *parent)
+        : KColorCombo(parent)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setSpacing(0);
-    l->setMargin(0);
-    m_edit = new KColorCombo(this);
-    m_edit->setFocusPolicy(Qt::NoFocus);
-    connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
+    connect(this, SIGNAL(activated(QColor)), this, SLOT(slotValueChanged(QColor)));
 
-    //TODO when a stylesheet is set and you click on 'custom' it segfaults!!
-    //KColorScheme cs(QPalette::Active);
-    //QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-    //m_edit->setStyleSheet(QString("QComboBox { \
-    //  border: 1px solid %1; \
-    //  border-radius: 0px; \
-    //  padding: 0 15px; }").arg(focus.name()));
-
-    l->addWidget(m_edit);
-    setFocusWidget(m_edit);
+    QList< QColor > colors;
+    const int oxygenColorsCount = g_oxygenColors->count();
+    for (int i = 0; i < oxygenColorsCount; i++) {
+        colors += g_oxygenColors->color(i);
+    }
+    setColors(colors);
 }
 
-ColorButton::~ColorButton()
-{}
-
-QVariant
-ColorButton::value() const
+ColorCombo::~ColorCombo()
 {
-    return m_edit->color();
 }
 
-void
-ColorButton::setValue(const QVariant &value, bool emitChange)
+QVariant ColorCombo::value() const
 {
-    m_edit->blockSignals(true);
-    m_edit->setColor(value.value<QColor>());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+    return color();
 }
 
-void
-ColorButton::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &value)
+void ColorCombo::setValue(const QVariant &value)
 {
-    p->eraseRect(r);
-
-    p->setBrush(value.value<QColor>());
-    p->setPen(Qt::SolidLine);
-    QRect r2(r);
-    r2.setTopLeft(r.topLeft() + QPoint(5, 5));
-    r2.setBottomRight(r.bottomRight() - QPoint(5, 5));
-    p->drawRect(r2);
+    setColor(value.value<QColor>());
 }
 
-void
-ColorButton::slotValueChanged(int)
+void ColorCombo::slotValueChanged(const QColor&)
 {
-    emit valueChanged(this);
+    emit commitData(this);
 }
 
-
-bool
-ColorButton::eventFilter(QObject* watched, QEvent* e)
+QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    return Widget::eventFilter(watched, e);
+    Q_UNUSED(type)
+    Q_UNUSED(option)
+    Q_UNUSED(index)
+    return new ColorCombo(parent);
 }
 
-void
-ColorButton::setReadOnlyInternal(bool readOnly)
+void ColorComboDelegate::paint( QPainter * painter, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    setVisibleFlag(!readOnly);
+    painter->save();
+    const QBrush b(index.data(Qt::EditRole).value<QColor>());
+    painter->setBrush(b);
+    painter->setPen(QPen(Qt::NoPen));
+    painter->drawRect(option.rect);
+    painter->setBrush(KoProperty::contrastColor(b.color()));
+    painter->setPen(KoProperty::contrastColor(b.color()));
+    QFont f(option.font);
+    f.setFamily("courier");
+    painter->setFont(f);
+    painter->drawText(option.rect, Qt::AlignCenter, b.color().name());
+    painter->restore();
 }
 
 #include "coloredit.moc"

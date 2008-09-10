@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,34 +20,29 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "../widget.h"
-
-#include <QVariant>
-
-class QLabel;
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT RectEdit : public Widget
+class KOPROPERTY_EXPORT RectComposedProperty : public ComposedPropertyInterface
 {
-    Q_OBJECT
-
 public:
-    explicit RectEdit(Property *property, QWidget *parent = 0);
-    virtual ~RectEdit();
+    explicit RectComposedProperty(Property *parent);
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual void setValue(Property *property, 
+        const QVariant &value, bool rememberOldValue);
 
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void childValueChanged(Property *child, 
+        const QVariant &value, bool rememberOldValue);
+};
 
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-
-private:
-    QLabel   *m_edit;
-    QVariant   m_value;
+class KOPROPERTY_EXPORT RectDelegate : public LabelCreator,
+                                       public ComposedPropertyCreator<RectComposedProperty>
+{
+public:
+    RectDelegate() {}
+    virtual QString displayText( const QVariant& value ) const;
 };
 
 }

@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,15 +19,17 @@
 */
 
 #include "booledit.h"
-#include "property.h"
+#include "koproperty/Property.h"
+#include "koproperty/EditorDataModel.h"
 
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kcombobox.h>
-#include <kdebug.h>
-#include <kcolorscheme.h>
+#include <KIconLoader>
+#include <KLocale>
+#include <KComboBox>
+#include <KDebug>
+#include <KColorScheme>
+#include <KGlobal>
 
-#include <QToolButton>
+#include <QApplication>
 #include <QPainter>
 #include <QVariant>
 #include <QLayout>
@@ -36,182 +37,346 @@
 
 using namespace KoProperty;
 
-BoolEdit::BoolEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
-        , m_yesIcon(SmallIcon("dialog-ok"))
-        , m_noIcon(SmallIcon("button_no"))
+/*! @return name for state with index @a index,
+ where 0 means true, 1 means false and 2 means none */
+static QString stateName(int index, const Property* prop)
 {
-    m_toggle = new QToolButton(this);
-    m_toggle->setFocusPolicy(Qt::WheelFocus);
-    m_toggle->setCheckable(true);
-    m_toggle->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    m_toggle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    //we're not using layout to because of problems with button size
-    m_toggle->move(0, 0);
-    m_toggle->resize(width(), height());
-    KColorScheme cs(QPalette::Active);
-    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-    m_toggle->setStyleSheet(QString("QToolButton { \
-        border: 1px solid %1; \
-        border-radius: 0px; \
-        padding: 0 0px; }").arg(focus.name()));
+    QString stateNameString;
+    if (index == 0) {
+        stateNameString = prop->option("yesName", QString()).toString();
+        if (stateNameString.isEmpty())
+            return i18n("Yes");
+    }
+    else if (index == 1) {
+        stateNameString = prop->option("noName", QString()).toString();
+        if (stateNameString.isEmpty())
+            return i18n("No");
+    }
+    else {
+        stateNameString = prop->option("3rdStateName", QString()).toString();
+        if (stateNameString.isEmpty())
+            return i18n("None");
+    }
+    return stateNameString;
+}
 
-    setFocusWidget(m_toggle);
-    connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
+//! Sets up @a data list data with keys and names for true, false, none values, respectively
+static void setupThreeStateListData(Property::ListData &data, 
+    const Property* prop)
+{
+    data.keys << true << false << QVariant();
+    data.names << stateName(0, prop) << stateName(1, prop) << stateName(2, prop);
+}
+
+static int valueToIndex(const QVariant& value)
+{
+    if (value.isNull() || !value.isValid())
+        return 2;
+    else
+        return value.toBool() ? 0 : 1;
+}
+
+//-------------------------
+
+class BoolEditGlobal
+{
+public:
+    BoolEditGlobal()
+        : yesIcon(SmallIcon("dialog-ok"))
+        , noIcon(SmallIcon("button_no"))
+        , noneIcon(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small))
+    {
+        noneIcon.fill(Qt::transparent);
+    }
+    QPixmap yesIcon;
+    QPixmap noIcon;
+    QPixmap noneIcon;
+};
+
+K_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
+
+BoolEdit::BoolEdit(const Property *prop, QWidget *parent)
+    : QToolButton(parent)
+    , m_yesText( stateName(0, prop) )
+    , m_noText( stateName(1, prop) )
+{
+    setFocusPolicy(Qt::WheelFocus);
+    setCheckable(true);
+//    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    setAutoFillBackground(true);
+//    setFlat(false);
+//    setStyle(qApp->style());
+//    setPalette(qApp->palette());
+//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //we're not using layout to because of problems with button size
+//    m_toggle->move(0, 0);
+//    m_toggle->resize(width(), height());
+/*    KColorScheme cs(QPalette::Active);
+    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+    setStyleSheet(
+        QString::fromLatin1("QToolButton { "
+        "border: 1px solid %1; "
+        "border-radius: 0px; "
+        "padding: 0 0px; }").arg(focus.name())); */
+
+//    setFocusWidget(m_toggle);
+//    setStyleSheet(
+//        QLatin1String(" QPushButton { border: none; padding:0;background-color: red; }") );
+    
+    connect(this, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
 }
 
 BoolEdit::~BoolEdit()
 {
 }
 
-QVariant
-BoolEdit::value() const
+bool BoolEdit::value() const
 {
-    return QVariant(m_toggle->isChecked());
+    return isChecked();
 }
 
-void
-BoolEdit::setValue(const QVariant &value, bool emitChange)
+void BoolEdit::setValue(bool value)
 {
-    m_toggle->blockSignals(true);
-    m_toggle->setChecked(value.toBool());
-    setState(value.toBool());
-    m_toggle->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+//    m_toggle->blockSignals(true);
+    setChecked(value);
+//    setState(value);
+//    m_toggle->blockSignals(false);
+//    if (emitChange)
+//        emit valueChanged(this);
 }
 
 void
 BoolEdit::slotValueChanged(bool state)
 {
-    setState(state);
-    emit valueChanged(this);
+    Q_UNUSED(state);
+    emit commitData(this);
+//    setState(state);
+////    emit valueChanged(this);
 }
 
-static void drawViewerInternal(QPainter *p, const QRect &r, const QVariant &value,
-                               const QPixmap& yesIcon, const QPixmap& noIcon, const QString& nullText)
+void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
+                    const QString& text, bool threeState)
 {
-    p->eraseRect(r);
+//    p->eraseRect(r);
     QRect r2(r);
-    r2.moveLeft(KIconLoader::SizeSmall + 6);
+    r2.setLeft(r2.left() + KIconLoader::SizeSmall + 6);
+//    r2.setTop(r2.top() + 1);
 
-    if (value.isNull() && !nullText.isEmpty()) {
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, nullText);
-    } else if (value.toBool()) {
-        p->drawPixmap(3, (r.height() - 1 - KIconLoader::SizeSmall) / 2, yesIcon);
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
+    if (!threeState && value.isNull()) {
+        // 2 states but null value
+        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, text);
     } else {
-        p->drawPixmap(3, (r.height() - 1 - KIconLoader::SizeSmall) / 2, noIcon);
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
+        QPixmap icon;
+//        QString text;
+
+        if (threeState && valueToIndex(value) == 2) {
+            // draw icon for the 3rd state for Three-State editor
+            icon = g_boolEdit->noneIcon;
+        }
+        else {
+            // draw true or false icon regardless of the 2 or 3 state version
+            icon = value.toBool() ? g_boolEdit->yesIcon : g_boolEdit->noIcon;
+        }
+/*        
+        if (threeState 
+            if (value.isNull() || !value.isValid())
+            //draw text state for Three-State editor
+            if (value.isNull() || !value.isValid())
+                text = overrideText;*/
+//        kDebug() << r2;
+        p->drawPixmap(
+            r.left() + 3,
+            r2.top() + (r2.height() - KIconLoader::SizeSmall) / 2,
+            icon);
+        p->drawText(
+            r2,
+            Qt::AlignVCenter | Qt::AlignLeft,
+            text);
     }
 }
 
-void
+void BoolEdit::paintEvent( QPaintEvent * event )
+{
+    QToolButton::paintEvent(event);
+    QPainter p(this);
+    const QVariant v( value() );
+    BoolEdit::draw(&p, rect(), v, 
+        v.toBool() ? m_yesText : m_noText, false /*2state*/);
+}
+
+/*void
 BoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-    Q_UNUSED(cg);
     drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, "");
-}
+}*/
 
-void
-BoolEdit::setState(bool state)
+/*
+void BoolEdit::setState(bool state)
 {
     if (state) {
-        m_toggle->setIcon(QIcon(SmallIcon("dialog-ok")));
-        m_toggle->setText(i18n("Yes"));
+        setIcon(KIcon("dialog-ok")); //QIcon(g_boolEdit->yesIcon));
+        setText(i18n("Yes"));
     } else {
-        m_toggle->setIcon(QIcon(SmallIcon("button_no")));
-        m_toggle->setText(i18n("No"));
+        setIcon(KIcon("button_no")); //QIcon(g_boolEdit->noIcon));
+        setText(i18n("No"));
     }
 }
-
-void
-BoolEdit::resizeEvent(QResizeEvent *ev)
+*/
+/*void BoolEdit::resizeEvent(QResizeEvent *ev)
 {
     m_toggle->resize(ev->size());
-}
+}*/
 
-bool
-BoolEdit::eventFilter(QObject* watched, QEvent* e)
+bool BoolEdit::eventFilter(QObject* watched, QEvent* e)
 {
     if (e->type() == QEvent::KeyPress) {
         QKeyEvent* ev = static_cast<QKeyEvent*>(e);
         const int k = ev->key();
         if (k == Qt::Key_Space || k == Qt::Key_Enter || k == Qt::Key_Return) {
-            if (m_toggle)
-                m_toggle->toggle();
+//            if (m_toggle)
+                toggle();
             return true;
         }
     }
-    return Widget::eventFilter(watched, e);
+    return QToolButton::eventFilter(watched, e);
 }
 
-void
+/*void
 BoolEdit::setReadOnlyInternal(bool readOnly)
 {
     setVisibleFlag(!readOnly);
-}
+}*/
 
 //--------------------------------------------------
 
-ThreeStateBoolEdit::ThreeStateBoolEdit(Property *property, QWidget *parent)
-        : ComboBox(property, parent)
-        , m_yesIcon(SmallIcon("dialog-ok"))
-        , m_noIcon(SmallIcon("button_no"))
+class ThreeStateBoolIconProvider : public ComboBox::Options::IconProviderInterface
 {
-    m_edit->addItem(m_yesIcon, i18n("Yes"));
-    m_edit->addItem(m_noIcon, i18n("No"));
-    QVariant thirdState = property ? property->option("3rdState") : QVariant();
-    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
-    nullIcon.fill(Qt::transparent);
-    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
+public:
+    ThreeStateBoolIconProvider() {}
+    virtual QIcon icon(int index) const
+    {
+          if (index == 0)
+              return g_boolEdit->yesIcon;
+          else if (index == 1)
+              return g_boolEdit->noIcon;
+          return g_boolEdit->noneIcon;
+    }
+    virtual IconProviderInterface* clone() const
+    {
+        return new ThreeStateBoolIconProvider();
+    }
+};
+
+ComboBox::Options initThreeStateBoolOptions()
+{
+    ComboBox::Options options;
+    options.iconProvider = new ThreeStateBoolIconProvider();
+    return options;
+}
+
+ThreeStateBoolEdit::ThreeStateBoolEdit(
+    const Property::ListData& listData, 
+    QWidget *parent)
+        : ComboBox(listData, initThreeStateBoolOptions(), parent)
+{
+//    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
+//    nullIcon.fill(Qt::transparent);
+//    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
+    setCurrentIndex(2);
 }
 
 ThreeStateBoolEdit::~ThreeStateBoolEdit()
 {
 }
 
-QVariant
-ThreeStateBoolEdit::value() const
+QVariant ThreeStateBoolEdit::value() const
 {
     // list items: true, false, NULL
-    const int idx = m_edit->currentIndex();
+    const int idx = currentIndex();
     if (idx == 0)
-        return QVariant(true);
+        return true;
     else
-        return idx == 1 ? QVariant(false) : QVariant();
+        return idx == 1 ? false : QVariant();
 }
 
-void
-ThreeStateBoolEdit::setProperty(Property *prop)
+/*void ThreeStateBoolEdit::setProperty(Property *prop)
 {
     m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
     Widget::setProperty(prop);
     m_setValueEnabled = true;
     if (prop)
         setValue(prop->value(), false); //now the value can be set
+}*/
+
+void ThreeStateBoolEdit::setValue(const QVariant &value)
+{
+//    if (!m_setValueEnabled)
+//        return;
+
+    setCurrentIndex( valueToIndex(value) );
+
+//    if (emitChange)
+//        emit valueChanged(this);
 }
 
-void
-ThreeStateBoolEdit::setValue(const QVariant &value, bool emitChange)
-{
-    if (!m_setValueEnabled)
-        return;
+//---------------
 
-    if (value.isNull())
-        m_edit->setCurrentIndex(2);
+BoolDelegate::BoolDelegate()
+{
+    options.removeBorders = false;
+}
+
+QWidget * BoolDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
+
+    // boolean editors can optionally accept 3rd state:
+    if (prop->option("3State", false).toBool()) {
+        Property::ListData threeStateListData;
+        setupThreeStateListData(threeStateListData, prop);
+        return new ThreeStateBoolEdit(threeStateListData, parent);
+    }
+    else {
+        return new BoolEdit(prop, parent);
+    }
+}
+
+void BoolDelegate::paint( QPainter * painter, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    painter->save();
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
+    const QVariant value( index.data(Qt::EditRole) );
+    QRect rect(option.rect);
+    if (prop->option("3State", false).toBool()) {
+        int listIndex = valueToIndex(value);
+//        const QString stateNameString( stateName(listIndex, prop) );
+/*        const int iconSize = IconSize(KIconLoader::Small);
+        if (listIndex < 0 || listIndex > 2)
+            listIndex = 2;
+        QRect r( option.rect );
+        r.setLeft(1+r.left()+2+iconSize);
+        painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, 
+            threeStateListData.names[listIndex] ); */
+        BoolEdit::draw(painter, rect, value, stateName(listIndex, prop), true/*3state*/);
+    }
     else
-        m_edit->setCurrentIndex(value.toBool() ? 0 : 1);
-
-    if (emitChange)
-        emit valueChanged(this);
-}
-
-void
-ThreeStateBoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    Q_UNUSED(cg);
-    drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, m_edit->itemText(2));
+    {
+        if (value.isNull() && !prop->option("nullName", QString()).toString().isEmpty()) {
+            BoolEdit::draw(painter, rect, value, 
+                prop->option("nullName", QString()).toString(), false/*2state*/);
+        }
+        else {
+            BoolEdit::draw(painter, rect, value, stateName(value.toBool() ? 0 : 1, prop),
+                false/*2state*/);
+        }
+    }
+    painter->restore();
 }
 
 #include "booledit.moc"

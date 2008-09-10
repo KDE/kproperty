@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +22,9 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include "koproperty_global.h"
-#include <QObject>
-#include <q3asciidict.h>
-#include <QByteArray>
-#include <QStringList>
-#include <QMap>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
+#include "Property.h"
 
 namespace KoProperty
 {
@@ -35,7 +32,7 @@ namespace KoProperty
 class Property;
 class SetPrivate;
 
-/*! \brief Lists holding properties in groups
+/*! \brief Set of properties
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
@@ -46,30 +43,82 @@ class KOPROPERTY_EXPORT Set : public QObject
     Q_OBJECT
 
 public:
-    /*! \brief A class to iterate over a Set.
-    It behaves like a QDictIterator. To use it:
-    \code  for(Set::Iterator it(set); it.current(); ++it) { .... }
-    \endcode
-      \author Cedric Pasteur <cedric.pasteur@free.fr>
-      \author Alexander Dymo <cloudtemple@mskat.net> */
+    //! Ordering options for properties
+    /*! @see Set::Iterator::setOrder() */
+    enum Order {
+        InsertionOrder,    //!< insertion order
+        AlphabeticalOrder, //!< alphabetical order (case-insensitively by captions)
+        AlphabeticalByName //!< alphabetical order (case-insensitively by name)
+    };
+
+    //! An interface for functor selecting properties.
+    /*! Used in Iterator. */
+    class KOPROPERTY_EXPORT PropertySelector
+    {
+    public:
+        PropertySelector();
+        virtual ~PropertySelector();
+        
+        //! An operator implementing the functor.
+        virtual bool operator()(const Property& prop) const = 0;
+
+        //! Creates a deep copy of the selector. 
+        //! Required for proper usage of the selector.
+        virtual PropertySelector* clone() const = 0;
+    };
+
+    //! A class to iterate over a Set.
+    /*! It behaves like a QList::ConstIterator.
+     Usage:
+     @code  for (Set::Iterator it(set); it.current(); ++it) { .... }
+     @endcode
+     Usage with selector:
+     @code  for (Set::Iterator it(set, MySelector()); it.current(); ++it) { .... }
+     @endcode */
     class KOPROPERTY_EXPORT Iterator
     {
     public:
+        //! Creates iterator for @a set set of properties.
+        /*!             The properties are sorted by insertion order by default.
+            Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
         Iterator(const Set &set);
+
+        //! Creates iterator for @a set set of properties.
+        /*! @a selector functor is used to iterate only 
+            over specified properties. 
+            The properties are sorted by insertion order by default.
+            Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
+        Iterator(const Set &set, const PropertySelector& selector);
+
         ~Iterator();
 
+        //! Sets order for properties. Restarts the iterator.
+        void setOrder(Set::Order order);
+
+        //! @return order for properties.
+        Set::Order order() const { return m_order; }
+
         void operator ++();
-        Property*  operator *() const;
+        Property* operator *() const {
+            return current();
+        }
+        Property* current() const {
+            return m_iterator==m_end ? 0 : *m_iterator;
+        }
 
-        QByteArray  currentKey() const;
-        Property*  current() const;
-
-    private:
-        Q3AsciiDictIterator<Property> *iterator;
         friend class Set;
+    private:
+        const Set *m_set;
+        QList<Property*>::ConstIterator m_iterator;
+        QList<Property*>::ConstIterator m_end;
+        PropertySelector *m_selector;
+        Set::Order m_order;
+        QList<Property*> m_sorted; //!< for sorted order
     };
 
-    explicit Set(QObject *parent = 0, const QString &typeName = QString::null);
+    //! Constructs a new Set object.
+    //! @see typeName()
+    explicit Set(QObject *parent = 0, const QString &typeName = QString());
 
     /*! Constructs a deep copy of \a set.
      The new object will not have a QObject parent even if \a set has such parent. */
@@ -89,13 +138,24 @@ public:
     void removeProperty(const QByteArray &name);
 
     /*! Removes all properties from the property set and destroys them. */
-    virtual void clear();
+    void clear();
 
-    /*! \return the number of items in the set. */
+    /*! @return the number of top-level properties in the set. */
     uint count() const;
 
-    /*! \return true if the set is empty, i.e. count() == 0; otherwise returns false. */
+    /*! @return the number of top-level properties in the set 
+                matching criteria defined by @a selector. */
+    uint count(const PropertySelector& selector) const;
+
+    /*! @return true if the set is empty, i.e. count() is 0; otherwise returns false. */
     bool isEmpty() const;
+
+    /*! @return true if the set is contains visible properties. */
+    bool hasVisibleProperties() const;
+
+    /*! @return true if the set is contains properties
+                matching criteria defined by @a selector. */
+    bool hasProperties(const PropertySelector& selector) const;
 
     /*! \return true if the set is read-only.
      In read-only property set,
@@ -130,15 +190,33 @@ public:
     }
     set["myProperty"].setValue("My Value");
     /endcode
-    \return \ref Property with given name. */
+    @return \ref Property with given name. 
+    @see changeProperty(const QByteArray &, const QVariant &)
+    @see changePropertyIfExists(const QByteArray &, const QVariant &)
+    */
     Property& operator[](const QByteArray &name) const;
+
+    /*! @return value for property named with @a name. 
+     If no such property is found, default value @a defaultValue is returned. */
+    QVariant propertyValue(const QByteArray &name, const QVariant& defaultValue = QVariant()) const {
+        const Property& p( property(name) );
+        return p.isNull() ? defaultValue : p.value();
+    }
 
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     const Set& operator= (const Set &set);
 
-    /*! Change the value of property whose key is \a property to \a value.
-    By default, it only calls Property::setValue(). */
+    /*! Change the value of property whose key is \a property to \a value. 
+    @see void changePropertyIfExists(const QByteArray &, const QVariant &) */
     void changeProperty(const QByteArray &property, const QVariant &value);
+
+    /*! Change the value of property whose key is \a property to \a value
+     only if it exists in the set.
+     @see void changeProperty(const QByteArray &, const QVariant &) */
+    void changePropertyIfExists(const QByteArray &property, const QVariant &value) {
+        if (contains(property))
+            changeProperty(property, value);
+    }
 
     /*! Sets the i18n'ed string that will be shown in Editor to represent
      \a group. */
@@ -155,34 +233,39 @@ public:
     /*! \return the icons name for \a group. */
     QString groupIcon(const QByteArray &group) const;
 
-    /*! \return a list of all group names. The order is the same as the order
-     of creation. */
-    const QList<QByteArray>& groupNames() const;
+    /*! \return a list of all group names. The order of items is undefined. */
+    const QList<QByteArray> groupNames() const;
 
-    /*! \return a list of all property names. The order is the same as the order
-     of creation. */
-    const QList<QByteArray>& propertyNamesForGroup(const QByteArray &group) const;
+    /*! \return a list of all property names for group @ group. 
+     The order of items is undefined. */
+    const QList<QByteArray> propertyNamesForGroup(const QByteArray &group) const;
+
+    /*! \return a list of all property names for group @ group. 
+     The order of items is undefined. */
+    const QHash<Property*, QByteArray> groupsNamesForProperties() const;
 
     /*! Used by property editor to preserve previous selection when this set
      is assigned again. */
-    QByteArray prevSelection() const;
+    QByteArray previousSelection() const;
 
-    void setPrevSelection(const QByteArray& prevSelection);
+    void setPreviousSelection(const QByteArray& prevSelection);
 
-    /*! A name of this property set type, that is usable when
+    /*! An optional name of this property set's type, that is usable when
      we want to know if two property set objects have the same type.
      This avoids e.g. reloading of all Editor's contents.
-     Also, this allows to know if two property set objects are compatible
-     by their property sets.
-     For comparing purposes, type names are case insensitive.*/
+     Also, informs whether two property set objects are compatible.
+     For comparing purposes, type names are lowercase for case insensitive comparisons.*/
     QString typeName() const;
 
     /*! Prints debug output for this set. */
-    void debug();
+    void debug() const;
 
 protected:
     /*! Constructs a set which owns or does not own it's properties.*/
     Set(bool propertyOwner);
+
+    /*! @return group name for property @a property */
+    QByteArray groupForProperty(Property *property) const;
 
     /*! Adds property to a group.*/
     void addToGroup(const QByteArray &group, Property *property);
@@ -191,14 +274,16 @@ protected:
     void removeFromGroup(Property *property);
 
     /*! Adds the property to the set, in the group. You can use any group name, except "common"
-      (which is already used for basic group). If \a updateSortingKey is true, the sorting key
-      will be set automatically to count().
+      (which is already used for basic group). 
       @internal */
-    void addPropertyInternal(Property *property, QByteArray group, bool updateSortingKey);
+    void addPropertyInternal(Property *property, QByteArray group);
 
     /*! @internal used to declare that \a property wants to be informed
      that the set has been cleared (all properties are deleted) */
     void informAboutClearing(bool& cleared);
+
+    /*! Helper for Private class. */
+    void addRelatedProperty(Property *p1, Property *p2) const;
 
 signals:
     /*! Emitted when the value of the property is changed.*/
@@ -222,12 +307,16 @@ signals:
     void aboutToBeDeleted();
 
 protected:
+    friend class SetPrivate;
     SetPrivate * const d;
 
     friend class Iterator;
     friend class Property;
     friend class Buffer;
 };
+
+//! kDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
+KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Set &set);
 
 /*! \brief
   \todo find a better name to show it's a set that doesn't own property
@@ -241,18 +330,21 @@ class KOPROPERTY_EXPORT Buffer : public Set
 
 public:
     Buffer();
-    Buffer(const Set *set);
+    Buffer(const KoProperty::Set& set);
 
     /*! Intersects with other Set.*/
-    virtual void intersect(const Set *set);
+    virtual void intersect(const KoProperty::Set& set);
 
 protected slots:
     void intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop);
     void intersectedReset(KoProperty::Set& set, KoProperty::Property& prop);
 
 private:
-    void initialSet(const Set *set);
+    void init(const KoProperty::Set& set);
 };
+
+//! @return property values for set @a set
+KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

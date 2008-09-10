@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,72 +18,49 @@
 */
 
 #include "sizeedit.h"
-#include "editoritem.h"
 
-#include <QLabel>
-#include <QLayout>
-#include <QPainter>
-#include <QToolTip>
-
-#include <klocale.h>
-
-#define SIZEEDIT_MASK "%1x%2"
+#include <KLocale>
+#include <QtCore/QSize>
 
 using namespace KoProperty;
 
-SizeEdit::SizeEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+static const char *SIZEEDIT_MASK = "%1x%2";
+
+QString SizeDelegate::displayText( const QVariant& value ) const
 {
-    setHasBorders(false);
-    m_edit = new QLabel(this);
-    m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
-// m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-    QPalette pal = m_edit->palette();
-    pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
-    m_edit->setPalette(pal);
-// m_edit->setBackgroundMode(Qt::PaletteBase);
-// m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    setEditor(m_edit);
-// setFocusWidget(m_edit);
+    const QSize s(value.toSize());
+    return QString::fromLatin1(SIZEEDIT_MASK)
+        .arg(s.width())
+        .arg(s.height());
 }
 
-SizeEdit::~SizeEdit()
-{}
+//------------
 
-QVariant
-SizeEdit::value() const
+SizeComposedProperty::SizeComposedProperty(Property *property)
+        : ComposedPropertyInterface(property)
 {
-    return m_value;
+    (void)new Property("width", 
+        QVariant(), i18n("Width"), i18n("Width"), UInt, property);
+    (void)new Property("height", 
+        QVariant(), i18n("Height"), i18n("Height"), UInt, property);
 }
 
-void
-SizeEdit::setValue(const QVariant &value, bool emitChange)
+void SizeComposedProperty::setValue(Property *property, 
+    const QVariant &value, bool rememberOldValue)
 {
-    m_value = value;
-    m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
-    this->setToolTip(QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
-
-    if (emitChange)
-        emit valueChanged(this);
+    const QSize s( value.toSize() );
+    property->child("width")->setValue(s.width(), rememberOldValue, false);
+    property->child("height")->setValue(s.height(), rememberOldValue, false);
 }
 
-void
-SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+void SizeComposedProperty::childValueChanged(Property *child,
+    const QVariant &value, bool rememberOldValue)
 {
-    QRect rect(r);
-    rect.setBottom(r.bottom() + 1);
-    Widget::drawViewer(p, cg, rect,
-                       QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
-// p->eraseRect(r);
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//  QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
-}
+    QSize s( child->parent()->value().toSize() );
+    if (child->name() == "width")
+        s.setWidth(value.toInt());
+    else if (child->name() == "height")
+        s.setHeight(value.toInt());
 
-void
-SizeEdit::setReadOnlyInternal(bool readOnly)
-{
-    Q_UNUSED(readOnly);
+    child->parent()->setValue(s, true, false);
 }
-
-#include "sizeedit.moc"
