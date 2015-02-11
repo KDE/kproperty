@@ -22,13 +22,7 @@
 #include "fontedit.h"
 #include "utils.h"
 
-#include <kfontchooser.h>
-#include <kfontdialog.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kpushbutton.h>
-#include <kdialog.h>
-
+#include <QObject>
 #include <QLabel>
 #include <QPushButton>
 #include <QPainter>
@@ -39,6 +33,9 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QApplication>
+#include <QPushButton>
+#include <QDialog>
+#include <QFontDialog>
 
 using namespace KoProperty;
 
@@ -58,11 +55,11 @@ public:
         lyr->setContentsMargins(0,0,0,0);
         lyr->setSpacing( 1 );
         lyr->addStretch(1);
-        m_button = new KPushButton(this);
+        m_button = new QPushButton(this);
         setFocusProxy(m_button);
         Utils::setupDotDotDotButton(m_button,
-            i18n("Click to select a font"),
-            i18n("Selects font"));
+            tr("Click to select a font"),
+            tr("Selects font"));
         connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
         lyr->addWidget(m_button);
         setValue(qApp->font());
@@ -86,8 +83,11 @@ signals:
 protected slots:
     void slotSelectFontClicked()
     {
-        KFontChooser::DisplayFlags flags = KFontChooser::NoDisplayFlags;
-        if (KDialog::Accepted == KFontDialog::getFont( m_font, flags, this )) {
+        bool ok;
+        QFont font;
+        font = QFontDialog::getFont( &ok, parentWidget() );
+        if (ok) {
+            m_font = font;
             setValue(m_font);
             emit commitData(this);
         }
@@ -99,7 +99,7 @@ protected:
         return QWidget::event(event);
     }
 
-    KPushButton *m_button;
+    QPushButton *m_button;
     QFont m_font;
     bool m_paletteChangedEnabled;
 };
@@ -132,14 +132,14 @@ void FontDelegate::paint( QPainter * painter,
     painter->setFont( f );
     QRect rect( option.rect );
     rect.setLeft( rect.left() + 1 );
-    const QString txt( i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
+    const QString txt( QObject::tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
+        QObject::tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
 
     rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
     painter->setFont(origFont);
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        i18nc("Font family and size, e.g. Arial, 2pt", "%1, %2pt", f.family(), size) );
+        QObject::tr("%1, %2pt", "Font family and size, e.g. Arial, 2pt").arg(f.family()).arg(size));
     painter->restore();
 }
 

@@ -23,9 +23,7 @@
 #include "Set.h"
 
 #include <QHash>
-
-#include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -168,9 +166,9 @@ QVariant EditorDataModel::headerData(int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0) {
-            return i18nc("Property name", "Name");
+            return tr("Property name", "Name");
         } else {
-            return i18nc("Property value", "Value");
+            return tr("Property value", "Value");
         }
     }
     return QVariant();

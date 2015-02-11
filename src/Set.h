@@ -57,11 +57,11 @@ public:
     public:
         PropertySelector();
         virtual ~PropertySelector();
-        
+
         //! An operator implementing the functor.
         virtual bool operator()(const Property& prop) const = 0;
 
-        //! Creates a deep copy of the selector. 
+        //! Creates a deep copy of the selector.
         //! Required for proper usage of the selector.
         virtual PropertySelector* clone() const = 0;
     };
@@ -83,8 +83,8 @@ public:
         explicit Iterator(const Set &set);
 
         //! Creates iterator for @a set set of properties.
-        /*! @a selector functor is used to iterate only 
-            over specified properties. 
+        /*! @a selector functor is used to iterate only
+            over specified properties.
             The properties are sorted by insertion order by default.
             Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
         Iterator(const Set &set, const PropertySelector& selector);
@@ -143,7 +143,7 @@ public:
     /*! @return the number of top-level properties in the set. */
     uint count() const;
 
-    /*! @return the number of top-level properties in the set 
+    /*! @return the number of top-level properties in the set
                 matching criteria defined by @a selector. */
     uint count(const PropertySelector& selector) const;
 
@@ -190,20 +190,20 @@ public:
     }
     set["myProperty"].setValue("My Value");
     /endcode
-    @return \ref Property with given name. 
+    @return \ref Property with given name.
     @see changeProperty(const QByteArray &, const QVariant &)
     @see changePropertyIfExists(const QByteArray &, const QVariant &)
     */
     Property& operator[](const QByteArray &name) const;
 
-    /*! @return value for property named with @a name. 
+    /*! @return value for property named with @a name.
      If no such property is found, default value @a defaultValue is returned. */
     QVariant propertyValue(const QByteArray &name, const QVariant& defaultValue = QVariant()) const;
 
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     const Set& operator= (const Set &set);
 
-    /*! Change the value of property whose key is \a property to \a value. 
+    /*! Change the value of property whose key is \a property to \a value.
     @see void changePropertyIfExists(const QByteArray &, const QVariant &) */
     void changeProperty(const QByteArray &property, const QVariant &value);
 
@@ -233,11 +233,11 @@ public:
     /*! \return a list of all group names. The order of items is undefined. */
     const QList<QByteArray> groupNames() const;
 
-    /*! \return a list of all property names for group @ group. 
+    /*! \return a list of all property names for group @ group.
      The order of items is undefined. */
     const QList<QByteArray> propertyNamesForGroup(const QByteArray &group) const;
 
-    /*! \return a list of all property names for group @ group. 
+    /*! \return a list of all property names for group @ group.
      The order of items is undefined. */
     const QHash<Property*, QByteArray> groupsNamesForProperties() const;
 
@@ -271,7 +271,7 @@ protected:
     void removeFromGroup(Property *property);
 
     /*! Adds the property to the set, in the group. You can use any group name, except "common"
-      (which is already used for basic group). 
+      (which is already used for basic group).
       @internal */
     void addPropertyInternal(Property *property, QByteArray group);
 

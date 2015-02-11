@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_DATEEDIT_H
 #define KPROPERTY_DATEEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 #include <QDateEdit>
 
 

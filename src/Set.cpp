@@ -23,9 +23,7 @@
 #include "Property.h"
 
 #include <QByteArray>
-
-#include <kdebug.h>
-#include <klocale.h>
+#include <QDebug>
 
 typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
 
@@ -57,18 +55,18 @@ public:
         if (p)
             return *p;
         nonConstNull.setName(0); //to ensure returned property is null
-        kWarning() << "PROPERTY" << name << "NOT FOUND";
+        qWarning() << "PROPERTY" << name << "NOT FOUND";
         return nonConstNull;
     }
 
     void addProperty(Property *property, QByteArray group/*, bool updateSortingKey*/)
     {
         if (!property) {
-            kWarning() << "property == 0";
+            qWarning() << "property == 0";
             return;
         }
         if (property->isNull()) {
-            kWarning() << "COULD NOT ADD NULL PROPERTY";
+            qWarning() << "COULD NOT ADD NULL PROPERTY";
             return;
         }
         if (group.isEmpty())
@@ -100,7 +98,7 @@ public:
             return;
 
         if (!list.removeOne(property)) {
-            kDebug() << "Set does not contain property" << property;
+            qDebug() << "Set does not contain property" << property;
             return;
         }
         Property *p = hash.take(property->name());
@@ -169,7 +167,7 @@ public:
             addProperty(prop, set.groupForProperty( *it )
 #if 0
                         ,
-                        false /* don't updateSortingKey, because the key is already 
+                        false /* don't updateSortingKey, because the key is already
                                  set in Property copy ctor.*/
 #endif
                        );
@@ -211,7 +209,7 @@ private:
     //! a hash of properties in form name -> property
     QHash<QByteArray, Property*> hash;
     QHash<Property*, QByteArray> groupForProperties;
-    uint m_visiblePropertiesCount; //! cache for optimization, 
+    uint m_visiblePropertiesCount; //! cache for optimization,
                                    //! used by @ref bool Set::hasVisibleProperties()
 };
 
@@ -300,7 +298,7 @@ void Set::Iterator::setOrder(Set::Order order)
             }
             propertiesAndStrings.append( qMakePair(prop, captionOrName) );
         }
-        qSort(propertiesAndStrings.begin(), propertiesAndStrings.end(), 
+        qSort(propertiesAndStrings.begin(), propertiesAndStrings.end(),
             Iterator_propertyAndStringLessThan);
         m_sorted.clear();
         foreach (const Iterator_PropertyAndString& propertyAndString, propertiesAndStrings) {
@@ -344,7 +342,7 @@ Set::Set(QObject *parent, const QString &typeName)
     setObjectName(typeName.toLower().toLatin1());
 
     d->ownProperty = true;
-    d->groupDescriptions.insert("common", i18nc("General properties", "General"));
+    d->groupDescriptions.insert("common", tr("General properties", "General"));
     d->typeName = typeName.toLower();
 }
 
@@ -362,7 +360,7 @@ Set::Set(bool propertyOwner)
         , d(new SetPrivate(this))
 {
     d->ownProperty = propertyOwner;
-    d->groupDescriptions.insert("common", i18nc("General properties", "General"));
+    d->groupDescriptions.insert("common", tr("General properties", "General"));
 }
 
 Set::~Set()
@@ -423,7 +421,7 @@ Set::addToGroup(const QByteArray &group, Property *property)
     //do not add the same property to the group twice
     const QByteArray groupLower(group.toLower());
     if (d->groupForProperty(property) == groupLower) {
-        kWarning() << "Group" << group << "already contains property" << property->name();
+        qWarning() << "Group" << group << "already contains property" << property->name();
         return;
     }
     QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ groupLower ];
@@ -585,7 +583,7 @@ Set::changeProperty(const QByteArray &property, const QVariant &value)
 
 void Set::debug() const
 {
-    kDebug(30007) << *this;
+    qDebug() << *this;
 }
 
 QDebug KoProperty::operator<<(QDebug dbg, const Set &set)
@@ -671,7 +669,7 @@ void Buffer::init(const Set& set)
 {
     //deep copy of set
     const QList<Property*>::ConstIterator itEnd(set.d->listConstEnd());
-    for (QList<Property*>::ConstIterator it(set.d->listConstIterator()); 
+    for (QList<Property*>::ConstIterator it(set.d->listConstIterator());
         it!=itEnd; ++it)
     {
         Property *prop = new Property(*(*it));
@@ -691,7 +689,7 @@ void Buffer::intersect(const Set& set)
     }
 
     const QList<Property*>::ConstIterator itEnd(set.d->listConstEnd());
-    for (QList<Property*>::ConstIterator it(set.d->listConstIterator()); 
+    for (QList<Property*>::ConstIterator it(set.d->listConstIterator());
         it!=itEnd; ++it)
     {
         const QByteArray key( (*it)->name() );

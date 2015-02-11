@@ -24,12 +24,12 @@
 using namespace KoProperty;
 
 StringEdit::StringEdit(QWidget *parent)
- : KLineEdit(parent)
+ : QLineEdit(parent)
  , m_slotTextChangedEnabled(true)
 {
     setFrame(false);
     setContentsMargins(0,1,0,0);
-    setClearButtonShown(true);
+    setClearButtonEnabled(true);
     connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
@@ -59,7 +59,7 @@ void StringEdit::slotTextChanged( const QString & text )
     emit commitData(this);
 }
 
-QWidget* StringDelegate::createEditor( int type, QWidget *parent, 
+QWidget* StringDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);

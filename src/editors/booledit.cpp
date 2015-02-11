@@ -19,16 +19,10 @@
 */
 
 #include "booledit.h"
-#include "koproperty/Property.h"
-#include "koproperty/EditorDataModel.h"
+#include "Property.h"
+#include "EditorDataModel.h"
 
-#include <KoIcon.h>
-
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kcolorscheme.h>
-#include <kglobal.h>
+#include <QIcon>
 
 #include <QApplication>
 #include <QPainter>
@@ -46,17 +40,17 @@ static QString stateName(int index, const Property* prop)
     if (index == 0) {
         stateNameString = prop->option("yesName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18nc("Property value: Boolean state Yes", "Yes");
+            return QObject::tr("Yes", "Property value: Boolean state Yes");
     }
     else if (index == 1) {
         stateNameString = prop->option("noName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18nc("Property value: Boolean state No", "No");
+            return QObject::tr("No", "Property value: Boolean state No");
     }
     else {
         stateNameString = prop->option("3rdStateName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18nc("Property value: Boolean (3rd) undefined state None", "None");
+            return QObject::tr("None", "Property value: Boolean (3rd) undefined state None");
     }
     return stateNameString;
 }
@@ -83,9 +77,8 @@ class BoolEditGlobal
 {
 public:
     BoolEditGlobal()
-        : yesIcon(koSmallIcon("dialog-ok"))
-        , noIcon(koSmallIcon("button_no"))
-        , noneIcon(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small))
+        : yesIcon(QIcon::fromTheme("dialog-ok").pixmap(QSize(22,22)))
+        , noIcon(QIcon::fromTheme("button_no").pixmap(QSize(22,22)))
     {
         noneIcon.fill(Qt::transparent);
     }
@@ -94,7 +87,7 @@ public:
     QPixmap noneIcon;
 };
 
-K_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
+Q_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
 BoolEdit::BoolEdit(const Property *prop, QWidget *parent)
     : QToolButton(parent)
@@ -160,7 +153,7 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
 {
 //    p->eraseRect(r);
     QRect r2(r);
-    r2.setLeft(r2.left() + KIconLoader::SizeSmall + 6);
+    r2.setLeft(r2.left() + 16 + 6); //16 = SmallSize
 //    r2.setTop(r2.top() + 1);
 
     if (!threeState && value.isNull()) {
@@ -187,8 +180,7 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
 //        kDebug() << r2;
         p->drawPixmap(
             r.left() + 3,
-            r2.top() + (r2.height() - KIconLoader::SizeSmall) / 2,
-            icon);
+            r2.top() + (r2.height() - 16) / 2,icon); //16 = SmallSize
         p->drawText(
             r2,
             Qt::AlignVCenter | Qt::AlignLeft,

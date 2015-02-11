@@ -20,8 +20,6 @@
 #include "sizepolicyedit.h"
 
 #include <QSizePolicy>
-#include <klocale.h>
-#include <kglobal.h>
 
 using namespace KoProperty;
 
@@ -55,18 +53,18 @@ private:
     static QStringList stringsInternal() {
         QStringList strings;
         strings
-         << i18nc("Size Policy", "Fixed")
-         << i18nc("Size Policy", "Minimum")
-         << i18nc("Size Policy", "Maximum")
-         << i18nc("Size Policy", "Preferred")
-         << i18nc("Size Policy", "Expanding")
-         << i18nc("Size Policy", "Minimum Expanding")
-         << i18nc("Size Policy", "Ignored");
+         << QObject::tr("Size Policy", "Fixed")
+         << QObject::tr("Size Policy", "Minimum")
+         << QObject::tr("Size Policy", "Maximum")
+         << QObject::tr("Size Policy", "Preferred")
+         << QObject::tr("Size Policy", "Expanding")
+         << QObject::tr("Size Policy", "Minimum Expanding")
+         << QObject::tr("Size Policy", "Ignored");
         return strings;
     }
 };
 
-K_GLOBAL_STATIC(SizePolicyListData, s_sizePolicyListData)
+Q_GLOBAL_STATIC(SizePolicyListData, s_sizePolicyListData)
 
 //---------
 
@@ -95,13 +93,13 @@ SizePolicyComposedProperty::SizePolicyComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("hor_policy", new SizePolicyListData(),
-        QVariant(), i18n("Hor. Policy"), i18n("Horizontal Policy"), ValueFromList, property);
+        QVariant(), QObject::tr("Hor. Policy"), QObject::tr("Horizontal Policy"), ValueFromList, property);
     (void)new Property("vert_policy", new SizePolicyListData(),
-        QVariant(), i18n("Vert. Policy"), i18n("Vertical Policy"), ValueFromList, property);
+        QVariant(), QObject::tr("Vert. Policy"), QObject::tr("Vertical Policy"), ValueFromList, property);
     (void)new Property("hor_stretch", QVariant(),
-        i18n("Hor. Stretch"), i18n("Horizontal Stretch"), UInt, property);
+        QObject::tr("Hor. Stretch"), QObject::tr("Horizontal Stretch"), UInt, property);
     (void)new Property("vert_stretch", QVariant(),
-        i18n("Vert. Stretch"), i18n("Vertical Stretch"), UInt, property);
+        QObject::tr("Vert. Stretch"), QObject::tr("Vertical Stretch"), UInt, property);
 }
 
 void SizePolicyComposedProperty::setValue(Property *property,

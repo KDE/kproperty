@@ -20,7 +20,7 @@
 */
 
 #include "cursoredit.h"
-#include "koproperty/Property.h"
+#include "Property.h"
 
 #include "xpm/blank_cursor.xpm"
 #include "xpm/arrow_cursor.xpm"
@@ -46,10 +46,6 @@
 #include <QVariant>
 #include <QCursor>
 #include <QBitmap>
-
-#include <klocale.h>
-#include <kdebug.h>
-#include <kglobal.h>
 
 using namespace KoProperty;
 
@@ -97,49 +93,49 @@ private:
     static QList<QVariant> keysInternal() {
         QList<QVariant> keys;
         keys
-        << Qt::BlankCursor
-        << Qt::ArrowCursor
-        << Qt::UpArrowCursor
-        << Qt::CrossCursor
-        << Qt::WaitCursor
-        << Qt::IBeamCursor
-        << Qt::SizeVerCursor
-        << Qt::SizeHorCursor
-        << Qt::SizeBDiagCursor
-        << Qt::SizeFDiagCursor
-        << Qt::SizeAllCursor
-        << Qt::SplitVCursor
-        << Qt::SplitHCursor
-        << Qt::PointingHandCursor
-        << Qt::ForbiddenCursor
-        << Qt::WhatsThisCursor
-        << Qt::BusyCursor
-        << Qt::OpenHandCursor
-        << Qt::ClosedHandCursor;
+        << QCursor(Qt::BlankCursor)
+        << QCursor(Qt::ArrowCursor)
+        << QCursor(Qt::UpArrowCursor)
+        << QCursor(Qt::CrossCursor)
+        << QCursor(Qt::WaitCursor)
+        << QCursor(Qt::IBeamCursor)
+        << QCursor(Qt::SizeVerCursor)
+        << QCursor(Qt::SizeHorCursor)
+        << QCursor(Qt::SizeBDiagCursor)
+        << QCursor(Qt::SizeFDiagCursor)
+        << QCursor(Qt::SizeAllCursor)
+        << QCursor(Qt::SplitVCursor)
+        << QCursor(Qt::SplitHCursor)
+        << QCursor(Qt::PointingHandCursor)
+        << QCursor(Qt::ForbiddenCursor)
+        << QCursor(Qt::WhatsThisCursor)
+        << QCursor(Qt::BusyCursor)
+        << QCursor(Qt::OpenHandCursor)
+        << QCursor(Qt::ClosedHandCursor);
         return keys;
     }
 
     static QStringList stringsInternal() {
         QStringList strings;
-        strings << i18nc("Mouse Cursor Shape", "No cursor") //0
-        << i18nc("Mouse Cursor Shape", "Arrow") //1
-        << i18nc("Mouse Cursor Shape", "Up arrow") //2
-        << i18nc("Mouse Cursor Shape", "Cross") //3
-        << i18nc("Mouse Cursor Shape", "Waiting") //4
-        << i18nc("Mouse Cursor Shape", "Text cursor") //5
-        << i18nc("Mouse Cursor Shape", "Size vertical") //6
-        << i18nc("Mouse Cursor Shape", "Size horizontal") //7
-        << i18nc("Mouse Cursor Shape", "Size slash") //8
-        << i18nc("Mouse Cursor Shape", "Size backslash") //9
-        << i18nc("Mouse Cursor Shape", "Size all") //10
-        << i18nc("Mouse Cursor Shape", "Split vertical") //11
-        << i18nc("Mouse Cursor Shape", "Split horizontal") //12
-        << i18nc("Mouse Cursor Shape", "Pointing hand") //13
-        << i18nc("Mouse Cursor Shape", "Forbidden") //14
-        << i18nc("Mouse Cursor Shape", "What's this?") //15
-        << i18nc("Mouse Cursor Shape", "Busy") //16
-        << i18nc("Mouse Cursor Shape", "Open hand") //17
-        << i18nc("Mouse Cursor Shape", "Closed hand"); //18
+        strings << QObject::tr("No cursor", "Mouse Cursor Shape") //0
+        << QObject::tr("Arrow", "Mouse Cursor Shape") //1
+        << QObject::tr("Up arrow", "Mouse Cursor Shape") //2
+        << QObject::tr("Cross", "Mouse Cursor Shape") //3
+        << QObject::tr("Waiting", "Mouse Cursor Shape") //4
+        << QObject::tr("Text cursor", "Mouse Cursor Shape") //5
+        << QObject::tr("Size vertical", "Mouse Cursor Shape") //6
+        << QObject::tr("Size horizontal", "Mouse Cursor Shape") //7
+        << QObject::tr("Size slash", "Mouse Cursor Shape") //8
+        << QObject::tr("Size backslash", "Mouse Cursor Shape") //9
+        << QObject::tr("Size all", "Mouse Cursor Shape") //10
+        << QObject::tr("Split vertical", "Mouse Cursor Shape") //11
+        << QObject::tr("Split horizontal", "Mouse Cursor Shape") //12
+        << QObject::tr("Pointing hand", "Mouse Cursor Shape") //13
+        << QObject::tr("Forbidden", "Mouse Cursor Shape") //14
+        << QObject::tr("What's this?", "Mouse Cursor Shape") //15
+        << QObject::tr("Busy", "Mouse Cursor Shape") //16
+        << QObject::tr("Open hand", "Mouse Cursor Shape") //17
+        << QObject::tr("Closed hand", "Mouse Cursor Shape"); //18
         return strings;
     }
     static const char * const * const m_xpms[];
@@ -168,7 +164,7 @@ const char * const * const CursorListData::m_xpms[] =
     closedhand_cursor_xpm
 };
 
-K_GLOBAL_STATIC(CursorListData, s_cursorListData)
+Q_GLOBAL_STATIC(CursorListData, s_cursorListData)
 
 //----------------------
 class CursorIconProvider : public ComboBox::Options::IconProviderInterface
@@ -183,7 +179,7 @@ public:
     {
         return new CursorIconProvider(m_parent);
     }
-    QPointer<QWidget> m_parent;
+    QWidget* m_parent;
 };
 
 //----------------------
@@ -211,7 +207,7 @@ QCursor CursorEdit::cursorValue() const
 
 void CursorEdit::setCursorValue(const QCursor &value)
 {
-    ComboBox::setValue( value.shape() );
+    ComboBox::setValue( value );
 }
 
 //---------------
@@ -221,7 +217,7 @@ CursorDelegate::CursorDelegate()
     options.removeBorders = false;
 }
 
-QWidget * CursorDelegate::createEditor( int type, QWidget *parent, 
+QWidget * CursorDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
@@ -230,7 +226,7 @@ QWidget * CursorDelegate::createEditor( int type, QWidget *parent,
     return new CursorEdit(parent);
 }
 
-void CursorDelegate::paint( QPainter * painter, 
+void CursorDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
@@ -243,7 +239,7 @@ void CursorDelegate::paint( QPainter * painter,
     painter->drawPixmap(pmPoint, pm);
     QRect r(option.rect);
     r.setLeft(2 + r.left() + 1 + pm.width());
-    painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, 
+    painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft,
         s_cursorListData->names[ comboIndex ] );
     painter->restore();
 }

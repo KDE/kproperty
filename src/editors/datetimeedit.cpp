@@ -21,8 +21,8 @@
 
 #include "datetimeedit.h"
 
-#include <koproperty/EditorDataModel.h>
-// Qt
+#include "EditorDataModel.h"
+
 #include <QLocale>
 
 using namespace KoProperty;

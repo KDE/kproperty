@@ -20,8 +20,8 @@
 #ifndef KPROPERTY_LINESTYLEEDIT_H
 #define KPROPERTY_LINESTYLEEDIT_H
 
-#include "koproperty/Factory.h"
-#include <KoLineStyleSelector.h>
+#include "Factory.h"
+#include "KoLineStyleSelector.h"
 
 namespace KoProperty
 {
@@ -58,10 +58,10 @@ class KOPROPERTY_EXPORT LineStyleComboDelegate : public EditorCreatorInterface,
 public:
     LineStyleComboDelegate() {options.removeBorders = false;}
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

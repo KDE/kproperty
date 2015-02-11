@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 namespace KoProperty
 {
@@ -30,10 +30,10 @@ class KOPROPERTY_EXPORT RectComposedProperty : public ComposedPropertyInterface
 public:
     explicit RectComposedProperty(Property *parent);
 
-    virtual void setValue(Property *property, 
+    virtual void setValue(Property *property,
         const QVariant &value, bool rememberOldValue);
 
-    virtual void childValueChanged(Property *child, 
+    virtual void childValueChanged(Property *child,
         const QVariant &value, bool rememberOldValue);
 };
 

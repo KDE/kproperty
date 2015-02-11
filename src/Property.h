@@ -39,7 +39,7 @@
  KoProperty framework also supports adding composed and property types
  and custom property editor types.
 
- Take a look at the test application, available in koproperty/test/ directory 
+ Take a look at the test application, available in koproperty/test/ directory
  to see example uses of the framework.
 
  @author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -381,7 +381,7 @@ public:
     */
     void setOption(const char* name, const QVariant& val);
 
-    /*! \return a value for option \a name or null value if there is no such option set. 
+    /*! \return a value for option \a name or null value if there is no such option set.
      If there is no such value, @a defaultValue is returned. */
     QVariant option(const char* name, const QVariant& defaultValue = QVariant()) const;
 

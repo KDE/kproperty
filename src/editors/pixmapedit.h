@@ -22,13 +22,13 @@
 #ifndef KPROPERTY_PIXMAPEDIT_H
 #define KPROPERTY_PIXMAPEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 #include <QPixmap>
 #include <QVariant>
 
 class QLabel;
-class KPushButton;
+class QPushButton;
 
 namespace KoProperty
 {
@@ -66,22 +66,22 @@ protected slots:
 protected:
     QLabel *m_edit;
     QLabel *m_popup;
-    KPushButton *m_button;
+    QPushButton *m_button;
     Property *m_property;
 //todo    QVariant m_recentlyPainted;
     QPixmap m_pixmap, /* todo? m_scaledPixmap,*/ m_previewPixmap;
 };
 
-class KOPROPERTY_EXPORT PixmapDelegate : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT PixmapDelegate : public EditorCreatorInterface,
                                          public ValuePainterInterface
 {
 public:
     PixmapDelegate();
-    
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

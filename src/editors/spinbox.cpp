@@ -20,16 +20,12 @@
 */
 
 #include "spinbox.h"
-#include "koproperty/Property.h"
-#include "koproperty/Property_p.h"
-#include "koproperty/EditorDataModel.h"
-#include "koproperty/EditorView.h"
+#include "Property.h"
+#include "Property_p.h"
+#include "EditorDataModel.h"
+#include "EditorView.h"
 
 #include <climits>
-
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
 
 #include <QVariant>
 #include <QPainter>
@@ -37,7 +33,7 @@
 #include <QEvent>
 #include <QLineEdit>
 
-#include <KoUnit.h>
+#include "KoUnit.h"
 
 using namespace KoProperty;
 
@@ -65,19 +61,19 @@ static QString cssForSpinBox(const char *_class, const QFont& font, int itemHeig
 }
 
 IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
-        : KIntNumInput(parent)
+        : QSpinBox(parent)
         , m_unsigned( prop->type() == UInt )
 {
 //    kDebug() << "itemHeight:" << itemHeight;
-    QLineEdit* le = spinBox()->findChild<QLineEdit*>();
-    spinBox()->setContentsMargins(0,0,0,0);
+    QLineEdit* le = findChild<QLineEdit*>();
+    setContentsMargins(0,0,0,0);
     if (le) {
 //        le->setFixedHeight(itemHeight);
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
     }
 //    kDebug() << parent->font().pointSize();
-    spinBox()->setFrame(true);
+    setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
     Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
     setStyleSheet(css);

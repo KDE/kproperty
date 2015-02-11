@@ -21,7 +21,6 @@
 
 #include "pointedit.h"
 
-#include <klocale.h>
 #include <QPoint>
 
 using namespace KoProperty;
@@ -42,11 +41,11 @@ PointComposedProperty::PointComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18nc("Property: X coordinate", "X"),
-        i18nc("Property: X coordinate", "X Coordinate"), Int, property);
+        QVariant(), QObject::tr("X", "Property: X coordinate"),
+        QObject::tr("X Coordinate", "Property: X coordinate"), Int, property);
     (void)new Property("y",
-        QVariant(), i18nc("Property: Y coordinate", "Y"),
-        i18nc("Property: Y coordinate", "Y Coordinate"), Int, property);
+        QVariant(), QObject::tr("Y", "Property: Y coordinate"),
+        QObject::tr("Y Coordinate", "Property: Y coordinate"), Int, property);
 }
 
 void PointComposedProperty::setValue(Property *property,

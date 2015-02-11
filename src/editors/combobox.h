@@ -22,14 +22,14 @@
 #ifndef KPROPERTY_COMBOBOX_H
 #define KPROPERTY_COMBOBOX_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
-#include <kcombobox.h>
+#include <QComboBox>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT ComboBox : public KComboBox
+class KOPROPERTY_EXPORT ComboBox : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -47,13 +47,13 @@ public:
         Options();
         Options(const Options& other);
         ~Options();
-        
+
         IconProviderInterface *iconProvider;
         bool extraValueAllowed : 1;
     };
 
 //    explicit ComboBox(const Property* property, QWidget *parent = 0);
-    ComboBox(const Property::ListData& listData, const Options& options, 
+    ComboBox(const Property::ListData& listData, const Options& options,
              QWidget *parent = 0);
 
     virtual ~ComboBox();
@@ -90,18 +90,18 @@ protected:
     Options m_options;
 };
 
-class KOPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface,
                                            public ValueDisplayInterface
 {
 public:
     ComboBoxDelegate();
-    
+
     virtual QString displayTextForProperty( const Property* property ) const;
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-//    virtual void paint( QPainter * painter, 
+//    virtual void paint( QPainter * painter,
 //        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

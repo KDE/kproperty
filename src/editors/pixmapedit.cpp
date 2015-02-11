@@ -21,8 +21,8 @@
 
 #include "pixmapedit.h"
 #include "utils.h"
-#include "koproperty/Property.h"
-#include "koproperty/EditorDataModel.h"
+#include "Property.h"
+#include "EditorDataModel.h"
 
 #include <QLayout>
 #include <QPainter>
@@ -30,7 +30,6 @@
 #include <QCursor>
 #include <QFont>
 #include <QImage>
-
 #include <QToolTip>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -40,18 +39,8 @@
 #include <QFrame>
 #include <QResizeEvent>
 #include <QMouseEvent>
-
-#include <kdebug.h>
-#include <kimageio.h>
-#include <kpushbutton.h>
-#include <kfiledialog.h>
-#include <klocale.h>
-
-/* KDE4:
-#ifdef Q_WS_WIN
-#include <win32_utils.h>
-#include <krecentdirs.h>
-#endif*/
+#include <QPushButton>
+#include <QFileDialog>
 
 using namespace KoProperty;
 
@@ -67,7 +56,7 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     m_edit = new QLabel(this);
     lyr->addWidget(m_edit);
     m_edit->setContentsMargins(0, 1, 0, 0);
-    m_edit->setToolTip(i18n("Click to show image preview"));
+    m_edit->setToolTip(tr("Click to show image preview"));
     m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 //    m_edit->setMinimumHeight(5);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -75,10 +64,10 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     m_edit->setMouseTracking(true);
     m_edit->installEventFilter(this);
 
-    m_button = new KPushButton(i18nc("Three dots for 'Insert image from file' button", "..."), this);
+    m_button = new QPushButton(tr("Three dots for 'Insert image from file' button", "..."), this);
     lyr->addWidget(m_button);
-    Utils::setupDotDotDotButton(m_button, i18n("Insert image from file"),
-        i18n("Inserts image from file"));
+    Utils::setupDotDotDotButton(m_button, tr("Insert image from file"),
+        tr("Inserts image from file"));
 
     m_popup = new QLabel(0, Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     m_popup->setBackgroundRole(QPalette::Base);
@@ -122,7 +111,7 @@ void PixmapEdit::setValue(const QVariant &value)
     }
 //    if (emitChange)
 //        emit valueChanged(this);
-    
+
     emit commitData(this);
 }
 
@@ -135,7 +124,7 @@ QString PixmapEdit::selectPixmapFileName()
         emit valueChanged(this);
       }
     #endif*/
-    const QString caption(i18n("Insert Image From File (for \"%1\" property)", m_property->caption()));
+    const QString caption(tr("Insert Image From File (for \"%1\" property)").arg(m_property->caption()));
     /*KDE4:
     #ifdef Q_WS_WIN
       QString recentDir;
@@ -144,9 +133,8 @@ QString PixmapEdit::selectPixmapFileName()
         convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)),
         this, 0, caption);
     #else*/
-    const KUrl url(KFileDialog::getImageOpenUrl(
-                 KUrl(":lastVisitedImagePath"), this, caption));
-    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
+    const QUrl url(QFileDialog::getOpenFileUrl(this, caption));
+    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.toString();
 
     //! @todo download the file if remote, then set fileName properly
 //#endif

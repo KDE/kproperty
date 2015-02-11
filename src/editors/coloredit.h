@@ -20,8 +20,8 @@
 #ifndef KPROPERTY_COLOREDIT_H
 #define KPROPERTY_COLOREDIT_H
 
-#include "koproperty/Factory.h"
-#include <kcolorcombo.h>
+#include "Factory.h"
+#include <QColorDialog>
 
 namespace KoProperty
 {
@@ -57,11 +57,11 @@ class KOPROPERTY_EXPORT ColorComboDelegate : public EditorCreatorInterface,
 {
 public:
     ColorComboDelegate() {}
-    
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

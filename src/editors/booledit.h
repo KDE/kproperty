@@ -23,7 +23,7 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "combobox.h"
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 #include <QEvent>
 #include <QPixmap>
@@ -33,7 +33,7 @@
 namespace KoProperty
 {
 
-//! A bool editor supporting two states: true and false. 
+//! A bool editor supporting two states: true and false.
 /*! For null values, false is displayed.
 */
 class KOPROPERTY_EXPORT BoolEdit : public QToolButton
@@ -71,7 +71,7 @@ private:
     QString m_noText;
 };
 
-//! A bool editor supporting three states: true, false and null. 
+//! A bool editor supporting three states: true, false and null.
 /*! The editor is implemented as a drop-down list.
 */
 class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
@@ -90,16 +90,16 @@ signals:
     void commitData( QWidget * editor );
 };
 
-class KOPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface,
                                        public ValuePainterInterface
 {
 public:
     BoolDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

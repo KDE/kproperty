@@ -31,7 +31,6 @@
 #include <QLayout>
 #include <QMouseEvent>
 
-#include <kdebug.h>
 #include <kstyle.h>
 
 #define BRANCHBOX_SIZE 9

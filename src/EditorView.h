@@ -35,7 +35,7 @@ class Set;
 /*! Editor widgets use property options using Property::option(const char *)
     to override default behaviour of editor items.
     Currently supported options are:
-    <ul><li> min: integer setting for minimum value for integer and double types. 
+    <ul><li> min: integer setting for minimum value for integer and double types.
              The default is 0.
              Set it to -1, if you want this special value to be allowed.</li>
     <li> minValueText: i18n'd QString used for integer type to set "specialValueText"
@@ -44,7 +44,7 @@ class Set;
     <li> precision:  The number of decimals after the decimal point (for double types).</li>
     <li> step: the size of the step that is taken when the user hits the up
     or down buttons (for double types).</li>
-    <li> 3State: boolean value used for boolean types; if true, the editor becomes a combobox 
+    <li> 3State: boolean value used for boolean types; if true, the editor becomes a combobox
          (instead of checkable button) and accepta the third "null" state.</li>
     <li> yesName: i18n'd QString used for boolean types (both 2- and 3-state)
          to display the "true" value. If not present, i18n("Yes") is used.</li>
@@ -101,7 +101,7 @@ public slots:
 
     /*! If @a enable is true (the default), property values are automatically synced as
     soon as editor contents change (e.g. every time the user types a character)
-    and the values are written back to the assigned property set. 
+    and the values are written back to the assigned property set.
     If @a enable is false, property set is updated only when selection within
     the property editor or user presses Enter/Return key.
     Each property can overwrite this setting by changing its own autoSync flag.

@@ -20,10 +20,6 @@
 
 #include "symbolcombo.h"
 
-#include <kcharselect.h>
-#include <klocale.h>
-#include <kdialog.h>
-
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLayout>

@@ -23,9 +23,6 @@
 #include <QPainter>
 #include <QPen>
 
-#include <kcolorscheme.h>
-#include <kdebug.h>
-
 using namespace KoProperty;
 
 LineStyleCombo::LineStyleCombo(QWidget *parent)
@@ -35,8 +32,8 @@ LineStyleCombo::LineStyleCombo(QWidget *parent)
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 
     QString styleSheet;
-    KColorScheme cs(QPalette::Active);
-    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+    QPalette p = QGuiApplication::palette();
+    QColor focus = p.highlight().color();
 
     styleSheet = QString("KoLineStyleSelector { \
     border: 1px solid %1; \
@@ -52,7 +49,7 @@ LineStyleCombo::~LineStyleCombo()
 
 QVariant LineStyleCombo::value() const
 {
-    return lineStyle();
+    return QPen(lineStyle());
 }
 
 static bool hasVisibleStyle(const QVariant &value)

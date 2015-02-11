@@ -31,7 +31,7 @@ namespace KoProperty {
 namespace Utils {
 
 //! Sets up a "..." button with fine-tuned settings.
-KOPROPERTY_EXPORT void setupDotDotDotButton(QPushButton *button, 
+KOPROPERTY_EXPORT void setupDotDotDotButton(QPushButton *button,
     const QString& toolTip = QString(), const QString& whatsThis = QString());
 
 }

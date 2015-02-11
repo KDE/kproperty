@@ -19,7 +19,6 @@
 
 #include "rectedit.h"
 
-#include <klocale.h>
 #include <QRect>
 
 using namespace KoProperty;
@@ -42,17 +41,17 @@ RectComposedProperty::RectComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18nc("Property: X coordinate", "X"),
-        i18nc("Property: X coordinate", "X Coordinate"), Int, property);
+        QVariant(), QObject::tr("X", "Property: X coordinate"),
+        QObject::tr("X Coordinate", "Property: X coordinate"), Int, property);
     (void)new Property("y",
-        QVariant(), i18nc("Property: Y coordinate", "Y"),
-        i18nc("Property: Y coordinate", "Y Coordinate"), Int, property);
+        QVariant(), QObject::tr("Y", "Property: Y coordinate"),
+        QObject::tr("Y Coordinate", "Property: Y coordinate"), Int, property);
     (void)new Property("width",
-        QVariant(), i18nc("Property: width of rectangle", "Width"),
-        i18nc("Property: width of rectangle", "Width"), UInt, property);
+        QVariant(), QObject::tr("Width", "Property: width of rectangle"),
+        QObject::tr("Width", "Property: width of rectangle"), UInt, property);
     (void)new Property("height",
-        QVariant(), i18nc("Property: height of rectangle", "Height"),
-        i18nc("Property: height of rectangle", "Height"), UInt, property);
+        QVariant(), QObject::tr("Height", "Property: height of rectangle"),
+        QObject::tr("Height", "Property: height of rectangle"), UInt, property);
 }
 
 void RectComposedProperty::setValue(Property *property,

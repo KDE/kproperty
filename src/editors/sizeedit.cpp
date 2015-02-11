@@ -19,7 +19,6 @@
 
 #include "sizeedit.h"
 
-#include <klocale.h>
 #include <QSize>
 
 using namespace KoProperty;
@@ -40,9 +39,9 @@ SizeComposedProperty::SizeComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("width",
-        QVariant(), i18n("Width"), i18n("Width"), UInt, property);
+        QVariant(), QObject::tr("Width"), QObject::tr("Width"), UInt, property);
     (void)new Property("height",
-        QVariant(), i18n("Height"), i18n("Height"), UInt, property);
+        QVariant(), QObject::tr("Height"), QObject::tr("Height"), UInt, property);
 }
 
 void SizeComposedProperty::setValue(Property *property,

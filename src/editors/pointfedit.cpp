@@ -22,7 +22,6 @@
 
 #include "pointfedit.h"
 
-#include <klocale.h>
 #include <QPointF>
 
 using namespace KoProperty;
@@ -43,11 +42,11 @@ PointFComposedProperty::PointFComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18nc("Property: X coordinate", "X"),
-        i18nc("Property: X coordinate", "X Coordinate"), Double, property);
+        QVariant(), QObject::tr("X", "Property: X coordinate"),
+        QObject::tr("X Coordinate", "Property: X coordinate"), Double, property);
     (void)new Property("y",
-        QVariant(), i18nc("Property: Y coordinate", "Y"),
-        i18nc("Property: Y coordinate", "Y Coordinate"), Double, property);
+        QVariant(), QObject::tr("Y", "Property: Y coordinate"),
+        QObject::tr("Y Coordinate", "Property: Y coordinate"), Double, property);
 }
 
 void PointFComposedProperty::setValue(Property *property,

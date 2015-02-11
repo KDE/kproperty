@@ -17,14 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QGlobalStatic>
+
 #include "Factory.h"
 #include "DefaultFactory.h"
 #include "EditorView.h"
 #include "EditorDataModel.h"
 #include "Property.h"
-
-#include <kdebug.h>
-#include <kiconloader.h>
 
 namespace KoProperty
 {
@@ -76,6 +75,8 @@ public:
     QHash<int, ValueDisplayInterface*> valueDisplays;
 };
 
+ Q_GLOBAL_STATIC(FactoryManager, _self);
+
 //! @internal
 class Factory::Private
 {
@@ -107,7 +108,7 @@ using namespace KoProperty;
 Factory::Factory()
     : d( new Private )
 {
-    KIconLoader::global()->addAppDir("koproperty");
+    //KIconLoader::global()->addAppDir("koproperty");
 }
 
 Factory::~Factory()
@@ -139,7 +140,7 @@ void Factory::addEditor(int type, EditorCreatorInterface *creator)
 {
     addEditorInternal( type, creator, true );
     if (dynamic_cast<ComposedPropertyCreatorInterface*>(creator)) {
-        addComposedPropertyCreatorInternal( type, 
+        addComposedPropertyCreatorInternal( type,
             dynamic_cast<ComposedPropertyCreatorInterface*>(creator), false/* !own*/ );
     }
     if (dynamic_cast<ValuePainterInterface*>(creator)) {
@@ -168,7 +169,7 @@ void Factory::addPainter(int type, ValuePainterInterface *painter)
 {
     addPainterInternal(type, painter, true);
     if (dynamic_cast<ComposedPropertyCreatorInterface*>(painter)) {
-        addComposedPropertyCreatorInternal( type, 
+        addComposedPropertyCreatorInternal( type,
         dynamic_cast<ComposedPropertyCreatorInterface*>(painter), false/* !own*/ );
     }
     if (dynamic_cast<EditorCreatorInterface*>(painter)) {
@@ -183,7 +184,7 @@ void Factory::addDisplay(int type, ValueDisplayInterface *display)
 {
     addDisplayInternal(type, display, true);
     if (dynamic_cast<ComposedPropertyCreatorInterface*>(display)) {
-        addComposedPropertyCreatorInternal( type, 
+        addComposedPropertyCreatorInternal( type,
         dynamic_cast<ComposedPropertyCreatorInterface*>(display), false/* !own*/ );
     }
     if (dynamic_cast<EditorCreatorInterface*>(display)) {
@@ -227,7 +228,7 @@ void Factory::paintTopGridLine(QWidget *widget)
 {
     // paint top grid line
     QPainter p(widget);
-    QColor gridLineColor( dynamic_cast<EditorView*>(widget->parentWidget()) ? 
+    QColor gridLineColor( dynamic_cast<EditorView*>(widget->parentWidget()) ?
         dynamic_cast<EditorView*>(widget->parentWidget())->gridLineColor()
         : EditorView::defaultGridLineColor() );
     p.setPen(QPen( QBrush(gridLineColor), 1));
@@ -237,7 +238,7 @@ void Factory::paintTopGridLine(QWidget *widget)
 //static
 void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent, const QString& extraStyleSheet)
 {
-    QColor gridLineColor( dynamic_cast<KoProperty::EditorView*>(parent) ? 
+    QColor gridLineColor( dynamic_cast<KoProperty::EditorView*>(parent) ?
         dynamic_cast<KoProperty::EditorView*>(parent)->gridLineColor()
         : KoProperty::EditorView::defaultGridLineColor() );
     widget->setStyleSheet(
@@ -262,7 +263,6 @@ FactoryManager::~FactoryManager()
 
 FactoryManager* FactoryManager::self()
 {
-    K_GLOBAL_STATIC(KoProperty::FactoryManager, _self);
     return _self;
 }
 
@@ -276,7 +276,7 @@ void FactoryManager::registerFactory(Factory *factory)
     {
         d->composedPropertyCreators.insert(it.key(), it.value());
     }
-    QHash<int, EditorCreatorInterface*>::ConstIterator editorCreatorsItEnd 
+    QHash<int, EditorCreatorInterface*>::ConstIterator editorCreatorsItEnd
         = factory->editorCreators().constEnd();
     for (QHash<int, EditorCreatorInterface*>::ConstIterator it( factory->editorCreators().constBegin() );
         it != editorCreatorsItEnd; ++it)
@@ -304,7 +304,7 @@ bool FactoryManager::isEditorForTypeAvailable( int type ) const
     return d->editorCreators.value(type);
 }
 
-QWidget * FactoryManager::createEditor( 
+QWidget * FactoryManager::createEditor(
     int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
@@ -319,7 +319,7 @@ QWidget * FactoryManager::createEditor(
        w->setObjectName( property->name() );
        if (creator->options.removeBorders) {
 //! @todo get real border color from the palette
-            QColor gridLineColor( dynamic_cast<EditorView*>(parent) ? 
+            QColor gridLineColor( dynamic_cast<EditorView*>(parent) ?
                 dynamic_cast<EditorView*>(parent)->gridLineColor()
                 : EditorView::defaultGridLineColor() );
             QString css =
@@ -333,7 +333,7 @@ QWidget * FactoryManager::createEditor(
     return w;
 }
 
-bool FactoryManager::paint( int type, QPainter * painter, 
+bool FactoryManager::paint( int type, QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     const ValuePainterInterface *_painter = d->valuePainters.value(type);

@@ -1,11 +1,20 @@
+cmake_minimum_required(VERSION 3.0)
+project(kproperty)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+find_package(Qt5Widgets REQUIRED)
+
 add_subdirectory( tests )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
-set(libkopropertyeditors_SRCS
+set(libkpropertyeditors_SRCS
   editors/utils.cpp
   editors/booledit.cpp
-  editors/coloredit.cpp
+  #editors/coloredit.cpp
   editors/combobox.cpp
   editors/cursoredit.cpp
   editors/dateedit.cpp
@@ -19,7 +28,7 @@ set(libkopropertyeditors_SRCS
   editors/sizeedit.cpp
   editors/sizefedit.cpp
   editors/sizepolicyedit.cpp
-  editors/spinbox.cpp
+#  editors/spinbox.cpp
   editors/stringedit.cpp
   editors/linestyleedit.cpp
 #  editors/stringlistedit.cpp
@@ -28,11 +37,11 @@ set(libkopropertyeditors_SRCS
 #  editors/urledit.cpp
 )
 
-include_directories(${KOPROPERTY_INCLUDES})
+include_directories(${KPROPERTY_INCLUDES})
 
 ########### next target ###############
 
-set(koproperty_LIB_SRCS
+set(kproperty_LIB_SRCS
    Property.cpp
    Set.cpp
    Factory.cpp
@@ -40,20 +49,27 @@ set(koproperty_LIB_SRCS
    EditorView.cpp
    EditorDataModel.cpp
    Utils.cpp
-   ${libkopropertyeditors_SRCS}
+   KoLineStyleSelector.cpp
+   KoUnit.cpp
+   KoLineStyleModel.cpp
+   KoLineStyleItemDelegate.cpp
+   ${libkpropertyeditors_SRCS}
 )
 
-kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
-target_link_libraries(koproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
-target_link_libraries(koproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
+add_library(kproperty SHARED ${kproperty_LIB_SRCS})
+#target_link_libraries(kproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
+#target_link_libraries(kproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
 
-set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
-install(TARGETS koproperty ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(kproperty PROPERTIES VERSION 3.0 SOVERSION 3.0.0)
+qt5_use_modules(kproperty Widgets)
+
+install(TARGETS kproperty LIBRARY DESTINATION lib)
+
 
 
 ########### install files ###############
 
-kde4_install_icons(${DATA_INSTALL_DIR}/koproperty/icons)
+#kde4_install_icons(${DATA_INSTALL_DIR}/kproperty/icons)
 
 if(FALSE) # TODO: install when we move to independent place
   install( FILES
@@ -89,5 +105,5 @@ if(FALSE) # TODO: install when we move to independent place
     editors/symbolcombo.h
     editors/timeedit.h
     editors/urledit.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
+  DESTINATION ${INCLUDE_INSTALL_DIR}/kproperty/editors COMPONENT Devel)
 endif(FALSE)

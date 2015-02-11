@@ -20,12 +20,13 @@
 */
 
 #include "combobox.h"
-#include "koproperty/EditorDataModel.h"
-#include "koproperty/EditorView.h"
-#include "koproperty/Property.h"
+#include "EditorDataModel.h"
+#include "EditorView.h"
+#include "Property.h"
 
-#include <kcolorscheme.h>
-#include <kdebug.h>
+#include <QCompleter>
+#include <QGuiApplication>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -48,7 +49,7 @@ ComboBox::Options::~Options()
 }
 
 ComboBox::ComboBox(const Property::ListData& listData, const Options& options, QWidget *parent)
-        : KComboBox(parent)
+        : QComboBox(parent)
         , m_setValueEnabled(true)
         , m_options(options)
 {
@@ -77,7 +78,7 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
 
 //    setFocusWidget(m_edit);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
-    
+
     setFrame(false);
 /*    QList<QPointer<QWidget> > children( findChildren<QWidget*>() );
     foreach (QWidget* w, children) {
@@ -85,18 +86,18 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
         w->setStyleSheet(QString());
     }*/
     //QComboBoxPrivateContainer
-    
-    
+
+
     //Set the stylesheet to a plain style
     QString styleSheet;
-    KColorScheme cs(QPalette::Active);
-    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+    QPalette p = QGuiApplication::palette();
+    QColor focus = p.highlight().color();
 
     styleSheet = QString("QComboBox { \
     border: 1px solid %1; \
     border-radius: 0px; \
     padding: 0px 18px; }").arg(focus.name());
-   
+
     setStyleSheet(styleSheet);
 }
 
@@ -107,7 +108,7 @@ ComboBox::~ComboBox()
 bool ComboBox::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
-        kWarning() << "property listData not available!";
+        qWarning() << "property listData not available!";
         return false;
     }
     return true;
@@ -145,13 +146,13 @@ void ComboBox::setValue(const QVariant &value)
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            kWarning() << "NO SUCH KEY:" << value.toString()
+            qWarning() << "NO SUCH KEY:" << value.toString()
                 << "property=" << objectName();
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            kWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+            qWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
                 << "count=" << count() << "value=" << value.toString()
                 << "property=" << objectName() << "\nActual combobox contents"
                 << list;
@@ -186,9 +187,8 @@ void ComboBox::fillValues()
         }
         index++;
     }
-    KCompletion *comp = completionObject();
-    comp->insertItems(m_listData.names);
-    comp->setCompletionMode(KGlobalSettings::CompletionShell);
+    QCompleter *comp = new QCompleter(m_listData.names);
+    comp->setWidget(this);
 }
 
 /*
@@ -220,7 +220,7 @@ void ComboBox::slotValueChanged(int)
 
 void ComboBox::paintEvent( QPaintEvent * event )
 {
-    KComboBox::paintEvent(event);
+    QComboBox::paintEvent(event);
     Factory::paintTopGridLine(this);
 }
 
@@ -276,7 +276,7 @@ QString ComboBoxDelegate::displayTextForProperty( const Property* property ) con
     return property->listData()->names[ idx ];
 }
 
-QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent, 
+QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
@@ -290,7 +290,7 @@ QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent,
     return cb;
 }
 
-/*void ComboBoxDelegate::paint( QPainter * painter, 
+/*void ComboBoxDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
 }*/

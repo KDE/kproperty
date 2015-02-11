@@ -22,17 +22,17 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
-#include <knuminput.h>
+#include <QSpinBox>
 
 namespace KoProperty {
 
 //! A delegate supporting Int and UInt types
-/*! Note that due to KIntNumInput limitations, for UInt the maximum value 
+/*! Note that due to KIntNumInput limitations, for UInt the maximum value
     is INT_MAX, not UINT_MAX.
 */
-class KOPROPERTY_EXPORT IntSpinBox : public KIntNumInput
+class KOPROPERTY_EXPORT IntSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -44,7 +44,7 @@ public:
     QVariant value() const;
 
 //    virtual void setProperty(const Property *prop);
-    
+
 signals:
     void commitData(QWidget* editor);
 
@@ -63,7 +63,7 @@ private:
 };
 
 //! Double editor
-class KOPROPERTY_EXPORT DoubleSpinBox : public KDoubleNumInput
+class KOPROPERTY_EXPORT DoubleSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)
@@ -97,27 +97,27 @@ protected:
 };
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
-class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface,
                                              public ValueDisplayInterface
 {
 public:
     IntSpinBoxDelegate();
-    
+
     virtual QString displayTextForProperty( const Property* prop ) const;
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class KOPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface,
                               public ValueDisplayInterface
 {
 public:
     DoubleSpinBoxDelegate();
-    
+
     virtual QString displayTextForProperty( const Property* prop ) const;
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

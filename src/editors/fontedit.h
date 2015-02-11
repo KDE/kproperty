@@ -22,21 +22,21 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 #include <QVariant>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface,
                                        public ValuePainterInterface
 {
 public:
     FontDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

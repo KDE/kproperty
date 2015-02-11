@@ -23,9 +23,9 @@
 #include "Set.h"
 #include "Factory.h"
 
-#include <KoIcon.h>
-
+#include <QIcon>
 #include <QPointer>
+#include <QString>
 #include <QItemDelegate>
 #include <QPainter>
 #include <QMouseEvent>
@@ -34,9 +34,6 @@
 #include <QHeaderView>
 #include <QLineEdit>
 
-#include <klocale.h>
-#include <kiconeffect.h>
-#include <kdebug.h>
 
 using namespace KoProperty;
 
@@ -51,7 +48,7 @@ public:
     {
     }
 
-    virtual void drawPrimitive(PrimitiveElement elem, const QStyleOption* option, 
+    virtual void drawPrimitive(PrimitiveElement elem, const QStyleOption* option,
         QPainter* painter, const QWidget* widget) const
     {
 /*        if (elem == PE_PanelLineEdit) {
@@ -59,12 +56,12 @@ public:
             if (panel) {
                 QStyleOptionFrame alteredOption(*panel);
                 alteredOption.lineWidth = 0;
-                KexiUtils::StyleProxy::drawPrimitive(elem, &alteredOption, 
+                KexiUtils::StyleProxy::drawPrimitive(elem, &alteredOption,
                     painter, widget);
                 return;
             }
         }*/
-        KexiUtils::StyleProxy::drawPrimitive(elem, option, 
+        KexiUtils::StyleProxy::drawPrimitive(elem, option,
             painter, widget);
     }
 };
@@ -83,11 +80,11 @@ class ItemDelegate : public QItemDelegate
 public:
     explicit ItemDelegate(QWidget *parent);
     virtual ~ItemDelegate();
-    virtual void paint(QPainter *painter, 
+    virtual void paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const;
-    virtual QWidget * createEditor(QWidget *parent, 
+    virtual QWidget * createEditor(QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     mutable QPointer<QWidget> m_currentEditor;
 };
@@ -114,7 +111,7 @@ static int typeForProperty( Property* prop )
         return prop->type();
 }
 
-void ItemDelegate::paint(QPainter *painter, 
+void ItemDelegate::paint(QPainter *painter,
                          const QStyleOptionViewItem &option,
                          const QModelIndex &index) const
 {
@@ -161,24 +158,26 @@ void ItemDelegate::paint(QPainter *painter,
         int y1 = alteredOption.rect.top();
         QLinearGradient grad(x2 - iconSize * 2, y1, x2 - iconSize / 2, y1);
         QColor color(
-            alteredOption.palette.color( 
+            alteredOption.palette.color(
                 (alteredOption.state & QStyle::State_Selected) ? QPalette::Highlight : QPalette::Base ));
         color.setAlpha(0);
         grad.setColorAt(0.0, color);
         color.setAlpha(255);
         grad.setColorAt(0.5, color);
         QBrush gradBrush(grad);
-        painter->fillRect(x2 - iconSize * 2, y1, 
+        painter->fillRect(x2 - iconSize * 2, y1,
             iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon(koIcon("edit-undo").pixmap(iconSize, iconSize));
-        revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0, 
-            alteredOption.palette.color(
-                (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
-        painter->drawPixmap( x2 - iconSize - 2, 
-            y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
+        QPixmap revertIcon(QIcon::fromTheme("edit-undo").pixmap(iconSize, iconSize));
+
+        //!TODO
+        //revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0,
+        //    alteredOption.palette.color(
+        //        (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
+        //painter->drawPixmap( x2 - iconSize - 2,
+        //   y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
     }
 
-    QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ? 
+    QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ?
         dynamic_cast<EditorView*>(painter->device())->gridLineColor()
         : EditorView::defaultGridLineColor() );
     QPen pen(gridLineColor);
@@ -195,7 +194,7 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QItemDelegate::sizeHint(option, index) + QSize(0, 2);
 }
 
-QWidget * ItemDelegate::createEditor(QWidget * parent, 
+QWidget * ItemDelegate::createEditor(QWidget * parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     if (!index.isValid())
@@ -257,8 +256,8 @@ EditorView::EditorView(QWidget* parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setAnimated(false);
     setAllColumnsShowFocus(true);
-    header()->setMovable(false);
-    
+    header()->setSectionsMovable(false);
+
     setEditTriggers(
           QAbstractItemView::CurrentChanged
         | QAbstractItemView::DoubleClicked
@@ -284,7 +283,7 @@ void EditorView::changeSet(Set *set, const QByteArray& propertyToSelect, SetOpti
     changeSetInternal(set, options, propertyToSelect);
 }
 
-void EditorView::changeSetInternal(Set *set, SetOptions options, 
+void EditorView::changeSetInternal(Set *set, SetOptions options,
     const QByteArray& propertyToSelect)
 {
 //! @todo port??
@@ -324,7 +323,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
             //    kDebug() << "WTF? a NULL property?";
-            //else        
+            //else
                 //d->set->setPreviousSelection(property->name());
 #endif
         }
@@ -500,7 +499,7 @@ bool EditorView::viewportEvent( QEvent * event )
         const QModelIndex index = indexAt(hevent->pos());
         if (index.column() == 0 && withinRevertButtonArea( hevent->x(), index )) {
             QRect r(revertButtonArea( index ));
-            QToolTip::showText(hevent->globalPos(), i18n("Undo changes"), this, r);
+            QToolTip::showText(hevent->globalPos(), tr("Undo changes"), this, r);
         }
         else {
             QToolTip::hideText();

@@ -76,32 +76,32 @@ class KOPROPERTY_EXPORT ComposedPropertyCreatorInterface
 {
 public:
     ComposedPropertyCreatorInterface();
-    
+
     virtual ~ComposedPropertyCreatorInterface();
 
     virtual ComposedPropertyInterface* createComposedProperty(Property *parent) const = 0;
 };
 
 //! An interface for editor widget creators.
-/*! Options can be set in the options attribute in order to customize 
+/*! Options can be set in the options attribute in order to customize
     widget creation process. Do this in the EditorCreatorInterface constructor.
 */
 class KOPROPERTY_EXPORT EditorCreatorInterface
 {
 public:
     EditorCreatorInterface();
-    
+
     virtual ~EditorCreatorInterface();
-    
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
 
-    /*! Options for altering the editor widget creation process, 
+    /*! Options for altering the editor widget creation process,
         used by FactoryManager::createEditor(). */
     class Options {
     public:
         Options();
-        /*! In order to have better look of the widget within the property editor view, 
+        /*! In order to have better look of the widget within the property editor view,
             we usually remove borders from the widget (see FactoryManager::createEditor()).
             and adding 1 pixel 'gray border' on the top. Default value is true. */
         bool removeBorders : 1;
@@ -116,7 +116,7 @@ class KOPROPERTY_EXPORT ValuePainterInterface
 public:
     ValuePainterInterface();
     virtual ~ValuePainterInterface();
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
 };
 
@@ -155,7 +155,7 @@ private:
 
 //! Creator returning label
 template<class Widget>
-class KOPROPERTY_EXPORT EditorCreator : public EditorCreatorInterface, 
+class KOPROPERTY_EXPORT EditorCreator : public EditorCreatorInterface,
                                         public ValueDisplayInterface,
                                         public ValuePainterInterface
 {
@@ -164,7 +164,7 @@ public:
 
     virtual ~EditorCreator() {}
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         Q_UNUSED(type);
@@ -173,13 +173,13 @@ public:
         return new Widget(parent, this);
     }
 
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         painter->save();
         QRect r(option.rect);
         r.setLeft(r.left()+1);
-        painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, 
+        painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
             displayText( index.data(Qt::EditRole) ) );
         painter->restore();
     }
@@ -193,7 +193,7 @@ class KOPROPERTY_EXPORT ComposedPropertyCreator : public ComposedPropertyCreator
 {
 public:
     ComposedPropertyCreator() : ComposedPropertyCreatorInterface() {}
-    
+
     virtual ~ComposedPropertyCreator() {}
 
     virtual ComposedProperty* createComposedProperty(Property *parent) const {
@@ -228,7 +228,7 @@ public:
 protected:
     void addEditorInternal(int type, EditorCreatorInterface *editor, bool own = true);
 
-    void addComposedPropertyCreatorInternal(int type, 
+    void addComposedPropertyCreatorInternal(int type,
         ComposedPropertyCreatorInterface* creator, bool own = true);
 
     //! Adds value painter @a painter for type @a type.
@@ -260,7 +260,7 @@ public:
 
     bool paint( int type,
         QPainter * painter,
-        const QStyleOptionViewItem & option, 
+        const QStyleOptionViewItem & option,
         const QModelIndex & index ) const;
 
     ComposedPropertyInterface* createComposedProperty(Property *parent);
@@ -279,10 +279,10 @@ public:
     /*! \return a pointer to a factory manager instance.*/
     static FactoryManager* self();
 
-private:
     FactoryManager();
     ~FactoryManager();
-
+private:
+    
     class Private;
     Private * const d;
 };

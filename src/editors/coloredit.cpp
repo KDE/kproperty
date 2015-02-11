@@ -18,15 +18,13 @@
 */
 
 #include "coloredit.h"
-#include "koproperty/Utils_p.h"
+#include "Utils_p.h"
 
-#include <QVariant>
-#include <QLayout>
-#include <QColor>
-#include <QPainter>
+#include <QtCore/QVariant>
+#include <QtGui/QLayout>
+#include <QtGui/QColor>
+#include <QtGui/QPainter>
 
-#include <kglobal.h>
-#include <kcolorcollection.h>
 
 using namespace KoProperty;
 
@@ -64,7 +62,7 @@ void ColorCombo::slotValueChanged(const QColor&)
     emit commitData(this);
 }
 
-QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent, 
+QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type)
@@ -73,7 +71,7 @@ QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent,
     return new ColorCombo(parent);
 }
 
-void ColorComboDelegate::paint( QPainter * painter, 
+void ColorComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();

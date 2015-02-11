@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_URLEDIT_H
 #define KPROPERTY_URLEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 class KUrlRequester;
 

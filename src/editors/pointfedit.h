@@ -23,7 +23,7 @@
 #ifndef KPROPERTY_POINTFEDIT_H
 #define KPROPERTY_POINTFEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 namespace KoProperty
 {
@@ -33,10 +33,10 @@ class KOPROPERTY_EXPORT PointFComposedProperty : public ComposedPropertyInterfac
 public:
     explicit PointFComposedProperty(Property *parent);
 
-    virtual void setValue(Property *property, 
+    virtual void setValue(Property *property,
         const QVariant &value, bool rememberOldValue);
 
-    virtual void childValueChanged(Property *child, 
+    virtual void childValueChanged(Property *child,
         const QVariant &value, bool rememberOldValue);
 };
 

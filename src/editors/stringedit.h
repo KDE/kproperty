@@ -22,15 +22,15 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
-#include "koproperty/Factory.h"
+#include "Factory.h"
 
 #include <QVariant>
-#include <klineedit.h>
+#include <QLineEdit>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT StringEdit : public KLineEdit
+class KOPROPERTY_EXPORT StringEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
@@ -59,7 +59,7 @@ class KOPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
 public:
     StringDelegate() {}
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
