@@ -58,8 +58,6 @@ kde4_install_icons(${DATA_INSTALL_DIR}/koproperty/icons)
 if(FALSE) # TODO: install when we move to independent place
   install( FILES
     Factory.h
-    koproperty_global.h
-    koproperty_export.h
     Property.h
     Set.h
     Utils.h

@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_EDITORVIEW_H
 #define KPROPERTY_EDITORVIEW_H
 
-#include "koproperty_export.h"
+#include <kproperty_export.h>
 
 #include <QTreeView>
 
