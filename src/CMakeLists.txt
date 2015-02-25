@@ -71,7 +71,7 @@ install(TARGETS kproperty LIBRARY DESTINATION lib)
 
 #kde4_install_icons(${DATA_INSTALL_DIR}/kproperty/icons)
 
-if(FALSE) # TODO: install when we move to independent place
+if(TRUE) # TODO: install when we move to independent place
   install( FILES
     Factory.h
     Property.h
@@ -79,7 +79,7 @@ if(FALSE) # TODO: install when we move to independent place
     Utils.h
     Factory.h
     EditorView.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty COMPONENT Devel
+    DESTINATION include/kproperty COMPONENT Devel
   )
 
   install( FILES
@@ -105,5 +105,5 @@ if(FALSE) # TODO: install when we move to independent place
     editors/symbolcombo.h
     editors/timeedit.h
     editors/urledit.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/kproperty/editors COMPONENT Devel)
+  DESTINATION include/kproperty/editors COMPONENT Devel)
 endif(FALSE)
