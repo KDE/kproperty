@@ -42,7 +42,9 @@ SymbolCombo::SymbolCombo(Property *property, QWidget *parent)
     m_edit->setMinimumHeight(5);
     m_edit->setMaxLength(1);
     l->addWidget(m_edit);
-    m_select = new QPushButton("...", this);
+    m_select = new QPushButton(this);
+    Utils::setupDotDotDotButton(m_select, tr("Select symbol"),
+        tr("Selects a symbol"));
     m_select->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
     m_select->setMinimumHeight(5);
     l->addWidget(m_select);

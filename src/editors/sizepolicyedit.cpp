@@ -53,13 +53,13 @@ private:
     static QStringList stringsInternal() {
         QStringList strings;
         strings
-         << QObject::tr("Size Policy", "Fixed")
-         << QObject::tr("Size Policy", "Minimum")
-         << QObject::tr("Size Policy", "Maximum")
-         << QObject::tr("Size Policy", "Preferred")
-         << QObject::tr("Size Policy", "Expanding")
-         << QObject::tr("Size Policy", "Minimum Expanding")
-         << QObject::tr("Size Policy", "Ignored");
+         << QObject::tr("Fixed", "Size Policy")
+         << QObject::tr("Minimum", "Size Policy")
+         << QObject::tr("Maximum", "Size Policy")
+         << QObject::tr("Preferred", "Size Policy")
+         << QObject::tr("Expanding", "Size Policy")
+         << QObject::tr("Minimum Expanding", "Size Policy")
+         << QObject::tr("Ignored", "Size Policy");
         return strings;
     }
 };

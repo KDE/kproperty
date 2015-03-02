@@ -342,7 +342,7 @@ Set::Set(QObject *parent, const QString &typeName)
     setObjectName(typeName.toLower().toLatin1());
 
     d->ownProperty = true;
-    d->groupDescriptions.insert("common", tr("General properties", "General"));
+    d->groupDescriptions.insert("common", tr("General", "General properties"));
     d->typeName = typeName.toLower();
 }
 
@@ -360,7 +360,7 @@ Set::Set(bool propertyOwner)
         , d(new SetPrivate(this))
 {
     d->ownProperty = propertyOwner;
-    d->groupDescriptions.insert("common", tr("General properties", "General"));
+    d->groupDescriptions.insert("common", tr("General", "General properties"));
 }
 
 Set::~Set()

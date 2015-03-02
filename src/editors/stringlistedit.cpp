@@ -53,7 +53,10 @@ StringListEdit::StringListEdit(Property *property, QWidget *parent)
     m_edit->setMinimumHeight(5);
     l->addWidget(m_edit);
 
-    m_selectButton = new QPushButton("...", this);
+    m_selectButton = new QPushButton(this);
+    Utils::setupDotDotDotButton(m_selectButton, tr("Select item"),
+        tr("Selects one item"));
+
     m_selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     l->addWidget(m_selectButton);
     setFocusWidget(m_selectButton);
