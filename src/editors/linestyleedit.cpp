@@ -49,7 +49,7 @@ LineStyleCombo::~LineStyleCombo()
 
 QVariant LineStyleCombo::value() const
 {
-    return QPen(lineStyle());
+    return int(lineStyle());
 }
 
 static bool hasVisibleStyle(const QVariant &value)
