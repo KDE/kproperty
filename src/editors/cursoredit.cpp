@@ -46,6 +46,7 @@
 #include <QVariant>
 #include <QCursor>
 #include <QBitmap>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -93,25 +94,25 @@ private:
     static QList<QVariant> keysInternal() {
         QList<QVariant> keys;
         keys
-        << QCursor(Qt::BlankCursor)
-        << QCursor(Qt::ArrowCursor)
-        << QCursor(Qt::UpArrowCursor)
-        << QCursor(Qt::CrossCursor)
-        << QCursor(Qt::WaitCursor)
-        << QCursor(Qt::IBeamCursor)
-        << QCursor(Qt::SizeVerCursor)
-        << QCursor(Qt::SizeHorCursor)
-        << QCursor(Qt::SizeBDiagCursor)
-        << QCursor(Qt::SizeFDiagCursor)
-        << QCursor(Qt::SizeAllCursor)
-        << QCursor(Qt::SplitVCursor)
-        << QCursor(Qt::SplitHCursor)
-        << QCursor(Qt::PointingHandCursor)
-        << QCursor(Qt::ForbiddenCursor)
-        << QCursor(Qt::WhatsThisCursor)
-        << QCursor(Qt::BusyCursor)
-        << QCursor(Qt::OpenHandCursor)
-        << QCursor(Qt::ClosedHandCursor);
+        << int(Qt::BlankCursor)
+        << int(Qt::ArrowCursor)
+        << int(Qt::UpArrowCursor)
+        << int(Qt::CrossCursor)
+        << int(Qt::WaitCursor)
+        << int(Qt::IBeamCursor)
+        << int(Qt::SizeVerCursor)
+        << int(Qt::SizeHorCursor)
+        << int(Qt::SizeBDiagCursor)
+        << int(Qt::SizeFDiagCursor)
+        << int(Qt::SizeAllCursor)
+        << int(Qt::SplitVCursor)
+        << int(Qt::SplitHCursor)
+        << int(Qt::PointingHandCursor)
+        << int(Qt::ForbiddenCursor)
+        << int(Qt::WhatsThisCursor)
+        << int(Qt::BusyCursor)
+        << int(Qt::OpenHandCursor)
+        << int(Qt::ClosedHandCursor);
         return keys;
     }
 
@@ -202,12 +203,12 @@ CursorEdit::~CursorEdit()
 
 QCursor CursorEdit::cursorValue() const
 {
-    return QCursor( (Qt::CursorShape)ComboBox::value().toInt() );
+    return QCursor((Qt::CursorShape)ComboBox::value().toInt());
 }
 
 void CursorEdit::setCursorValue(const QCursor &value)
 {
-    ComboBox::setValue( value );
+    ComboBox::setValue( (int)(value.shape()) );
 }
 
 //---------------
