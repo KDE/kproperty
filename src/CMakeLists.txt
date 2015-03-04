@@ -6,15 +6,15 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 find_package(Qt5Widgets REQUIRED)
+find_package(KF5WidgetsAddons)
+find_package(KF5GuiAddons)
 
 add_subdirectory( tests )
-
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
 set(libkpropertyeditors_SRCS
   editors/utils.cpp
   editors/booledit.cpp
-  #editors/coloredit.cpp
+  editors/coloredit.cpp
   editors/combobox.cpp
   editors/cursoredit.cpp
   editors/dateedit.cpp
@@ -56,7 +56,10 @@ set(kproperty_LIB_SRCS
    ${libkpropertyeditors_SRCS}
 )
 
+
 add_library(kproperty SHARED ${kproperty_LIB_SRCS})
+target_link_libraries(kproperty KF5::WidgetsAddons KF5::GuiAddons)
+
 #target_link_libraries(kproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
 #target_link_libraries(kproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
 
@@ -64,8 +67,6 @@ set_target_properties(kproperty PROPERTIES VERSION 3.0 SOVERSION 3.0.0)
 qt5_use_modules(kproperty Widgets)
 
 install(TARGETS kproperty LIBRARY DESTINATION lib)
-
-
 
 ########### install files ###############
 

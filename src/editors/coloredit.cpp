@@ -25,10 +25,11 @@
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
 
+#include <kcolorcollection.h>
 
 using namespace KoProperty;
 
-K_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, ("Oxygen.colors"))
+Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, ("Oxygen.colors"))
 
 ColorCombo::ColorCombo(QWidget *parent)
         : KColorCombo(parent)

@@ -23,7 +23,7 @@
 #include "customproperty.h"*/
 #include "editors/booledit.h"
 #include "editors/combobox.h"
-//#include "editors/coloredit.h"
+#include "editors/coloredit.h"
 #include "editors/cursoredit.h"
 #include "editors/dateedit.h"
 #include "editors/datetimeedit.h"
@@ -52,7 +52,7 @@ DefaultFactory::DefaultFactory()
 {
     addEditor( KoProperty::Bool, new BoolDelegate );
     addEditor( KoProperty::Cursor, new CursorDelegate );
-    //addEditor( KoProperty::Color, new ColorComboDelegate );
+    addEditor( KoProperty::Color, new ColorComboDelegate );
     addEditor( KoProperty::Date, new DateDelegate );
     addEditor( KoProperty::DateTime, new DateTimeDelegate );
 //!TODO    addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
