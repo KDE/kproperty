@@ -58,6 +58,3 @@ DummyWidget::setReadOnlyInternal(bool readOnly)
 {
     Q_UNUSED(readOnly);
 }
-
-#include "dummywidget.moc"
-

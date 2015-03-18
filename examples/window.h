@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-#include "Set.h"
+#include "kproperty/Set.h"
 
 /*!
  * @internal

@@ -30,7 +30,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT StringEdit : public QLineEdit
+class KPROPERTY_EXPORT StringEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
@@ -54,7 +54,7 @@ private:
     bool m_slotTextChangedEnabled;
 };
 
-class KOPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
+class KPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
 {
 public:
     StringDelegate() {}

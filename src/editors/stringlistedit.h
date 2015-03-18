@@ -31,7 +31,7 @@ class QPushButton;
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT StringListEdit : public Widget
+class KPROPERTY_EXPORT StringListEdit : public Widget
 {
     Q_OBJECT
 

@@ -739,5 +739,3 @@ QMap<QByteArray, QVariant> KoProperty::propertyValues(const Set& set)
     }
     return result;
 }
-
-#include "Set.moc"

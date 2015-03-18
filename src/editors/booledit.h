@@ -36,7 +36,7 @@ namespace KoProperty
 //! A bool editor supporting two states: true and false.
 /*! For null values, false is displayed.
 */
-class KOPROPERTY_EXPORT BoolEdit : public QToolButton
+class KPROPERTY_EXPORT BoolEdit : public QToolButton
 {
     Q_OBJECT
     Q_PROPERTY(bool value READ value WRITE setValue USER true)
@@ -74,7 +74,7 @@ private:
 //! A bool editor supporting three states: true, false and null.
 /*! The editor is implemented as a drop-down list.
 */
-class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
+class KPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -90,7 +90,7 @@ signals:
     void commitData( QWidget * editor );
 };
 
-class KOPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface,
                                        public ValuePainterInterface
 {
 public:

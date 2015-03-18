@@ -119,5 +119,3 @@ SymbolCombo::setReadOnlyInternal(bool readOnly)
 {
     m_select->setEnabled(!readOnly);
 }
-
-#include "symbolcombo.moc"

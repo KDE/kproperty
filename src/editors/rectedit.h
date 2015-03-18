@@ -25,7 +25,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT RectComposedProperty : public ComposedPropertyInterface
+class KPROPERTY_EXPORT RectComposedProperty : public ComposedPropertyInterface
 {
 public:
     explicit RectComposedProperty(Property *parent);
@@ -37,7 +37,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KOPROPERTY_EXPORT RectDelegate : public LabelCreator,
+class KPROPERTY_EXPORT RectDelegate : public LabelCreator,
                                        public ComposedPropertyCreator<RectComposedProperty>
 {
 public:

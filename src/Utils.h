@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_UTILS_H
 #define KPROPERTY_UTILS_H
 
-#include "koproperty_global.h"
+#include "kproperty_export.h"
 
 #include <QWidget>
 
@@ -29,7 +29,7 @@ namespace KoProperty
 
 //! @short A container widget that can be used to split information into hideable sections
 //! for a property editor-like panes.
-class KOPROPERTY_EXPORT GroupContainer : public QWidget
+class KPROPERTY_EXPORT GroupContainer : public QWidget
 {
 public:
     GroupContainer(const QString& title, QWidget* parent);

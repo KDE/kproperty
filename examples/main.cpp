@@ -19,12 +19,10 @@
 
 #include <QFont>
 
-#include <kapplication.h>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
+#include <QApplication>
+#include <QCommandLineParser>
 
-#include "test.h"
+#include "window.h"
 
 static const char description[] = "A test application for the KoProperty library";
 
@@ -32,32 +30,30 @@ static const char version[] = "0.2";
 
 int main(int argc, char **argv)
 {
-    KAboutData about("propertytest2", 0, ki18n("KoProperty Test"), version, ki18n(description),
-                     KAboutData::License_GPL, ki18n("(C) 2005 Cedric Pasteur"), KLocalizedString(), 0, "cedric.pasteur@free.fr");
-    about.addAuthor(ki18n("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
-    KCmdLineArgs::init(argc, argv, &about);
+    QApplication app(argc, argv);
 
-    KCmdLineOptions options;
-    options.add("flat",
-        ki18n("Flat display: do not display groups\n"
-              "(useful for testing)"));
-    options.add("font-size <size>",
-        ki18n("Set font size to &lt;size&gt; (in points)\n"
-              "(useful for testing whether editors keep the font settings)"));
-    options.add("property <name>",
-        ki18n("Display only specified property\n"
-              "(useful when we want to focus on testing a single\n"
-              "property editor)"));
-    options.add("ro",
-        ki18n("Set all properties as read-only:\n"
-              "(useful for testing read-only mode)"));
-    KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app;
+    QCoreApplication::setApplicationName("propertytest3");
+    QCoreApplication::setApplicationVersion("0.1");
+    QCommandLineParser parser;
+
+    QCommandLineOption flatOption("flat", QCoreApplication::translate("main", "Flat display: do not display groups\n(useful for testing)"));
+    parser.addOption(flatOption);
+
+    QCommandLineOption fontSizeOption("font-size", QCoreApplication::translate("main", "Set font size to <size> (in points)\n(useful for testing whether editors keep the font settings)"));
+    parser.addOption(fontSizeOption);
+
+    QCommandLineOption propertyOption("property", QCoreApplication::translate("main", "Display only specified property\n(useful when we want to focus on testing a single\nproperty editor)"));
+    parser.addOption(propertyOption);
+
+    QCommandLineOption roOption("ro", QCoreApplication::translate("main", "Set all properties as read-only:\n(useful for testing read-only mode)"));
+    parser.addOption(roOption);
+
+    parser.process(app);
 
     TestWindow test;
+
     bool ok;
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    const int fontSize = args->getOption("font-size").toInt(&ok);
+    const int fontSize = parser.value("font-size").toInt(&ok);
     if (fontSize > 0 && ok) {
         QFont f(test.font());
         f.setPointSize(fontSize);

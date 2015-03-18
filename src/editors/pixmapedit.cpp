@@ -260,5 +260,3 @@ void PixmapDelegate::paint( QPainter * painter,
                   option.rect.topLeft().y() + (option.rect.height() - pm.height()) / 2, pm);
     painter->restore();
 }
-
-#include "pixmapedit.moc"

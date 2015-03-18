@@ -3,13 +3,13 @@ project(kproperty)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+include(GenerateExportHeader)
 
 find_package(Qt5Widgets REQUIRED)
 find_package(KF5WidgetsAddons)
 find_package(KF5GuiAddons)
-
-add_subdirectory( tests )
 
 set(libkpropertyeditors_SRCS
   editors/utils.cpp
@@ -58,6 +58,8 @@ set(kproperty_LIB_SRCS
 
 
 add_library(kproperty SHARED ${kproperty_LIB_SRCS})
+generate_export_header(kproperty)
+
 target_link_libraries(kproperty KF5::WidgetsAddons KF5::GuiAddons)
 
 #target_link_libraries(kproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
@@ -80,6 +82,7 @@ if(TRUE) # TODO: install when we move to independent place
     Utils.h
     Factory.h
     EditorView.h
+    ${PROJECT_BINARY_DIR}/kproperty_export.h
     DESTINATION include/kproperty COMPONENT Devel
   )
 
@@ -107,4 +110,4 @@ if(TRUE) # TODO: install when we move to independent place
     editors/timeedit.h
     editors/urledit.h
   DESTINATION include/kproperty/editors COMPONENT Devel)
-endif(FALSE)
+endif(TRUE)

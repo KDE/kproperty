@@ -33,7 +33,7 @@ class QPushButton;
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT PixmapEdit : public QWidget
+class KPROPERTY_EXPORT PixmapEdit : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -72,7 +72,7 @@ protected:
     QPixmap m_pixmap, /* todo? m_scaledPixmap,*/ m_previewPixmap;
 };
 
-class KOPROPERTY_EXPORT PixmapDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT PixmapDelegate : public EditorCreatorInterface,
                                          public ValuePainterInterface
 {
 public:

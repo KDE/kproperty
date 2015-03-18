@@ -30,7 +30,7 @@ namespace KoProperty
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KOPROPERTY_EXPORT ColorCombo : public KColorCombo
+class KPROPERTY_EXPORT ColorCombo : public KColorCombo
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -52,7 +52,7 @@ protected slots:
     void slotValueChanged(const QColor&);
 };
 
-class KOPROPERTY_EXPORT ColorComboDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT ColorComboDelegate : public EditorCreatorInterface,
                                              public ValuePainterInterface
 {
 public:

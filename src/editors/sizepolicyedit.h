@@ -25,7 +25,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT SizePolicyComposedProperty : public ComposedPropertyInterface
+class KPROPERTY_EXPORT SizePolicyComposedProperty : public ComposedPropertyInterface
 {
 public:
     explicit SizePolicyComposedProperty(Property *parent);
@@ -37,7 +37,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KOPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator,
+class KPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator,
                                              public ComposedPropertyCreator<SizePolicyComposedProperty>
 {
 public:

@@ -37,7 +37,7 @@ class SetPrivate;
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jarosław Staniek <staniek@kde.org>
  */
-class KOPROPERTY_EXPORT Set : public QObject
+class KPROPERTY_EXPORT Set : public QObject
 {
     Q_OBJECT
 
@@ -52,7 +52,7 @@ public:
 
     //! An interface for functor selecting properties.
     /*! Used in Iterator. */
-    class KOPROPERTY_EXPORT PropertySelector
+    class KPROPERTY_EXPORT PropertySelector
     {
     public:
         PropertySelector();
@@ -74,7 +74,7 @@ public:
      Usage with selector:
      @code  for (Set::Iterator it(set, MySelector()); it.current(); ++it) { .... }
      @endcode */
-    class KOPROPERTY_EXPORT Iterator
+    class KPROPERTY_EXPORT Iterator
     {
     public:
         //! Creates iterator for @a set set of properties.
@@ -313,7 +313,7 @@ protected:
 };
 
 //! kDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
-KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Set &set);
+KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Set &set);
 
 /*! \brief
   \todo find a better name to show it's a set that doesn't own property
@@ -321,7 +321,7 @@ KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Set &set);
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Adam Treat <treat@kde.org>
  */
-class KOPROPERTY_EXPORT Buffer : public Set
+class KPROPERTY_EXPORT Buffer : public Set
 {
     Q_OBJECT
 
@@ -341,7 +341,7 @@ private:
 };
 
 //! @return property values for set @a set
-KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
+KPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

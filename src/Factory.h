@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_FACTORY_H
 #define KPROPERTY_FACTORY_H
 
-#include "koproperty_global.h"
+#include "kproperty_export.h"
 #include "Property.h"
 #include <QObject>
 #include <QVariant>
@@ -42,7 +42,7 @@ namespace KoProperty
 
   Example implementation of composed properties can be found in editors/ directory.
 */
-class KOPROPERTY_EXPORT ComposedPropertyInterface
+class KPROPERTY_EXPORT ComposedPropertyInterface
 {
 public:
     explicit ComposedPropertyInterface(Property *parent);
@@ -72,7 +72,7 @@ protected:
     bool m_childValueChangedEnabled : 1;
 };
 
-class KOPROPERTY_EXPORT ComposedPropertyCreatorInterface
+class KPROPERTY_EXPORT ComposedPropertyCreatorInterface
 {
 public:
     ComposedPropertyCreatorInterface();
@@ -86,7 +86,7 @@ public:
 /*! Options can be set in the options attribute in order to customize
     widget creation process. Do this in the EditorCreatorInterface constructor.
 */
-class KOPROPERTY_EXPORT EditorCreatorInterface
+class KPROPERTY_EXPORT EditorCreatorInterface
 {
 public:
     EditorCreatorInterface();
@@ -111,7 +111,7 @@ public:
     Options options;
 };
 
-class KOPROPERTY_EXPORT ValuePainterInterface
+class KPROPERTY_EXPORT ValuePainterInterface
 {
 public:
     ValuePainterInterface();
@@ -120,7 +120,7 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
 };
 
-class KOPROPERTY_EXPORT ValueDisplayInterface
+class KPROPERTY_EXPORT ValueDisplayInterface
 {
 public:
     ValueDisplayInterface();
@@ -133,7 +133,7 @@ public:
 
 //! Label widget that can be used for displaying text-based read-only items
 //! Used in LabelCreator.
-class KOPROPERTY_EXPORT Label : public QLabel
+class KPROPERTY_EXPORT Label : public QLabel
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -155,7 +155,7 @@ private:
 
 //! Creator returning label
 template<class Widget>
-class KOPROPERTY_EXPORT EditorCreator : public EditorCreatorInterface,
+class KPROPERTY_EXPORT EditorCreator : public EditorCreatorInterface,
                                         public ValueDisplayInterface,
                                         public ValuePainterInterface
 {
@@ -189,7 +189,7 @@ typedef EditorCreator<Label> LabelCreator;
 
 //! Creator returning composed property object
 template<class ComposedProperty>
-class KOPROPERTY_EXPORT ComposedPropertyCreator : public ComposedPropertyCreatorInterface
+class KPROPERTY_EXPORT ComposedPropertyCreator : public ComposedPropertyCreatorInterface
 {
 public:
     ComposedPropertyCreator() : ComposedPropertyCreatorInterface() {}
@@ -201,7 +201,7 @@ public:
     }
 };
 
-class KOPROPERTY_EXPORT Factory
+class KPROPERTY_EXPORT Factory
 {
 public:
     Factory();
@@ -246,7 +246,7 @@ protected:
 class Property;
 class CustomProperty;
 
-class KOPROPERTY_EXPORT FactoryManager : public QObject
+class KPROPERTY_EXPORT FactoryManager : public QObject
 {
     Q_OBJECT
 public:

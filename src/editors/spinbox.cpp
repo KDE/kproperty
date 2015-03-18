@@ -273,5 +273,3 @@ QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,
     Property *prop = editorModel->propertyForItem(index);
     return new DoubleSpinBox(prop, parent, option.rect.height() - 2 - 1);
 }
-
-#include "spinbox.moc"

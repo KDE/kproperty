@@ -29,7 +29,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface,
                                        public ValuePainterInterface
 {
 public:

@@ -116,5 +116,3 @@ StringListEdit::setReadOnlyInternal(bool readOnly)
 {
     m_selectButton->setEnabled(!readOnly);
 }
-
-#include "stringlistedit.moc"

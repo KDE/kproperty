@@ -25,7 +25,7 @@
 #include <QVariant>
 #include <QStringList>
 #include <QByteArray>
-#include "koproperty_global.h"
+#include "kproperty_export.h"
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
@@ -177,11 +177,11 @@ enum PropertyType {
   \author Alexander Dymo <cloudtemple@mskat.net>
   \author Jarosław Staniek <staniek@kde.org>
 */
-class KOPROPERTY_EXPORT Property
+class KPROPERTY_EXPORT Property
 {
 public:
     /*! Data container for properties of list type. */
-    class KOPROPERTY_EXPORT ListData
+    class KPROPERTY_EXPORT ListData
     {
     public:
         /*! Data container for list-value property.
@@ -442,11 +442,11 @@ protected:
     friend class SetPrivate;
     friend class Buffer;
     friend class ComposedPropertyInterface;
-    friend KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
+    friend KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 };
 
 //! kDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
-KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
+KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 
 }
 

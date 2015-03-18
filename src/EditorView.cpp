@@ -569,5 +569,3 @@ void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& p
 //! @todo OK?
     slotPropertyChanged(set, property);
 }
-
-#include "EditorView.moc"

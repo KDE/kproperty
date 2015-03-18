@@ -20,13 +20,13 @@
 #ifndef _KOLINESTYLESELECTOR_H_
 #define _KOLINESTYLESELECTOR_H_
 
-#include "koproperty_global.h"
+#include "kproperty_export.h"
 #include <QComboBox>
 
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KOPROPERTY_EXPORT KoLineStyleSelector : public QComboBox
+class KPROPERTY_EXPORT KoLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:

@@ -67,5 +67,3 @@ QWidget* StringDelegate::createEditor( int type, QWidget *parent,
     Q_UNUSED(index);
     return new StringEdit(parent);
 }
-
-#include "stringedit.moc"

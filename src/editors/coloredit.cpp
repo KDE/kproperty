@@ -88,5 +88,3 @@ void ColorComboDelegate::paint( QPainter * painter,
     painter->drawText(option.rect, Qt::AlignCenter, b.color().name());
     painter->restore();
 }
-
-#include "coloredit.moc"

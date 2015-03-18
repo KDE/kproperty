@@ -27,7 +27,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT CursorEdit : public ComboBox
+class KPROPERTY_EXPORT CursorEdit : public ComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
@@ -40,7 +40,7 @@ public:
     virtual void setCursorValue(const QCursor &value);
 };
 
-class KOPROPERTY_EXPORT CursorDelegate : public EditorCreatorInterface, 
+class KPROPERTY_EXPORT CursorDelegate : public EditorCreatorInterface, 
                        public ValuePainterInterface
 {
 public:

@@ -32,7 +32,7 @@ namespace KoProperty {
 /*! Note that due to KIntNumInput limitations, for UInt the maximum value
     is INT_MAX, not UINT_MAX.
 */
-class KOPROPERTY_EXPORT IntSpinBox : public QSpinBox
+class KPROPERTY_EXPORT IntSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -63,7 +63,7 @@ private:
 };
 
 //! Double editor
-class KOPROPERTY_EXPORT DoubleSpinBox : public QSpinBox
+class KPROPERTY_EXPORT DoubleSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)
@@ -97,7 +97,7 @@ protected:
 };
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
-class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface,
                                              public ValueDisplayInterface
 {
 public:
@@ -109,7 +109,7 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class KOPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface,
                               public ValueDisplayInterface
 {
 public:

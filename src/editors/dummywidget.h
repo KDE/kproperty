@@ -28,7 +28,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT DummyWidget: public Widget
+class KPROPERTY_EXPORT DummyWidget: public Widget
 {
     Q_OBJECT
 

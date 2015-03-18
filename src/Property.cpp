@@ -770,7 +770,7 @@ void Property::debug() const
     qDebug() << *this;
 }
 
-KOPROPERTY_EXPORT QDebug KoProperty::operator<<(QDebug dbg, const Property &p)
+KPROPERTY_EXPORT QDebug KoProperty::operator<<(QDebug dbg, const Property &p)
 {
     dbg.nospace() << "KoProperty::Property("
         << "NAME=" << p.name();

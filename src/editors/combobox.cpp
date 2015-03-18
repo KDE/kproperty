@@ -294,6 +294,3 @@ QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
 }*/
-
-
-#include "combobox.moc"

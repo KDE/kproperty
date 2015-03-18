@@ -27,7 +27,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT PointComposedProperty : public ComposedPropertyInterface
+class KPROPERTY_EXPORT PointComposedProperty : public ComposedPropertyInterface
 {
 public:
     explicit PointComposedProperty(Property *parent);
@@ -39,7 +39,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KOPROPERTY_EXPORT PointDelegate : public LabelCreator,
+class KPROPERTY_EXPORT PointDelegate : public LabelCreator,
                                         public ComposedPropertyCreator<PointComposedProperty>
 {
 public:

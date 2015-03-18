@@ -350,5 +350,3 @@ void BoolDelegate::paint( QPainter * painter,
     }
     painter->restore();
 }
-
-#include "booledit.moc"

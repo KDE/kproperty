@@ -288,5 +288,3 @@ bool EditorDataModel::hasChildren(const QModelIndex & parent) const
     const QList<Property*>* children = parentItem->children();
     return children && !children->isEmpty();
 }
-
-#include "EditorDataModel.moc"

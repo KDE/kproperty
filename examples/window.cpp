@@ -18,16 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "test.h"
+#include "window.h"
 
-#include "Property.h"
-#include "EditorView.h"
-
-#include <KoIcon.h>
-
-#include <klocale.h>
-#include <kdebug.h>
-#include <kcmdlineargs.h>
+#include "kproperty/Property.h"
+#include "kproperty/EditorView.h"
 
 #include <QDate>
 #include <QDateTime>
@@ -37,6 +31,9 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
+#include <QIcon>
+#include <QCommandLineParser>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -45,12 +42,15 @@ TestWindow::TestWindow()
         , m_set(this, "test")
 {
     setObjectName("koproperty_test");
-    setWindowIcon(koIcon("document-properties"));
+    setWindowIcon(QIcon::fromTheme("document-properties"));
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    const bool flat = args->isSet("flat");
-    const bool readOnly = args->isSet("ro");
-    const QString singleProperty = args->getOption("property");
+    QCommandLineParser parser;
+
+    parser.process(*(QCoreApplication::instance()));
+
+    const bool flat = parser.isSet("flat");
+    const bool readOnly = parser.isSet("ro");
+    const QString singleProperty = parser.value("property");
 
     /*  First, create the Set which will hold the properties.  */
     Property *p = 0;
@@ -141,7 +141,7 @@ TestWindow::TestWindow()
         m_set.addProperty(new Property("Color", palette().color(QPalette::Active, QPalette::Background), "Color"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Pixmap") {
-        QPixmap pm(koDesktopIcon("network-wired"));
+        QPixmap pm(QIcon::fromTheme("network-wired").pixmap(QSize(16,16)));
         m_set.addProperty(p = new Property("Pixmap", pm, "Pixmap"), group);
         p->setIcon("kpaint");
     }
@@ -175,11 +175,9 @@ TestWindow::TestWindow()
 //crashes.. why?: editorView->expandAll();
     resize(400, qApp->desktop()->height() - 200);
     editorView->setFocus();
-    kDebug() << m_set;
+    qDebug() << m_set;
 }
 
 TestWindow::~TestWindow()
 {
 }
-
-#include "test.moc"

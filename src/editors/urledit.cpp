@@ -95,5 +95,3 @@ URLEdit::setReadOnlyInternal(bool readOnly)
     m_edit->lineEdit()->setReadOnly(readOnly);
     m_edit->button()->setEnabled(!readOnly);
 }
-
-#include "urledit.moc"

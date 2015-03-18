@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_EDITORVIEW_H
 #define KPROPERTY_EDITORVIEW_H
 
-#include <kproperty_export.h>
+#include "kproperty_export.h"
 
 #include <QTreeView>
 
@@ -60,7 +60,7 @@ class Set;
     </li>
     </ul>
  */
-class KOPROPERTY_EXPORT EditorView : public QTreeView
+class KPROPERTY_EXPORT EditorView : public QTreeView
 {
     Q_OBJECT
 public:

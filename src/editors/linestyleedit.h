@@ -30,7 +30,7 @@ namespace KoProperty
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KOPROPERTY_EXPORT LineStyleCombo : public KoLineStyleSelector
+class KPROPERTY_EXPORT LineStyleCombo : public KoLineStyleSelector
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -52,7 +52,7 @@ protected slots:
     void slotValueChanged(int index);
 };
 
-class KOPROPERTY_EXPORT LineStyleComboDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT LineStyleComboDelegate : public EditorCreatorInterface,
                                                  public ValuePainterInterface
 {
 public:

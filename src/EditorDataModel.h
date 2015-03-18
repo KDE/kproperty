@@ -33,7 +33,7 @@ class Property;
 /*! @short A data model for using Set objects within the Qt's model/view API.
  @see EditorView
 */
-class KOPROPERTY_EXPORT EditorDataModel : public QAbstractItemModel
+class KPROPERTY_EXPORT EditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
 

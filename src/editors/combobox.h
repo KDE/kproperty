@@ -29,7 +29,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT ComboBox : public QComboBox
+class KPROPERTY_EXPORT ComboBox : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -90,7 +90,7 @@ protected:
     Options m_options;
 };
 
-class KOPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface,
                                            public ValueDisplayInterface
 {
 public:

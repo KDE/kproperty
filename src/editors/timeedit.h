@@ -29,7 +29,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT TimeEdit : public QTimeEdit
+class KPROPERTY_EXPORT TimeEdit : public QTimeEdit
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -54,7 +54,7 @@ protected slots:
 };
 
 
-class KOPROPERTY_EXPORT TimeDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT TimeDelegate : public EditorCreatorInterface,
                                        public ValueDisplayInterface
 {
 public:

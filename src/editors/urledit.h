@@ -28,7 +28,7 @@ class KUrlRequester;
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT URLEdit : public Widget
+class KPROPERTY_EXPORT URLEdit : public Widget
 {
     Q_OBJECT
 

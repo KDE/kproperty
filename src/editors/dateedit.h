@@ -29,7 +29,7 @@
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT DateEdit : public QDateEdit
+class KPROPERTY_EXPORT DateEdit : public QDateEdit
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -54,7 +54,7 @@ protected slots:
 };
 
 
-class KOPROPERTY_EXPORT DateDelegate : public EditorCreatorInterface,
+class KPROPERTY_EXPORT DateDelegate : public EditorCreatorInterface,
                                        public ValueDisplayInterface
 {
 public:

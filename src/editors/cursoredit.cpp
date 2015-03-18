@@ -244,5 +244,3 @@ void CursorDelegate::paint( QPainter * painter,
         s_cursorListData->names[ comboIndex ] );
     painter->restore();
 }
-
-#include "cursoredit.moc"
