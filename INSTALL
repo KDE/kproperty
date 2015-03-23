@@ -1,0 +1,22 @@
+KProperty - a library which provides a GUI for the editing of properties of objects
+
+Useful in applications such as IDEs where large amounts of properties are available for the user to edit.
+
+Installation Instructions
+===============
+
+1. Extract the source
+tar -xvf kproperty-<version>.tar.bz2
+
+2. Create a build directory
+mkdir kproperty-build
+cd kproperty-build
+
+3. Run cmake to configure the build
+cmake ../kproperty-<version>
+
+4. Run make to build the library
+make
+
+5. Run make install to install (as root)
+sudo make install

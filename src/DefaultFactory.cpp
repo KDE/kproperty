@@ -55,21 +55,22 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Color, new ColorComboDelegate );
     addEditor( KoProperty::Date, new DateDelegate );
     addEditor( KoProperty::DateTime, new DateTimeDelegate );
-//!TODO    addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
+//! @todo    addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
-//!TODO    addEditor( KoProperty::Int, new IntSpinBoxDelegate );
+//! @todo    addEditor( KoProperty::Int, new IntSpinBoxDelegate );
     addEditor( KoProperty::LineStyle, new LineStyleComboDelegate );
 //! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::Pixmap, new PixmapDelegate );
     addEditor( KoProperty::Point, new PointDelegate );
     addEditor( KoProperty::PointF, new PointFDelegate );
     addEditor( KoProperty::Rect, new RectDelegate );
+//TODO    addEditor( KoProperty::RectF, new RectFDelegate );
     addEditor( KoProperty::Size, new SizeDelegate );
     addEditor( KoProperty::SizeF, new SizeFDelegate );
     addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );
     addEditor( KoProperty::String, new StringDelegate );
     addEditor( KoProperty::Time, new TimeDelegate );
-//!TODO    addEditor( KoProperty::UInt, new IntSpinBoxDelegate );
+//! @todo    addEditor( KoProperty::UInt, new IntSpinBoxDelegate );
 //! @todo addEditor( KoProperty::ULongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::ValueFromList, new ComboBoxDelegate );
 }
