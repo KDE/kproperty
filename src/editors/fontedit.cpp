@@ -20,6 +20,7 @@
 */
 
 #include "fontedit.h"
+#include "fontedit_p.h"
 #include "utils.h"
 
 #include <QObject>
@@ -39,70 +40,52 @@
 
 using namespace KoProperty;
 
-//! @internal
-//! reimplemented to better button and label's positioning
-class FontEditRequester : public QWidget
+FontEditRequester::FontEditRequester(QWidget *parent)
+        : QWidget(parent)
+        , m_paletteChangedEnabled(true)
 {
-    Q_OBJECT
-    Q_PROPERTY(QFont value READ value WRITE setValue USER true)
-public:
-    explicit FontEditRequester(QWidget* parent)
-            : QWidget(parent)
-            , m_paletteChangedEnabled(true)
-    {
-        setBackgroundRole(QPalette::Base);
-        QHBoxLayout *lyr = new QHBoxLayout(this);
-        lyr->setContentsMargins(0,0,0,0);
-        lyr->setSpacing( 1 );
-        lyr->addStretch(1);
-        m_button = new QPushButton(this);
-        setFocusProxy(m_button);
-        Utils::setupDotDotDotButton(m_button,
-            tr("Click to select a font"),
-            tr("Selects font"));
-        connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
-        lyr->addWidget(m_button);
-        setValue(qApp->font());
+    setBackgroundRole(QPalette::Base);
+    QHBoxLayout *lyr = new QHBoxLayout(this);
+    lyr->setContentsMargins(0,0,0,0);
+    lyr->setSpacing( 1 );
+    lyr->addStretch(1);
+    m_button = new QPushButton(this);
+    setFocusProxy(m_button);
+    Utils::setupDotDotDotButton(m_button,
+        tr("Click to select a font"),
+        tr("Selects font"));
+    connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
+    lyr->addWidget(m_button);
+    setValue(qApp->font());
+}
+
+QFont FontEditRequester::value() const
+{
+    return m_font;
+}
+
+void FontEditRequester::setValue(const QFont &value)
+{
+    //kDebug() << QFontDatabase().families();
+    m_font = value;
+}
+
+void FontEditRequester::slotSelectFontClicked()
+{
+    bool ok;
+    QFont font;
+    font = QFontDialog::getFont( &ok, parentWidget() );
+    if (ok) {
+        m_font = font;
+        setValue(m_font);
+        emit commitData(this);
     }
+}
 
-    QFont value() const
-    {
-        return m_font;
-    }
-
-public Q_SLOTS:
-    void setValue(const QFont& value)
-    {
-        //kDebug() << QFontDatabase().families();
-        m_font = value;
-    }
-
-Q_SIGNALS:
-    void commitData( QWidget * editor );
-
-protected Q_SLOTS:
-    void slotSelectFontClicked()
-    {
-        bool ok;
-        QFont font;
-        font = QFontDialog::getFont( &ok, parentWidget() );
-        if (ok) {
-            m_font = font;
-            setValue(m_font);
-            emit commitData(this);
-        }
-    }
-
-protected:
-    virtual bool event( QEvent * event )
-    {
-        return QWidget::event(event);
-    }
-
-    QPushButton *m_button;
-    QFont m_font;
-    bool m_paletteChangedEnabled;
-};
+bool FontEditRequester::event( QEvent * event )
+{
+    return QWidget::event(event);
+}
 
 // -----------
 
@@ -142,5 +125,3 @@ void FontDelegate::paint( QPainter * painter,
         QObject::tr("%1, %2pt", "Font family and size, e.g. Arial, 2pt").arg(f.family()).arg(size));
     painter->restore();
 }
-
-#include "fontedit.moc"

@@ -100,5 +100,3 @@ void LineStyleComboDelegate::paint( QPainter * painter,
     painter->drawLine(r.left(), r.center().y(), r.right(), r.center().y());
     painter->restore();
 }
-
-#include "linestyleedit.moc"
