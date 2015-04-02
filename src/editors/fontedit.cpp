@@ -70,17 +70,17 @@ public:
         return m_font;
     }
 
-public slots:
+public Q_SLOTS:
     void setValue(const QFont& value)
     {
         //kDebug() << QFontDatabase().families();
         m_font = value;
     }
 
-signals:
+Q_SIGNALS:
     void commitData( QWidget * editor );
 
-protected slots:
+protected Q_SLOTS:
     void slotSelectFontClicked()
     {
         bool ok;
