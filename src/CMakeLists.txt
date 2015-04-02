@@ -75,8 +75,8 @@ if(TRUE) # TODO: install when we move to independent place
     Utils.h
     Factory.h
     EditorView.h
-    ${PROJECT_BINARY_DIR}/kproperty_export.h
-    DESTINATION include/kproperty COMPONENT Devel
+    ${PROJECT_BINARY_DIR}/src/kproperty_export.h
+    DESTINATION include/KProperty COMPONENT Devel
   )
 
   install( FILES
@@ -102,5 +102,5 @@ if(TRUE) # TODO: install when we move to independent place
     editors/symbolcombo.h
     editors/timeedit.h
     editors/urledit.h
-  DESTINATION include/kproperty/editors COMPONENT Devel)
+  DESTINATION include/KProperty/editors COMPONENT Devel)
 endif(TRUE)
