@@ -98,9 +98,9 @@ ItemDelegate::~ItemDelegate()
 {
 }
 
-static int getIconSize(int rowHeight)
+static int getIconSize(int fontPixelSize)
 {
-    return rowHeight * 2 / 3;
+    return fontPixelSize * 0.85;
 }
 
 static int typeForProperty( Property* prop )
@@ -138,7 +138,7 @@ void ItemDelegate::paint(QPainter *painter,
     }
     const int x2 = alteredOption.rect.right();
     const int y2 = alteredOption.rect.bottom();
-    const int iconSize = getIconSize( alteredOption.rect.height() );
+    const int iconSize = getIconSize( alteredOption.font.pixelSize() );
     if (modified) {
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
     }
@@ -441,7 +441,7 @@ QRect EditorView::revertButtonArea( const QModelIndex& index ) const
     QVariant modifiedVariant( d->model->data(index, EditorDataModel::PropertyModifiedRole) );
     if (!modifiedVariant.isValid() || !modifiedVariant.toBool())
         return QRect();
-    const int iconSize = getIconSize( rowHeight( index ) );
+    const int iconSize = getIconSize( fontInfo().pixelSize() );
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
