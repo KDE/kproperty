@@ -1,5 +1,3 @@
-include(GenerateExportHeader)
-
 find_package(Qt5Widgets REQUIRED)
 find_package(KF5WidgetsAddons)
 find_package(KF5GuiAddons)
@@ -30,10 +28,6 @@ set(libkpropertyeditors_SRCS
 #  editors/urledit.cpp
 )
 
-include_directories(${KPROPERTY_INCLUDES})
-
-########### next target ###############
-
 set(kproperty_LIB_SRCS
    Property.cpp
    Set.cpp
@@ -49,58 +43,95 @@ set(kproperty_LIB_SRCS
    ${libkpropertyeditors_SRCS}
 )
 
+add_library(KProperty SHARED ${kproperty_LIB_SRCS})
 
-add_library(kproperty SHARED ${kproperty_LIB_SRCS})
-generate_export_header(kproperty)
+generate_export_header(KProperty)
 
-target_link_libraries(kproperty KF5::WidgetsAddons KF5::GuiAddons)
+target_include_directories(KProperty INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/KProperty>")
+
+target_link_libraries(KProperty KF5::WidgetsAddons KF5::GuiAddons)
 
 #target_link_libraries(kproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
 #target_link_libraries(kproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
 
-set_target_properties(kproperty PROPERTIES VERSION 3.0 SOVERSION 3.0.0)
-qt5_use_modules(kproperty Widgets)
+set_target_properties(KProperty
+    PROPERTIES VERSION 1.0
+               SOVERSION 1.0.0
+               EXPORT_NAME KProperty
+)
 
-install(TARGETS kproperty LIBRARY DESTINATION lib)
+# Create a Config.cmake and a ConfigVersion.cmake file and install them
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KProperty")
 
-########### install files ###############
+ecm_setup_version(${KPROPERTY_VERSION}
+    VARIABLE_PREFIX KPROPERTY
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPropertyConfigVersion.cmake"
+)
+
+ecm_configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/KPropertyConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KPropertyConfig.cmake"
+    INSTALL_DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+)
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/KPropertyConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KPropertyConfigVersion.cmake"
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        COMPONENT Devel)
+
+install(TARGETS KProperty
+        EXPORT KPropertyTargets
+        ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(EXPORT KPropertyTargets
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        FILE KPropertyTargets.cmake)
+
+ecm_generate_pri_file(
+    BASE_NAME KProperty
+    LIB_NAME KProperty
+    DEPS "widgets"
+    FILENAME_VAR PRI_FILENAME
+    INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/KProperty
+)
+
+install(FILES ${PRI_FILENAME}
+        DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
 #kde4_install_icons(${DATA_INSTALL_DIR}/kproperty/icons)
 
-if(TRUE) # TODO: install when we move to independent place
-  install( FILES
-    Factory.h
-    Property.h
-    Set.h
-    Utils.h
-    Factory.h
-    EditorView.h
-    ${PROJECT_BINARY_DIR}/src/kproperty_export.h
-    DESTINATION include/KProperty COMPONENT Devel
-  )
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
+        DESTINATION "${INCLUDE_INSTALL_DIR}"
+        COMPONENT Devel)
 
-  install( FILES
-    editors/utils.h
-    editors/booledit.h
-    editors/coloredit.h
-    editors/combobox.h
-    editors/cursoredit.h
-    editors/dateedit.h
-    editors/datetimeedit.h
-    editors/dummywidget.h
-    editors/fontedit.h
-    editors/linestyleedit.h
-    editors/pixmapedit.h
-    editors/pointedit.h
-    editors/rectedit.h
-    editors/sizeedit.h
-    editors/sizepolicyedit.h
-    editors/spinbox.h
-    editors/spinbox.h
-    editors/stringedit.h
-    editors/stringlistedit.h
-    editors/symbolcombo.h
-    editors/timeedit.h
-    editors/urledit.h
-  DESTINATION include/KProperty/editors COMPONENT Devel)
-endif(TRUE)
+ecm_generate_headers(kproperty_FORWARDING_HEADERS
+    ORIGINAL CAMELCASE
+    PREFIX kproperty
+    HEADER_NAMES
+        Factory
+        Property
+        Set
+        Utils
+        Factory
+        EditorView
+    REQUIRED_HEADERS kproperty_HEADERS
+)
+
+install(
+    FILES
+        ${kproperty_HEADERS}
+        ${PROJECT_BINARY_DIR}/src/kproperty_export.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/kproperty
+    COMPONENT Devel
+)
+
+install(
+    FILES
+        ${kproperty_FORWARDING_HEADERS}
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/KProperty
+    COMPONENT Devel
+)
+
+add_subdirectory(editors)

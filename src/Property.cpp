@@ -811,7 +811,7 @@ KPROPERTY_EXPORT QDebug KoProperty::operator<<(QDebug dbg, const Property &p)
             else {
                 dbg.space() << ",";
             }
-            dbg.nospace() << key << ":" << p.option(key);
+            dbg.nospace() << key << ":" << p.option(key.constData());
         }
         dbg.nospace() << "]";
     }

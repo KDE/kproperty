@@ -35,7 +35,7 @@ LineStyleCombo::LineStyleCombo(QWidget *parent)
     QPalette p = QGuiApplication::palette();
     QColor focus = p.highlight().color();
 
-    styleSheet = QString("KoLineStyleSelector { \
+    styleSheet = QString::fromLatin1("KoLineStyleSelector { \
     border: 1px solid %1; \
     border-radius: 0px; \
     padding: 0px 18px; }").arg(focus.name());

@@ -93,7 +93,7 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     QPalette p = QGuiApplication::palette();
     QColor focus = p.highlight().color();
 
-    styleSheet = QString("QComboBox { \
+    styleSheet = QString::fromLatin1("QComboBox { \
     border: 1px solid %1; \
     border-radius: 0px; \
     padding: 0px 18px; }").arg(focus.name());

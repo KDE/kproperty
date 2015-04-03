@@ -243,7 +243,8 @@ void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* pa
         : KoProperty::EditorView::defaultGridLineColor() );
     widget->setStyleSheet(
         QString::fromLatin1("%1 { border-top: 1px solid %2;border-bottom: 1px solid %2; } %3")
-        .arg(widget->metaObject()->className()).arg(gridLineColor.name()).arg(extraStyleSheet));
+        .arg(QLatin1String(widget->metaObject()->className()))
+        .arg(gridLineColor.name()).arg(extraStyleSheet));
 }
 
 //------------
@@ -252,7 +253,7 @@ FactoryManager::FactoryManager()
         : QObject(0)
         , d(new Private)
 {
-    setObjectName("KoProperty::FactoryManager");
+    setObjectName(QLatin1String("KPropertyFactoryManager"));
     registerFactory(new DefaultFactory);
 }
 
@@ -316,16 +317,17 @@ QWidget * FactoryManager::createEditor(
        const EditorDataModel *editorModel
            = dynamic_cast<const EditorDataModel*>(index.model());
        Property *property = editorModel->propertyForItem(index);
-       w->setObjectName( property->name() );
+       w->setObjectName(QLatin1String(property->name()));
        if (creator->options.removeBorders) {
 //! @todo get real border color from the palette
             QColor gridLineColor( dynamic_cast<EditorView*>(parent) ?
                 dynamic_cast<EditorView*>(parent)->gridLineColor()
                 : EditorView::defaultGridLineColor() );
+            QString cssClassName = QLatin1String(w->metaObject()->className());
+            cssClassName.replace(QLatin1String("KProperty"), QString()); //!< @todo
             QString css =
                 QString::fromLatin1("%1 { border-top: 1px solid %2; } ")
-                .arg(QString::fromLatin1(w->metaObject()->className()).remove("KoProperty::"))
-                .arg(gridLineColor.name());
+                .arg(cssClassName).arg(gridLineColor.name());
 //            kDebug() << css;
             w->setStyleSheet(css);
         }

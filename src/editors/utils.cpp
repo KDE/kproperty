@@ -32,5 +32,5 @@ KPROPERTY_EXPORT void KoProperty::Utils::setupDotDotDotButton(QPushButton *butto
     button->setFocusPolicy(Qt::NoFocus);
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     const QFontMetrics fm(button->font());
-    button->setFixedWidth(fm.width(button->text() + "  "));
+    button->setFixedWidth(fm.width(button->text() + QLatin1String("  ")));
 }

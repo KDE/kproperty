@@ -28,7 +28,6 @@
 #include <QPainter>
 #include <QVariant>
 #include <QLayout>
-#include <QBitmap>
 
 using namespace KoProperty;
 
@@ -77,8 +76,8 @@ class BoolEditGlobal
 {
 public:
     BoolEditGlobal()
-        : yesIcon(QIcon::fromTheme("dialog-ok").pixmap(QSize(22,22)))
-        , noIcon(QIcon::fromTheme("button_no").pixmap(QSize(22,22)))
+        : yesIcon(QIcon::fromTheme(QLatin1String("dialog-ok")).pixmap(QSize(22,22)))
+        , noIcon(QIcon::fromTheme(QLatin1String("button_no")).pixmap(QSize(22,22)))
     {
         noneIcon.fill(Qt::transparent);
     }

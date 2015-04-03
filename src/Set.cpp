@@ -294,7 +294,7 @@ void Set::Iterator::setOrder(Set::Order order)
                 captionOrName = prop->caption();
             }
             if (captionOrName.isEmpty()) {
-                captionOrName = prop->name();
+                captionOrName = QLatin1String(prop->name());
             }
             propertiesAndStrings.append( qMakePair(prop, captionOrName) );
         }
@@ -339,7 +339,7 @@ Set::Set(QObject *parent, const QString &typeName)
         : QObject(parent)
         , d(new SetPrivate(this))
 {
-    setObjectName(typeName.toLower().toLatin1());
+    setObjectName(typeName.toLower());
 
     d->ownProperty = true;
     d->groupDescriptions.insert("common", tr("General", "General properties"));
@@ -476,7 +476,7 @@ Set::groupDescription(const QByteArray &group) const
     const QString result( d->groupDescriptions.value(group.toLower()) );
     if (!result.isEmpty())
         return result;
-    return group;
+    return QLatin1String(group);
 }
 
 void

@@ -29,7 +29,7 @@
 
 using namespace KoProperty;
 
-Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, ("Oxygen.colors"))
+Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, (QLatin1String("Oxygen.colors")))
 
 ColorCombo::ColorCombo(QWidget *parent)
         : KColorCombo(parent)
@@ -83,7 +83,7 @@ void ColorComboDelegate::paint( QPainter * painter,
     painter->setBrush(KoProperty::contrastColor(b.color()));
     painter->setPen(KoProperty::contrastColor(b.color()));
     QFont f(option.font);
-    f.setFamily("courier");
+    f.setFamily(QLatin1String("courier"));
     painter->setFont(f);
     painter->drawText(option.rect, Qt::AlignCenter, b.color().name());
     painter->restore();

@@ -167,7 +167,7 @@ void ItemDelegate::paint(QPainter *painter,
         QBrush gradBrush(grad);
         painter->fillRect(x2 - iconSize * 2, y1,
             iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon(QIcon::fromTheme("edit-undo").pixmap(iconSize, iconSize));
+        QPixmap revertIcon(QIcon::fromTheme(QLatin1String("edit-undo")).pixmap(iconSize, iconSize));
 
         //!TODO
         //revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0,
@@ -206,7 +206,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = FactoryManager::self()->createEditor(t, parent, alteredOption, index);
     if (w) {
-        if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)"))
+        if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)").constData())
             && property && !property->children())
         {
         }
