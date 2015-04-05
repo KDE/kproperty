@@ -28,16 +28,13 @@
 class QLineEdit;
 class QPushButton;
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT StringListEdit : public Widget
+class KPROPERTY_EXPORT KPropertyStringListEditor : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit StringListEdit(Property *property, QWidget *parent = 0);
-    virtual ~StringListEdit();
+    explicit KPropertyStringListEditor(KProperty *property, QWidget *parent = 0);
+    virtual ~KPropertyStringListEditor();
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant &value, bool emitChange = true);
@@ -55,7 +52,5 @@ private:
     QStringList  m_list;
     QPushButton *m_selectButton;
 };
-
-}
 
 #endif

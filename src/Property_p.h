@@ -21,6 +21,6 @@
 #define KPROPERTY_PROPERTY_P_H
 
 //! Default value for "step" option. Used for spin boxes, etc.
-#define KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP 0.01
+#define KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP 0.01
 
 #endif

@@ -23,9 +23,7 @@
 #include <QPainter>
 #include <QPen>
 
-using namespace KoProperty;
-
-LineStyleCombo::LineStyleCombo(QWidget *parent)
+KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
     : KoLineStyleSelector(parent)
 {
     setFrame(false);
@@ -43,11 +41,11 @@ LineStyleCombo::LineStyleCombo(QWidget *parent)
     setStyleSheet(styleSheet);
 }
 
-LineStyleCombo::~LineStyleCombo()
+KPropertyLineStyleComboEditor::~KPropertyLineStyleComboEditor()
 {
 }
 
-QVariant LineStyleCombo::value() const
+QVariant KPropertyLineStyleComboEditor::value() const
 {
     return int(lineStyle());
 }
@@ -57,7 +55,7 @@ static bool hasVisibleStyle(const QVariant &value)
     return !value.isNull() && value.canConvert(QVariant::Int) && value.toInt() < Qt::CustomDashLine;
 }
 
-void LineStyleCombo::setValue(const QVariant &value)
+void KPropertyLineStyleComboEditor::setValue(const QVariant &value)
 {
     if (!hasVisibleStyle(value)) {
         setLineStyle(Qt::NoPen);
@@ -66,21 +64,21 @@ void LineStyleCombo::setValue(const QVariant &value)
     setLineStyle(static_cast<Qt::PenStyle>(value.toInt()));
 }
 
-void LineStyleCombo::slotValueChanged(int)
+void KPropertyLineStyleComboEditor::slotValueChanged(int)
 {
     emit commitData(this);
 }
 
-QWidget * LineStyleComboDelegate::createEditor( int type, QWidget *parent,
+QWidget * KPropertyLineStyleComboDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type)
     Q_UNUSED(option)
     Q_UNUSED(index)
-    return new LineStyleCombo(parent);
+    return new KPropertyLineStyleComboEditor(parent);
 }
 
-void LineStyleComboDelegate::paint( QPainter * painter,
+void KPropertyLineStyleComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();

@@ -25,21 +25,18 @@
 
 class KUrlRequester;
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT URLEdit : public Widget
+class KPROPERTY_EXPORT KPropertyUrlEditor : public Widget
 {
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
     Q_OBJECT
 
 public:
-    explicit URLEdit(Property *property, QWidget *parent = 0);
-    virtual ~URLEdit();
+    explicit KPropertyUrlEditor(KProperty *property, QWidget *parent = 0);
+    virtual ~KPropertyUrlEditor();
 
     virtual QVariant value() const;
 
-    virtual void setProperty(Property *property);
+    virtual void setProperty(KProperty *property);
 
 Q_SIGNALS:
     void commitData( QWidget * editor );
@@ -56,7 +53,5 @@ protected:
 private:
     KUrlRequester *m_edit;
 };
-
-}
 
 #endif

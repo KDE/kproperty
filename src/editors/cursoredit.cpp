@@ -48,12 +48,10 @@
 #include <QBitmap>
 #include <QDebug>
 
-using namespace KoProperty;
-
-class CursorListData : public Property::ListData
+class CursorListData : public KPropertyListData
 {
 public:
-    CursorListData() : Property::ListData(keysInternal(), stringsInternal())
+    CursorListData() : KPropertyListData(keysInternal(), stringsInternal())
     {
     }
 
@@ -168,7 +166,7 @@ const char * const * const CursorListData::m_xpms[] =
 Q_GLOBAL_STATIC(CursorListData, s_cursorListData)
 
 //----------------------
-class CursorIconProvider : public ComboBox::Options::IconProviderInterface
+class CursorIconProvider : public KPropertyComboBoxEditor::Options::IconProviderInterface
 {
 public:
     explicit CursorIconProvider(QWidget* parent) : m_parent(parent) {}
@@ -185,49 +183,49 @@ public:
 
 //----------------------
 
-ComboBox::Options initComboBoxOptions( QWidget* parent )
+KPropertyComboBoxEditor::Options initComboBoxOptions( QWidget* parent )
 {
-    ComboBox::Options options;
+    KPropertyComboBoxEditor::Options options;
     options.iconProvider = new CursorIconProvider(parent);
     return options;
 }
 
-CursorEdit::CursorEdit(QWidget *parent)
-        : ComboBox(*s_cursorListData, initComboBoxOptions( this ), parent)
+KPropertyCursorEditor::KPropertyCursorEditor(QWidget *parent)
+        : KPropertyComboBoxEditor(*s_cursorListData, initComboBoxOptions( this ), parent)
 {
 }
 
-CursorEdit::~CursorEdit()
+KPropertyCursorEditor::~KPropertyCursorEditor()
 {
 }
 
-QCursor CursorEdit::cursorValue() const
+QCursor KPropertyCursorEditor::cursorValue() const
 {
-    return QCursor((Qt::CursorShape)ComboBox::value().toInt());
+    return QCursor((Qt::CursorShape)KPropertyComboBoxEditor::value().toInt());
 }
 
-void CursorEdit::setCursorValue(const QCursor &value)
+void KPropertyCursorEditor::setCursorValue(const QCursor &value)
 {
-    ComboBox::setValue( (int)(value.shape()) );
+    KPropertyComboBoxEditor::setValue( (int)(value.shape()) );
 }
 
 //---------------
 
-CursorDelegate::CursorDelegate()
+KPropertyCursorDelegate::KPropertyCursorDelegate()
 {
     options.removeBorders = false;
 }
 
-QWidget * CursorDelegate::createEditor( int type, QWidget *parent,
+QWidget * KPropertyCursorDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return new CursorEdit(parent);
+    return new KPropertyCursorEditor(parent);
 }
 
-void CursorDelegate::paint( QPainter * painter,
+void KPropertyCursorDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();

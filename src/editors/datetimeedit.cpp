@@ -25,10 +25,7 @@
 
 #include <QLocale>
 
-using namespace KoProperty;
-
-
-DateTimeEdit::DateTimeEdit(const Property* prop, QWidget* parent)
+KPropertyDateTimeEditor::KPropertyDateTimeEditor(const KProperty* prop, QWidget* parent)
   : QDateTimeEdit(parent)
 {
     Q_UNUSED(prop);
@@ -48,56 +45,56 @@ DateTimeEdit::DateTimeEdit(const Property* prop, QWidget* parent)
     connect(this, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged()));
 }
 
-DateTimeEdit::~DateTimeEdit()
+KPropertyDateTimeEditor::~KPropertyDateTimeEditor()
 {
 }
 
-QVariant DateTimeEdit::value() const
+QVariant KPropertyDateTimeEditor::value() const
 {
     return QVariant(dateTime());
 }
 
-void DateTimeEdit::setValue(const QVariant& value)
+void KPropertyDateTimeEditor::setValue(const QVariant& value)
 {
     blockSignals(true);
     setDateTime(value.toDateTime());
     blockSignals(false);
 }
 
-void DateTimeEdit::paintEvent(QPaintEvent* event)
+void KPropertyDateTimeEditor::paintEvent(QPaintEvent* event)
 {
     QDateTimeEdit::paintEvent(event);
-    Factory::paintTopGridLine(this);
+    KPropertyFactory::paintTopGridLine(this);
 }
 
 
-void DateTimeEdit::onDateTimeChanged()
+void KPropertyDateTimeEditor::onDateTimeChanged()
 {
     emit commitData(this);
 }
 
 
 //! @todo Port to KLocale, be inspired by KexiDateTimeTableEdit (with Kexi*Formatter)
-DateTimeDelegate::DateTimeDelegate()
+KPropertyDateTimeDelegate::KPropertyDateTimeDelegate()
 {
 }
 
-QString DateTimeDelegate::displayTextForProperty(const Property* prop) const
+QString KPropertyDateTimeDelegate::displayTextForProperty(const KProperty* prop) const
 {
     const QLocale locale;
     const QString defaultDateTimeFormat = locale.dateTimeFormat(QLocale::ShortFormat);
     return prop->value().toDateTime().toString(defaultDateTimeFormat);
 }
 
-QWidget* DateTimeDelegate::createEditor(int type, QWidget* parent,
+QWidget* KPropertyDateTimeDelegate::createEditor(int type, QWidget* parent,
     const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
 
-    const EditorDataModel *editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *prop = editorModel->propertyForItem(index);
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *prop = editorModel->propertyForItem(index);
 
-    return new DateTimeEdit(prop, parent);
+    return new KPropertyDateTimeEditor(prop, parent);
 }

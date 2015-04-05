@@ -21,11 +21,9 @@
 
 #include <QSize>
 
-using namespace KoProperty;
-
 static const char SIZEEDIT_MASK[] = "%1x%2";
 
-QString SizeDelegate::displayText( const QVariant& value ) const
+QString KPropertySizeDelegate::displayText( const QVariant& value ) const
 {
     const QSize s(value.toSize());
     return QString::fromLatin1(SIZEEDIT_MASK)
@@ -35,16 +33,16 @@ QString SizeDelegate::displayText( const QVariant& value ) const
 
 //------------
 
-SizeComposedProperty::SizeComposedProperty(Property *property)
-        : ComposedPropertyInterface(property)
+KSizeComposedProperty::KSizeComposedProperty(KProperty *property)
+        : KComposedPropertyInterface(property)
 {
-    (void)new Property("width",
-        QVariant(), QObject::tr("Width"), QObject::tr("Width"), UInt, property);
-    (void)new Property("height",
-        QVariant(), QObject::tr("Height"), QObject::tr("Height"), UInt, property);
+    (void)new KProperty("width",
+        QVariant(), QObject::tr("Width"), QObject::tr("Width"), KProperty::UInt, property);
+    (void)new KProperty("height",
+        QVariant(), QObject::tr("Height"), QObject::tr("Height"), KProperty::UInt, property);
 }
 
-void SizeComposedProperty::setValue(Property *property,
+void KSizeComposedProperty::setValue(KProperty *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QSize s( value.toSize() );
@@ -52,7 +50,7 @@ void SizeComposedProperty::setValue(Property *property,
     property->child("height")->setValue(s.height(), rememberOldValue, false);
 }
 
-void SizeComposedProperty::childValueChanged(Property *child,
+void KSizeComposedProperty::childValueChanged(KProperty *child,
     const QVariant &value, bool rememberOldValue)
 {
     Q_UNUSED(rememberOldValue);

@@ -35,8 +35,6 @@
 
 #include "KoUnit.h"
 
-using namespace KoProperty;
-
 //! @return font size expressed in points (pt)
 //! or if points are not available - in pixels (px) for @a font
 static QString fontSizeForCSS(const QFont& font)
@@ -60,7 +58,7 @@ static QString cssForSpinBox(const char *_class, const QFont& font, int itemHeig
         .arg(_class);
 }
 
-IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
+KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent, int itemHeight)
         : QSpinBox(parent)
         , m_unsigned( prop->type() == UInt )
 {
@@ -75,7 +73,7 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
 //    kDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
-    Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
+    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
@@ -88,18 +86,18 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
     connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged(int)));
 }
 
-IntSpinBox::~IntSpinBox()
+KPropertyIntSpinBox::~KPropertyIntSpinBox()
 {
 }
 
-QVariant IntSpinBox::value() const
+QVariant KPropertyIntSpinBox::value() const
 {
     if (m_unsigned)
         return uint( KIntNumInput::value() );
     return KIntNumInput::value();
 }
 
-void IntSpinBox::setValue(const QVariant& value)
+void KPropertyIntSpinBox::setValue(const QVariant& value)
 {
     int v( value.toInt() );
     if (m_unsigned && v<0) {
@@ -109,7 +107,7 @@ void IntSpinBox::setValue(const QVariant& value)
     KIntNumInput::setValue(v);
 }
 
-void IntSpinBox::slotValueChanged(int value)
+void KPropertyIntSpinBox::slotValueChanged(int value)
 {
     Q_UNUSED(value);
     emit commitData(this);
@@ -117,7 +115,7 @@ void IntSpinBox::slotValueChanged(int value)
 
 //-----------------------
 
-DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeight)
+KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight)
         : KDoubleNumInput(parent)
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
@@ -131,7 +129,7 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
         le->setContentsMargins(0,0,0,0);
         le->setFrame(false);
     }
-/*    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
+/*    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
         QString::fromLatin1(
             "QDoubleSpinBox { border-left: 0; border-right: 0; } "
             "QDoubleSpinBox::down-button { height: %1px; } "
@@ -139,12 +137,12 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
         ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
     );*/
     QString css = cssForSpinBox("QDoubleSpinBox", font(), itemHeight);
-    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent, css);
+    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(sb, parent, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
-    QVariant step(prop->option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP));
+    QVariant step(prop->option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP));
     if (!minVal.isNull() && !maxVal.isNull() && !step.isNull()) {
         bool slider = prop->option("slider", false).toBool();
         setRange(minVal.toDouble(), maxVal.toDouble(), step.toDouble(), slider);
@@ -165,18 +163,18 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged(double)));
 }
 
-DoubleSpinBox::~DoubleSpinBox()
+KPropertyDoubleSpinBox::~KPropertyDoubleSpinBox()
 {
 }
 
-void DoubleSpinBox::resizeEvent( QResizeEvent * event )
+void KPropertyDoubleSpinBox::resizeEvent( QResizeEvent * event )
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     sb->setFixedHeight(height()+1);
     KDoubleNumInput::resizeEvent(event);
 }
 
-void DoubleSpinBox::setValue(double v)
+void KPropertyDoubleSpinBox::setValue(double v)
 {
     if (!m_unit.isEmpty()) {
         KDoubleNumInput::setValue(KoUnit::fromSymbol(m_unit).toUserValue(v));
@@ -185,7 +183,7 @@ void DoubleSpinBox::setValue(double v)
     KDoubleNumInput::setValue(v);
 }
 
-double DoubleSpinBox::value() const
+double KPropertyDoubleSpinBox::value() const
 {
     if (!m_unit.isEmpty()) {
         return KoUnit::fromSymbol(m_unit).fromUserValue(KDoubleNumInput::value());
@@ -193,7 +191,7 @@ double DoubleSpinBox::value() const
     return KDoubleNumInput::value();
 }
 
-void DoubleSpinBox::slotValueChanged(double value)
+void KPropertyDoubleSpinBox::slotValueChanged(double value)
 {
     Q_UNUSED(value);
     emit commitData(this);
@@ -201,11 +199,11 @@ void DoubleSpinBox::slotValueChanged(double value)
 
 //-----------------------
 
-IntSpinBoxDelegate::IntSpinBoxDelegate()
+KPropertyIntSpinBoxDelegate::KPropertyIntSpinBoxDelegate()
 {
 }
 
-QString IntSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
+QString KPropertyIntSpinBoxDelegate::displayTextForProperty( const KProperty* prop ) const
 {
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
@@ -220,24 +218,24 @@ QString IntSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
     return QString::number(prop->value().toInt());
 }
 
-QWidget* IntSpinBoxDelegate::createEditor( int type, QWidget *parent,
+QWidget* KPropertyIntSpinBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
 
-    const EditorDataModel *editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *prop = editorModel->propertyForItem(index);
-    return new IntSpinBox(prop, parent, option.rect.height() - 2);
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *prop = editorModel->propertyForItem(index);
+    return new KPropertyIntSpinBox(prop, parent, option.rect.height() - 2);
 }
 
 //-----------------------
 
-DoubleSpinBoxDelegate::DoubleSpinBoxDelegate()
+KPropertyDoubleSpinBoxDelegate::KPropertyDoubleSpinBoxDelegate()
 {
 }
 
-QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
+QString KPropertyDoubleSpinBoxDelegate::displayTextForProperty( const KProperty* prop ) const
 {
     QString valueText;
     const QString unit(prop->option("unit").toString());
@@ -264,12 +262,12 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
     return KGlobal::locale()->formatNumber(prop->value().toDouble());
 }
 
-QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,
+QWidget* KPropertyDoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
-    const EditorDataModel *editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *prop = editorModel->propertyForItem(index);
-    return new DoubleSpinBox(prop, parent, option.rect.height() - 2 - 1);
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *prop = editorModel->propertyForItem(index);
+    return new KPropertyDoubleSpinBox(prop, parent, option.rect.height() - 2 - 1);
 }

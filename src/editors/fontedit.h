@@ -26,20 +26,15 @@
 
 #include <QVariant>
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface,
-                                       public ValuePainterInterface
+class KPROPERTY_EXPORT KPropertyFontDelegate : public KPropertyEditorCreatorInterface,
+                                               public KPropertyValuePainterInterface
 {
 public:
-    FontDelegate() {}
+    KPropertyFontDelegate() {}
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

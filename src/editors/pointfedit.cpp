@@ -24,11 +24,9 @@
 
 #include <QPointF>
 
-using namespace KoProperty;
-
 static const char POINTFEDIT_MASK[] = "%1, %2";
 
-QString PointFDelegate::displayText( const QVariant& value ) const
+QString KPropertyPointFDelegate::displayText( const QVariant& value ) const
 {
     const QPointF p(value.toPointF());
     return QString::fromLatin1(POINTFEDIT_MASK)
@@ -38,18 +36,18 @@ QString PointFDelegate::displayText( const QVariant& value ) const
 
 //------------
 
-PointFComposedProperty::PointFComposedProperty(Property *property)
-        : ComposedPropertyInterface(property)
+KPointFComposedProperty::KPointFComposedProperty(KProperty *property)
+        : KComposedPropertyInterface(property)
 {
-    (void)new Property("x",
+    (void)new KProperty("x",
         QVariant(), QObject::tr("X", "Property: X coordinate"),
-        QObject::tr("X Coordinate", "Property: X coordinate"), Double, property);
-    (void)new Property("y",
+        QObject::tr("X Coordinate", "Property: X coordinate"), KProperty::Double, property);
+    (void)new KProperty("y",
         QVariant(), QObject::tr("Y", "Property: Y coordinate"),
-        QObject::tr("Y Coordinate", "Property: Y coordinate"), Double, property);
+        QObject::tr("Y Coordinate", "Property: Y coordinate"), KProperty::Double, property);
 }
 
-void PointFComposedProperty::setValue(Property *property,
+void KPointFComposedProperty::setValue(KProperty *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QPointF p( value.toPointF() );
@@ -57,7 +55,7 @@ void PointFComposedProperty::setValue(Property *property,
     property->child("y")->setValue(p.y(), rememberOldValue, false);
 }
 
-void PointFComposedProperty::childValueChanged(Property *child,
+void KPointFComposedProperty::childValueChanged(KProperty *child,
     const QVariant &value, bool rememberOldValue)
 {
     Q_UNUSED(rememberOldValue);

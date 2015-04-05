@@ -26,15 +26,12 @@
 
 class QPushButton;
 
-namespace KoProperty {
-
-namespace Utils {
+namespace KPropertyUtils
+{
 
 //! Sets up a "..." button with fine-tuned settings.
 KPROPERTY_EXPORT void setupDotDotDotButton(QPushButton *button,
     const QString& toolTip = QString(), const QString& whatsThis = QString());
-
-}
 
 }
 

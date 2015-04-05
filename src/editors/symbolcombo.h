@@ -26,16 +26,13 @@
 class QLineEdit;
 class QPushButton;
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT SymbolCombo : public Widget
+class KPROPERTY_EXPORT KPropertySymbolComboEditor : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit SymbolCombo(Property *property, QWidget *parent = 0);
-    virtual ~SymbolCombo();
+    explicit KPropertySymbolComboEditor(KProperty *property, QWidget *parent = 0);
+    virtual ~KPropertySymbolComboEditor();
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant &value, bool emitChange = true);
@@ -53,7 +50,5 @@ private:
     QLineEdit  *m_edit;
     QPushButton  *m_select;
 };
-
-}
 
 #endif

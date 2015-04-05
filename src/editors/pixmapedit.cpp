@@ -42,9 +42,7 @@
 #include <QPushButton>
 #include <QFileDialog>
 
-using namespace KoProperty;
-
-PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
+KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
         : QWidget(parent)
         , m_property(prop)
 {
@@ -66,7 +64,7 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
 
     m_button = new QPushButton(this);
     lyr->addWidget(m_button);
-    Utils::setupDotDotDotButton(m_button, tr("Insert image from file"),
+    KPropertyUtils::setupDotDotDotButton(m_button, tr("Insert image from file"),
         tr("Inserts image from file"));
 
     m_popup = new QLabel(0, Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
@@ -80,17 +78,17 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     connect(m_button, SIGNAL(clicked()), this, SLOT(selectPixmap()));
 }
 
-PixmapEdit::~PixmapEdit()
+KPropertyPixmapEditor::~KPropertyPixmapEditor()
 {
     delete m_popup;
 }
 
-QVariant PixmapEdit::value() const
+QVariant KPropertyPixmapEditor::value() const
 {
     return m_pixmap;
 }
 
-void PixmapEdit::setValue(const QVariant &value)
+void KPropertyPixmapEditor::setValue(const QVariant &value)
 {
     m_pixmap = value.value<QPixmap>();
     if (m_pixmap.isNull() || (m_pixmap.height() <= height())) {
@@ -115,7 +113,7 @@ void PixmapEdit::setValue(const QVariant &value)
     emit commitData(this);
 }
 
-QString PixmapEdit::selectPixmapFileName()
+QString KPropertyPixmapEditor::selectPixmapFileName()
 {
     /*#ifdef PURE_QT
       QString url = QFileDialog::getOpenFileName();
@@ -141,7 +139,7 @@ QString PixmapEdit::selectPixmapFileName()
     return fileName;
 }
 
-void PixmapEdit::selectPixmap()
+void KPropertyPixmapEditor::selectPixmap()
 {
     const QString fileName(selectPixmapFileName());
     if (fileName.isEmpty())
@@ -176,7 +174,7 @@ PixmapEdit::resizeEvent(QResizeEvent *e)
 }*/
 
 bool
-PixmapEdit::eventFilter(QObject *o, QEvent *ev)
+KPropertyPixmapEditor::eventFilter(QObject *o, QEvent *ev)
 {
     if (o == m_edit) {
         if (ev->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(ev)->button() == Qt::LeftButton) {
@@ -218,24 +216,24 @@ PixmapEdit::setReadOnlyInternal(bool readOnly)
 
 //-----------------------
 
-PixmapDelegate::PixmapDelegate()
+KPropertyPixmapDelegate::KPropertyPixmapDelegate()
 {
 //    options.removeBorders = false;
 }
 
-QWidget* PixmapDelegate::createEditor( int type, QWidget *parent,
+QWidget* KPropertyPixmapDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
-    const EditorDataModel *editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *property = editorModel->propertyForItem(index);
-    PixmapEdit *pe = new PixmapEdit(property, parent);
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *property = editorModel->propertyForItem(index);
+    KPropertyPixmapEditor *pe = new KPropertyPixmapEditor(property, parent);
     return pe;
 }
 
-void PixmapDelegate::paint( QPainter * painter,
+void KPropertyPixmapDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     QPixmap pm( index.data(Qt::EditRole).value<QPixmap>() );

@@ -25,45 +25,43 @@
 #include <QHash>
 #include <QDebug>
 
-using namespace KoProperty;
-
-class EditorDataModel::Private
+class KPropertyEditorDataModel::Private
 {
 public:
-    explicit Private(Set *_set, Set::Order _order = Set::InsertionOrder) : set(_set), order(_order)
+    explicit Private(KPropertySet *_set, KPropertySetIterator::Order _order = KPropertySetIterator::InsertionOrder) : set(_set), order(_order)
     {
     }
-    Set *set;
-    Property rootItem;
+    KPropertySet *set;
+    KProperty rootItem;
     QHash<QByteArray, QPersistentModelIndex> indicesForNames;
-    Set::Order order; //!< order of properties
+    KPropertySetIterator::Order order; //!< order of properties
 };
 
 // -------------------
 
 //! A property selector offering functor selecting only visible properties.
 /*! Used e.g. in EditorDataModel::index(). */
-class VisiblePropertySelector : public Set::PropertySelector
+class VisiblePropertySelector : public KPropertySelector
 {
 public:
     VisiblePropertySelector() {}
-    virtual bool operator()(const Property& prop) const {
+    virtual bool operator()(const KProperty& prop) const {
         return prop.isVisible();
     }
-    Set::PropertySelector* clone() const { return new VisiblePropertySelector(); }
+    KPropertySelector* clone() const { return new VisiblePropertySelector(); }
 };
 
 // -------------------
 
-EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent,
-                                 Set::Order order)
+KPropertyEditorDataModel::KPropertyEditorDataModel(KPropertySet &propertySet, QObject *parent,
+                                                   KPropertySetIterator::Order order)
         : QAbstractItemModel(parent)
         , d(new Private(&propertySet, order))
 {
     collectIndices();
 }
 
-EditorDataModel::~EditorDataModel()
+KPropertyEditorDataModel::~KPropertyEditorDataModel()
 {
     delete d;
 }
@@ -75,11 +73,11 @@ bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAndCaption &n2)
     return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;
 }
 
-void EditorDataModel::collectIndices() const
+void KPropertyEditorDataModel::collectIndices() const
 {
-    Set::Iterator it(*d->set, VisiblePropertySelector());
-    if (d->order == Set::AlphabeticalOrder) {
-        it.setOrder(Set::AlphabeticalOrder);
+    KPropertySetIterator it(*d->set, VisiblePropertySelector());
+    if (d->order == KPropertySetIterator::AlphabeticalOrder) {
+        it.setOrder(KPropertySetIterator::AlphabeticalOrder);
     }
     d->indicesForNames.clear();
     for (int row = 0; it.current(); row++, ++it) {
@@ -88,32 +86,32 @@ void EditorDataModel::collectIndices() const
     }
 }
 
-QModelIndex EditorDataModel::indexForPropertyName(const QByteArray& propertyName) const
+QModelIndex KPropertyEditorDataModel::indexForPropertyName(const QByteArray& propertyName) const
 {
     return (const QModelIndex &)d->indicesForNames.value(propertyName);
 }
 
-QModelIndex EditorDataModel::indexForColumn(const QModelIndex& index, int column) const
+QModelIndex KPropertyEditorDataModel::indexForColumn(const QModelIndex& index, int column) const
 {
     if (column == 0)
         return index;
     return createIndex(index.row(), column, propertyForItem(index));
 }
 
-int EditorDataModel::columnCount(const QModelIndex &parent) const
+int KPropertyEditorDataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return 2;
 }
 
-QVariant EditorDataModel::data(const QModelIndex &index, int role) const
+QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
     const int col = index.column();
     if (col == 0) {
-        Property *prop = propertyForItem(index);
+        KProperty *prop = propertyForItem(index);
         if (role == Qt::DisplayRole) {
             if (!prop->caption().isEmpty())
                 return prop->caption();
@@ -124,25 +122,25 @@ QVariant EditorDataModel::data(const QModelIndex &index, int role) const
         }
     }
     else if (col == 1) {
-        Property *prop = propertyForItem(index);
+        KProperty *prop = propertyForItem(index);
         if (role == Qt::EditRole) {
             return prop->value();
         }
         else if (role == Qt::DisplayRole) {
-            return FactoryManager::self()->convertValueToText(prop);
+            return KPropertyFactoryManager::self()->convertValueToText(prop);
         }
     }
     return QVariant();
 }
 
-Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
+Qt::ItemFlags KPropertyEditorDataModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsEnabled;
 
     const int col = index.column();
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    Property *prop = propertyForItem(index);
+    KProperty *prop = propertyForItem(index);
     if (prop) {
         if (col == 1) {
             f |= Qt::ItemIsEditable;
@@ -151,17 +149,17 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
     return f;
 }
 
-Property *EditorDataModel::propertyForItem(const QModelIndex &index) const
+KProperty *KPropertyEditorDataModel::propertyForItem(const QModelIndex &index) const
 {
     if (index.isValid()) {
-        Property *item = static_cast<Property*>(index.internalPointer());
+        KProperty *item = static_cast<KProperty*>(index.internalPointer());
         if (item)
             return item;
     }
     return &d->rootItem;
 }
 
-QVariant EditorDataModel::headerData(int section, Qt::Orientation orientation,
+QVariant KPropertyEditorDataModel::headerData(int section, Qt::Orientation orientation,
                                      int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
@@ -174,25 +172,25 @@ QVariant EditorDataModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.column() != 0)
         return QModelIndex();
 
-    Property *parentItem = propertyForItem(parent);
-    Property *childItem;
+    KProperty *parentItem = propertyForItem(parent);
+    KProperty *childItem;
     if (parentItem == &d->rootItem) { // special case: top level
         int visibleRows = 0;
-        Set::Iterator it(*d->set, VisiblePropertySelector());
-        if (d->order == Set::AlphabeticalOrder) {
-            it.setOrder(Set::AlphabeticalOrder);
+        KPropertySetIterator it(*d->set, VisiblePropertySelector());
+        if (d->order == KPropertySetIterator::AlphabeticalOrder) {
+            it.setOrder(KPropertySetIterator::AlphabeticalOrder);
         }
 //! @todo use qBinaryFind()?
         for (; visibleRows < row && it.current(); visibleRows++, ++it)
             ;
         childItem = it.current();
     } else {
-        const QList<Property*>* children = parentItem->children();
+        const QList<KProperty*>* children = parentItem->children();
         if (!children)
             return QModelIndex();
         childItem = children->value(row);
@@ -202,18 +200,18 @@ QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &paren
     return createIndex(row, column, childItem);
 }
 
-QModelIndex EditorDataModel::parent(const QModelIndex &index) const
+QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
 
-    Property *childItem = propertyForItem(index);
-    Property *parentItem = childItem->parent();
+    KProperty *childItem = propertyForItem(index);
+    KProperty *parentItem = childItem->parent();
 
     if (!parentItem)
         return QModelIndex();
 
-    const QList<Property*>* children = parentItem->children();
+    const QList<KProperty*>* children = parentItem->children();
     Q_ASSERT(children);
     const int indexOfItem = children->indexOf(childItem);
     Q_ASSERT(indexOfItem != -1);
@@ -221,30 +219,30 @@ QModelIndex EditorDataModel::parent(const QModelIndex &index) const
     return createIndex(indexOfItem, 0, parentItem);
 }
 
-int EditorDataModel::rowCount(const QModelIndex &parent) const
+int KPropertyEditorDataModel::rowCount(const QModelIndex &parent) const
 {
-    Property *parentItem = propertyForItem(parent);
+    KProperty *parentItem = propertyForItem(parent);
     if (!parentItem || parentItem == &d->rootItem) { // top level
         return d->set->count(VisiblePropertySelector());
     }
-    const QList<Property*>* children = parentItem->children();
+    const QList<KProperty*>* children = parentItem->children();
     return children ? children->count() : 0;
 }
 
-bool EditorDataModel::setData(const QModelIndex &index, const QVariant &value,
+bool KPropertyEditorDataModel::setData(const QModelIndex &index, const QVariant &value,
                               int role)
 {
     if (role != Qt::EditRole)
         return false;
 
-    Property *item = propertyForItem(index);
+    KProperty *item = propertyForItem(index);
     if (item == &d->rootItem)
         return false;
     item->setValue(value);
     return true;
 }
 
-bool EditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
+bool KPropertyEditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
                                     const QVariant &value, int role)
 {
     Q_UNUSED(section);
@@ -254,19 +252,19 @@ bool EditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
     return false;
 }
 
-QModelIndex EditorDataModel::buddy(const QModelIndex & idx) const
+QModelIndex KPropertyEditorDataModel::buddy(const QModelIndex & idx) const
 {
     if (idx.column() == 0)
         return index( idx.row(), 1, parent(idx));
     return idx;
 }
 
-Set& EditorDataModel::propertySet() const
+KPropertySet& KPropertyEditorDataModel::propertySet() const
 {
     return *d->set;
 }
 
-void EditorDataModel::setOrder(Set::Order order)
+void KPropertyEditorDataModel::setOrder(KPropertySetIterator::Order order)
 {
     if (d->order != order) {
         d->order = order;
@@ -274,17 +272,17 @@ void EditorDataModel::setOrder(Set::Order order)
     }
 }
 
-Set::Order EditorDataModel::order() const
+KPropertySetIterator::Order KPropertyEditorDataModel::order() const
 {
     return d->order;
 }
 
-bool EditorDataModel::hasChildren(const QModelIndex & parent) const
+bool KPropertyEditorDataModel::hasChildren(const QModelIndex & parent) const
 {
-    Property *parentItem = propertyForItem(parent);
+    KProperty *parentItem = propertyForItem(parent);
     if (!parentItem || parentItem == &d->rootItem) { // top level
         return d->set->hasVisibleProperties();
     }
-    const QList<Property*>* children = parentItem->children();
+    const QList<KProperty*>* children = parentItem->children();
     return children && !children->isEmpty();
 }

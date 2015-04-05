@@ -24,29 +24,24 @@
 
 #include "Factory.h"
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT PointComposedProperty : public ComposedPropertyInterface
+class KPROPERTY_EXPORT KPointComposedProperty : public KComposedPropertyInterface
 {
 public:
-    explicit PointComposedProperty(Property *parent);
+    explicit KPointComposedProperty(KProperty *parent);
 
-    virtual void setValue(Property *property,
+    virtual void setValue(KProperty *property,
         const QVariant &value, bool rememberOldValue);
 
-    virtual void childValueChanged(Property *child,
+    virtual void childValueChanged(KProperty *child,
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT PointDelegate : public LabelCreator,
-                                        public ComposedPropertyCreator<PointComposedProperty>
+class KPROPERTY_EXPORT KPropertyPointDelegate : public KPropertyLabelCreator,
+                                                public KComposedPropertyCreator<KPointComposedProperty>
 {
 public:
-    PointDelegate() {}
+    KPropertyPointDelegate() {}
     virtual QString displayText( const QVariant& value ) const;
 };
-
-}
 
 #endif

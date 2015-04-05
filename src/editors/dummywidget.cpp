@@ -22,23 +22,21 @@
 
 #include <QPainter>
 
-using namespace KoProperty;
-
-DummyWidget::DummyWidget(Property *property, QWidget *parent)
+KPropertyDummyWidget::KPropertyDummyWidget(KProperty *property, QWidget *parent)
         : Widget(property, parent)
 {}
 
-DummyWidget::~DummyWidget()
+KPropertyDummyWidget::~KPropertyDummyWidget()
 {}
 
 QVariant
-DummyWidget::value() const
+KPropertyDummyWidget::value() const
 {
     return m_value;
 }
 
 void
-DummyWidget::setValue(const QVariant &value, bool emitChange)
+KPropertyDummyWidget::setValue(const QVariant &value, bool emitChange)
 {
     m_value = value;
     if (emitChange)
@@ -46,7 +44,7 @@ DummyWidget::setValue(const QVariant &value, bool emitChange)
 }
 
 void
-DummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &)
+KPropertyDummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &)
 {
     p->setBrush(cg.window());
     p->setPen(Qt::NoPen);
@@ -54,7 +52,7 @@ DummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, cons
 }
 
 void
-DummyWidget::setReadOnlyInternal(bool readOnly)
+KPropertyDummyWidget::setReadOnlyInternal(bool readOnly)
 {
     Q_UNUSED(readOnly);
 }

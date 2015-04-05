@@ -34,9 +34,6 @@
 #include <QHeaderView>
 #include <QLineEdit>
 
-
-using namespace KoProperty;
-
 #if 0 // not sure if we should use it, better to fix Oxygen?
 #include <kexiutils/styleproxy.h>
 
@@ -67,7 +64,7 @@ public:
 };
 #endif
 
-static bool computeAutoSync(Property *property, bool defaultAutoSync)
+static bool computeAutoSync(KProperty *property, bool defaultAutoSync)
 {
     return (property->autoSync() != 0 && property->autoSync() != 1) ?
                 defaultAutoSync : (property->autoSync() != 0);
@@ -103,10 +100,10 @@ static int getIconSize(int fontPixelSize)
     return fontPixelSize * 0.85;
 }
 
-static int typeForProperty( Property* prop )
+static int typeForProperty( KProperty* prop )
 {
     if (prop->listData())
-        return KoProperty::ValueFromList;
+        return KProperty::ValueFromList;
     else
         return prop->type();
 }
@@ -119,13 +116,13 @@ void ItemDelegate::paint(QPainter *painter,
     alteredOption.rect.setTop(alteredOption.rect.top() + 1);
     painter->save();
     QRect r(option.rect);
-    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
+    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
     bool modified = false;
     if (index.column()==0) {
         r.setWidth(r.width() - 1);
         r.setLeft(0);
 
-        QVariant modifiedVariant( editorModel->data(index, EditorDataModel::PropertyModifiedRole) );
+        QVariant modifiedVariant( editorModel->data(index, KPropertyEditorDataModel::PropertyModifiedRole) );
         if (modifiedVariant.isValid() && modifiedVariant.toBool()) {
             modified = true;
             QFont font(alteredOption.font);
@@ -143,10 +140,10 @@ void ItemDelegate::paint(QPainter *painter,
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
     }
 
-    Property *property = editorModel->propertyForItem(index);
+    KProperty *property = editorModel->propertyForItem(index);
     const int t = typeForProperty( property );
     bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
-    if (index.column() == 1 && FactoryManager::self()->paint(t, painter, alteredOption, index)) {
+    if (index.column() == 1 && KPropertyFactoryManager::self()->paint(t, painter, alteredOption, index)) {
         useQItemDelegatePaint = false;
     }
     if (useQItemDelegatePaint) {
@@ -177,9 +174,9 @@ void ItemDelegate::paint(QPainter *painter,
         //   y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
     }
 
-    QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ?
-        dynamic_cast<EditorView*>(painter->device())->gridLineColor()
-        : EditorView::defaultGridLineColor() );
+    QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(painter->device()) ?
+        dynamic_cast<KPropertyEditorView*>(painter->device())->gridLineColor()
+        : KPropertyEditorView::defaultGridLineColor() );
     QPen pen(gridLineColor);
     pen.setWidth(1);
     painter->setPen(pen);
@@ -200,11 +197,11 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     if (!index.isValid())
         return 0;
     QStyleOptionViewItem alteredOption(option);
-    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *property = editorModel->propertyForItem(index);
+    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *property = editorModel->propertyForItem(index);
     int t = typeForProperty(property);
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
-    QWidget *w = FactoryManager::self()->createEditor(t, parent, alteredOption, index);
+    QWidget *w = KPropertyFactoryManager::self()->createEditor(t, parent, alteredOption, index);
     if (w) {
         if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)").constData())
             && property && !property->children())
@@ -216,7 +213,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     }
     QObject::disconnect(w, SIGNAL(commitData(QWidget*)),
         this, SIGNAL(commitData(QWidget*)));
-    if (computeAutoSync( property, static_cast<EditorView*>(this->parent())->isAutoSync() )) {
+    if (computeAutoSync( property, static_cast<KPropertyEditorView*>(this->parent())->isAutoSync() )) {
         QObject::connect(w, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
     }
@@ -226,30 +223,30 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
 
 //----------
 
-class EditorView::Private
+class KPropertyEditorView::Private
 {
 public:
     Private()
      : set(0)
      , model(0)
-     , gridLineColor( EditorView::defaultGridLineColor() )
+     , gridLineColor( KPropertyEditorView::defaultGridLineColor() )
      , autoSync(true)
      , slotPropertyChangedEnabled(true)
     {
     }
-    Set *set;
-    EditorDataModel *model;
+    KPropertySet *set;
+    KPropertyEditorDataModel *model;
     ItemDelegate *itemDelegate;
     QColor gridLineColor;
     bool autoSync;
     bool slotPropertyChangedEnabled;
 };
 
-EditorView::EditorView(QWidget* parent)
+KPropertyEditorView::KPropertyEditorView(QWidget* parent)
         : QTreeView(parent)
         , d( new Private )
 {
-    setObjectName(QLatin1String("EditorView"));
+    setObjectName(QLatin1String("KPropertyEditorView"));
     setAlternatingRowColors(true);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -268,22 +265,22 @@ EditorView::EditorView(QWidget* parent)
     setItemDelegate(d->itemDelegate = new ItemDelegate(this));
 }
 
-EditorView::~EditorView()
+KPropertyEditorView::~KPropertyEditorView()
 {
     delete d;
 }
 
-void EditorView::changeSet(Set *set, SetOptions options)
+void KPropertyEditorView::changeSet(KPropertySet *set, SetOptions options)
 {
     changeSetInternal(set, options, QByteArray());
 }
 
-void EditorView::changeSet(Set *set, const QByteArray& propertyToSelect, SetOptions options)
+void KPropertyEditorView::changeSet(KPropertySet *set, const QByteArray& propertyToSelect, SetOptions options)
 {
     changeSetInternal(set, options, propertyToSelect);
 }
 
-void EditorView::changeSetInternal(Set *set, SetOptions options,
+void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions options,
     const QByteArray& propertyToSelect)
 {
 //! @todo port??
@@ -352,18 +349,18 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
     if (d->set && setChanged) {
         //receive property changes
-        connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&,KoProperty::Property&)),
-                this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
-        connect(d->set, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
-                this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
+        connect(d->set, SIGNAL(propertyChangedInternal(KPropertySet&,KProperty&)),
+                this, SLOT(slotPropertyChanged(KPropertySet&,KProperty&)));
+        connect(d->set, SIGNAL(propertyReset(KPropertySet&,KProperty&)),
+                this, SLOT(slotPropertyReset(KPropertySet&,KProperty&)));
         connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
 
-    EditorDataModel *oldModel = d->model;
-    const Set::Order setOrder
-        = (options & AlphabeticalOrder) ? Set::AlphabeticalOrder : Set::InsertionOrder;
-    d->model = d->set ? new EditorDataModel(*d->set, this, setOrder) : 0;
+    KPropertyEditorDataModel *oldModel = d->model;
+    const KPropertySetIterator::Order setOrder
+        = (options & AlphabeticalOrder) ? KPropertySetIterator::AlphabeticalOrder : KPropertySetIterator::InsertionOrder;
+    d->model = d->set ? new KPropertyEditorDataModel(*d->set, this, setOrder) : 0;
     setModel( d->model );
     delete oldModel;
 
@@ -391,32 +388,32 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
 }
 
-void EditorView::slotSetWillBeCleared()
+void KPropertyEditorView::slotSetWillBeCleared()
 {
     changeSet(0, QByteArray());
 }
 
-void EditorView::slotSetWillBeDeleted()
+void KPropertyEditorView::slotSetWillBeDeleted()
 {
     changeSet(0, QByteArray());
 }
 
-void EditorView::setAutoSync(bool enable)
+void KPropertyEditorView::setAutoSync(bool enable)
 {
     d->autoSync = enable;
 }
 
-bool EditorView::isAutoSync() const
+bool KPropertyEditorView::isAutoSync() const
 {
     return d->autoSync;
 }
 
-void EditorView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
+void KPropertyEditorView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
     QTreeView::currentChanged( current, previous );
 }
 
-bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
+bool KPropertyEditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
 {
     bool result = QTreeView::edit( index, trigger, event );
     if (result) {
@@ -429,16 +426,16 @@ bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * 
     return result;
 }
 
-void EditorView::drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
+void KPropertyEditorView::drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
 {
     QTreeView::drawBranches( painter, rect, index );
 }
 
-QRect EditorView::revertButtonArea( const QModelIndex& index ) const
+QRect KPropertyEditorView::revertButtonArea( const QModelIndex& index ) const
 {
     if (index.column() != 0)
         return QRect();
-    QVariant modifiedVariant( d->model->data(index, EditorDataModel::PropertyModifiedRole) );
+    QVariant modifiedVariant( d->model->data(index, KPropertyEditorDataModel::PropertyModifiedRole) );
     if (!modifiedVariant.isValid() || !modifiedVariant.toBool())
         return QRect();
     const int iconSize = getIconSize( fontInfo().pixelSize() );
@@ -452,7 +449,7 @@ QRect EditorView::revertButtonArea( const QModelIndex& index ) const
     return r;
 }
 
-bool EditorView::withinRevertButtonArea( int x, const QModelIndex& index ) const
+bool KPropertyEditorView::withinRevertButtonArea( int x, const QModelIndex& index ) const
 {
     QRect r(revertButtonArea( index ));
     if (!r.isValid())
@@ -460,7 +457,7 @@ bool EditorView::withinRevertButtonArea( int x, const QModelIndex& index ) const
     return r.left() < x && x < r.right();
 }
 
-void EditorView::mousePressEvent ( QMouseEvent * event )
+void KPropertyEditorView::mousePressEvent ( QMouseEvent * event )
 {
     QTreeView::mousePressEvent( event );
     QModelIndex index = indexAt( event->pos() );
@@ -470,29 +467,29 @@ void EditorView::mousePressEvent ( QMouseEvent * event )
     }
 }
 
-void EditorView::undo()
+void KPropertyEditorView::undo()
 {
     if (!d->set || d->set->isReadOnly())
         return;
 
-    Property *property = d->model->propertyForItem(currentIndex());
+    KProperty *property = d->model->propertyForItem(currentIndex());
     if (computeAutoSync( property, d->autoSync ))
         property->resetValue();
 }
 
-void EditorView::acceptInput()
+void KPropertyEditorView::acceptInput()
 {
 //! @todo
 }
 
-void EditorView::commitData( QWidget * editor )
+void KPropertyEditorView::commitData( QWidget * editor )
 {
     d->slotPropertyChangedEnabled = false;
     QAbstractItemView::commitData( editor );
     d->slotPropertyChangedEnabled = true;
 }
 
-bool EditorView::viewportEvent( QEvent * event )
+bool KPropertyEditorView::viewportEvent( QEvent * event )
 {
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *hevent = static_cast<QHelpEvent*>(event);
@@ -508,19 +505,19 @@ bool EditorView::viewportEvent( QEvent * event )
     return QTreeView::viewportEvent(event);
 }
 
-QColor EditorView::gridLineColor() const
+QColor KPropertyEditorView::gridLineColor() const
 {
     return d->gridLineColor;
 }
 
-void EditorView::setGridLineColor(const QColor& color)
+void KPropertyEditorView::setGridLineColor(const QColor& color)
 {
     d->gridLineColor = color;
 }
 
-static QModelIndex findChildItem(const Property& property, const QModelIndex &parent)
+static QModelIndex findChildItem(const KProperty& property, const QModelIndex &parent)
 {
-    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(parent.model());
+    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(parent.model());
     if (editorModel->propertyForItem(parent) == &property) {
         return parent;
     }
@@ -540,13 +537,13 @@ static QModelIndex findChildItem(const Property& property, const QModelIndex &pa
     }
 }
 
-void EditorView::slotPropertyChanged(Set& set, Property& property)
+void KPropertyEditorView::slotPropertyChanged(KPropertySet& set, KProperty& property)
 {
     Q_UNUSED(set);
     if (!d->slotPropertyChangedEnabled)
         return;
     d->slotPropertyChangedEnabled = false;
-    Property *realProperty = &property;
+    KProperty *realProperty = &property;
     while (realProperty->parent()) { // find top-level property
         realProperty = realProperty->parent();
     }
@@ -558,7 +555,7 @@ void EditorView::slotPropertyChanged(Set& set, Property& property)
     d->slotPropertyChangedEnabled = true;
 }
 
-void EditorView::updateSubtree(const QModelIndex &index)
+void KPropertyEditorView::updateSubtree(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return;
@@ -568,17 +565,17 @@ void EditorView::updateSubtree(const QModelIndex &index)
     if (valueIndex.isValid()) {
         update(valueIndex);
     }
-    Property *property = static_cast<Property*>(index.internalPointer());
+    KProperty *property = static_cast<KProperty*>(index.internalPointer());
     if (property->children()) {
         int row = 0;
-        foreach (Property* p, *property->children()) {
+        foreach (KProperty* p, *property->children()) {
             updateSubtree(d->model->createIndex(row, 0, p));
             ++row;
         }
     }
 }
 
-void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)
+void KPropertyEditorView::slotPropertyReset(KPropertySet& set, KProperty& property)
 {
 //! @todo OK?
     slotPropertyChanged(set, property);

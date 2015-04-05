@@ -22,29 +22,24 @@
 
 #include "Factory.h"
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT RectComposedProperty : public ComposedPropertyInterface
+class KPROPERTY_EXPORT KRectComposedProperty : public KComposedPropertyInterface
 {
 public:
-    explicit RectComposedProperty(Property *parent);
+    explicit KRectComposedProperty(KProperty *parent);
 
-    virtual void setValue(Property *property,
+    virtual void setValue(KProperty *property,
         const QVariant &value, bool rememberOldValue);
 
-    virtual void childValueChanged(Property *child,
+    virtual void childValueChanged(KProperty *child,
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT RectDelegate : public LabelCreator,
-                                       public ComposedPropertyCreator<RectComposedProperty>
+class KPROPERTY_EXPORT KPropertyRectDelegate : public KPropertyLabelCreator,
+                                               public KComposedPropertyCreator<KRectComposedProperty>
 {
 public:
-    RectDelegate() {}
+    KPropertyRectDelegate() {}
     virtual QString displayText( const QVariant& value ) const;
 };
-
-}
 
 #endif

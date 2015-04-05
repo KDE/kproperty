@@ -36,9 +36,7 @@
 
 #include "Property.h"
 
-using namespace KoProperty;
-
-StringListEdit::StringListEdit(Property *property, QWidget *parent)
+KPropertyStringListEditor::KPropertyStringListEditor(KProperty *property, QWidget *parent)
         : Widget(property, parent)
 {
     setHasBorders(false);
@@ -64,17 +62,17 @@ StringListEdit::StringListEdit(Property *property, QWidget *parent)
     connect(m_selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
 }
 
-StringListEdit::~StringListEdit()
+KPropertyStringListEditor::~KPropertyStringListEditor()
 {}
 
 QVariant
-StringListEdit::value() const
+KPropertyStringListEditor::value() const
 {
     return m_list;
 }
 
 void
-StringListEdit::setValue(const QVariant &value, bool emitChange)
+KPropertyStringListEditor::setValue(const QVariant &value, bool emitChange)
 {
     m_list = value.toStringList();
     m_edit->setText(value.toStringList().join(", "));
@@ -83,7 +81,7 @@ StringListEdit::setValue(const QVariant &value, bool emitChange)
 }
 
 void
-StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+KPropertyStringListEditor::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 // p->eraseRect(r);
 // p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toStringList().join(", "));
@@ -91,7 +89,7 @@ StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 }
 
 void
-StringListEdit::showEditor()
+KPropertyStringListEditor::showEditor()
 {
     KDialog dialog(this->topLevelWidget());
     dialog.setWindowTitle(i18nc("@title:window", "Edit List of Items"));
@@ -112,7 +110,7 @@ StringListEdit::showEditor()
 }
 
 void
-StringListEdit::setReadOnlyInternal(bool readOnly)
+KPropertyStringListEditor::setReadOnlyInternal(bool readOnly)
 {
     m_selectButton->setEnabled(!readOnly);
 }

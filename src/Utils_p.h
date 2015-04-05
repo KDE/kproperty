@@ -22,7 +22,7 @@
 
 #include <QColor>
 
-namespace KoProperty
+namespace KPropertyUtils
 {
 
 QColor contrastColor(const QColor& c);

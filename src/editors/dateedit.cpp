@@ -25,10 +25,7 @@
 
 #include <QLocale>
 
-using namespace KoProperty;
-
-
-DateEdit::DateEdit(const Property* prop, QWidget* parent)
+KPropertyDateEditor::KPropertyDateEditor(const KProperty* prop, QWidget* parent)
   : QDateEdit(parent)
 {
     setFrame(false);
@@ -46,56 +43,56 @@ DateEdit::DateEdit(const Property* prop, QWidget* parent)
     connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(onDateChanged()));
 }
 
-DateEdit::~DateEdit()
+KPropertyDateEditor::~KPropertyDateEditor()
 {
 }
 
-QVariant DateEdit::value() const
+QVariant KPropertyDateEditor::value() const
 {
     return QVariant(date());
 }
 
-void DateEdit::setValue(const QVariant& value)
+void KPropertyDateEditor::setValue(const QVariant& value)
 {
     blockSignals(true);
     setDate(value.toDate());
     blockSignals(false);
 }
 
-void DateEdit::paintEvent(QPaintEvent* event)
+void KPropertyDateEditor::paintEvent(QPaintEvent* event)
 {
     QDateEdit::paintEvent(event);
-    Factory::paintTopGridLine(this);
+    KPropertyFactory::paintTopGridLine(this);
 }
 
 
-void DateEdit::onDateChanged()
+void KPropertyDateEditor::onDateChanged()
 {
     emit commitData(this);
 }
 
 
 //! @todo Port to KLocale, be inspired by KexiDateTableEdit (with Kexi*Formatter)
-DateDelegate::DateDelegate()
+KPropertyDateDelegate::KPropertyDateDelegate()
 {
 }
 
-QString DateDelegate::displayTextForProperty(const Property* prop) const
+QString KPropertyDateDelegate::displayTextForProperty(const KProperty* prop) const
 {
     const QLocale locale;
     const QString defaultDateFormat = locale.dateFormat(QLocale::ShortFormat);
     return prop->value().toDate().toString(defaultDateFormat);
 }
 
-QWidget* DateDelegate::createEditor(int type, QWidget* parent,
+QWidget* KPropertyDateDelegate::createEditor(int type, QWidget* parent,
     const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
 
-    const EditorDataModel *editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *prop = editorModel->propertyForItem(index);
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *prop = editorModel->propertyForItem(index);
 
-    return new DateEdit(prop, parent);
+    return new KPropertyDateEditor(prop, parent);
 }

@@ -24,16 +24,15 @@
 
 #include "window.h"
 
-static const char description[] = "A test application for the KoProperty library";
-
+static const char description[] = "A test application for the KProperty library";
 static const char version[] = "0.2";
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    QCoreApplication::setApplicationName("propertytest3");
-    QCoreApplication::setApplicationVersion("0.1");
+    QCoreApplication::setApplicationName("propertytest");
+    QCoreApplication::setApplicationVersion(version);
     QCommandLineParser parser;
 
     QCommandLineOption flatOption("flat", QCoreApplication::translate("main", "Flat display: do not display groups\n(useful for testing)"));

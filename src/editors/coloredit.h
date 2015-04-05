@@ -23,22 +23,19 @@
 #include "Factory.h"
 #include <kcolorcombo.h>
 
-namespace KoProperty
-{
-
 //! Color combo box
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KPROPERTY_EXPORT ColorCombo : public KColorCombo
+class KPROPERTY_EXPORT KPropertyColorComboEditor : public KColorCombo
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit ColorCombo(QWidget *parent = 0);
+    explicit KPropertyColorComboEditor(QWidget *parent = 0);
 
-    ~ColorCombo();
+    ~KPropertyColorComboEditor();
 
     QVariant value() const;
 
@@ -52,11 +49,11 @@ protected Q_SLOTS:
     void slotValueChanged(const QColor&);
 };
 
-class KPROPERTY_EXPORT ColorComboDelegate : public EditorCreatorInterface,
-                                             public ValuePainterInterface
+class KPROPERTY_EXPORT KPropertyColorComboDelegate : public KPropertyEditorCreatorInterface,
+                                                     public KPropertyValuePainterInterface
 {
 public:
-    ColorComboDelegate() {}
+    KPropertyColorComboDelegate() {}
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -64,7 +61,5 @@ public:
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

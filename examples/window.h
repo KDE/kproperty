@@ -27,7 +27,7 @@
 
 /*!
  * @internal
- * @short KoProperty test application main window
+ * @short KProperty test's application main window
  * @author Cedric Pasteur <cedric.pasteur@free.fr>
  * @version 0.1
  */
@@ -39,7 +39,7 @@ public:
     virtual ~TestWindow();
 
 private:
-    KoProperty::Set m_set;
+    KPropertySet m_set;
 };
 
 #endif

@@ -27,9 +27,7 @@
 #include <QVariant>
 #include <QHBoxLayout>
 
-using namespace KoProperty;
-
-SymbolCombo::SymbolCombo(Property *property, QWidget *parent)
+KPropertySymbolComboEditor::KPropertySymbolComboEditor(KProperty *property, QWidget *parent)
         : Widget(property, parent)
 {
     setHasBorders(false);
@@ -53,11 +51,11 @@ SymbolCombo::SymbolCombo(Property *property, QWidget *parent)
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
 }
 
-SymbolCombo::~SymbolCombo()
+KPropertySymbolComboEditor::~KPropertySymbolComboEditor()
 {}
 
 QVariant
-SymbolCombo::value() const
+KPropertySymbolComboEditor::value() const
 {
     if (!(m_edit->text().isNull()))
         return m_edit->text().at(0).unicode();
@@ -66,7 +64,7 @@ SymbolCombo::value() const
 }
 
 void
-SymbolCombo::setValue(const QVariant &value, bool emitChange)
+KPropertySymbolComboEditor::setValue(const QVariant &value, bool emitChange)
 {
     if (!(value.isNull()))
     {
@@ -79,7 +77,7 @@ SymbolCombo::setValue(const QVariant &value, bool emitChange)
 }
 
 void
-SymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+KPropertySymbolComboEditor::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 // p->eraseRect(r);
 // p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, QChar(value.toInt()));
@@ -87,7 +85,7 @@ SymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, cons
 }
 
 void
-SymbolCombo::selectChar()
+KPropertySymbolComboEditor::selectChar()
 {
     KDialog dialog(this->topLevelWidget());
     dialog.setWindowTitle(i18nc("@title:window", "Select Char"));
@@ -109,13 +107,13 @@ SymbolCombo::selectChar()
 }
 
 void
-SymbolCombo::slotValueChanged(const QString&)
+KPropertySymbolComboEditor::slotValueChanged(const QString&)
 {
     emit valueChanged(this);
 }
 
 void
-SymbolCombo::setReadOnlyInternal(bool readOnly)
+KPropertySymbolComboEditor::setReadOnlyInternal(bool readOnly)
 {
     m_select->setEnabled(!readOnly);
 }

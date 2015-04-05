@@ -17,21 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_DEFAULT_FACTORY_H
-#define KPROPERTY_DEFAULT_FACTORY_H
+#ifndef KDEFAULTPROPERTYFACTORY_H
+#define KDEFAULTPROPERTYFACTORY_H
 
 #include "Factory.h"
 
-namespace KoProperty
-{
-
-class DefaultFactory : public Factory
+class KDefaultPropertyFactory : public KPropertyFactory
 {
 public:
-    DefaultFactory();
-    ~DefaultFactory();
+    KDefaultPropertyFactory();
+    ~KDefaultPropertyFactory();
 };
-
-}
 
 #endif

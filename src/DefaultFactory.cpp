@@ -45,36 +45,34 @@
 // #include "urledit.h"
 #include <QDebug>
 
-using namespace KoProperty;
-
-DefaultFactory::DefaultFactory()
- : Factory()
+KDefaultPropertyFactory::KDefaultPropertyFactory()
+ : KPropertyFactory()
 {
-    addEditor( KoProperty::Bool, new BoolDelegate );
-    addEditor( KoProperty::Cursor, new CursorDelegate );
-    addEditor( KoProperty::Color, new ColorComboDelegate );
-    addEditor( KoProperty::Date, new DateDelegate );
-    addEditor( KoProperty::DateTime, new DateTimeDelegate );
-//! @todo    addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
-    addEditor( KoProperty::Font, new FontDelegate );
-//! @todo    addEditor( KoProperty::Int, new IntSpinBoxDelegate );
-    addEditor( KoProperty::LineStyle, new LineStyleComboDelegate );
-//! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
-    addEditor( KoProperty::Pixmap, new PixmapDelegate );
-    addEditor( KoProperty::Point, new PointDelegate );
-    addEditor( KoProperty::PointF, new PointFDelegate );
-    addEditor( KoProperty::Rect, new RectDelegate );
-//TODO    addEditor( KoProperty::RectF, new RectFDelegate );
-    addEditor( KoProperty::Size, new SizeDelegate );
-    addEditor( KoProperty::SizeF, new SizeFDelegate );
-    addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );
-    addEditor( KoProperty::String, new StringDelegate );
-    addEditor( KoProperty::Time, new TimeDelegate );
-//! @todo    addEditor( KoProperty::UInt, new IntSpinBoxDelegate );
-//! @todo addEditor( KoProperty::ULongLong, new LongLongSpinBoxDelegate );
-    addEditor( KoProperty::ValueFromList, new ComboBoxDelegate );
+    addEditor( KProperty::Bool, new KPropertyBoolDelegate );
+    addEditor( KProperty::Cursor, new KPropertyCursorDelegate );
+    addEditor( KProperty::Color, new KPropertyColorComboDelegate );
+    addEditor( KProperty::Date, new KPropertyDateDelegate );
+    addEditor( KProperty::DateTime, new KPropertyDateTimeDelegate );
+//! @todo    addEditor( KProperty::Double, new DoubleSpinBoxDelegate );
+    addEditor( KProperty::Font, new KPropertyFontDelegate );
+//! @todo    addEditor( KProperty::Int, new IntSpinBoxDelegate );
+    addEditor( KProperty::LineStyle, new KPropertyLineStyleComboDelegate );
+//! @todo addEditor( KProperty::LongLong, new LongLongSpinBoxDelegate );
+    addEditor( KProperty::Pixmap, new KPropertyPixmapDelegate );
+    addEditor( KProperty::Point, new KPropertyPointDelegate );
+    addEditor( KProperty::PointF, new KPropertyPointFDelegate );
+    addEditor( KProperty::Rect, new KPropertyRectDelegate );
+//TODO    addEditor( KProperty::RectF, new RectFDelegate );
+    addEditor( KProperty::Size, new KPropertySizeDelegate );
+    addEditor( KProperty::SizeF, new KPropertySizeFDelegate );
+    addEditor( KProperty::SizePolicy, new KPropertySizePolicyDelegate );
+    addEditor( KProperty::String, new KPropertyStringDelegate );
+    addEditor( KProperty::Time, new KPropertyTimeDelegate );
+//! @todo    addEditor( KProperty::UInt, new IntSpinBoxDelegate );
+//! @todo addEditor( KProperty::ULongLong, new LongLongSpinBoxDelegate );
+    addEditor( KProperty::ValueFromList, new KPropertyComboBoxDelegate );
 }
 
-DefaultFactory::~DefaultFactory()
+KDefaultPropertyFactory::~KDefaultPropertyFactory()
 {
 }

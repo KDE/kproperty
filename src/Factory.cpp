@@ -25,10 +25,7 @@
 #include "EditorDataModel.h"
 #include "Property.h"
 
-namespace KoProperty
-{
-
-Label::Label(QWidget *parent, const KoProperty::ValueDisplayInterface *iface)
+KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface)
     : QLabel(parent)
     , m_iface(iface)
 {
@@ -37,27 +34,27 @@ Label::Label(QWidget *parent, const KoProperty::ValueDisplayInterface *iface)
   setIndent(1);
 }
 
-QVariant Label::value() const
+QVariant KPropertyLabel::value() const
 {
     return m_value;
 }
 
-void Label::setValue(const QVariant& value)
+void KPropertyLabel::setValue(const QVariant& value)
 {
     setText( m_iface->displayText(value) );
     m_value = value;
 }
 
-void Label::paintEvent( QPaintEvent * event )
+void KPropertyLabel::paintEvent( QPaintEvent * event )
 {
     QLabel::paintEvent(event);
-    KoProperty::Factory::paintTopGridLine(this);
+    KPropertyFactory::paintTopGridLine(this);
 }
 
 //---------------
 
 //! @internal
-class FactoryManager::Private
+class KPropertyFactoryManager::Private
 {
 public:
     Private()
@@ -68,17 +65,17 @@ public:
         qDeleteAll(factories);
     }
 
-    QSet<Factory*> factories;
-    QHash<int, ComposedPropertyCreatorInterface*> composedPropertyCreators;
-    QHash<int, EditorCreatorInterface*> editorCreators;
-    QHash<int, ValuePainterInterface*> valuePainters;
-    QHash<int, ValueDisplayInterface*> valueDisplays;
+    QSet<KPropertyFactory*> factories;
+    QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators;
+    QHash<int, KPropertyEditorCreatorInterface*> editorCreators;
+    QHash<int, KPropertyValuePainterInterface*> valuePainters;
+    QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
 };
 
- Q_GLOBAL_STATIC(FactoryManager, _self);
+ Q_GLOBAL_STATIC(KPropertyFactoryManager, _self);
 
 //! @internal
-class Factory::Private
+class KPropertyFactory::Private
 {
 public:
     Private()
@@ -91,132 +88,127 @@ public:
         qDeleteAll(valueDisplaysSet);
     }
 
-    QHash<int, ComposedPropertyCreatorInterface*> composedPropertyCreators;
-    QHash<int, EditorCreatorInterface*> editorCreators;
-    QHash<int, ValuePainterInterface*> valuePainters;
-    QHash<int, ValueDisplayInterface*> valueDisplays;
-    QSet<ComposedPropertyCreatorInterface*> composedPropertyCreatorsSet;
-    QSet<EditorCreatorInterface*> editorCreatorsSet;
-    QSet<ValuePainterInterface*> valuePaintersSet;
-    QSet<ValueDisplayInterface*> valueDisplaysSet;
+    QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators;
+    QHash<int, KPropertyEditorCreatorInterface*> editorCreators;
+    QHash<int, KPropertyValuePainterInterface*> valuePainters;
+    QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
+    QSet<KComposedPropertyCreatorInterface*> composedPropertyCreatorsSet;
+    QSet<KPropertyEditorCreatorInterface*> editorCreatorsSet;
+    QSet<KPropertyValuePainterInterface*> valuePaintersSet;
+    QSet<KPropertyValueDisplayInterface*> valueDisplaysSet;
 };
 
-}
-
-using namespace KoProperty;
-
-Factory::Factory()
+KPropertyFactory::KPropertyFactory()
     : d( new Private )
 {
-    //KIconLoader::global()->addAppDir("koproperty");
 }
 
-Factory::~Factory()
+KPropertyFactory::~KPropertyFactory()
 {
     delete d;
 }
 
-QHash<int, ComposedPropertyCreatorInterface*> Factory::composedPropertyCreators() const
+QHash<int, KComposedPropertyCreatorInterface*> KPropertyFactory::composedPropertyCreators() const
 {
     return d->composedPropertyCreators;
 }
 
-QHash<int, EditorCreatorInterface*> Factory::editorCreators() const
+QHash<int, KPropertyEditorCreatorInterface*> KPropertyFactory::editorCreators() const
 {
     return d->editorCreators;
 }
 
-QHash<int, ValuePainterInterface*> Factory::valuePainters() const
+QHash<int, KPropertyValuePainterInterface*> KPropertyFactory::valuePainters() const
 {
     return d->valuePainters;
 }
 
-QHash<int, ValueDisplayInterface*> Factory::valueDisplays() const
+QHash<int, KPropertyValueDisplayInterface*> KPropertyFactory::valueDisplays() const
 {
     return d->valueDisplays;
 }
 
-void Factory::addEditor(int type, EditorCreatorInterface *creator)
+void KPropertyFactory::addEditor(int type, KPropertyEditorCreatorInterface *creator)
 {
     addEditorInternal( type, creator, true );
-    if (dynamic_cast<ComposedPropertyCreatorInterface*>(creator)) {
+    if (dynamic_cast<KComposedPropertyCreatorInterface*>(creator)) {
         addComposedPropertyCreatorInternal( type,
-            dynamic_cast<ComposedPropertyCreatorInterface*>(creator), false/* !own*/ );
+            dynamic_cast<KComposedPropertyCreatorInterface*>(creator), false/* !own*/ );
     }
-    if (dynamic_cast<ValuePainterInterface*>(creator)) {
-        addPainterInternal( type, dynamic_cast<ValuePainterInterface*>(creator), false/* !own*/ );
+    if (dynamic_cast<KPropertyValuePainterInterface*>(creator)) {
+        addPainterInternal( type, dynamic_cast<KPropertyValuePainterInterface*>(creator), false/* !own*/ );
     }
-    if (dynamic_cast<ValueDisplayInterface*>(creator)) {
-        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(creator), false/* !own*/ );
+    if (dynamic_cast<KPropertyValueDisplayInterface*>(creator)) {
+        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(creator), false/* !own*/ );
     }
 }
 
-void Factory::addComposedPropertyCreator( int type, ComposedPropertyCreatorInterface* creator )
+void KPropertyFactory::addComposedPropertyCreator( int type, KComposedPropertyCreatorInterface* creator )
 {
     addComposedPropertyCreatorInternal( type, creator, true );
-    if (dynamic_cast<EditorCreatorInterface*>(creator)) {
-        addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(creator), false/* !own*/ );
+    if (dynamic_cast<KPropertyEditorCreatorInterface*>(creator)) {
+        addEditorInternal( type, dynamic_cast<KPropertyEditorCreatorInterface*>(creator), false/* !own*/ );
     }
-    if (dynamic_cast<ValuePainterInterface*>(creator)) {
-        addPainterInternal( type, dynamic_cast<ValuePainterInterface*>(creator), false/* !own*/ );
+    if (dynamic_cast<KPropertyValuePainterInterface*>(creator)) {
+        addPainterInternal( type, dynamic_cast<KPropertyValuePainterInterface*>(creator), false/* !own*/ );
     }
-    if (dynamic_cast<ValueDisplayInterface*>(creator)) {
-        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(creator), false/* !own*/ );
+    if (dynamic_cast<KPropertyValueDisplayInterface*>(creator)) {
+        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(creator), false/* !own*/ );
     }
 }
 
-void Factory::addPainter(int type, ValuePainterInterface *painter)
+void KPropertyFactory::addPainter(int type, KPropertyValuePainterInterface *painter)
 {
     addPainterInternal(type, painter, true);
-    if (dynamic_cast<ComposedPropertyCreatorInterface*>(painter)) {
+    if (dynamic_cast<KComposedPropertyCreatorInterface*>(painter)) {
         addComposedPropertyCreatorInternal( type,
-        dynamic_cast<ComposedPropertyCreatorInterface*>(painter), false/* !own*/ );
+        dynamic_cast<KComposedPropertyCreatorInterface*>(painter), false/* !own*/ );
     }
-    if (dynamic_cast<EditorCreatorInterface*>(painter)) {
-        addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(painter), false/* !own*/ );
+    if (dynamic_cast<KPropertyEditorCreatorInterface*>(painter)) {
+        addEditorInternal( type, dynamic_cast<KPropertyEditorCreatorInterface*>(painter), false/* !own*/ );
     }
-    if (dynamic_cast<ValueDisplayInterface*>(painter)) {
-        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(painter), false/* !own*/ );
+    if (dynamic_cast<KPropertyValueDisplayInterface*>(painter)) {
+        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(painter), false/* !own*/ );
     }
 }
 
-void Factory::addDisplay(int type, ValueDisplayInterface *display)
+void KPropertyFactory::addDisplay(int type, KPropertyValueDisplayInterface *display)
 {
     addDisplayInternal(type, display, true);
-    if (dynamic_cast<ComposedPropertyCreatorInterface*>(display)) {
+    if (dynamic_cast<KComposedPropertyCreatorInterface*>(display)) {
         addComposedPropertyCreatorInternal( type,
-        dynamic_cast<ComposedPropertyCreatorInterface*>(display), false/* !own*/ );
+        dynamic_cast<KComposedPropertyCreatorInterface*>(display), false/* !own*/ );
     }
-    if (dynamic_cast<EditorCreatorInterface*>(display)) {
-        addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(display), false/* !own*/ );
+    if (dynamic_cast<KPropertyEditorCreatorInterface*>(display)) {
+        addEditorInternal( type, dynamic_cast<KPropertyEditorCreatorInterface*>(display), false/* !own*/ );
     }
-    if (dynamic_cast<ValueDisplayInterface*>(display)) {
-        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(display), false/* !own*/ );
+    if (dynamic_cast<KPropertyValueDisplayInterface*>(display)) {
+        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(display), false/* !own*/ );
     }
 }
 
-void Factory::addEditorInternal(int type, EditorCreatorInterface *editor, bool own)
+void KPropertyFactory::addEditorInternal(int type, KPropertyEditorCreatorInterface *editor, bool own)
 {
     if (own)
         d->editorCreatorsSet.insert(editor);
     d->editorCreators.insert(type, editor);
 }
 
-void Factory::addComposedPropertyCreatorInternal(int type, ComposedPropertyCreatorInterface* creator, bool own)
+void KPropertyFactory::addComposedPropertyCreatorInternal(int type, KComposedPropertyCreatorInterface* creator, bool own)
 {
     if (own)
         d->composedPropertyCreatorsSet.insert(creator);
     d->composedPropertyCreators.insert(type, creator);
 }
 
-void Factory::addPainterInternal(int type, ValuePainterInterface *painter, bool own)
+void KPropertyFactory::addPainterInternal(int type, KPropertyValuePainterInterface *painter, bool own)
 {
     if (own)
         d->valuePaintersSet.insert(painter);
     d->valuePainters.insert(type, painter);
 }
 
-void Factory::addDisplayInternal(int type, ValueDisplayInterface *display, bool own)
+void KPropertyFactory::addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own)
 {
     if (own)
         d->valueDisplaysSet.insert(display);
@@ -224,23 +216,23 @@ void Factory::addDisplayInternal(int type, ValueDisplayInterface *display, bool 
 }
 
 //static
-void Factory::paintTopGridLine(QWidget *widget)
+void KPropertyFactory::paintTopGridLine(QWidget *widget)
 {
     // paint top grid line
     QPainter p(widget);
-    QColor gridLineColor( dynamic_cast<EditorView*>(widget->parentWidget()) ?
-        dynamic_cast<EditorView*>(widget->parentWidget())->gridLineColor()
-        : EditorView::defaultGridLineColor() );
+    QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(widget->parentWidget()) ?
+        dynamic_cast<KPropertyEditorView*>(widget->parentWidget())->gridLineColor()
+        : KPropertyEditorView::defaultGridLineColor() );
     p.setPen(QPen( QBrush(gridLineColor), 1));
     p.drawLine(0, 0, widget->width()-1, 0);
 }
 
 //static
-void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent, const QString& extraStyleSheet)
+void KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent, const QString& extraStyleSheet)
 {
-    QColor gridLineColor( dynamic_cast<KoProperty::EditorView*>(parent) ?
-        dynamic_cast<KoProperty::EditorView*>(parent)->gridLineColor()
-        : KoProperty::EditorView::defaultGridLineColor() );
+    QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(parent) ?
+        dynamic_cast<KPropertyEditorView*>(parent)->gridLineColor()
+        : KPropertyEditorView::defaultGridLineColor() );
     widget->setStyleSheet(
         QString::fromLatin1("%1 { border-top: 1px solid %2;border-bottom: 1px solid %2; } %3")
         .arg(QLatin1String(widget->metaObject()->className()))
@@ -249,80 +241,80 @@ void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* pa
 
 //------------
 
-FactoryManager::FactoryManager()
+KPropertyFactoryManager::KPropertyFactoryManager()
         : QObject(0)
         , d(new Private)
 {
     setObjectName(QLatin1String("KPropertyFactoryManager"));
-    registerFactory(new DefaultFactory);
+    registerFactory(new KDefaultPropertyFactory);
 }
 
-FactoryManager::~FactoryManager()
+KPropertyFactoryManager::~KPropertyFactoryManager()
 {
     delete d;
 }
 
-FactoryManager* FactoryManager::self()
+KPropertyFactoryManager* KPropertyFactoryManager::self()
 {
     return _self;
 }
 
-void FactoryManager::registerFactory(Factory *factory)
+void KPropertyFactoryManager::registerFactory(KPropertyFactory *factory)
 {
     d->factories.insert(factory);
-    QHash<int, ComposedPropertyCreatorInterface*>::ConstIterator composedPropertyCreatorsItEnd
+    QHash<int, KComposedPropertyCreatorInterface*>::ConstIterator composedPropertyCreatorsItEnd
         = factory->composedPropertyCreators().constEnd();
-    for (QHash<int, ComposedPropertyCreatorInterface*>::ConstIterator it( factory->composedPropertyCreators().constBegin() );
+    for (QHash<int, KComposedPropertyCreatorInterface*>::ConstIterator it( factory->composedPropertyCreators().constBegin() );
         it != composedPropertyCreatorsItEnd; ++it)
     {
         d->composedPropertyCreators.insert(it.key(), it.value());
     }
-    QHash<int, EditorCreatorInterface*>::ConstIterator editorCreatorsItEnd
+    QHash<int, KPropertyEditorCreatorInterface*>::ConstIterator editorCreatorsItEnd
         = factory->editorCreators().constEnd();
-    for (QHash<int, EditorCreatorInterface*>::ConstIterator it( factory->editorCreators().constBegin() );
+    for (QHash<int, KPropertyEditorCreatorInterface*>::ConstIterator it( factory->editorCreators().constBegin() );
         it != editorCreatorsItEnd; ++it)
     {
         d->editorCreators.insert(it.key(), it.value());
     }
-    QHash<int, ValuePainterInterface*>::ConstIterator valuePaintersItEnd
+    QHash<int, KPropertyValuePainterInterface*>::ConstIterator valuePaintersItEnd
         = factory->valuePainters().constEnd();
-    for (QHash<int, ValuePainterInterface*>::ConstIterator it( factory->valuePainters().constBegin() );
+    for (QHash<int, KPropertyValuePainterInterface*>::ConstIterator it( factory->valuePainters().constBegin() );
         it != valuePaintersItEnd; ++it)
     {
         d->valuePainters.insert(it.key(), it.value());
     }
-    QHash<int, ValueDisplayInterface*>::ConstIterator valueDisplaysItEnd
+    QHash<int, KPropertyValueDisplayInterface*>::ConstIterator valueDisplaysItEnd
         = factory->valueDisplays().constEnd();
-    for (QHash<int, ValueDisplayInterface*>::ConstIterator it( factory->valueDisplays().constBegin() );
+    for (QHash<int, KPropertyValueDisplayInterface*>::ConstIterator it( factory->valueDisplays().constBegin() );
         it != valueDisplaysItEnd; ++it)
     {
         d->valueDisplays.insert(it.key(), it.value());
     }
 }
 
-bool FactoryManager::isEditorForTypeAvailable( int type ) const
+bool KPropertyFactoryManager::isEditorForTypeAvailable( int type ) const
 {
     return d->editorCreators.value(type);
 }
 
-QWidget * FactoryManager::createEditor(
+QWidget * KPropertyFactoryManager::createEditor(
     int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const EditorCreatorInterface *creator = d->editorCreators.value(type);
+    const KPropertyEditorCreatorInterface *creator = d->editorCreators.value(type);
     if (!creator)
         return 0;
     QWidget *w = creator->createEditor(type, parent, option, index);
     if (w) {
-       const EditorDataModel *editorModel
-           = dynamic_cast<const EditorDataModel*>(index.model());
-       Property *property = editorModel->propertyForItem(index);
+       const KPropertyEditorDataModel *editorModel
+           = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+       KProperty *property = editorModel->propertyForItem(index);
        w->setObjectName(QLatin1String(property->name()));
        if (creator->options.removeBorders) {
 //! @todo get real border color from the palette
-            QColor gridLineColor( dynamic_cast<EditorView*>(parent) ?
-                dynamic_cast<EditorView*>(parent)->gridLineColor()
-                : EditorView::defaultGridLineColor() );
+            QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(parent) ?
+                dynamic_cast<KPropertyEditorView*>(parent)->gridLineColor()
+                : KPropertyEditorView::defaultGridLineColor() );
             QString cssClassName = QLatin1String(w->metaObject()->className());
             cssClassName.replace(QLatin1String("KProperty"), QString()); //!< @todo
             QString css =
@@ -335,10 +327,10 @@ QWidget * FactoryManager::createEditor(
     return w;
 }
 
-bool FactoryManager::paint( int type, QPainter * painter,
+bool KPropertyFactoryManager::paint( int type, QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const ValuePainterInterface *_painter = d->valuePainters.value(type);
+    const KPropertyValuePainterInterface *_painter = d->valuePainters.value(type);
     if (!_painter)
         return false;
     QStyleOptionViewItem realOption(option);
@@ -352,25 +344,25 @@ bool FactoryManager::paint( int type, QPainter * painter,
     return true;
 }
 
-bool FactoryManager::canConvertValueToText( int type ) const
+bool KPropertyFactoryManager::canConvertValueToText( int type ) const
 {
     return d->valueDisplays.value(type) != 0;
 }
 
-bool FactoryManager::canConvertValueToText( const Property* property ) const
+bool KPropertyFactoryManager::canConvertValueToText( const KProperty* property ) const
 {
     return d->valueDisplays.value( property->type() ) != 0;
 }
 
-QString FactoryManager::convertValueToText( const Property* property ) const
+QString KPropertyFactoryManager::convertValueToText( const KProperty* property ) const
 {
-    const ValueDisplayInterface *display = d->valueDisplays.value( property->type() );
+    const KPropertyValueDisplayInterface *display = d->valueDisplays.value( property->type() );
     return display ? display->displayTextForProperty( property ) : property->value().toString();
 }
 
-ComposedPropertyInterface* FactoryManager::createComposedProperty(Property *parent)
+KComposedPropertyInterface* KPropertyFactoryManager::createComposedProperty(KProperty *parent)
 {
-    const ComposedPropertyCreatorInterface *creator = d->composedPropertyCreators.value( parent->type() );
+    const KComposedPropertyCreatorInterface *creator = d->composedPropertyCreators.value( parent->type() );
     return creator ? creator->createComposedProperty(parent) : 0;
 }
 
@@ -407,49 +399,49 @@ ComposedPropertyInterface* FactoryManager::createComposedProperty(Property *pare
     return 0;
 #endif
 
-ComposedPropertyInterface::ComposedPropertyInterface(Property *parent)
+KComposedPropertyInterface::KComposedPropertyInterface(KProperty *parent)
  : m_childValueChangedEnabled(true)
 {
     Q_UNUSED(parent)
 }
 
-ComposedPropertyInterface::~ComposedPropertyInterface()
+KComposedPropertyInterface::~KComposedPropertyInterface()
 {
 }
 
-ComposedPropertyCreatorInterface::ComposedPropertyCreatorInterface()
+KComposedPropertyCreatorInterface::KComposedPropertyCreatorInterface()
 {
 }
 
-ComposedPropertyCreatorInterface::~ComposedPropertyCreatorInterface()
+KComposedPropertyCreatorInterface::~KComposedPropertyCreatorInterface()
 {
 }
 
-EditorCreatorInterface::EditorCreatorInterface()
+KPropertyEditorCreatorInterface::KPropertyEditorCreatorInterface()
 {
 }
 
-EditorCreatorInterface::~EditorCreatorInterface()
+KPropertyEditorCreatorInterface::~KPropertyEditorCreatorInterface()
 {
 }
 
-EditorCreatorInterface::Options::Options()
+KPropertyEditorCreatorInterface::Options::Options()
  : removeBorders(true)
 {
 }
 
-ValuePainterInterface::ValuePainterInterface()
+KPropertyValuePainterInterface::KPropertyValuePainterInterface()
 {
 }
 
-ValuePainterInterface::~ValuePainterInterface()
+KPropertyValuePainterInterface::~KPropertyValuePainterInterface()
 {
 }
 
-ValueDisplayInterface::ValueDisplayInterface()
+KPropertyValueDisplayInterface::KPropertyValueDisplayInterface()
 {
 }
 
-ValueDisplayInterface::~ValueDisplayInterface()
+KPropertyValueDisplayInterface::~KPropertyValueDisplayInterface()
 {
 }

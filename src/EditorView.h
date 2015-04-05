@@ -24,11 +24,8 @@
 
 #include <QTreeView>
 
-namespace KoProperty
-{
-
-class Property;
-class Set;
+class KProperty;
+class KPropertySet;
 
 //! @brief A widget for editing properties
 //! @todo review this .............
@@ -60,14 +57,14 @@ class Set;
     </li>
     </ul>
  */
-class KPROPERTY_EXPORT EditorView : public QTreeView
+class KPROPERTY_EXPORT KPropertyEditorView : public QTreeView
 {
     Q_OBJECT
 public:
     /*! Creates an empty property editor with @a parent as parent widget. */
-    explicit EditorView(QWidget *parent = 0);
+    explicit KPropertyEditorView(QWidget *parent = 0);
 
-    ~EditorView();
+    ~KPropertyEditorView();
 
     //! Options for changeSet().
     enum SetOption {
@@ -91,13 +88,13 @@ public Q_SLOTS:
      See SetOption documentation for description of @a options options.
      If @a preservePreviousSelection is true, previously selected editor
      item will be kept selected, if present. */
-    void changeSet(Set *set, SetOptions options = NoOptions);
+    void changeSet(KPropertySet *set, SetOptions options = NoOptions);
 
     /*! Populates the editor view with items for each property from the @ set set.
      Child items for composed properties are also created.
      If @a propertyToSelect is provided, item for this property name
      will be selected, if present. */
-    void changeSet(Set *set, const QByteArray& propertyToSelect, SetOptions options = NoOptions);
+    void changeSet(KPropertySet *set, const QByteArray& propertyToSelect, SetOptions options = NoOptions);
 
     /*! If @a enable is true (the default), property values are automatically synced as
     soon as editor contents change (e.g. every time the user types a character)
@@ -120,7 +117,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /*! Emitted when current property set has been changed. May be 0. */
-    void propertySetChanged(KoProperty::Set *set);
+    void propertySetChanged(KPropertySet *set);
 
 protected:
     virtual bool viewportEvent( QEvent * event );
@@ -136,13 +133,13 @@ protected Q_SLOTS:
     void slotSetWillBeDeleted();
 
     /*! Updates editor widget in the editor.*/
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KPropertySet& set, KProperty& property);
 
-    void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyReset(KPropertySet& set, KProperty& property);
 
 private:
     /*! Used by changeSet(). */
-    void changeSetInternal(Set *set, SetOptions options, const QByteArray& propertyToSelect);
+    void changeSetInternal(KPropertySet *set, SetOptions options, const QByteArray& propertyToSelect);
     virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
     virtual void drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
     virtual void mousePressEvent( QMouseEvent * event );
@@ -164,5 +161,4 @@ private:
     Private * const d;
 };
 
-}
 #endif

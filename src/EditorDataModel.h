@@ -25,22 +25,19 @@
 
 #include "Set.h"
 
-namespace KoProperty
-{
-
-class Property;
+class KProperty;
 
 /*! @short A data model for using Set objects within the Qt's model/view API.
- @see EditorView
+ @see KPropertyEditorView
 */
-class KPROPERTY_EXPORT EditorDataModel : public QAbstractItemModel
+class KPROPERTY_EXPORT KPropertyEditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit EditorDataModel(Set &propertySet, QObject *parent = 0,
-                             Set::Order order = Set::InsertionOrder);
-    ~EditorDataModel();
+    explicit KPropertyEditorDataModel(KPropertySet &propertySet, QObject *parent = 0,
+                                      KPropertySetIterator::Order order = KPropertySetIterator::InsertionOrder);
+    ~KPropertyEditorDataModel();
 
     enum Role {
         PropertyModifiedRole = Qt::UserRole + 0
@@ -65,11 +62,11 @@ public:
     QModelIndex buddy(const QModelIndex & index) const;
 
     //! @return property set object for this model.
-    Set& propertySet() const;
+    KPropertySet& propertySet() const;
 
     //! @return property object for model index @a index
     //! or 0 for invalid index or index without property assigned.
-    Property *propertyForItem(const QModelIndex& index) const;
+    KProperty *propertyForItem(const QModelIndex& index) const;
 
     //! @return model index for property named @a propertyName
     //! or invalid index if such property could not be found.
@@ -79,10 +76,10 @@ public:
     QModelIndex indexForColumn(const QModelIndex& index, int column) const;
 
     //! Sets order for properties. Restarts the iterator.
-    void setOrder(Set::Order order);
+    void setOrder(KPropertySetIterator::Order order);
 
     //! @return order for properties.
-    Set::Order order() const;
+    KPropertySetIterator::Order order() const;
 
     //! Reimplemented for optimization.
     bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
@@ -93,8 +90,7 @@ private:
     class Private;
     Private * const d;
 
-    friend class EditorView;
+    friend class KPropertyEditorView;
 };
 
-}
 #endif

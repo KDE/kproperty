@@ -23,22 +23,19 @@
 #include "Factory.h"
 #include "KoLineStyleSelector.h"
 
-namespace KoProperty
-{
-
 //! Line style combo box (Property::LineStyle, equivalent of Qt::PenStyle)
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KPROPERTY_EXPORT LineStyleCombo : public KoLineStyleSelector
+class KPROPERTY_EXPORT KPropertyLineStyleComboEditor : public KoLineStyleSelector
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit LineStyleCombo(QWidget *parent = 0);
+    explicit KPropertyLineStyleComboEditor(QWidget *parent = 0);
 
-    ~LineStyleCombo();
+    ~KPropertyLineStyleComboEditor();
 
     QVariant value() const;
 
@@ -52,11 +49,11 @@ protected Q_SLOTS:
     void slotValueChanged(int index);
 };
 
-class KPROPERTY_EXPORT LineStyleComboDelegate : public EditorCreatorInterface,
-                                                 public ValuePainterInterface
+class KPROPERTY_EXPORT KPropertyLineStyleComboDelegate : public KPropertyEditorCreatorInterface,
+                                                         public KPropertyValuePainterInterface
 {
 public:
-    LineStyleComboDelegate() {options.removeBorders = false;}
+    KPropertyLineStyleComboDelegate() {options.removeBorders = false;}
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -64,7 +61,5 @@ public:
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

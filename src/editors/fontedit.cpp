@@ -38,9 +38,7 @@
 #include <QDialog>
 #include <QFontDialog>
 
-using namespace KoProperty;
-
-FontEditRequester::FontEditRequester(QWidget *parent)
+KPropertyFontEditRequester::KPropertyFontEditRequester(QWidget *parent)
         : QWidget(parent)
         , m_paletteChangedEnabled(true)
 {
@@ -51,7 +49,7 @@ FontEditRequester::FontEditRequester(QWidget *parent)
     lyr->addStretch(1);
     m_button = new QPushButton(this);
     setFocusProxy(m_button);
-    Utils::setupDotDotDotButton(m_button,
+    KPropertyUtils::setupDotDotDotButton(m_button,
         tr("Click to select a font"),
         tr("Selects font"));
     connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
@@ -59,18 +57,18 @@ FontEditRequester::FontEditRequester(QWidget *parent)
     setValue(qApp->font());
 }
 
-QFont FontEditRequester::value() const
+QFont KPropertyFontEditRequester::value() const
 {
     return m_font;
 }
 
-void FontEditRequester::setValue(const QFont &value)
+void KPropertyFontEditRequester::setValue(const QFont &value)
 {
     //kDebug() << QFontDatabase().families();
     m_font = value;
 }
 
-void FontEditRequester::slotSelectFontClicked()
+void KPropertyFontEditRequester::slotSelectFontClicked()
 {
     bool ok;
     QFont font;
@@ -82,23 +80,23 @@ void FontEditRequester::slotSelectFontClicked()
     }
 }
 
-bool FontEditRequester::event( QEvent * event )
+bool KPropertyFontEditRequester::event( QEvent * event )
 {
     return QWidget::event(event);
 }
 
 // -----------
 
-QWidget * FontDelegate::createEditor( int type, QWidget *parent,
+QWidget * KPropertyFontDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return new FontEditRequester(parent);
+    return new KPropertyFontEditRequester(parent);
 }
 
-void FontDelegate::paint( QPainter * painter,
+void KPropertyFontDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();

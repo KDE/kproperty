@@ -21,9 +21,7 @@
 
 #include "stringedit.h"
 
-using namespace KoProperty;
-
-StringEdit::StringEdit(QWidget *parent)
+KPropertyStringEditor::KPropertyStringEditor(QWidget *parent)
  : QLineEdit(parent)
  , m_slotTextChangedEnabled(true)
 {
@@ -33,16 +31,16 @@ StringEdit::StringEdit(QWidget *parent)
     connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
-StringEdit::~StringEdit()
+KPropertyStringEditor::~KPropertyStringEditor()
 {
 }
 
-QString StringEdit::value() const
+QString KPropertyStringEditor::value() const
 {
     return text();
 }
 
-void StringEdit::setValue(const QString& value)
+void KPropertyStringEditor::setValue(const QString& value)
 {
     m_slotTextChangedEnabled = false;
     setText(value);
@@ -51,7 +49,7 @@ void StringEdit::setValue(const QString& value)
     end(false);*/
 }
 
-void StringEdit::slotTextChanged( const QString & text )
+void KPropertyStringEditor::slotTextChanged( const QString & text )
 {
     Q_UNUSED(text)
     if (!m_slotTextChangedEnabled)
@@ -59,11 +57,11 @@ void StringEdit::slotTextChanged( const QString & text )
     emit commitData(this);
 }
 
-QWidget* StringDelegate::createEditor( int type, QWidget *parent,
+QWidget* KPropertyStringDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return new StringEdit(parent);
+    return new KPropertyStringEditor(parent);
 }

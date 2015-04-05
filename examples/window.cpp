@@ -35,13 +35,11 @@
 #include <QCommandLineParser>
 #include <QDebug>
 
-using namespace KoProperty;
-
 TestWindow::TestWindow()
         : QWidget()
         , m_set(this, "test")
 {
-    setObjectName("koproperty_test");
+    setObjectName("kproperty_test");
     setWindowIcon(QIcon::fromTheme("document-properties"));
 
     QCommandLineParser parser;
@@ -53,7 +51,7 @@ TestWindow::TestWindow()
     const QString singleProperty = parser.value("property");
 
     /*  First, create the Set which will hold the properties.  */
-    Property *p = 0;
+    KProperty *p = 0;
     m_set.setReadOnly(readOnly);
     QByteArray group;
     if (!flat) {
@@ -61,32 +59,33 @@ TestWindow::TestWindow()
         m_set.setGroupDescription(group, "Simple Group");
     }
     if (singleProperty.isEmpty() || singleProperty=="Name") {
-        m_set.addProperty(new Property("Name", "Name"), group);
+        m_set.addProperty(new KProperty("Name", "Name"), group);
         m_set["Name"].setAutoSync(1);
     }
 
     if (singleProperty.isEmpty() || singleProperty=="Int") {
-        m_set.addProperty(new Property("Int", 2, "Int"), group);
+        m_set.addProperty(new KProperty("Int", 2, "Int"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Double") {
-        m_set.addProperty(new Property("Double", 3.1415, "Double"), group);
+        m_set.addProperty(new KProperty("Double", 3.1415, "Double"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Bool") {
-        m_set.addProperty(new Property("Bool", QVariant(true), "Bool"), group);
+        m_set.addProperty(new KProperty("Bool", QVariant(true), "Bool"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="3-State") {
-        m_set.addProperty(p = new Property("3-State", QVariant(), "3 States", QString(), Bool), group);
+        m_set.addProperty(p = new KProperty("3-State", QVariant(), "3 States", QString(),
+                                            KProperty::Bool), group);
         p->setOption("3State", true);
     }
     if (singleProperty.isEmpty() || singleProperty=="Date") {
-        m_set.addProperty(p = new Property("Date", QDate::currentDate(), "Date"), group);
+        m_set.addProperty(p = new KProperty("Date", QDate::currentDate(), "Date"), group);
         p->setIcon("date");
     }
     if (singleProperty.isEmpty() || singleProperty=="Time") {
-        m_set.addProperty(new Property("Time", QTime::currentTime(), "Time"), group);
+        m_set.addProperty(new KProperty("Time", QTime::currentTime(), "Time"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="DateTime") {
-        m_set.addProperty(new Property("DateTime", QDateTime::currentDateTime(), "Date/Time"), group);
+        m_set.addProperty(new KProperty("DateTime", QDateTime::currentDateTime(), "Date/Time"), group);
     }
 
     QStringList name_list; //strings
@@ -94,7 +93,7 @@ TestWindow::TestWindow()
     if (singleProperty.isEmpty() || singleProperty=="List") {
         QStringList list;//keys
         list << "myitem" << "otheritem" << "3rditem";
-        m_set.addProperty(new Property("List", list, name_list, "otheritem", "List"), group);
+        m_set.addProperty(new KProperty("List", list, name_list, "otheritem", "List"), group);
     }
 
     if (singleProperty.isEmpty() || singleProperty=="List2") {
@@ -103,8 +102,8 @@ TestWindow::TestWindow()
         keys.append(1);
         keys.append(2);
         keys.append(3);
-        Property::ListData *listData = new Property::ListData(keys, name_list);
-        m_set.addProperty(new Property("List2", listData, 3, "List 2"), group);
+        KPropertyListData *listData = new KPropertyListData(keys, name_list);
+        m_set.addProperty(new KProperty("List2", listData, 3, "List 2"), group);
     }
 
 //  Complex
@@ -113,22 +112,22 @@ TestWindow::TestWindow()
         m_set.setGroupDescription(group, "Complex Group");
     }
     if (singleProperty.isEmpty() || singleProperty=="Rect") {
-        m_set.addProperty(new Property("Rect", QRect(5,11,100,200), "Rect"), group);
+        m_set.addProperty(new KProperty("Rect", QRect(5,11,100,200), "Rect"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Point") {
-        m_set.addProperty(new Property("Point", QPoint(3, 4), "Point"), group);
+        m_set.addProperty(new KProperty("Point", QPoint(3, 4), "Point"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Size") {
-        m_set.addProperty(new Property("Size", QSize(10, 20), "Size"), group);
+        m_set.addProperty(new KProperty("Size", QSize(10, 20), "Size"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="RectF") {
-        m_set.addProperty(new Property("RectF", QRectF(0.1, 0.5, 10.72, 18.21), "RectF"), group);
+        m_set.addProperty(new KProperty("RectF", QRectF(0.1, 0.5, 10.72, 18.21), "RectF"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="PointF") {
-        m_set.addProperty(new Property("PointF", QPointF(3.14, 4.15), "PointF"), group);
+        m_set.addProperty(new KProperty("PointF", QPointF(3.14, 4.15), "PointF"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="SizeF") {
-        m_set.addProperty(new Property("SizeF", QSizeF(1.1, 2.45), "SizeF"), group);
+        m_set.addProperty(new KProperty("SizeF", QSizeF(1.1, 2.45), "SizeF"), group);
     }
 
 //  Appearance
@@ -138,38 +137,39 @@ TestWindow::TestWindow()
         m_set.setGroupIcon(group, "appearance");
     }
     if (singleProperty.isEmpty() || singleProperty=="Color") {
-        m_set.addProperty(new Property("Color", palette().color(QPalette::Active, QPalette::Background), "Color"), group);
+        m_set.addProperty(new KProperty("Color", palette().color(QPalette::Active, QPalette::Background), "Color"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Pixmap") {
         QPixmap pm(QIcon::fromTheme("network-wired").pixmap(QSize(16,16)));
-        m_set.addProperty(p = new Property("Pixmap", pm, "Pixmap"), group);
+        m_set.addProperty(p = new KProperty("Pixmap", pm, "Pixmap"), group);
         p->setIcon("kpaint");
     }
     if (singleProperty.isEmpty() || singleProperty=="Font") {
         QFont myFont("Times", 12);
-        m_set.addProperty(p = new Property("Font", myFont, "Font"), group);
+        m_set.addProperty(p = new KProperty("Font", myFont, "Font"), group);
         p->setIcon("fonts");
     }
     if (singleProperty.isEmpty() || singleProperty=="Cursor") {
-        m_set.addProperty(new Property("Cursor", QCursor(Qt::WaitCursor), "Cursor"), group);
+        m_set.addProperty(new KProperty("Cursor", QCursor(Qt::WaitCursor), "Cursor"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="LineStyle") {
-        m_set.addProperty(new Property("LineStyle", 3, "Line Style", QString(), LineStyle), group);
+        m_set.addProperty(new KProperty("LineStyle", 3, "Line Style", QString(),
+                                        KProperty::LineStyle), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="SizePolicy") {
         QSizePolicy sp(sizePolicy());
         sp.setHorizontalStretch(1);
         sp.setVerticalStretch(2);
-        m_set.addProperty(new Property("SizePolicy", sp, "Size Policy"), group);
+        m_set.addProperty(new KProperty("SizePolicy", sp, "Size Policy"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Invisible") {
-        m_set.addProperty(p = new Property("Invisible", "I am invisible", "Invisible"), group);
+        m_set.addProperty(p = new KProperty("Invisible", "I am invisible", "Invisible"), group);
         p->setVisible(false);
     }
 
 // kDebug(30007) << m_set.groupNames();
     QVBoxLayout *lyr = new QVBoxLayout(this);
-    EditorView *editorView = new EditorView(this);
+    KPropertyEditorView *editorView = new KPropertyEditorView(this);
     lyr->addWidget(editorView);
     editorView->changeSet(&m_set);
 //crashes.. why?: editorView->expandAll();

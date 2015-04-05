@@ -26,9 +26,7 @@
 
 #include <KUrlRequester>
 
-using namespace KoProperty;
-
-URLEdit::URLEdit(Property *property, QWidget *parent)
+KPropertyUrlEditor::KPropertyUrlEditor(KProperty *property, QWidget *parent)
         : Widget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this);
@@ -46,17 +44,17 @@ URLEdit::URLEdit(Property *property, QWidget *parent)
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
-URLEdit::~URLEdit()
+KPropertyUrlEditor::~KPropertyUrlEditor()
 {}
 
 QVariant
-URLEdit::value() const
+KPropertyUrlEditor::value() const
 {
     return m_edit->url();
 }
 
 void
-URLEdit::setValue(const QVariant &value, bool emitChange)
+KPropertyUrlEditor::setValue(const QVariant &value, bool emitChange)
 {
     m_edit->blockSignals(true);
     m_edit->setUrl(value.toString());
@@ -66,13 +64,13 @@ URLEdit::setValue(const QVariant &value, bool emitChange)
 }
 
 void
-URLEdit::slotValueChanged(const QString&)
+KPropertyUrlEditor::slotValueChanged(const QString&)
 {
     emit valueChanged(this);
 }
 
 void
-URLEdit::setProperty(Property *property)
+KPropertyUrlEditor::setProperty(KProperty *property)
 {
     if (property) {
         KFile::Modes mode;
@@ -87,7 +85,7 @@ URLEdit::setProperty(Property *property)
 }
 
 void
-URLEdit::setReadOnlyInternal(bool readOnly)
+KPropertyUrlEditor::setReadOnlyInternal(bool readOnly)
 {
     m_edit->lineEdit()->setReadOnly(readOnly);
     m_edit->button()->setEnabled(!readOnly);

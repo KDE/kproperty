@@ -30,17 +30,14 @@
 class QLabel;
 class QPushButton;
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT PixmapEdit : public QWidget
+class KPROPERTY_EXPORT KPropertyPixmapEditor : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit PixmapEdit(Property *prop, QWidget *parent = 0);
-    ~PixmapEdit();
+    explicit KPropertyPixmapEditor(KProperty *prop, QWidget *parent = 0);
+    ~KPropertyPixmapEditor();
 
     QVariant value() const;
 
@@ -67,16 +64,16 @@ protected:
     QLabel *m_edit;
     QLabel *m_popup;
     QPushButton *m_button;
-    Property *m_property;
+    KProperty *m_property;
 //todo    QVariant m_recentlyPainted;
     QPixmap m_pixmap, /* todo? m_scaledPixmap,*/ m_previewPixmap;
 };
 
-class KPROPERTY_EXPORT PixmapDelegate : public EditorCreatorInterface,
-                                         public ValuePainterInterface
+class KPROPERTY_EXPORT KPropertyPixmapDelegate : public KPropertyEditorCreatorInterface,
+                                                 public KPropertyValuePainterInterface
 {
 public:
-    PixmapDelegate();
+    KPropertyPixmapDelegate();
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -84,7 +81,5 @@ public:
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

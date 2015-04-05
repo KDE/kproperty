@@ -22,32 +22,27 @@
 
 #include "Factory.h"
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT SizePolicyComposedProperty : public ComposedPropertyInterface
+class KPROPERTY_EXPORT KSizePolicyComposedProperty : public KComposedPropertyInterface
 {
 public:
-    explicit SizePolicyComposedProperty(Property *parent);
+    explicit KSizePolicyComposedProperty(KProperty *parent);
 
-    virtual void setValue(Property *property,
+    virtual void setValue(KProperty *property,
         const QVariant &value, bool rememberOldValue);
 
-    virtual void childValueChanged(Property *child,
+    virtual void childValueChanged(KProperty *child,
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator,
-                                             public ComposedPropertyCreator<SizePolicyComposedProperty>
+class KPROPERTY_EXPORT KPropertySizePolicyDelegate : public KPropertyLabelCreator,
+                                                     public KComposedPropertyCreator<KSizePolicyComposedProperty>
 {
 public:
-    SizePolicyDelegate() {}
+    KPropertySizePolicyDelegate() {}
 
     virtual QString displayText( const QVariant& value ) const;
 
-    static const Property::ListData& listData();
+    static const KPropertyListData& listData();
 };
-
-}
 
 #endif

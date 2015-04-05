@@ -26,10 +26,7 @@
 
 #include <QComboBox>
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT ComboBox : public QComboBox
+class KPROPERTY_EXPORT KPropertyComboBoxEditor : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -49,19 +46,19 @@ public:
         ~Options();
 
         IconProviderInterface *iconProvider;
-        bool extraValueAllowed : 1;
+        bool extraValueAllowed;
     };
 
 //    explicit ComboBox(const Property* property, QWidget *parent = 0);
-    ComboBox(const Property::ListData& listData, const Options& options,
+    KPropertyComboBoxEditor(const KPropertyListData& listData, const Options& options,
              QWidget *parent = 0);
 
-    virtual ~ComboBox();
+    virtual ~KPropertyComboBoxEditor();
 
     virtual QVariant value() const;
 
 //    virtual void setProperty(const Property *property);
-    void setListData(const Property::ListData & listData);
+    void setListData(const KPropertyListData & listData);
 
 Q_SIGNALS:
     void commitData( QWidget * editor );
@@ -84,19 +81,19 @@ protected:
 
 //    KComboBox *m_edit;
 //    const Property *m_property;
-    Property::ListData m_listData;
+    KPropertyListData m_listData;
 //    QList<QVariant> keys;
     bool m_setValueEnabled;
     Options m_options;
 };
 
-class KPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface,
-                                           public ValueDisplayInterface
+class KPROPERTY_EXPORT KPropertyComboBoxDelegate : public KPropertyEditorCreatorInterface,
+                                                   public KPropertyValueDisplayInterface
 {
 public:
-    ComboBoxDelegate();
+    KPropertyComboBoxDelegate();
 
-    virtual QString displayTextForProperty( const Property* property ) const;
+    virtual QString displayTextForProperty( const KProperty* property ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -104,7 +101,5 @@ public:
 //    virtual void paint( QPainter * painter,
 //        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

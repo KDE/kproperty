@@ -21,11 +21,9 @@
 
 #include <QRect>
 
-using namespace KoProperty;
-
 static const char RECTEDIT_MASK[] = "%1, %2, %3x%4";
 
-QString RectDelegate::displayText( const QVariant& value ) const
+QString KPropertyRectDelegate::displayText( const QVariant& value ) const
 {
     const QRect r(value.toRect());
     return QString::fromLatin1(RECTEDIT_MASK)
@@ -37,24 +35,24 @@ QString RectDelegate::displayText( const QVariant& value ) const
 
 //------------
 
-RectComposedProperty::RectComposedProperty(Property *property)
-        : ComposedPropertyInterface(property)
+KRectComposedProperty::KRectComposedProperty(KProperty *property)
+        : KComposedPropertyInterface(property)
 {
-    (void)new Property("x",
+    (void)new KProperty("x",
         QVariant(), QObject::tr("X", "Property: X coordinate"),
-        QObject::tr("X Coordinate", "Property: X coordinate"), Int, property);
-    (void)new Property("y",
+        QObject::tr("X Coordinate", "Property: X coordinate"), KProperty::Int, property);
+    (void)new KProperty("y",
         QVariant(), QObject::tr("Y", "Property: Y coordinate"),
-        QObject::tr("Y Coordinate", "Property: Y coordinate"), Int, property);
-    (void)new Property("width",
+        QObject::tr("Y Coordinate", "Property: Y coordinate"), KProperty::Int, property);
+    (void)new KProperty("width",
         QVariant(), QObject::tr("Width", "Property: width of rectangle"),
-        QObject::tr("Width", "Property: width of rectangle"), UInt, property);
-    (void)new Property("height",
+        QObject::tr("Width", "Property: width of rectangle"), KProperty::UInt, property);
+    (void)new KProperty("height",
         QVariant(), QObject::tr("Height", "Property: height of rectangle"),
-        QObject::tr("Height", "Property: height of rectangle"), UInt, property);
+        QObject::tr("Height", "Property: height of rectangle"), KProperty::UInt, property);
 }
 
-void RectComposedProperty::setValue(Property *property,
+void KRectComposedProperty::setValue(KProperty *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QRect r( value.toRect() );
@@ -64,7 +62,7 @@ void RectComposedProperty::setValue(Property *property,
     property->child("height")->setValue(r.height(), rememberOldValue, false);
 }
 
-void RectComposedProperty::childValueChanged(Property *child,
+void KRectComposedProperty::childValueChanged(KProperty *child,
     const QVariant &value, bool rememberOldValue)
 {
     Q_UNUSED(rememberOldValue);

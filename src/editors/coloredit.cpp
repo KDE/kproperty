@@ -27,11 +27,9 @@
 
 #include <kcolorcollection.h>
 
-using namespace KoProperty;
-
 Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, (QLatin1String("Oxygen.colors")))
 
-ColorCombo::ColorCombo(QWidget *parent)
+KPropertyColorComboEditor::KPropertyColorComboEditor(QWidget *parent)
         : KColorCombo(parent)
 {
     connect(this, SIGNAL(activated(QColor)), this, SLOT(slotValueChanged(QColor)));
@@ -44,35 +42,35 @@ ColorCombo::ColorCombo(QWidget *parent)
     setColors(colors);
 }
 
-ColorCombo::~ColorCombo()
+KPropertyColorComboEditor::~KPropertyColorComboEditor()
 {
 }
 
-QVariant ColorCombo::value() const
+QVariant KPropertyColorComboEditor::value() const
 {
     return color();
 }
 
-void ColorCombo::setValue(const QVariant &value)
+void KPropertyColorComboEditor::setValue(const QVariant &value)
 {
     setColor(value.value<QColor>());
 }
 
-void ColorCombo::slotValueChanged(const QColor&)
+void KPropertyColorComboEditor::slotValueChanged(const QColor&)
 {
     emit commitData(this);
 }
 
-QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent,
+QWidget * KPropertyColorComboDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type)
     Q_UNUSED(option)
     Q_UNUSED(index)
-    return new ColorCombo(parent);
+    return new KPropertyColorComboEditor(parent);
 }
 
-void ColorComboDelegate::paint( QPainter * painter,
+void KPropertyColorComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
@@ -80,8 +78,8 @@ void ColorComboDelegate::paint( QPainter * painter,
     painter->setBrush(b);
     painter->setPen(QPen(Qt::NoPen));
     painter->drawRect(option.rect);
-    painter->setBrush(KoProperty::contrastColor(b.color()));
-    painter->setPen(KoProperty::contrastColor(b.color()));
+    painter->setBrush(KPropertyUtils::contrastColor(b.color()));
+    painter->setPen(KPropertyUtils::contrastColor(b.color()));
     QFont f(option.font);
     f.setFamily(QLatin1String("courier"));
     painter->setFont(f);

@@ -27,17 +27,14 @@
 #include <QVariant>
 #include <QLineEdit>
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT StringEdit : public QLineEdit
+class KPROPERTY_EXPORT KPropertyStringEditor : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 public:
-    explicit StringEdit(QWidget *parent = 0);
+    explicit KPropertyStringEditor(QWidget *parent = 0);
 
-    ~StringEdit();
+    ~KPropertyStringEditor();
 
     QString value() const;
 
@@ -54,15 +51,13 @@ private:
     bool m_slotTextChangedEnabled;
 };
 
-class KPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
+class KPROPERTY_EXPORT KPropertyStringDelegate : public KPropertyEditorCreatorInterface
 {
 public:
-    StringDelegate() {}
+    KPropertyStringDelegate() {}
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

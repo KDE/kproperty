@@ -25,18 +25,14 @@
 #include "Factory.h"
 #include <QTimeEdit>
 
-
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT TimeEdit : public QTimeEdit
+class KPROPERTY_EXPORT KPropertyTimeEditor : public QTimeEdit
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    TimeEdit(const Property* prop, QWidget* parent);
-    virtual ~TimeEdit();
+    KPropertyTimeEditor(const KProperty* prop, QWidget* parent);
+    virtual ~KPropertyTimeEditor();
 
     QVariant value() const;
 
@@ -53,19 +49,16 @@ protected Q_SLOTS:
     void onTimeChanged();
 };
 
-
-class KPROPERTY_EXPORT TimeDelegate : public EditorCreatorInterface,
-                                       public ValueDisplayInterface
+class KPROPERTY_EXPORT KPropertyTimeDelegate : public KPropertyEditorCreatorInterface,
+                                               public KPropertyValueDisplayInterface
 {
 public:
-    TimeDelegate();
+    KPropertyTimeDelegate();
 
-    virtual QString displayTextForProperty(const Property* prop) const;
+    virtual QString displayTextForProperty(const KProperty* prop) const;
 
     virtual QWidget* createEditor(int type, QWidget* parent,
         const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
-
-}
 
 #endif

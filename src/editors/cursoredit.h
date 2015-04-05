@@ -24,27 +24,24 @@
 
 #include "combobox.h"
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT CursorEdit : public ComboBox
+class KPROPERTY_EXPORT KPropertyCursorEditor : public KPropertyComboBoxEditor
 {
     Q_OBJECT
     Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
 
 public:
-    explicit CursorEdit(QWidget *parent = 0);
-    virtual ~CursorEdit();
+    explicit KPropertyCursorEditor(QWidget *parent = 0);
+    virtual ~KPropertyCursorEditor();
 
     virtual QCursor cursorValue() const;
     virtual void setCursorValue(const QCursor &value);
 };
 
-class KPROPERTY_EXPORT CursorDelegate : public EditorCreatorInterface, 
-                       public ValuePainterInterface
+class KPROPERTY_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface, 
+                                                 public KPropertyValuePainterInterface
 {
 public:
-    CursorDelegate();
+    KPropertyCursorDelegate();
 
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -52,7 +49,5 @@ public:
     virtual void paint( QPainter * painter, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

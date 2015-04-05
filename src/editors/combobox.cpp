@@ -28,27 +28,25 @@
 #include <QGuiApplication>
 #include <QDebug>
 
-using namespace KoProperty;
-
-ComboBox::Options::Options()
+KPropertyComboBoxEditor::Options::Options()
  : iconProvider(0)
  , extraValueAllowed(false)
 {
 }
 
-ComboBox::Options::Options(const ComboBox::Options& other)
+KPropertyComboBoxEditor::Options::Options(const KPropertyComboBoxEditor::Options& other)
 {
     *this = other;
     if (other.iconProvider)
         iconProvider = other.iconProvider->clone();
 }
 
-ComboBox::Options::~Options()
+KPropertyComboBoxEditor::Options::~Options()
 {
     delete iconProvider;
 }
 
-ComboBox::ComboBox(const Property::ListData& listData, const Options& options, QWidget *parent)
+KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listData, const Options& options, QWidget *parent)
         : QComboBox(parent)
         , m_setValueEnabled(true)
         , m_options(options)
@@ -101,11 +99,11 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     setStyleSheet(styleSheet);
 }
 
-ComboBox::~ComboBox()
+KPropertyComboBoxEditor::~KPropertyComboBoxEditor()
 {
 }
 
-bool ComboBox::listDataKeysAvailable() const
+bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
         qWarning() << "property listData not available!";
@@ -114,7 +112,7 @@ bool ComboBox::listDataKeysAvailable() const
     return true;
 }
 
-QVariant ComboBox::value() const
+QVariant KPropertyComboBoxEditor::value() const
 {
     if (!listDataKeysAvailable())
         return QVariant();
@@ -128,7 +126,7 @@ QVariant ComboBox::value() const
     return QVariant(m_listData.keys[idx]);
 }
 
-void ComboBox::setValue(const QVariant &value)
+void KPropertyComboBoxEditor::setValue(const QVariant &value)
 {
     if (!listDataKeysAvailable())
         return;
@@ -167,7 +165,7 @@ void ComboBox::setValue(const QVariant &value)
 //??        emit valueChanged(this);
 }
 
-void ComboBox::fillValues()
+void KPropertyComboBoxEditor::fillValues()
 {
     clear();
     //m_edit->clearContents();
@@ -206,22 +204,22 @@ void ComboBox::setProperty( const Property *property )
 //        setValue(prop->value(), false); //now the value can be set
 }*/
 
-void ComboBox::setListData(const Property::ListData & listData)
+void KPropertyComboBoxEditor::setListData(const KPropertyListData & listData)
 {
     m_listData = listData;
     fillValues();
 }
 
-void ComboBox::slotValueChanged(int)
+void KPropertyComboBoxEditor::slotValueChanged(int)
 {
 //    emit valueChanged(this);
     emit commitData( this );
 }
 
-void ComboBox::paintEvent( QPaintEvent * event )
+void KPropertyComboBoxEditor::paintEvent( QPaintEvent * event )
 {
     QComboBox::paintEvent(event);
-    Factory::paintTopGridLine(this);
+    KPropertyFactory::paintTopGridLine(this);
 }
 
 /*
@@ -252,14 +250,14 @@ ComboBox::keyForValue(const QVariant &value)
 
 //-----------------------
 
-ComboBoxDelegate::ComboBoxDelegate()
+KPropertyComboBoxDelegate::KPropertyComboBoxDelegate()
 {
     options.removeBorders = false;
 }
 
-QString ComboBoxDelegate::displayTextForProperty( const Property* property ) const
+QString KPropertyComboBoxDelegate::displayTextForProperty( const KProperty* property ) const
 {
-    Property::ListData *listData = property->listData();
+    KPropertyListData *listData = property->listData();
     if (!listData)
         return property->value().toString();
     if (property->value().isNull())
@@ -276,17 +274,17 @@ QString ComboBoxDelegate::displayTextForProperty( const Property* property ) con
     return property->listData()->names[ idx ];
 }
 
-QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent,
+QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
-    const EditorDataModel *editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property *property = editorModel->propertyForItem(index);
-    ComboBox::Options options;
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty *property = editorModel->propertyForItem(index);
+    KPropertyComboBoxEditor::Options options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
-    ComboBox *cb = new ComboBox(*property->listData(), options, parent);
+    KPropertyComboBoxEditor *cb = new KPropertyComboBoxEditor(*property->listData(), options, parent);
     return cb;
 }
 

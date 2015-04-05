@@ -24,10 +24,7 @@
 #include <EditorDataModel.h>
 #include <QLocale>
 
-using namespace KoProperty;
-
-
-TimeEdit::TimeEdit(const Property* prop, QWidget* parent)
+KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)
   : QTimeEdit(parent)
 {
     setFrame(false);
@@ -44,56 +41,56 @@ TimeEdit::TimeEdit(const Property* prop, QWidget* parent)
     connect(this, SIGNAL(timeChanged(QTime)), this, SLOT(onTimeChanged()));
 }
 
-TimeEdit::~TimeEdit()
+KPropertyTimeEditor::~KPropertyTimeEditor()
 {
 }
 
-QVariant TimeEdit::value() const
+QVariant KPropertyTimeEditor::value() const
 {
     return QVariant(time());
 }
 
-void TimeEdit::setValue(const QVariant& value)
+void KPropertyTimeEditor::setValue(const QVariant& value)
 {
     blockSignals(true);
     setTime(value.toTime());
     blockSignals(false);
 }
 
-void TimeEdit::paintEvent(QPaintEvent* event)
+void KPropertyTimeEditor::paintEvent(QPaintEvent* event)
 {
     QTimeEdit::paintEvent(event);
-    Factory::paintTopGridLine(this);
+    KPropertyFactory::paintTopGridLine(this);
 }
 
 
-void TimeEdit::onTimeChanged()
+void KPropertyTimeEditor::onTimeChanged()
 {
     emit commitData(this);
 }
 
 
 //! @todo Port to KLocale, be inspired by KexiTimeTableEdit (with Kexi*Formatter)
-TimeDelegate::TimeDelegate()
+KPropertyTimeDelegate::KPropertyTimeDelegate()
 {
 }
 
-QString TimeDelegate::displayTextForProperty(const Property* prop) const
+QString KPropertyTimeDelegate::displayTextForProperty(const KProperty* prop) const
 {
     const QLocale locale;
     const QString defaultTimeFormat = locale.timeFormat(QLocale::ShortFormat);
     return prop->value().toTime().toString(defaultTimeFormat);
 }
 
-QWidget* TimeDelegate::createEditor(int type, QWidget* parent,
+QWidget* KPropertyTimeDelegate::createEditor(int type, QWidget* parent,
     const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
 
-    const EditorDataModel* editorModel
-        = dynamic_cast<const EditorDataModel*>(index.model());
-    Property* prop = editorModel->propertyForItem(index);
+    const KPropertyEditorDataModel* editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    KProperty* prop = editorModel->propertyForItem(index);
 
-    return new TimeEdit(prop, parent);
+    return new KPropertyTimeEditor(prop, parent);
 }

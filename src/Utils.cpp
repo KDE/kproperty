@@ -35,9 +35,6 @@
 
 #define BRANCHBOX_SIZE 9
 
-namespace KoProperty
-{
-
 //! @internal
 static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPalette& palette, bool isOpen)
 {
@@ -55,7 +52,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
 #endif
         Q_UNUSED(w);
         //draw by hand
-        p->setPen(EditorView::defaultGridLineColor());
+        p->setPen(KPropertyEditorView::defaultGridLineColor());
         p->drawRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
         p->fillRect(xmarg + 1, marg + 1, BRANCHBOX_SIZE - 2, BRANCHBOX_SIZE - 2,
                     palette.brush(QPalette::Base));
@@ -65,88 +62,88 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
             p->drawLine(xmarg + BRANCHBOX_SIZE / 2, marg + 2,
                         xmarg + BRANCHBOX_SIZE / 2, marg + BRANCHBOX_SIZE - 3);
         }
-    }
+}
 
 //! @internal
 //! Based on KPopupTitle, see kpopupmenu.cpp
-    class GroupWidgetBase : public QWidget
-    {
-    public:
-        explicit GroupWidgetBase(QWidget* parent)
-                : QWidget(parent)
-                , m_isOpen(true)
-                , m_mouseDown(false) {
-            QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
-            sp.setHorizontalStretch(0);
-            sp.setVerticalStretch(1);
-            setSizePolicy(sp);
+class GroupWidgetBase : public QWidget
+{
+public:
+    explicit GroupWidgetBase(QWidget* parent)
+            : QWidget(parent)
+            , m_isOpen(true)
+            , m_mouseDown(false) {
+        QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sp.setHorizontalStretch(0);
+        sp.setVerticalStretch(1);
+        setSizePolicy(sp);
+    }
+
+    void setText(const QString &text) {
+        m_titleStr = text;
+    }
+
+    void setIcon(const QPixmap &pix) {
+        m_miniicon = pix;
+    }
+
+    virtual bool isOpen() const {
+        return m_isOpen;
+    }
+
+    virtual void setOpen(bool set) {
+        m_isOpen = set;
+    }
+
+    virtual QSize sizeHint() const {
+        QSize s(QWidget::sizeHint());
+        s.setHeight(fontMetrics().height()*2);
+        return s;
+    }
+
+protected:
+    virtual void paintEvent(QPaintEvent *) {
+        QRect r(rect());
+        QPainter p(this);
+        QStyleOptionHeader option;
+        option.initFrom(this);
+        option.state = m_mouseDown ? QStyle::State_Sunken : QStyle::State_Raised;
+        style()->drawControl(QStyle::CE_Header, &option, &p, this);
+
+        paintListViewExpander(&p, this, r.height() + 2, palette(), isOpen());
+        if (!m_miniicon.isNull()) {
+            p.drawPixmap(24, (r.height() - m_miniicon.height()) / 2, m_miniicon);
         }
 
-        void setText(const QString &text) {
-            m_titleStr = text;
+        if (!m_titleStr.isEmpty()) {
+            int indent = 16 + (m_miniicon.isNull() ? 0 : (m_miniicon.width() + 4));
+            p.setPen(palette().color(QPalette::Text));
+            QFont f = p.font();
+            f.setBold(true);
+            p.setFont(f);
+            p.drawText(indent + 8, 0, width() - (indent + 8),
+                       height(), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+                       m_titleStr);
         }
+    }
 
-        void setIcon(const QPixmap &pix) {
-            m_miniicon = pix;
-        }
-
-        virtual bool isOpen() const {
-            return m_isOpen;
-        }
-
-        virtual void setOpen(bool set) {
-            m_isOpen = set;
-        }
-
-        virtual QSize sizeHint() const {
-            QSize s(QWidget::sizeHint());
-            s.setHeight(fontMetrics().height()*2);
-            return s;
-        }
-
-    protected:
-        virtual void paintEvent(QPaintEvent *) {
-            QRect r(rect());
-            QPainter p(this);
-            QStyleOptionHeader option;
-            option.initFrom(this);
-            option.state = m_mouseDown ? QStyle::State_Sunken : QStyle::State_Raised;
-            style()->drawControl(QStyle::CE_Header, &option, &p, this);
-
-            paintListViewExpander(&p, this, r.height() + 2, palette(), isOpen());
-            if (!m_miniicon.isNull()) {
-                p.drawPixmap(24, (r.height() - m_miniicon.height()) / 2, m_miniicon);
+    virtual bool event(QEvent * e) {
+        if (e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonRelease) {
+            QMouseEvent* me = static_cast<QMouseEvent*>(e);
+            if (me->button() == Qt::LeftButton) {
+                m_mouseDown = e->type() == QEvent::MouseButtonPress;
+                update();
             }
-
-            if (!m_titleStr.isEmpty()) {
-                int indent = 16 + (m_miniicon.isNull() ? 0 : (m_miniicon.width() + 4));
-                p.setPen(palette().color(QPalette::Text));
-                QFont f = p.font();
-                f.setBold(true);
-                p.setFont(f);
-                p.drawText(indent + 8, 0, width() - (indent + 8),
-                           height(), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-                           m_titleStr);
-            }
         }
+        return QWidget::event(e);
+    }
 
-        virtual bool event(QEvent * e) {
-            if (e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonRelease) {
-                QMouseEvent* me = static_cast<QMouseEvent*>(e);
-                if (me->button() == Qt::LeftButton) {
-                    m_mouseDown = e->type() == QEvent::MouseButtonPress;
-                    update();
-                }
-            }
-            return QWidget::event(e);
-        }
-
-    protected:
-        QString m_titleStr;
-        QPixmap m_miniicon;
-        bool m_isOpen;
-        bool m_mouseDown;
-    };
+protected:
+    QString m_titleStr;
+    QPixmap m_miniicon;
+    bool m_isOpen;
+    bool m_mouseDown;
+};
 
 /*    class GroupWidget : public GroupWidgetBase
     {
@@ -164,20 +161,16 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
         EditorGroupItem *m_parentItem;
     };*/
 
-    class GroupContainer::Private
-    {
-    public:
-        Private() {}
-        QVBoxLayout* lyr;
-        GroupWidgetBase *groupWidget;
-        QPointer<QWidget> contents;
-    };
+class KPropertyGroupWidget::Private
+{
+public:
+    Private() {}
+    QVBoxLayout* lyr;
+    GroupWidgetBase *groupWidget;
+    QPointer<QWidget> contents;
+};
 
-}//namespace
-
-using namespace KoProperty;
-
-GroupContainer::GroupContainer(const QString& title, QWidget* parent)
+KPropertyGroupWidget::KPropertyGroupWidget(const QString& title, QWidget* parent)
         : QWidget(parent)
         , d(new Private())
 {
@@ -192,12 +185,12 @@ GroupContainer::GroupContainer(const QString& title, QWidget* parent)
     d->lyr->addSpacing(4);
 }
 
-GroupContainer::~GroupContainer()
+KPropertyGroupWidget::~KPropertyGroupWidget()
 {
     delete d;
 }
 
-void GroupContainer::setContents(QWidget* contents)
+void KPropertyGroupWidget::setContents(QWidget* contents)
 {
     if (d->contents) {
         d->contents->hide();
@@ -212,7 +205,7 @@ void GroupContainer::setContents(QWidget* contents)
     update();
 }
 
-bool GroupContainer::event(QEvent * e)
+bool KPropertyGroupWidget::event(QEvent * e)
 {
     if (e->type() == QEvent::MouseButtonPress) {
         QMouseEvent* me = static_cast<QMouseEvent*>(e);
@@ -229,7 +222,7 @@ bool GroupContainer::event(QEvent * e)
     return QWidget::event(e);
 }
 
-QColor KoProperty::contrastColor(const QColor& c)
+QColor KPropertyUtils::contrastColor(const QColor& c)
 {
     int g = qGray(c.rgb());
     if (g > 110)

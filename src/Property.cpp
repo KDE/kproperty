@@ -28,14 +28,11 @@
 #include <QPointer>
 #include <QSizePolicy>
 
-namespace KoProperty
-{
-
 //! @internal
-class PropertyPrivate
+class KProperty::Private
 {
 public:
-    PropertyPrivate()
+    Private()
             : type(0), caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
@@ -59,7 +56,7 @@ public:
         this->captionForDisplaying = captionForDisplaying;
     }
 
-    ~PropertyPrivate() {
+    ~Private() {
         delete caption;
         caption = 0;
         delete listData;
@@ -80,7 +77,7 @@ public:
     QVariant value;
     QVariant oldValue;
     /*! The string-to-value correspondence list of the property.*/
-    Property::ListData* listData;
+    KPropertyListData* listData;
     QString icon;
 
     bool changed;
@@ -90,46 +87,43 @@ public:
     int autosync;
     QMap<QByteArray, QVariant> options;
 
-    ComposedPropertyInterface *composed;
+    KComposedPropertyInterface *composed;
     //! Flag used to allow composed property to use setValue() without causing recursion
     bool useComposedProperty;
 
     //! Used when a single set is assigned for the property
-    QPointer<Set> set;
+    QPointer<KPropertySet> set;
     //! Used when multiple sets are assigned for the property
-    QList< QPointer<Set> > *sets;
+    QList< QPointer<KPropertySet> > *sets;
 
-    Property  *parent;
-    QList<Property*>  *children;
+    KProperty  *parent;
+    QList<KProperty*>  *children;
     //! list of properties with the same name (when intersecting buffers)
-    QList<Property*>  *relatedProperties;
+    QList<KProperty*>  *relatedProperties;
 };
-}
-
-using namespace KoProperty;
 
 /////////////////////////////////////////////////////////////////
 
-Property::ListData::ListData(const QStringList& keys_, const QStringList& names_)
+KPropertyListData::KPropertyListData(const QStringList& keys_, const QStringList& names_)
         : names(names_)
 {
     setKeysAsStringList(keys_);
 }
 
-Property::ListData::ListData(const QList<QVariant> keys_, const QStringList& names_)
+KPropertyListData::KPropertyListData(const QList<QVariant> keys_, const QStringList& names_)
         : keys(keys_), names(names_)
 {
 }
 
-Property::ListData::ListData()
+KPropertyListData::KPropertyListData()
 {
 }
 
-Property::ListData::~ListData()
+KPropertyListData::~KPropertyListData()
 {
 }
 
-void Property::ListData::setKeysAsStringList(const QStringList& list)
+void KPropertyListData::setKeysAsStringList(const QStringList& list)
 {
     keys.clear();
     for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
@@ -137,7 +131,7 @@ void Property::ListData::setKeysAsStringList(const QStringList& list)
     }
 }
 
-QStringList Property::ListData::keysAsStringList() const
+QStringList KPropertyListData::keysAsStringList() const
 {
     QStringList result;
     for (QList<QVariant>::ConstIterator it = keys.constBegin(); it != keys.constEnd(); ++it) {
@@ -148,10 +142,10 @@ QStringList Property::ListData::keysAsStringList() const
 
 /////////////////////////////////////////////////////////////////
 
-Property::Property(const QByteArray &name, const QVariant &value,
+KProperty::KProperty(const QByteArray &name, const QVariant &value,
                    const QString &caption, const QString &description,
-                   int type, Property* parent)
-        : d(new PropertyPrivate())
+                   int type, KProperty* parent)
+        : d(new KProperty::Private())
 {
     d->name = name;
     d->setCaptionForDisplaying(caption);
@@ -162,17 +156,17 @@ Property::Property(const QByteArray &name, const QVariant &value,
     else
         d->type = type;
 
-    d->composed = FactoryManager::self()->createComposedProperty(this);
+    d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
 
     if (parent)
         parent->addChild(this);
     setValue(value, false);
 }
 
-Property::Property(const QByteArray &name, const QStringList &keys, const QStringList &strings,
+KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStringList &strings,
                    const QVariant &value, const QString &caption, const QString &description,
-                   int type, Property* parent)
-        : d(new PropertyPrivate())
+                   int type, KProperty* parent)
+        : d(new KProperty::Private())
 {
     d->name = name;
     d->setCaptionForDisplaying(caption);
@@ -180,17 +174,17 @@ Property::Property(const QByteArray &name, const QStringList &keys, const QStrin
     d->type = type;
     setListData(keys, strings);
 
-    d->composed = FactoryManager::self()->createComposedProperty(this);
+    d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
 
     if (parent)
         parent->addChild(this);
     setValue(value, false);
 }
 
-Property::Property(const QByteArray &name, ListData* listData,
+KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
                    const QVariant &value, const QString &caption, const QString &description,
-                   int type, Property* parent)
-        : d(new PropertyPrivate())
+                   int type, KProperty* parent)
+        : d(new KProperty::Private())
 {
     d->name = name;
     d->setCaptionForDisplaying(caption);
@@ -198,109 +192,109 @@ Property::Property(const QByteArray &name, ListData* listData,
     d->type = type;
     d->listData = listData;
 
-    d->composed = FactoryManager::self()->createComposedProperty(this);
+    d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
 
     if (parent)
         parent->addChild(this);
     setValue(value, false);
 }
 
-Property::Property()
-        : d(new PropertyPrivate())
+KProperty::KProperty()
+        : d(new KProperty::Private())
 {
 }
 
-Property::Property(const Property &prop)
-        : d(new PropertyPrivate())
+KProperty::KProperty(const KProperty &prop)
+        : d(new KProperty::Private())
 {
     *this = prop;
 }
 
-Property::~Property()
+KProperty::~KProperty()
 {
     delete d;
 }
 
 QByteArray
-Property::name() const
+KProperty::name() const
 {
     return d->name;
 }
 
 void
-Property::setName(const QByteArray &name)
+KProperty::setName(const QByteArray &name)
 {
     d->name = name;
 }
 
 QString
-Property::caption() const
+KProperty::caption() const
 {
     return d->caption ? *d->caption : d->captionForDisplaying;
 }
 
 QString
-Property::captionForDisplaying() const
+KProperty::captionForDisplaying() const
 {
     return d->captionForDisplaying;
 }
 
 void
-Property::setCaption(const QString &caption)
+KProperty::setCaption(const QString &caption)
 {
     d->setCaptionForDisplaying(caption);
 }
 
 QString
-Property::description() const
+KProperty::description() const
 {
     return d->description;
 }
 
 void
-Property::setDescription(const QString &desc)
+KProperty::setDescription(const QString &desc)
 {
     d->description = desc;
 }
 
 int
-Property::type() const
+KProperty::type() const
 {
     return d->type;
 }
 
 void
-Property::setType(int type)
+KProperty::setType(int type)
 {
     d->type = type;
 }
 
 QString
-Property::icon() const
+KProperty::icon() const
 {
     return d->icon;
 }
 
 void
-Property::setIcon(const QString &icon)
+KProperty::setIcon(const QString &icon)
 {
     d->icon = icon;
 }
 
 QVariant
-Property::value() const
+KProperty::value() const
 {
     return d->value;
 }
 
 QVariant
-Property::oldValue() const
+KProperty::oldValue() const
 {
     return d->oldValue;
 }
 
 void
-Property::childValueChanged(Property *child, const QVariant &value, bool rememberOldValue)
+KProperty::childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue)
 {
     if (!d->composed)
         return;
@@ -328,7 +322,7 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
     return false;
 }
 
-void Property::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
+void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
     if (d->name.isEmpty()) {
         qWarning() << "COULD NOT SET value to a null property";
@@ -358,7 +352,7 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
               || (!currentValue.toString().isEmpty() && !value.toString().isEmpty() && currentValue != value));
     }
     else if (t == QVariant::Double) {
-        const double factor = 1.0 / option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
+        const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
         //kDebug()
         //    << "double compared:" << currentValue.toDouble() << value.toDouble()
         //    << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
@@ -408,7 +402,7 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
 }
 
 void
-Property::resetValue()
+KProperty::resetValue()
 {
     d->changed = false;
     bool cleared = false;
@@ -423,7 +417,7 @@ Property::resetValue()
         d->parent->d->changed = false;
 
     if (d->sets) {
-        foreach (QPointer<Set> set, *d->sets) {
+        foreach (QPointer<KPropertySet> set, *d->sets) {
             if (!set.isNull()) //may be destroyed in the meantime
                 emit set->propertyReset(*set, *this);
         }
@@ -432,13 +426,13 @@ Property::resetValue()
     }
 }
 
-Property::ListData* Property::listData() const
+KPropertyListData* KProperty::listData() const
 {
     return d->listData;
 }
 
 void
-Property::setListData(ListData* list)
+KProperty::setListData(KPropertyListData* list)
 {
     if (list == d->listData)
         return;
@@ -447,88 +441,88 @@ Property::setListData(ListData* list)
 }
 
 void
-Property::setListData(const QStringList &keys, const QStringList &names)
+KProperty::setListData(const QStringList &keys, const QStringList &names)
 {
-    ListData* list = new ListData(keys, names);
+    KPropertyListData* list = new KPropertyListData(keys, names);
     setListData(list);
 }
 
 ////////////////////////////////////////////////////////////////
 
 bool
-Property::isNull() const
+KProperty::isNull() const
 {
     return d->name.isEmpty();
 }
 
 bool
-Property::isModified() const
+KProperty::isModified() const
 {
     return d->changed;
 }
 
 void
-Property::clearModifiedFlag()
+KProperty::clearModifiedFlag()
 {
     d->changed = false;
 }
 
 bool
-Property::isReadOnly() const
+KProperty::isReadOnly() const
 {
     return d->readOnly;
 }
 
 void
-Property::setReadOnly(bool readOnly)
+KProperty::setReadOnly(bool readOnly)
 {
     d->readOnly = readOnly;
 }
 
 bool
-Property::isVisible() const
+KProperty::isVisible() const
 {
     return d->visible;
 }
 
 void
-Property::setVisible(bool visible)
+KProperty::setVisible(bool visible)
 {
     d->visible = visible;
 }
 
 int
-Property::autoSync() const
+KProperty::autoSync() const
 {
     return d->autosync;
 }
 
 void
-Property::setAutoSync(int sync)
+KProperty::setAutoSync(int sync)
 {
     d->autosync = sync;
 }
 
 bool
-Property::isStorable() const
+KProperty::isStorable() const
 {
     return d->storable;
 }
 
 void
-Property::setStorable(bool storable)
+KProperty::setStorable(bool storable)
 {
     d->storable = storable;
 }
 
 void
-Property::setOption(const char* name, const QVariant& val)
+KProperty::setOption(const char* name, const QVariant& val)
 {
     d->options[name] = val;
 }
 
 QVariant
-Property::option(const char* name, const QVariant& defaultValue) const
+KProperty::option(const char* name, const QVariant& defaultValue) const
 {
     if (d->options.contains(name))
         return d->options[name];
@@ -536,22 +530,22 @@ Property::option(const char* name, const QVariant& defaultValue) const
 }
 
 bool
-Property::hasOptions() const
+KProperty::hasOptions() const
 {
     return !d->options.isEmpty();
 }
 
 /////////////////////////////////////////////////////////////////
 
-const Property&
-Property::operator= (const QVariant & val)
+const KProperty&
+KProperty::operator= (const QVariant & val)
 {
     setValue(val);
     return *this;
 }
 
-const Property&
-Property::operator= (const Property & property)
+const KProperty&
+KProperty::operator= (const KProperty & property)
 {
     if (&property == this)
         return *this;
@@ -578,28 +572,28 @@ Property::operator= (const Property & property)
     d->options = property.d->options;
 
     if (property.d->listData) {
-        d->listData = new ListData(*property.d->listData);
+        d->listData = new KPropertyListData(*property.d->listData);
     }
     if (property.d->composed) {
         delete d->composed;
-        d->composed = FactoryManager::self()->createComposedProperty(this);
-        // updates all children value, using ComposedPropertyInterface
+        d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
+        // updates all children value, using KComposedPropertyInterface
         setValue(property.value());
     } else {
         d->value = property.d->value;
         if (property.d->children) {
-            // no ComposedPropertyInterface (should never happen), simply copy all children
-            d->children = new QList<Property*>();
-            QList<Property*>::ConstIterator endIt = property.d->children->constEnd();
-            for (QList<Property*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
-                Property *child = new Property(*(*it));
+            // no KComposedPropertyInterface (should never happen), simply copy all children
+            d->children = new QList<KProperty*>();
+            QList<KProperty*>::ConstIterator endIt = property.d->children->constEnd();
+            for (QList<KProperty*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
+                KProperty *child = new KProperty(*(*it));
                 addChild(child);
             }
         }
     }
 
     if (property.d->relatedProperties) {
-        d->relatedProperties = new QList<Property*>(*(property.d->relatedProperties));
+        d->relatedProperties = new QList<KProperty*>(*(property.d->relatedProperties));
     }
 
     // update these later because they may have been changed when creating children
@@ -609,45 +603,45 @@ Property::operator= (const Property & property)
 }
 
 bool
-Property::operator ==(const Property &prop) const
+KProperty::operator ==(const KProperty &prop) const
 {
     return ((d->name == prop.d->name) && (value() == prop.value()));
 }
 
 /////////////////////////////////////////////////////////////////
 
-const QList<Property*>*
-Property::children() const
+const QList<KProperty*>*
+KProperty::children() const
 {
     return d->children;
 }
 
-Property*
-Property::child(const QByteArray &name)
+KProperty*
+KProperty::child(const QByteArray &name)
 {
-    QList<Property*>::ConstIterator endIt = d->children->constEnd();
-    for (QList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
+    QList<KProperty*>::ConstIterator endIt = d->children->constEnd();
+    for (QList<KProperty*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
         if ((*it)->name() == name)
             return *it;
     }
     return 0;
 }
 
-Property*
-Property::parent() const
+KProperty*
+KProperty::parent() const
 {
     return d->parent;
 }
 
 void
-Property::addChild(Property *prop)
+KProperty::addChild(KProperty *prop)
 {
     if (!prop)
         return;
 
     if (!d->children || qFind(d->children->begin(), d->children->end(), prop) == d->children->end()) { // not in our list
         if (!d->children)
-            d->children = new QList<Property*>();
+            d->children = new QList<KProperty*>();
         d->children->append(prop);
         prop->d->parent = this;
     } else {
@@ -658,7 +652,7 @@ Property::addChild(Property *prop)
 }
 
 void
-Property::addSet(Set *set)
+KProperty::addSet(KPropertySet *set)
 {
     if (!set)
         return;
@@ -670,36 +664,36 @@ Property::addSet(Set *set)
     if (d->set == set || d->sets->contains(set))
         return;
     if (!d->sets) {
-        d->sets = new QList< QPointer<Set> >;
+        d->sets = new QList< QPointer<KPropertySet> >;
     }
 
-    d->sets->append(QPointer<Set>(set));
+    d->sets->append(QPointer<KPropertySet>(set));
 }
 
-const QList<Property*>*
-Property::related() const
+const QList<KProperty*>*
+KProperty::related() const
 {
     return d->relatedProperties;
 }
 
 void
-Property::addRelatedProperty(Property *property)
+KProperty::addRelatedProperty(KProperty *property)
 {
     if (!d->relatedProperties)
-        d->relatedProperties = new QList<Property*>();
+        d->relatedProperties = new QList<KProperty*>();
 
-    QList<Property*>::iterator it = qFind(d->relatedProperties->begin(), d->relatedProperties->end(), property);
+    QList<KProperty*>::iterator it = qFind(d->relatedProperties->begin(), d->relatedProperties->end(), property);
     if (it == d->relatedProperties->end()) // not in our list
         d->relatedProperties->append(property);
 }
 
-ComposedPropertyInterface* Property::composedProperty() const
+KComposedPropertyInterface* KProperty::composedProperty() const
 {
     return d->composed;
 }
 
 void
-Property::setComposedProperty(ComposedPropertyInterface *prop)
+KProperty::setComposedProperty(KComposedPropertyInterface *prop)
 {
     if (d->composed == prop)
         return;
@@ -719,9 +713,9 @@ void Property::setSortingKey(int key)
 }
 #endif
 
-void Property::emitPropertyChanged()
+void KProperty::emitPropertyChanged()
 {
-    QList< QPointer<Set> > *sets = 0;
+    QList< QPointer<KPropertySet> > *sets = 0;
     if (d->sets) {
         sets = d->sets;
     }
@@ -729,7 +723,7 @@ void Property::emitPropertyChanged()
         sets = d->parent->d->sets;
     }
     if (sets) {
-        foreach (QPointer<Set> s, *sets) {
+        foreach (QPointer<KPropertySet> s, *sets) {
             if (!s.isNull()) { //may be destroyed in the meantime
                 emit s->propertyChangedInternal(*s, *this);
                 emit s->propertyChanged(*s, *this);
@@ -737,7 +731,7 @@ void Property::emitPropertyChanged()
         }
     }
     else {
-        QPointer<Set> set;
+        QPointer<KPropertySet> set;
         set = d->set;
         if (d->set) {
             set = d->set;
@@ -758,21 +752,21 @@ void Property::emitPropertyChanged()
     }
 }
 
-const QMap<QByteArray, QVariant>& Property::options() const
+const QMap<QByteArray, QVariant>& KProperty::options() const
 {
     return d->options;
 }
 
 /////////////////////////////////////////////////////////////////
 
-void Property::debug() const
+void KProperty::debug() const
 {
     qDebug() << *this;
 }
 
-KPROPERTY_EXPORT QDebug KoProperty::operator<<(QDebug dbg, const Property &p)
+KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
 {
-    dbg.nospace() << "KoProperty::Property("
+    dbg.nospace() << "KProperty("
         << "NAME=" << p.name();
     if (!p.caption().isEmpty()) {
         dbg.nospace() << " CAPTION=" << p.caption();

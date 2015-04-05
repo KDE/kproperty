@@ -21,12 +21,10 @@
 
 #include <QSizePolicy>
 
-using namespace KoProperty;
-
-class SizePolicyListData : public Property::ListData
+class SizePolicyListData : public KPropertyListData
 {
 public:
-    SizePolicyListData() : Property::ListData(keysInternal(), stringsInternal())
+    SizePolicyListData() : KPropertyListData(keysInternal(), stringsInternal())
     {
     }
 
@@ -70,7 +68,7 @@ Q_GLOBAL_STATIC(SizePolicyListData, s_sizePolicyListData)
 
 static const char SIZEPOLICY_MASK[] = "%1, %2, %3, %4";
 
-QString SizePolicyDelegate::displayText( const QVariant& value ) const
+QString KPropertySizePolicyDelegate::displayText( const QVariant& value ) const
 {
     const QSizePolicy sp(value.value<QSizePolicy>());
 
@@ -82,27 +80,31 @@ QString SizePolicyDelegate::displayText( const QVariant& value ) const
 }
 
 //static
-const Property::ListData& SizePolicyDelegate::listData()
+const KPropertyListData& KPropertySizePolicyDelegate::listData()
 {
     return *s_sizePolicyListData;
 }
 
 //------------
 
-SizePolicyComposedProperty::SizePolicyComposedProperty(Property *property)
-        : ComposedPropertyInterface(property)
+KSizePolicyComposedProperty::KSizePolicyComposedProperty(KProperty *property)
+        : KComposedPropertyInterface(property)
 {
-    (void)new Property("hor_policy", new SizePolicyListData(),
-        QVariant(), QObject::tr("Hor. Policy"), QObject::tr("Horizontal Policy"), ValueFromList, property);
-    (void)new Property("vert_policy", new SizePolicyListData(),
-        QVariant(), QObject::tr("Vert. Policy"), QObject::tr("Vertical Policy"), ValueFromList, property);
-    (void)new Property("hor_stretch", QVariant(),
-        QObject::tr("Hor. Stretch"), QObject::tr("Horizontal Stretch"), UInt, property);
-    (void)new Property("vert_stretch", QVariant(),
-        QObject::tr("Vert. Stretch"), QObject::tr("Vertical Stretch"), UInt, property);
+    (void)new KProperty("hor_policy", new SizePolicyListData(),
+        QVariant(), QObject::tr("Hor. Policy"), QObject::tr("Horizontal Policy"),
+        KProperty::ValueFromList, property);
+    (void)new KProperty("vert_policy", new SizePolicyListData(),
+        QVariant(), QObject::tr("Vert. Policy"), QObject::tr("Vertical Policy"),
+        KProperty::ValueFromList, property);
+    (void)new KProperty("hor_stretch", QVariant(),
+        QObject::tr("Hor. Stretch"), QObject::tr("Horizontal Stretch"),
+        KProperty::UInt, property);
+    (void)new KProperty("vert_stretch", QVariant(),
+        QObject::tr("Vert. Stretch"), QObject::tr("Vertical Stretch"),
+        KProperty::UInt, property);
 }
 
-void SizePolicyComposedProperty::setValue(Property *property,
+void KSizePolicyComposedProperty::setValue(KProperty *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QSizePolicy sp( value.value<QSizePolicy>() );
@@ -112,7 +114,7 @@ void SizePolicyComposedProperty::setValue(Property *property,
     property->child("vert_stretch")->setValue(sp.verticalStretch(), rememberOldValue, false);
 }
 
-void SizePolicyComposedProperty::childValueChanged(Property *child,
+void KSizePolicyComposedProperty::childValueChanged(KProperty *child,
     const QVariant &value, bool rememberOldValue)
 {
     Q_UNUSED(rememberOldValue);

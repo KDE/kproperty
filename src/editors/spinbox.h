@@ -26,20 +26,18 @@
 
 #include <QSpinBox>
 
-namespace KoProperty {
-
 //! A delegate supporting Int and UInt types
 /*! Note that due to KIntNumInput limitations, for UInt the maximum value
     is INT_MAX, not UINT_MAX.
 */
-class KPROPERTY_EXPORT IntSpinBox : public QSpinBox
+class KPROPERTY_EXPORT KPropertyIntSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    IntSpinBox(const Property* prop, QWidget *parent, int itemHeight);
-    virtual ~IntSpinBox();
+    KPropertyIntSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
+    virtual ~KPropertyIntSpinBox();
 
     QVariant value() const;
 
@@ -63,15 +61,15 @@ private:
 };
 
 //! Double editor
-class KPROPERTY_EXPORT DoubleSpinBox : public QSpinBox
+class KPROPERTY_EXPORT KPropertyDoubleSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)
 
 public:
 //! @todo Support setting precision limits, step, etc.
-    DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeight);
-    virtual ~DoubleSpinBox();
+    KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
+    virtual ~KPropertyDoubleSpinBox();
 
 //    virtual bool eventFilter(QObject *o, QEvent *e);
 /*    QLineEdit * lineEdit() const {
@@ -97,30 +95,28 @@ protected:
 };
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
-class KPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface,
-                                             public ValueDisplayInterface
+class KPROPERTY_EXPORT KPropertyIntSpinBoxDelegate : public KPropertyEditorCreatorInterface,
+                                                     public KPropertyValueDisplayInterface
 {
 public:
-    IntSpinBoxDelegate();
+    KPropertyIntSpinBoxDelegate();
 
-    virtual QString displayTextForProperty( const Property* prop ) const;
+    virtual QString displayTextForProperty( const KProperty* prop ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class KPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface,
-                              public ValueDisplayInterface
+class KPROPERTY_EXPORT KPropertyDoubleSpinBoxDelegate : public KPropertyEditorCreatorInterface,
+                                                        public KPropertyValueDisplayInterface
 {
 public:
-    DoubleSpinBoxDelegate();
+    KPropertyDoubleSpinBoxDelegate();
 
-    virtual QString displayTextForProperty( const Property* prop ) const;
+    virtual QString displayTextForProperty( const KProperty* prop ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

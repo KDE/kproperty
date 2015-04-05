@@ -26,16 +26,14 @@
 
 class QPushButton;
 
-namespace KoProperty {
-
 //! @internal
 //! reimplemented to better button and label's positioning
-class FontEditRequester : public QWidget
+class KPropertyFontEditRequester : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QFont value READ value WRITE setValue USER true)
 public:
-    explicit FontEditRequester(QWidget *parent);
+    explicit KPropertyFontEditRequester(QWidget *parent);
 
     QFont value() const;
 
@@ -55,6 +53,5 @@ protected:
     QFont m_font;
     bool m_paletteChangedEnabled;
 };
-}
 
 #endif

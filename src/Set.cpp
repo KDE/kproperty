@@ -27,31 +27,28 @@
 
 typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
 
-namespace KoProperty
-{
-
 //! @internal
-class SetPrivate
+class KPropertySet::Private
 {
 public:
-    explicit SetPrivate(KoProperty::Set *set) :
+    explicit Private(KPropertySet *set) :
             q(set),
             readOnly(false),
             informAboutClearing(0),
             m_visiblePropertiesCount(0)
     {}
 
-    ~SetPrivate() {}
+    ~Private() {}
 
     inline uint visiblePropertiesCount() const { return m_visiblePropertiesCount; }
 
-    inline Property* property(const QByteArray &name) const {
+    inline KProperty* property(const QByteArray &name) const {
         return hash.value(name.toLower());
     }
 
-    inline Property& propertyOrNull(const QByteArray &name) const
+    inline KProperty& propertyOrNull(const QByteArray &name) const
     {
-        Property *p = property(name);
+        KProperty *p = property(name);
         if (p)
             return *p;
         nonConstNull.setName(0); //to ensure returned property is null
@@ -59,7 +56,7 @@ public:
         return nonConstNull;
     }
 
-    void addProperty(Property *property, QByteArray group/*, bool updateSortingKey*/)
+    void addProperty(KProperty *property, QByteArray group/*, bool updateSortingKey*/)
     {
         if (!property) {
             qWarning() << "property == 0";
@@ -72,7 +69,7 @@ public:
         if (group.isEmpty())
             group = "common";
 
-        Property *p = this->property(property->name());
+        KProperty *p = this->property(property->name());
         if (p) {
             q->addRelatedProperty(p, property);
         }
@@ -92,7 +89,7 @@ public:
 #endif
     }
 
-    void removeProperty(Property *property)
+    void removeProperty(KProperty *property)
     {
         if (!property)
             return;
@@ -101,7 +98,7 @@ public:
             qDebug() << "Set does not contain property" << property;
             return;
         }
-        Property *p = hash.take(property->name());
+        KProperty *p = hash.take(property->name());
         q->removeFromGroup(p);
         if (p->isVisible()) {
             m_visiblePropertiesCount--;
@@ -132,22 +129,22 @@ public:
 
     inline bool isEmpty() const { return list.isEmpty(); }
 
-    inline QByteArray groupForProperty(Property *property) const {
+    inline QByteArray groupForProperty(KProperty *property) const {
         return groupForProperties.value(property);
     }
 
-    inline void addPropertyToGroup(Property *property, const QByteArray &groupLower) {
+    inline void addPropertyToGroup(KProperty *property, const QByteArray &groupLower) {
         groupForProperties.insert(property, groupLower);
     }
 
-    inline void removePropertyFromGroup(Property *property) {
+    inline void removePropertyFromGroup(KProperty *property) {
         groupForProperties.remove(property);
     }
 
     // Copy all attributes except complex ones
-    void copyAttributesFrom(const SetPrivate& other)
+    void copyAttributesFrom(const Private &other)
     {
-        Set *origSet = q;
+        KPropertySet *origSet = q;
         *this = other;
         q = origSet;
         // do not copy too deeply
@@ -159,11 +156,11 @@ public:
 
     // Copy all properties from the other set
     void copyPropertiesFrom(
-        const QList<Property*>::ConstIterator& constBegin,
-        const QList<Property*>::ConstIterator& constEnd, const Set & set)
+        const QList<KProperty*>::ConstIterator& constBegin,
+        const QList<KProperty*>::ConstIterator& constEnd, const KPropertySet & set)
     {
-        for (QList<Property*>::ConstIterator it(constBegin); it!=constEnd; ++it) {
-            Property *prop = new Property(*(*it));
+        for (QList<KProperty*>::ConstIterator it(constBegin); it!=constEnd; ++it) {
+            KProperty *prop = new KProperty(*(*it));
             addProperty(prop, set.groupForProperty( *it )
 #if 0
                         ,
@@ -174,15 +171,15 @@ public:
         }
     }
 
-    inline QList<Property*>::ConstIterator listConstIterator() const {
+    inline QList<KProperty*>::ConstIterator listConstIterator() const {
         return list.constBegin();
     }
 
-    inline QList<Property*>::ConstIterator listConstEnd() const {
+    inline QList<KProperty*>::ConstIterator listConstEnd() const {
         return list.constEnd();
     }
 
-    Set *q;
+    KPropertySet *q;
 
     //groups of properties:
     // list of group name: (list of property names)
@@ -201,35 +198,31 @@ public:
     //! to be informed that the set has been cleared (all properties are deleted)
     bool* informAboutClearing;
 
-    mutable Property nonConstNull;
+    mutable KProperty nonConstNull;
 
 private:
     //! a list of properties, preserving their order, owner of Property objects
-    QList<Property*> list;
+    QList<KProperty*> list;
     //! a hash of properties in form name -> property
-    QHash<QByteArray, Property*> hash;
-    QHash<Property*, QByteArray> groupForProperties;
+    QHash<QByteArray, KProperty*> hash;
+    QHash<KProperty*, QByteArray> groupForProperties;
     uint m_visiblePropertiesCount; //! cache for optimization,
                                    //! used by @ref bool Set::hasVisibleProperties()
 };
 
-}
-
-using namespace KoProperty;
-
 //////////////////////////////////////////////
 
-Set::PropertySelector::PropertySelector()
+KPropertySelector::KPropertySelector()
 {
 }
 
-Set::PropertySelector::~PropertySelector()
+KPropertySelector::~KPropertySelector()
 {
 }
 
 //////////////////////////////////////////////
 
-typedef QPair<Property*, QString> Iterator_PropertyAndString;
+typedef QPair<KProperty*, QString> Iterator_PropertyAndString;
 
 bool Iterator_propertyAndStringLessThan(
     const Iterator_PropertyAndString &n1, const Iterator_PropertyAndString &n2)
@@ -239,31 +232,31 @@ bool Iterator_propertyAndStringLessThan(
 
 //////////////////////////////////////////////
 
-Set::Iterator::Iterator(const Set &set)
+KPropertySetIterator::KPropertySetIterator(const KPropertySet &set)
     : m_set(&set)
     , m_iterator( set.d->listConstIterator() )
     , m_end( set.d->listConstEnd() )
     , m_selector( 0 )
-    , m_order(Set::InsertionOrder)
+    , m_order(KPropertySetIterator::InsertionOrder)
 {
 }
 
-Set::Iterator::Iterator(const Set &set, const PropertySelector& selector)
+KPropertySetIterator::KPropertySetIterator(const KPropertySet &set, const KPropertySelector& selector)
     : m_set(&set)
     , m_iterator( set.d->listConstIterator() )
     , m_end( set.d->listConstEnd() )
     , m_selector( selector.clone() )
-    , m_order(Set::InsertionOrder)
+    , m_order(KPropertySetIterator::InsertionOrder)
 {
     skipNotAcceptable();
 }
 
-Set::Iterator::~Iterator()
+KPropertySetIterator::~KPropertySetIterator()
 {
     delete m_selector;
 }
 
-void Set::Iterator::skipNotAcceptable()
+void KPropertySetIterator::skipNotAcceptable()
 {
     if (!m_selector)
         return;
@@ -275,22 +268,22 @@ void Set::Iterator::skipNotAcceptable()
     //kDebug() << "TO:" << *current();
 }
 
-void Set::Iterator::setOrder(Set::Order order)
+void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
 {
     if (m_order == order)
         return;
     m_order = order;
     switch (m_order) {
-    case Set::AlphabeticalOrder:
-    case Set::AlphabeticalByName:
+    case KPropertySetIterator::AlphabeticalOrder:
+    case KPropertySetIterator::AlphabeticalByName:
     {
         QList<Iterator_PropertyAndString> propertiesAndStrings;
         m_iterator = m_set->d->listConstIterator();
         m_end = m_set->d->listConstEnd();
         for (; m_iterator!=m_end; ++m_iterator) {
-            Property *prop = *m_iterator;
+            KProperty *prop = *m_iterator;
             QString captionOrName;
-            if (m_order == Set::AlphabeticalOrder) {
+            if (m_order == KPropertySetIterator::AlphabeticalOrder) {
                 captionOrName = prop->caption();
             }
             if (captionOrName.isEmpty()) {
@@ -319,7 +312,7 @@ void Set::Iterator::setOrder(Set::Order order)
 }
 
 void
-Set::Iterator::operator ++()
+KPropertySetIterator::operator ++()
 {
     while (true) {
         ++m_iterator;
@@ -335,9 +328,9 @@ Set::Iterator::operator ++()
 
 //////////////////////////////////////////////
 
-Set::Set(QObject *parent, const QString &typeName)
+KPropertySet::KPropertySet(QObject *parent, const QString &typeName)
         : QObject(parent)
-        , d(new SetPrivate(this))
+        , d(new KPropertySet::Private(this))
 {
     setObjectName(typeName.toLower());
 
@@ -347,23 +340,23 @@ Set::Set(QObject *parent, const QString &typeName)
 }
 
 
-Set::Set(const Set &set)
+KPropertySet::KPropertySet(const KPropertySet &set)
         : QObject(0 /* implicit sharing the parent is dangerous */)
-        , d(new SetPrivate(this))
+        , d(new KPropertySet::Private(this))
 {
     setObjectName(set.objectName());
     *this = set;
 }
 
-Set::Set(bool propertyOwner)
+KPropertySet::KPropertySet(bool propertyOwner)
         : QObject(0)
-        , d(new SetPrivate(this))
+        , d(new KPropertySet::Private(this))
 {
     d->ownProperty = propertyOwner;
     d->groupDescriptions.insert("common", tr("General", "General properties"));
 }
 
-Set::~Set()
+KPropertySet::~KPropertySet()
 {
     emit aboutToBeCleared();
     emit aboutToBeDeleted();
@@ -374,32 +367,32 @@ Set::~Set()
 /////////////////////////////////////////////////////
 
 void
-Set::addProperty(Property *property, QByteArray group)
+KPropertySet::addProperty(KProperty *property, QByteArray group)
 {
     d->addProperty(property, group);
 }
 
 void
-Set::removeProperty(Property *property)
+KPropertySet::removeProperty(KProperty *property)
 {
     d->removeProperty(property);
 }
 
 void
-Set::removeProperty(const QByteArray &name)
+KPropertySet::removeProperty(const QByteArray &name)
 {
-    Property *p = d->property(name);
+    KProperty *p = d->property(name);
     removeProperty(p);
 }
 
 void
-Set::clear()
+KPropertySet::clear()
 {
     d->clear();
 }
 
 void
-Set::informAboutClearing(bool& cleared)
+KPropertySet::informAboutClearing(bool& cleared)
 {
     cleared = false;
     d->informAboutClearing = &cleared;
@@ -407,13 +400,13 @@ Set::informAboutClearing(bool& cleared)
 
 /////////////////////////////////////////////////////
 
-QByteArray Set::groupForProperty(Property *property) const
+QByteArray KPropertySet::groupForProperty(KProperty *property) const
 {
     return d->groupForProperty(property);
 }
 
 void
-Set::addToGroup(const QByteArray &group, Property *property)
+KPropertySet::addToGroup(const QByteArray &group, KProperty *property)
 {
     if (!property || group.isEmpty())
         return;
@@ -433,7 +426,7 @@ Set::addToGroup(const QByteArray &group, Property *property)
 }
 
 void
-Set::removeFromGroup(Property *property)
+KPropertySet::removeFromGroup(KProperty *property)
 {
     if (!property)
         return;
@@ -453,25 +446,25 @@ Set::removeFromGroup(Property *property)
 }
 
 const QList<QByteArray>
-Set::groupNames() const
+KPropertySet::groupNames() const
 {
     return d->groupNames;
 }
 
 const QList<QByteArray>
-Set::propertyNamesForGroup(const QByteArray &group) const
+KPropertySet::propertyNamesForGroup(const QByteArray &group) const
 {
     return d->propertiesOfGroup.value(group);
 }
 
 void
-Set::setGroupDescription(const QByteArray &group, const QString desc)
+KPropertySet::setGroupDescription(const QByteArray &group, const QString desc)
 {
     d->groupDescriptions.insert(group.toLower(), desc);
 }
 
 QString
-Set::groupDescription(const QByteArray &group) const
+KPropertySet::groupDescription(const QByteArray &group) const
 {
     const QString result( d->groupDescriptions.value(group.toLower()) );
     if (!result.isEmpty())
@@ -480,13 +473,13 @@ Set::groupDescription(const QByteArray &group) const
 }
 
 void
-Set::setGroupIcon(const QByteArray &group, const QString& icon)
+KPropertySet::setGroupIcon(const QByteArray &group, const QString& icon)
 {
     d->groupIcons.insert(group.toLower(), icon);
 }
 
 QString
-Set::groupIcon(const QByteArray &group) const
+KPropertySet::groupIcon(const QByteArray &group) const
 {
     return d->groupIcons.value(group);
 }
@@ -495,68 +488,68 @@ Set::groupIcon(const QByteArray &group) const
 /////////////////////////////////////////////////////
 
 uint
-Set::count() const
+KPropertySet::count() const
 {
     return d->count();
 }
 
-uint Set::count(const PropertySelector& selector) const
+uint KPropertySet::count(const KPropertySelector& selector) const
 {
     uint result = 0;
-    for (Set::Iterator it(*this, selector); it.current(); ++it, result++)
+    for (KPropertySetIterator it(*this, selector); it.current(); ++it, result++)
         ;
     return result;
 }
 
 bool
-Set::isEmpty() const
+KPropertySet::isEmpty() const
 {
     return d->isEmpty();
 }
 
-bool Set::hasVisibleProperties() const
+bool KPropertySet::hasVisibleProperties() const
 {
     return d->visiblePropertiesCount() > 0;
 }
 
-bool Set::hasProperties(const PropertySelector& selector) const
+bool KPropertySet::hasProperties(const KPropertySelector& selector) const
 {
-    Set::Iterator it(*this, selector);
+    KPropertySetIterator it(*this, selector);
     return it.current();
 }
 
 bool
-Set::isReadOnly() const
+KPropertySet::isReadOnly() const
 {
     return d->readOnly;
 }
 
 void
-Set::setReadOnly(bool readOnly)
+KPropertySet::setReadOnly(bool readOnly)
 {
     d->readOnly = readOnly;
 }
 
 bool
-Set::contains(const QByteArray &name) const
+KPropertySet::contains(const QByteArray &name) const
 {
     return d->property(name);
 }
 
-Property&
-Set::property(const QByteArray &name) const
+KProperty&
+KPropertySet::property(const QByteArray &name) const
 {
     return d->propertyOrNull(name);
 }
 
-Property&
-Set::operator[](const QByteArray &name) const
+KProperty&
+KPropertySet::operator[](const QByteArray &name) const
 {
     return d->propertyOrNull(name);
 }
 
-const Set&
-Set::operator= (const Set & set)
+const KPropertySet&
+KPropertySet::operator= (const KPropertySet & set)
 {
     if (&set == this)
         return *this;
@@ -567,28 +560,28 @@ Set::operator= (const Set & set)
     return *this;
 }
 
-QVariant Set::propertyValue(const QByteArray &name, const QVariant& defaultValue) const
+QVariant KPropertySet::propertyValue(const QByteArray &name, const QVariant& defaultValue) const
 {
-    const Property *p = d->property(name);
+    const KProperty *p = d->property(name);
     return p ? p->value() : defaultValue;
 }
 
 void
-Set::changeProperty(const QByteArray &property, const QVariant &value)
+KPropertySet::changeProperty(const QByteArray &property, const QVariant &value)
 {
-    Property *p = d->property(property);
+    KProperty *p = d->property(property);
     if (p)
         p->setValue(value);
 }
 
-void Set::debug() const
+void KPropertySet::debug() const
 {
     qDebug() << *this;
 }
 
-QDebug KoProperty::operator<<(QDebug dbg, const Set &set)
+KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
 {
-    dbg.nospace() << "KoProperty::Set(";
+    dbg.nospace() << "KPropertySet(";
     if (!set.typeName().isEmpty()) {
         dbg.nospace() << "TYPENAME=" << set.typeName();
         if (set.isEmpty()) {
@@ -602,8 +595,8 @@ QDebug KoProperty::operator<<(QDebug dbg, const Set &set)
     }
     dbg.nospace() << " PROPERTIES(" << set.count() << "):\n";
 
-    Set::Iterator it(set);
-    it.setOrder(Set::AlphabeticalByName);
+    KPropertySetIterator it(set);
+    it.setOrder(KPropertySetIterator::AlphabeticalByName);
     bool first = true;
     for ( ; it.current(); ++it) {
         if (first) {
@@ -619,60 +612,69 @@ QDebug KoProperty::operator<<(QDebug dbg, const Set &set)
 }
 
 QByteArray
-Set::previousSelection() const
+KPropertySet::previousSelection() const
 {
     return d->prevSelection;
 }
 
 void
-Set::setPreviousSelection(const QByteArray &prevSelection)
+KPropertySet::setPreviousSelection(const QByteArray &prevSelection)
 {
     d->prevSelection = prevSelection;
 }
 
 QString
-Set::typeName() const
+KPropertySet::typeName() const
 {
     return d->typeName;
 }
 
-void Set::addRelatedProperty(Property *p1, Property *p2) const
+void KPropertySet::addRelatedProperty(KProperty *p1, KProperty *p2) const
 {
     p1->addRelatedProperty(p2);
 }
 
-/////////////////////////////////////////////////////
-
-Buffer::Buffer()
-        : Set(false)
+QMap<QByteArray, QVariant> KPropertySet::propertyValues() const
 {
-    connect(this, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(intersectedChanged(KoProperty::Set&,KoProperty::Property&)));
-
-    connect(this, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(intersectedReset(KoProperty::Set&,KoProperty::Property&)));
+    QMap<QByteArray, QVariant> result;
+    for (KPropertySetIterator it(*this); it.current(); ++it) {
+        result.insert(it.current()->name(), it.current()->value());
+    }
+    return result;
 }
 
-Buffer::Buffer(const Set& set)
-        : Set(false)
-{
-    connect(this, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(intersectedChanged(KoProperty::Set&,KoProperty::Property&)));
+/////////////////////////////////////////////////////
 
-    connect(this, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
-            this, SLOT(intersectedReset(KoProperty::Set&,KoProperty::Property&)));
+KPropertyBuffer::KPropertyBuffer()
+        : KPropertySet(false)
+{
+    connect(this, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
+            this, SLOT(intersectedChanged(KPropertySet&,KProperty&)));
+
+    connect(this, SIGNAL(propertyReset(KPropertySet&,KProperty&)),
+            this, SLOT(intersectedReset(KPropertySet&,KProperty&)));
+}
+
+KPropertyBuffer::KPropertyBuffer(const KPropertySet& set)
+        : KPropertySet(false)
+{
+    connect(this, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
+            this, SLOT(intersectedChanged(KPropertySet&,KProperty&)));
+
+    connect(this, SIGNAL(propertyReset(KPropertySet&,KProperty&)),
+            this, SLOT(intersectedReset(KPropertySet&,KProperty&)));
 
     init(set);
 }
 
-void Buffer::init(const Set& set)
+void KPropertyBuffer::init(const KPropertySet& set)
 {
     //deep copy of set
-    const QList<Property*>::ConstIterator itEnd(set.d->listConstEnd());
-    for (QList<Property*>::ConstIterator it(set.d->listConstIterator());
+    const QList<KProperty*>::ConstIterator itEnd(set.d->listConstEnd());
+    for (QList<KProperty*>::ConstIterator it(set.d->listConstIterator());
         it!=itEnd; ++it)
     {
-        Property *prop = new Property(*(*it));
+        KProperty *prop = new KProperty(*(*it));
         QByteArray group = set.groupForProperty(*it);
         QString groupDesc = set.groupDescription( group );
         setGroupDescription(group, groupDesc);
@@ -681,19 +683,19 @@ void Buffer::init(const Set& set)
     }
 }
 
-void Buffer::intersect(const Set& set)
+void KPropertyBuffer::intersect(const KPropertySet& set)
 {
     if (isEmpty()) {
         init(set);
         return;
     }
 
-    const QList<Property*>::ConstIterator itEnd(set.d->listConstEnd());
-    for (QList<Property*>::ConstIterator it(set.d->listConstIterator());
+    const QList<KProperty*>::ConstIterator itEnd(set.d->listConstEnd());
+    for (QList<KProperty*>::ConstIterator it(set.d->listConstIterator());
         it!=itEnd; ++it)
     {
         const QByteArray key( (*it)->name() );
-        Property *property = set.d->property( key );
+        KProperty *property = set.d->property( key );
         if (property) {
             blockSignals(true);
             (*it)->resetValue();
@@ -705,37 +707,26 @@ void Buffer::intersect(const Set& set)
     }
 }
 
-void Buffer::intersectedChanged(Set& set, Property& prop)
+void KPropertyBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
 {
     Q_UNUSED(set);
     if (!contains(prop.name()))
         return;
 
-    const QList<Property*> *props = prop.related();
-    for (QList<Property*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it) {
+    const QList<KProperty*> *props = prop.related();
+    for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it) {
         (*it)->setValue(prop.value(), false);
     }
 }
 
-void Buffer::intersectedReset(Set& set, Property& prop)
+void KPropertyBuffer::intersectedReset(KPropertySet& set, KProperty& prop)
 {
     Q_UNUSED(set);
     if (!contains(prop.name()))
         return;
 
-    const QList<Property*> *props = prop.related();
-    for (QList<Property*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it)  {
+    const QList<KProperty*> *props = prop.related();
+    for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it)  {
         (*it)->setValue(prop.value(), false);
     }
-}
-
-//////////////////////////////////////////////
-
-QMap<QByteArray, QVariant> KoProperty::propertyValues(const Set& set)
-{
-    QMap<QByteArray, QVariant> result;
-    for (Set::Iterator it(set); it.current(); ++it) {
-        result.insert(it.current()->name(), it.current()->value());
-    }
-    return result;
 }

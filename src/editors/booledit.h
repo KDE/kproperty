@@ -30,21 +30,18 @@
 #include <QResizeEvent>
 #include <QToolButton>
 
-namespace KoProperty
-{
-
 //! A bool editor supporting two states: true and false.
 /*! For null values, false is displayed.
 */
-class KPROPERTY_EXPORT BoolEdit : public QToolButton
+class KPROPERTY_EXPORT KPropertyBoolEditor : public QToolButton
 {
     Q_OBJECT
     Q_PROPERTY(bool value READ value WRITE setValue USER true)
 
 public:
-    explicit BoolEdit(const Property *prop, QWidget *parent = 0);
+    explicit KPropertyBoolEditor(const KProperty *prop, QWidget *parent = 0);
 
-    ~BoolEdit();
+    ~KPropertyBoolEditor();
 
     bool value() const;
 
@@ -74,14 +71,14 @@ private:
 //! A bool editor supporting three states: true, false and null.
 /*! The editor is implemented as a drop-down list.
 */
-class KPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
+class KPROPERTY_EXPORT KPropertyThreeStateBoolEditor : public KPropertyComboBoxEditor
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
-    ~ThreeStateBoolEdit();
+    explicit KPropertyThreeStateBoolEditor(const KPropertyListData& listData, QWidget *parent = 0);
+    ~KPropertyThreeStateBoolEditor();
 
     QVariant value() const;
     void setValue(const QVariant &value);
@@ -90,11 +87,11 @@ Q_SIGNALS:
     void commitData( QWidget * editor );
 };
 
-class KPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface,
-                                       public ValuePainterInterface
+class KPROPERTY_EXPORT KPropertyBoolDelegate : public KPropertyEditorCreatorInterface,
+                                               public KPropertyValuePainterInterface
 {
 public:
-    BoolDelegate();
+    KPropertyBoolDelegate();
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -102,7 +99,5 @@ public:
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-}
 
 #endif

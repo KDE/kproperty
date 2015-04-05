@@ -25,16 +25,13 @@
 
 #include <QVariant>
 
-namespace KoProperty
-{
-
-class KPROPERTY_EXPORT DummyWidget: public Widget
+class KPROPERTY_EXPORT KPropertyDummyWidget: public Widget
 {
     Q_OBJECT
 
 public:
-    explicit DummyWidget(Property *property, QWidget *parent = 0);
-    virtual ~DummyWidget();
+    explicit KPropertyDummyWidget(KProperty *property, QWidget *parent = 0);
+    virtual ~KPropertyDummyWidget();
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant &value, bool emitChange = true);
@@ -47,8 +44,6 @@ protected:
 private:
     QVariant  m_value;
 };
-
-}
 
 #endif
 

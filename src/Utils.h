@@ -24,16 +24,13 @@
 
 #include <QWidget>
 
-namespace KoProperty
-{
-
 //! @short A container widget that can be used to split information into hideable sections
 //! for a property editor-like panes.
-class KPROPERTY_EXPORT GroupContainer : public QWidget
+class KPROPERTY_EXPORT KPropertyGroupWidget : public QWidget
 {
 public:
-    GroupContainer(const QString& title, QWidget* parent);
-    ~GroupContainer();
+    KPropertyGroupWidget(const QString& title, QWidget* parent);
+    ~KPropertyGroupWidget();
 
     void setContents(QWidget* contents);
 
@@ -43,7 +40,5 @@ protected:
     class Private;
     Private * const d;
 };
-
-}
 
 #endif
