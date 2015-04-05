@@ -24,10 +24,7 @@
 #include <QVariant>
 #include <QHBoxLayout>
 
-#include <kurlrequester.h>
-
-#include "Property.h"
-
+#include <KUrlRequester>
 
 using namespace KoProperty;
 

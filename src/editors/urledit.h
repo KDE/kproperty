@@ -30,6 +30,7 @@ namespace KoProperty
 
 class KPROPERTY_EXPORT URLEdit : public Widget
 {
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
     Q_OBJECT
 
 public:
@@ -37,15 +38,20 @@ public:
     virtual ~URLEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void setProperty(Property *property);
 
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+Q_SIGNALS:
+    void commitData( QWidget * editor );
+
+public Q_SLOTS:
+    virtual void setValue(const QVariant &value);
 
 protected Q_SLOTS:
     void slotValueChanged(const QString &url);
+
+protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
 private:
     KUrlRequester *m_edit;

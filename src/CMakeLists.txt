@@ -1,6 +1,7 @@
 find_package(Qt5Widgets REQUIRED)
 find_package(KF5WidgetsAddons)
 find_package(KF5GuiAddons)
+#TODO find_package(KF5KIO REQUIRED)
 
 set(libkpropertyeditors_SRCS
   editors/utils.cpp
@@ -25,7 +26,7 @@ set(libkpropertyeditors_SRCS
 #  editors/stringlistedit.cpp
 #  editors/symbolcombo.cpp
   editors/timeedit.cpp
-#  editors/urledit.cpp
+#TODO  editors/urledit.cpp
 )
 
 set(kproperty_LIB_SRCS
@@ -49,10 +50,11 @@ generate_export_header(KProperty)
 
 target_include_directories(KProperty INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/KProperty>")
 
-target_link_libraries(KProperty KF5::WidgetsAddons KF5::GuiAddons)
-
-#target_link_libraries(kproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
-#target_link_libraries(kproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
+target_link_libraries(KProperty
+    KF5::WidgetsAddons
+    KF5::GuiAddons
+    #TODO KF5::KIOWidgets
+)
 
 set_target_properties(KProperty
     PROPERTIES VERSION 1.0
