@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_PIXMAPEDIT_H
 #define KPROPERTY_PIXMAPEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QPixmap>
 #include <QVariant>

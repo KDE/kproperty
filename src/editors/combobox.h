@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_COMBOBOX_H
 #define KPROPERTY_COMBOBOX_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QComboBox>
 

@@ -20,10 +20,10 @@
 */
 
 #include "spinbox.h"
-#include "Property.h"
-#include "Property_p.h"
-#include "EditorDataModel.h"
-#include "EditorView.h"
+#include "KProperty.h"
+#include "KProperty_p.h"
+#include "KPropertyEditorDataModel.h"
+#include "KPropertyEditorView.h"
 
 #include <climits>
 

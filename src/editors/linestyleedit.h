@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_LINESTYLEEDIT_H
 #define KPROPERTY_LINESTYLEEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 #include "KoLineStyleSelector.h"
 
 //! Line style combo box (Property::LineStyle, equivalent of Qt::PenStyle)

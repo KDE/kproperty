@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 class KPROPERTY_EXPORT KRectComposedProperty : public KComposedPropertyInterface
 {

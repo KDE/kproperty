@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_STRINGLISTEDIT_H
 #define KPROPERTY_STRINGLISTEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QStringList>
 

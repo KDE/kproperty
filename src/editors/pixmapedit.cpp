@@ -21,8 +21,8 @@
 
 #include "pixmapedit.h"
 #include "utils.h"
-#include "Property.h"
-#include "EditorDataModel.h"
+#include "KProperty.h"
+#include "KPropertyEditorDataModel.h"
 
 #include <QLayout>
 #include <QPainter>

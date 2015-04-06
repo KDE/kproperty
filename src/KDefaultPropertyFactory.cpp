@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "DefaultFactory.h"
-#include "Property.h"
+#include "KDefaultPropertyFactory.h"
+#include "KProperty.h"
 /*
 #include "customproperty.h"*/
 #include "editors/booledit.h"

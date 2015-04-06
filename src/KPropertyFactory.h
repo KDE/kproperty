@@ -21,7 +21,7 @@
 #define KPROPERTY_FACTORY_H
 
 #include "kproperty_export.h"
-#include "Property.h"
+#include "KProperty.h"
 #include <QObject>
 #include <QVariant>
 #include <QHash>

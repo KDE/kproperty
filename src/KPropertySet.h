@@ -24,7 +24,7 @@
 
 #include <QObject>
 #include <QHash>
-#include "Property.h"
+#include "KProperty.h"
 
 //! An interface for functor selecting properties.
 /*! Used in Iterator. */

@@ -20,7 +20,7 @@
 #ifndef KDEFAULTPROPERTYFACTORY_H
 #define KDEFAULTPROPERTYFACTORY_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 class KDefaultPropertyFactory : public KPropertyFactory
 {

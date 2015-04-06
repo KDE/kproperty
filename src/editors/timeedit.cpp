@@ -21,7 +21,7 @@
 
 #include "timeedit.h"
 
-#include <EditorDataModel.h>
+#include <KPropertyEditorDataModel.h>
 #include <QLocale>
 
 KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)

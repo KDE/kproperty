@@ -20,9 +20,9 @@
 */
 
 #include "combobox.h"
-#include "EditorDataModel.h"
-#include "EditorView.h"
-#include "Property.h"
+#include "KPropertyEditorDataModel.h"
+#include "KPropertyEditorView.h"
+#include "KProperty.h"
 
 #include <QCompleter>
 #include <QGuiApplication>

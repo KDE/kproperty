@@ -18,7 +18,7 @@
 */
 
 #include "coloredit.h"
-#include "Utils_p.h"
+#include "KPropertyUtils_p.h"
 
 #include <QtCore/QVariant>
 #include <QtGui/QLayout>

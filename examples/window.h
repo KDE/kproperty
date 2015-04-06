@@ -18,25 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TEST_H
-#define TEST_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include <QWidget>
+#include <KPropertySet>
 
-#include "kproperty/Set.h"
-
-/*!
- * @internal
- * @short KProperty test's application main window
- * @author Cedric Pasteur <cedric.pasteur@free.fr>
- * @version 0.1
- */
-class TestWindow : public QWidget
+/*! @internal
+ * @short KPropertyExample application's main window */
+class Window : public QWidget
 {
     Q_OBJECT
 public:
-    TestWindow();
-    virtual ~TestWindow();
+    Window();
+    virtual ~Window();
 
 private:
     KPropertySet m_set;

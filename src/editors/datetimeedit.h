@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_DATETIMEEDIT_H
 #define KPROPERTY_DATETIMEEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 #include <QDateTimeEdit>
 
 class KPROPERTY_EXPORT KPropertyDateTimeEditor : public QDateTimeEdit

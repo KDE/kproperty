@@ -23,7 +23,7 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "combobox.h"
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QEvent>
 #include <QPixmap>

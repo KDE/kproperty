@@ -30,13 +30,13 @@ set(libkpropertyeditors_SRCS
 )
 
 set(kproperty_LIB_SRCS
-   Property.cpp
-   Set.cpp
-   Factory.cpp
-   DefaultFactory.cpp
-   EditorView.cpp
-   EditorDataModel.cpp
-   Utils.cpp
+   KProperty.cpp
+   KPropertySet.cpp
+   KPropertyFactory.cpp
+   KDefaultPropertyFactory.cpp
+   KPropertyEditorView.cpp
+   KPropertyEditorDataModel.cpp
+   KPropertyUtils.cpp
    KoLineStyleSelector.cpp
    KoUnit.cpp
    KoLineStyleModel.cpp
@@ -112,12 +112,13 @@ ecm_generate_headers(kproperty_FORWARDING_HEADERS
     ORIGINAL CAMELCASE
     PREFIX kproperty
     HEADER_NAMES
-        Factory
-        Property
-        Set
-        Utils
-        Factory
-        EditorView
+        KPropertyFactory
+        KProperty
+        KPropertySet
+        KPropertyUtils
+        KPropertyFactory
+        KPropertyEditorView
+        KPropertyEditorDataModel
     REQUIRED_HEADERS kproperty_HEADERS
 )
 

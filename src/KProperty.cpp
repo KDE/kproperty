@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Property.h"
-#include "Property_p.h"
-#include "Set.h"
-#include "Factory.h"
+#include "KProperty.h"
+#include "KProperty_p.h"
+#include "KPropertySet.h"
+#include "KPropertyFactory.h"
 
 #include <QDebug>
 #include <QPointer>

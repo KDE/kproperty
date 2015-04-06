@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_SYMBOLCOMBO_H
 #define KPROPERTY_SYMBOLCOMBO_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 class QLineEdit;
 class QPushButton;

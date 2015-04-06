@@ -21,7 +21,7 @@
 
 #include "dateedit.h"
 
-#include "EditorDataModel.h"
+#include "KPropertyEditorDataModel.h"
 
 #include <QLocale>
 

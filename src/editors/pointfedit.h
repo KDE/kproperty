@@ -23,7 +23,7 @@
 #ifndef KPROPERTY_POINTFEDIT_H
 #define KPROPERTY_POINTFEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 class KPROPERTY_EXPORT KPointFComposedProperty : public KComposedPropertyInterface
 {

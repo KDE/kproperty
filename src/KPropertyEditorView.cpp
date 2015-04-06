@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "EditorView.h"
-#include "EditorDataModel.h"
-#include "Property.h"
-#include "Set.h"
-#include "Factory.h"
+#include "KPropertyEditorView.h"
+#include "KPropertyEditorDataModel.h"
+#include "KProperty.h"
+#include "KPropertySet.h"
+#include "KPropertyFactory.h"
 
 #include <QIcon>
 #include <QPointer>

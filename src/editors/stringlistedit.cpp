@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "Property.h"
+#include "KProperty.h"
 
 KPropertyStringListEditor::KPropertyStringListEditor(KProperty *property, QWidget *parent)
         : Widget(property, parent)

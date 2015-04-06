@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QVariant>
 #include <QLineEdit>

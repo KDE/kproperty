@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Set.h"
-#include "Property.h"
+#include "KPropertySet.h"
+#include "KProperty.h"
 
 #include <QByteArray>
 #include <QDebug>

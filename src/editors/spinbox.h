@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QSpinBox>
 

@@ -19,8 +19,8 @@
 */
 
 #include "booledit.h"
-#include "Property.h"
-#include "EditorDataModel.h"
+#include "KProperty.h"
+#include "KPropertyEditorDataModel.h"
 
 #include <QIcon>
 

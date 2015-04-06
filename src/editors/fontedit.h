@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 #include <QVariant>
 

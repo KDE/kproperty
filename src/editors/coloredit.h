@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_COLOREDIT_H
 #define KPROPERTY_COLOREDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 #include <kcolorcombo.h>
 
 //! Color combo box

@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_SIZEFEDIT_H
 #define KPROPERTY_SIZEFEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 class KPROPERTY_EXPORT KSizeFComposedProperty : public KComposedPropertyInterface
 {

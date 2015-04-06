@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Utils.h"
-#include "Utils_p.h"
-#include "EditorView.h"
+#include "KPropertyUtils.h"
+#include "KPropertyUtils_p.h"
+#include "KPropertyEditorView.h"
 
 #include <QPainter>
 #include <QPixmap>

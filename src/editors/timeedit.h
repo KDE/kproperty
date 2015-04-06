@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_TIMEEDIT_H
 #define KPROPERTY_TIMEEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 #include <QTimeEdit>
 
 class KPROPERTY_EXPORT KPropertyTimeEditor : public QTimeEdit

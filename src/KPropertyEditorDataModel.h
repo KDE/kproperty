@@ -23,7 +23,7 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 
-#include "Set.h"
+#include "KPropertySet.h"
 
 class KProperty;
 

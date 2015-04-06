@@ -19,11 +19,11 @@
 
 #include <QGlobalStatic>
 
-#include "Factory.h"
-#include "DefaultFactory.h"
-#include "EditorView.h"
-#include "EditorDataModel.h"
-#include "Property.h"
+#include "KPropertyFactory.h"
+#include "KDefaultPropertyFactory.h"
+#include "KPropertyEditorView.h"
+#include "KPropertyEditorDataModel.h"
+#include "KProperty.h"
 
 KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface)
     : QLabel(parent)

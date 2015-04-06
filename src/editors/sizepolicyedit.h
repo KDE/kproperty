@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_SIZEPOLICYEDIT_H
 #define KPROPERTY_SIZEPOLICYEDIT_H
 
-#include "Factory.h"
+#include "KPropertyFactory.h"
 
 class KPROPERTY_EXPORT KSizePolicyComposedProperty : public KComposedPropertyInterface
 {

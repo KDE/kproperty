@@ -20,8 +20,8 @@
 
 #include "window.h"
 
-#include "kproperty/Property.h"
-#include "kproperty/EditorView.h"
+#include <KProperty>
+#include <KPropertyEditorView>
 
 #include <QDate>
 #include <QDateTime>
@@ -35,11 +35,11 @@
 #include <QCommandLineParser>
 #include <QDebug>
 
-TestWindow::TestWindow()
+Window::Window()
         : QWidget()
-        , m_set(this, "test")
+        , m_set(this, "example")
 {
-    setObjectName("kproperty_test");
+    setObjectName("kpropertyexamplewindow");
     setWindowIcon(QIcon::fromTheme("document-properties"));
 
     QCommandLineParser parser;
@@ -178,6 +178,6 @@ TestWindow::TestWindow()
     qDebug() << m_set;
 }
 
-TestWindow::~TestWindow()
+Window::~Window()
 {
 }

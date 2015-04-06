@@ -18,48 +18,51 @@
 */
 
 #include <QFont>
-
 #include <QApplication>
+#include <QObject>
 #include <QCommandLineParser>
 
 #include "window.h"
 
-static const char description[] = "A test application for the KProperty library";
+static const char description[] = "An example application for the KProperty library";
 static const char version[] = "0.2";
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    QCoreApplication::setApplicationName("propertytest");
+    QCoreApplication::setApplicationName("KPropertyExample");
     QCoreApplication::setApplicationVersion(version);
     QCommandLineParser parser;
 
-    QCommandLineOption flatOption("flat", QCoreApplication::translate("main", "Flat display: do not display groups\n(useful for testing)"));
+    QCommandLineOption flatOption("flat", QCoreApplication::translate("main",
+        "Flat display: do not display groups\n(useful for testing)"));
     parser.addOption(flatOption);
 
-    QCommandLineOption fontSizeOption("font-size", QCoreApplication::translate("main", "Set font size to <size> (in points)\n(useful for testing whether editors keep the font settings)"));
+    QCommandLineOption fontSizeOption("font-size", QCoreApplication::translate("main",
+        "Set font size to <size> (in points)\n(useful for testing whether editors keep the font settings)"));
     parser.addOption(fontSizeOption);
 
-    QCommandLineOption propertyOption("property", QCoreApplication::translate("main", "Display only specified property\n(useful when we want to focus on testing a single\nproperty editor)"));
+    QCommandLineOption propertyOption("property", QCoreApplication::translate("main",
+        "Display only specified property\n(useful when we want to focus on testing a single\nproperty editor)"));
     parser.addOption(propertyOption);
 
-    QCommandLineOption roOption("ro", QCoreApplication::translate("main", "Set all properties as read-only:\n(useful for testing read-only mode)"));
+    QCommandLineOption roOption("ro", QCoreApplication::translate("main",
+        "Set all properties as read-only:\n(useful for testing read-only mode)"));
     parser.addOption(roOption);
 
     parser.process(app);
 
-    TestWindow test;
+    Window window;
 
     bool ok;
     const int fontSize = parser.value("font-size").toInt(&ok);
     if (fontSize > 0 && ok) {
-        QFont f(test.font());
+        QFont f(window.font());
         f.setPointSize(fontSize);
-        test.setFont(f);
+        window.setFont(f);
     }
-    test.show();
-
+    window.show();
     return app.exec();
 }
 
