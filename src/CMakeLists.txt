@@ -102,7 +102,7 @@ ecm_generate_pri_file(
 install(FILES ${PRI_FILENAME}
         DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
-#kde4_install_icons(${DATA_INSTALL_DIR}/kproperty/icons)
+#ecm_install_icons(${DATA_INSTALL_DIR}/kproperty/icons)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
         DESTINATION "${INCLUDE_INSTALL_DIR}"
