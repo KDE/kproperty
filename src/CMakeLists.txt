@@ -20,7 +20,7 @@ set(libkpropertyeditors_SRCS
   editors/sizeedit.cpp
   editors/sizefedit.cpp
   editors/sizepolicyedit.cpp
-#  editors/spinbox.cpp
+  editors/spinbox.cpp
   editors/stringedit.cpp
   editors/linestyleedit.cpp
 #  editors/stringlistedit.cpp

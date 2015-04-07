@@ -32,6 +32,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QLineEdit>
+#include <QLocale>
 
 #include "KoUnit.h"
 
@@ -54,13 +55,13 @@ static QString cssForSpinBox(const char *_class, const QFont& font, int itemHeig
         )
         .arg(itemHeight/2 - 1).arg(itemHeight - itemHeight/2 - 1)
         .arg(fontSizeForCSS(font))
-        .arg((itemHeight/2 <= 9) ? "bottom: 2px;" : "bottom: 0px;")
-        .arg(_class);
+        .arg(QLatin1String((itemHeight/2 <= 9) ? "bottom: 2px;" : "bottom: 0px;"))
+        .arg(QLatin1String(_class));
 }
 
 KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent, int itemHeight)
         : QSpinBox(parent)
-        , m_unsigned( prop->type() == UInt )
+        , m_unsigned(prop->type() == KProperty::UInt)
 {
 //    kDebug() << "itemHeight:" << itemHeight;
     QLineEdit* le = findChild<QLineEdit*>();
@@ -73,7 +74,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
 //    kDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
-    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
+    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
@@ -93,18 +94,18 @@ KPropertyIntSpinBox::~KPropertyIntSpinBox()
 QVariant KPropertyIntSpinBox::value() const
 {
     if (m_unsigned)
-        return uint( KIntNumInput::value() );
-    return KIntNumInput::value();
+        return uint(QSpinBox::value());
+    return QSpinBox::value();
 }
 
 void KPropertyIntSpinBox::setValue(const QVariant& value)
 {
     int v( value.toInt() );
     if (m_unsigned && v<0) {
-        kWarning() << "could not assign negative value" << v << "- assigning 0";
+        qWarning() << "could not assign negative value" << v << "- assigning 0";
         v = 0;
     }
-    KIntNumInput::setValue(v);
+    QSpinBox::setValue(v);
 }
 
 void KPropertyIntSpinBox::slotValueChanged(int value)
@@ -115,8 +116,27 @@ void KPropertyIntSpinBox::slotValueChanged(int value)
 
 //-----------------------
 
+class KPropertyDoubleSpinBox::Private
+{
+public:
+    KoUnit unit;
+    bool hasUnit;
+};
+
+static void decodeUnit(const KProperty &property, KoUnit *unit, bool *hasUnit)
+{
+    const QString unitString = property.option("unit").toString();
+    if (unitString.isEmpty()) {
+        *hasUnit = false;
+    }
+    else {
+        *unit = KoUnit::fromSymbol(unitString, hasUnit);
+    }
+}
+
 KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight)
-        : KDoubleNumInput(parent)
+        : QDoubleSpinBox(parent)
+        , d(new Private)
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     QLineEdit* le = 0;
@@ -140,55 +160,58 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
     KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(sb, parent, css);
     setStyleSheet(css);
 
-    QVariant minVal(prop->option("min", 0.0));
+    QVariant minVal(prop->option("min"));
+    if (minVal.canConvert(QMetaType::Double)) {
+        setMinimum(minVal.toDouble());
+    }
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
+    if (maxVal.canConvert(QMetaType::Double)) {
+        setMaximum(maxVal.toDouble());
+    }
     QVariant step(prop->option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP));
-    if (!minVal.isNull() && !maxVal.isNull() && !step.isNull()) {
-        bool slider = prop->option("slider", false).toBool();
-        setRange(minVal.toDouble(), maxVal.toDouble(), step.toDouble(), slider);
+    if (step.canConvert(QMetaType::Double)) {
+        setSingleStep(step.toDouble());
     }
-    else {
-        if (!minVal.isNull())
-            setMinimum(minVal.toDouble());
-        if (!maxVal.isNull())
-            setMaximum(maxVal.toDouble());
-    }
+    //! @todo implement slider
+    // bool slider = prop->option("slider", false).toBool();
     QVariant precision(prop->option("precision"));
-    if (!precision.isNull())
+    if (precision.canConvert(QMetaType::Int)) {
         setDecimals(precision.toInt());
+    }
     QString minValueText(prop->option("minValueText").toString());
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
-    m_unit = prop->option("unit").toString();
+    decodeUnit(*prop, &d->unit, &d->hasUnit);
     connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged(double)));
 }
 
 KPropertyDoubleSpinBox::~KPropertyDoubleSpinBox()
 {
+    delete d;
 }
 
 void KPropertyDoubleSpinBox::resizeEvent( QResizeEvent * event )
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     sb->setFixedHeight(height()+1);
-    KDoubleNumInput::resizeEvent(event);
+    QDoubleSpinBox::resizeEvent(event);
 }
 
 void KPropertyDoubleSpinBox::setValue(double v)
 {
-    if (!m_unit.isEmpty()) {
-        KDoubleNumInput::setValue(KoUnit::fromSymbol(m_unit).toUserValue(v));
+    if (d->hasUnit) {
+        QDoubleSpinBox::setValue(d->unit.toUserValue(v));
         return;
     }
-    KDoubleNumInput::setValue(v);
+    QDoubleSpinBox::setValue(v);
 }
 
 double KPropertyDoubleSpinBox::value() const
 {
-    if (!m_unit.isEmpty()) {
-        return KoUnit::fromSymbol(m_unit).fromUserValue(KDoubleNumInput::value());
+    if (d->hasUnit) {
+        return d->unit.fromUserValue(QDoubleSpinBox::value());
     }
-    return KDoubleNumInput::value();
+    return QDoubleSpinBox::value();
 }
 
 void KPropertyDoubleSpinBox::slotValueChanged(double value)
@@ -237,8 +260,10 @@ KPropertyDoubleSpinBoxDelegate::KPropertyDoubleSpinBoxDelegate()
 
 QString KPropertyDoubleSpinBoxDelegate::displayTextForProperty( const KProperty* prop ) const
 {
-    QString valueText;
-    const QString unit(prop->option("unit").toString());
+    KoUnit unit;
+    bool hasUnit;
+    decodeUnit(*prop, &unit, &hasUnit);
+    QLocale locale;
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
         QVariant minValue(prop->option("min"));
@@ -246,20 +271,19 @@ QString KPropertyDoubleSpinBoxDelegate::displayTextForProperty( const KProperty*
         if (!minValue.isNull() && !minValueText.isEmpty()
             && minValue.toDouble() == prop->value().toDouble())
         {
-            if (unit.isEmpty())
-                return minValueText;
+            if (hasUnit)
+                return QObject::tr("%1 %2", "<text> <unit>").arg(minValueText).arg(unit.toString());
             else
-                return minValueText + ' ' + unit;
+                return minValueText;
         }
     }
 //! @todo precision?
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
-    QString display;
-    if (!unit.isEmpty()) {
-        return KGlobal::locale()->formatNumber(KoUnit::fromSymbol(unit).toUserValue(prop->value().toDouble())) +
-               QLatin1Char(' ') + unit;
+    if (hasUnit) {
+        return QObject::tr("%1 %2", "<text> <unit>")
+                .arg(locale.toString(prop->value().toDouble())).arg(unit.toString());
     }
-    return KGlobal::locale()->formatNumber(prop->value().toDouble());
+    return locale.toString(prop->value().toDouble());
 }
 
 QWidget* KPropertyDoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,

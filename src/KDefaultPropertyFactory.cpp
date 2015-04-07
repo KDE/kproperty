@@ -53,9 +53,9 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
     addEditor( KProperty::Color, new KPropertyColorComboDelegate );
     addEditor( KProperty::Date, new KPropertyDateDelegate );
     addEditor( KProperty::DateTime, new KPropertyDateTimeDelegate );
-//! @todo    addEditor( KProperty::Double, new DoubleSpinBoxDelegate );
+    addEditor( KProperty::Double, new KPropertyDoubleSpinBoxDelegate );
     addEditor( KProperty::Font, new KPropertyFontDelegate );
-//! @todo    addEditor( KProperty::Int, new IntSpinBoxDelegate );
+    addEditor( KProperty::Int, new KPropertyIntSpinBoxDelegate );
     addEditor( KProperty::LineStyle, new KPropertyLineStyleComboDelegate );
 //! @todo addEditor( KProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KProperty::Pixmap, new KPropertyPixmapDelegate );

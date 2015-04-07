@@ -25,6 +25,7 @@
 #include "KPropertyFactory.h"
 
 #include <QSpinBox>
+#include <QDoubleSpinBox>
 
 //! A delegate supporting Int and UInt types
 /*! Note that due to KIntNumInput limitations, for UInt the maximum value
@@ -61,7 +62,7 @@ private:
 };
 
 //! Double editor
-class KPROPERTY_EXPORT KPropertyDoubleSpinBox : public QSpinBox
+class KPROPERTY_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)
@@ -91,7 +92,8 @@ protected:
     //! Used to fix height of the internal spin box
     virtual void resizeEvent( QResizeEvent * event );
 
-    QString m_unit;
+    class Private;
+    Private * const d;
 };
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
