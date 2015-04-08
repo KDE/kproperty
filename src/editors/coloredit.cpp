@@ -21,7 +21,7 @@
 #include "KPropertyUtils_p.h"
 
 #include <QtCore/QVariant>
-#include <QtGui/QLayout>
+#include <QLayout>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
 
