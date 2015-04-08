@@ -161,4 +161,6 @@ private:
     Private * const d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KPropertyEditorView::SetOptions)
+
 #endif
