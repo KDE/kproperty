@@ -171,8 +171,7 @@ Window::Window()
     QVBoxLayout *lyr = new QVBoxLayout(this);
     KPropertyEditorView *editorView = new KPropertyEditorView(this);
     lyr->addWidget(editorView);
-    editorView->changeSet(&m_set);
-//crashes.. why?: editorView->expandAll();
+    editorView->changeSet(&m_set, KPropertyEditorView::ExpandChildItems);
     resize(400, qApp->desktop()->height() - 200);
     editorView->setFocus();
     qDebug() << m_set;
