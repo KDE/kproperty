@@ -138,12 +138,8 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
         : QDoubleSpinBox(parent)
         , d(new Private)
 {
-    QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
-    QLineEdit* le = 0;
-    if (sb) {
-        le = sb->findChild<QLineEdit*>();
-        sb->setFrame(false);
-    }
+    setFrame(false);
+    QLineEdit* le = findChild<QLineEdit*>();
     if (le) {
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
@@ -157,7 +153,7 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
         ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
     );*/
     QString css = cssForSpinBox("QDoubleSpinBox", font(), itemHeight);
-    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(sb, parent, css);
+    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min"));
@@ -192,8 +188,7 @@ KPropertyDoubleSpinBox::~KPropertyDoubleSpinBox()
 
 void KPropertyDoubleSpinBox::resizeEvent( QResizeEvent * event )
 {
-    QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
-    sb->setFixedHeight(height()+1);
+    setFixedHeight(height() + 1);
     QDoubleSpinBox::resizeEvent(event);
 }
 
