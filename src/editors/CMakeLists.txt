@@ -35,6 +35,6 @@ install(
 install(
     FILES
         ${kproperty_editors_FORWARDING_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/KProperty
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty
     COMPONENT Devel
 )
