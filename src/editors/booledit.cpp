@@ -248,7 +248,7 @@ KPropertyThreeStateBoolEditor::KPropertyThreeStateBoolEditor(
 {
 //    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
 //    nullIcon.fill(Qt::transparent);
-//    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
+//    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? tr("None") : thirdState.toString());
     setCurrentIndex(2);
 }
 

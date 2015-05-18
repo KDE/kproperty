@@ -72,7 +72,7 @@ public:
 //   QStringList keys;
 
 //! @todo what about using QValueList<QVariant> here too?
-    /*! The list of i18n'ed names that will be visible on the screen.
+    /*! The list of translated names that will be visible on the screen.
      First value is referenced by first key, and so on. */
     QStringList names;
 
@@ -86,8 +86,8 @@ public:
   It can hold a property of any type supported by QVariant. You can also create you own property
   types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
   use \ref KComposedPropertyInterface instead. \n
-  Each property stores old value to allow undo. It has a name (a QByteArray), a caption (i18n'ed name
-  shown in Editor) and a description (also i18n'ed). \n
+  Each property stores old value to allow undo. It has a name (a QByteArray), a caption
+  (user-visible translated name shown in Editor) and a description (also translated). \n
   It also supports setting arbitrary number of options (of type option=value).
   See Editor for a list of options, and their meaning.
 
@@ -99,8 +99,8 @@ public:
   // To create a valueFromList property (matching strings with strings)
   QStringList keys, strings;
   keys << "one" << "two" << "three"; // possible values of the property
-  // Strings (possibly i18n-ed) shown in the editor instead of the values
-  strings << i18n("One") << i18n("Two") << i18n("Three");
+  // Strings (possibly translated) shown in the editor instead of the values
+  strings << tr("One") << tr("Two") << tr("Three");
   property = Property(name, keys, strings, "two", caption);
 
   // To create a valueFromList property (matching strings with QVariant)

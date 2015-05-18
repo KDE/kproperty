@@ -88,7 +88,7 @@ void
 KPropertySymbolComboEditor::selectChar()
 {
     KDialog dialog(this->topLevelWidget());
-    dialog.setWindowTitle(i18nc("@title:window", "Select Char"));
+    dialog.setWindowTitle(tr("Select Character", "Window title"));
     dialog.setObjectName("charselect_dialog");
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     dialog.setDefaultButton(KDialog::Ok);

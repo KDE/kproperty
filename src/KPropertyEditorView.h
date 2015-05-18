@@ -35,7 +35,7 @@ class KPropertySet;
     <ul><li> min: integer setting for minimum value for integer and double types.
              The default is 0.
              Set it to -1, if you want this special value to be allowed.</li>
-    <li> minValueText: i18n'd QString used for integer type to set "specialValueText"
+    <li> minValueText: user-visible translated string used for integer type to set "specialValueText"
          widget's property</li>
     <li> max: integer setting for minimum value the property of integer type. Default is 0xffff.</li>
     <li> precision:  The number of decimals after the decimal point (for double types).</li>
@@ -43,13 +43,13 @@ class KPropertySet;
     or down buttons (for double types).</li>
     <li> 3State: boolean value used for boolean types; if true, the editor becomes a combobox
          (instead of checkable button) and accepta the third "null" state.</li>
-    <li> yesName: i18n'd QString used for boolean types (both 2- and 3-state)
-         to display the "true" value. If not present, i18n("Yes") is used.</li>
-    <li> noName: i18n'd QString used for boolean types (both 2- and 3-state)
-         to display the "false" value. If not present, i18n("No") is used.</li>
-    <li> 3rdStateName: i18n'd QString used for boolean types (both 2- and 3-state)
-         to display the 3rd state "null" value. If not present, i18n("N") is used.</li>
-    <li> nullName: i18n'd QString used for boolean types to display the "null" value if
+    <li> yesName: user-visible translated string used for boolean types (both 2- and 3-state)
+         to display the "true" value. If not present, tr("Yes") is used.</li>
+    <li> noName: user-visible translated string used for boolean types (both 2- and 3-state)
+         to display the "false" value. If not present, tr("No") is used.</li>
+    <li> 3rdStateName: user-visible translated string used for boolean types (both 2- and 3-state)
+         to display the 3rd state "null" value. If not present, tr("None") is used.</li>
+    <li> nullName: user-visible translated string used for boolean types to display the "null" value if
          and only if the property accepts two states (i.e. when "3State" option is not true).
          If this option is not present, null values are displayed as false.</li>
     <li> extraValueAllowed: Allow the user to manually enter a value into a combobox

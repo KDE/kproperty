@@ -210,11 +210,11 @@ public:
             changeProperty(property, value);
     }
 
-    /*! Sets the i18n'ed string that will be shown in Editor to represent
+    /*! Sets the user-visible translated string that will be shown in Editor to represent
      \a group. */
     void setGroupDescription(const QByteArray &group, const QString desc);
 
-    /*! \return the i18n'ed description string for \a group that will
+    /*! \return the user-visible translated description string for \a group that will
      be shown in Editor to represent \a group. If there is no special
      description set for the group, \a group is just returned. */
     QString groupDescription(const QByteArray &group) const;
