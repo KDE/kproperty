@@ -48,7 +48,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
             KStyle::KPE_ListViewExpander, p, w, QRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE),
             cg, isOpen ? 0 : QStyle::Style_On,
             QStyleOption::Default);
-    } else {
+    }
 #endif
         Q_UNUSED(w);
         //draw by hand
