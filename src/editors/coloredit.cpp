@@ -20,10 +20,10 @@
 #include "coloredit.h"
 #include "KPropertyUtils_p.h"
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <QLayout>
-#include <QtGui/QColor>
-#include <QtGui/QPainter>
+#include <QColor>
+#include <QPainter>
 
 #include <kcolorcollection.h>
 
