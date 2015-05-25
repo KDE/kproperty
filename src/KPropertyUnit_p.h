@@ -21,20 +21,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOUNIT_H
-#define KOUNIT_H
+#ifndef KPROPERTYUNIT_H
+#define KPROPERTYUNIT_H
 
-// Calligra
 #include "kproperty_export.h"
-// Qt
+
 #include <QString>
+#include <QStringList>
 #include <QDebug>
 #include <QMetaType>
-// std
-#include <math.h> // for floor
 
-class QStringList;
-class QVariant;
+#include <math.h> // for floor
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
@@ -67,7 +64,7 @@ class QVariant;
  * bound to the order in the enum (so ABI-compatible extension is possible) and
  * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
-class KPROPERTY_EXPORT KoUnit
+class KPROPERTY_EXPORT KPropertyUnit
 {
 public:
     /** Length units supported by Calligra. */
@@ -91,35 +88,35 @@ public:
     };
      Q_DECLARE_FLAGS(ListOptions, ListOption)
 
-    /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
-    static KoUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
+    /** Returns a KPropertyUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
+    static KPropertyUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
 
-    /// Convert a unit symbol string into a KoUnit
+    /// Convert a unit symbol string into a KPropertyUnit
     /// @param symbol symbol to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
-    static KoUnit fromSymbol(const QString &symbol, bool *ok = 0);
+    static KPropertyUnit fromSymbol(const QString &symbol, bool *ok = 0);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
-    explicit KoUnit(Type unit = Point, qreal factor = 1.0) {
+    explicit KPropertyUnit(Type unit = Point, qreal factor = 1.0) {
         m_type = unit;
         m_pixelConversion = factor;
     }
 
-    KoUnit& operator=(Type unit) {
+    KPropertyUnit& operator=(Type unit) {
         m_type = unit; m_pixelConversion = 1.0; return *this;
     }
 
-    bool operator!=(const KoUnit &other) const {
+    bool operator!=(const KPropertyUnit &other) const {
         return !operator==(other);
     }
 
-    bool operator==(const KoUnit &other) const {
+    bool operator==(const KPropertyUnit &other) const {
         return m_type == other.m_type &&
             (m_type != Pixel ||
              qFuzzyCompare(m_pixelConversion, other.m_pixelConversion));
     }
 
-    KoUnit::Type type() const {
+    KPropertyUnit::Type type() const {
         return m_type;
     }
 
@@ -190,7 +187,7 @@ public:
     /**
      * convert the given value directly from one unit to another
      */
-    static qreal convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor = 1.0);
+    static qreal convertFromUnitToUnit(const qreal value, const KPropertyUnit &fromUnit, const KPropertyUnit &toUnit, qreal factor = 1.0);
 
 
     /**
@@ -201,10 +198,10 @@ public:
 
     /**
      * Convert the value @p ptValue to a given unit @p unit
-     * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
+     * Unlike KPropertyUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
      * \return the converted value
      */
-    static qreal ptToUnit(const qreal ptValue, const KoUnit &unit);
+    static qreal ptToUnit(const qreal ptValue, const KPropertyUnit &unit);
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
@@ -222,7 +219,7 @@ public:
     qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
     /// Get the description string of the given unit
-    static QString unitDescription(KoUnit::Type type);
+    static QString unitDescription(KPropertyUnit::Type type);
 
     /// Get the symbol string of the unit
     QString symbol() const;
@@ -268,10 +265,10 @@ private:
 };
 
 #ifndef QT_NO_DEBUG_STREAM
-KPROPERTY_EXPORT QDebug operator<<(QDebug, const KoUnit &);
+KPROPERTY_EXPORT QDebug operator<<(QDebug, const KPropertyUnit &);
 #endif
 
-Q_DECLARE_METATYPE(KoUnit)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoUnit::ListOptions)
+Q_DECLARE_METATYPE(KPropertyUnit)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KPropertyUnit::ListOptions)
 
 #endif

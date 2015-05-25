@@ -183,7 +183,7 @@ public:
 
 //----------------------
 
-KPropertyComboBoxEditor::Options initComboBoxOptions( QWidget* parent )
+static KPropertyComboBoxEditor::Options initComboBoxOptions(QWidget* parent)
 {
     KPropertyComboBoxEditor::Options options;
     options.iconProvider = new CursorIconProvider(parent);

@@ -34,7 +34,7 @@
 #include <QLineEdit>
 #include <QLocale>
 
-#include "KoUnit.h"
+#include "KPropertyUnit_p.h"
 
 //! @return font size expressed in points (pt)
 //! or if points are not available - in pixels (px) for @a font
@@ -119,18 +119,18 @@ void KPropertyIntSpinBox::slotValueChanged(int value)
 class KPropertyDoubleSpinBox::Private
 {
 public:
-    KoUnit unit;
+    KPropertyUnit unit;
     bool hasUnit;
 };
 
-static void decodeUnit(const KProperty &property, KoUnit *unit, bool *hasUnit)
+static void decodeUnit(const KProperty &property, KPropertyUnit *unit, bool *hasUnit)
 {
     const QString unitString = property.option("unit").toString();
     if (unitString.isEmpty()) {
         *hasUnit = false;
     }
     else {
-        *unit = KoUnit::fromSymbol(unitString, hasUnit);
+        *unit = KPropertyUnit::fromSymbol(unitString, hasUnit);
     }
 }
 
@@ -255,7 +255,7 @@ KPropertyDoubleSpinBoxDelegate::KPropertyDoubleSpinBoxDelegate()
 
 QString KPropertyDoubleSpinBoxDelegate::displayTextForProperty( const KProperty* prop ) const
 {
-    KoUnit unit;
+    KPropertyUnit unit;
     bool hasUnit;
     decodeUnit(*prop, &unit, &hasUnit);
     QLocale locale;

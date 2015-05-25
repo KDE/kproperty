@@ -23,7 +23,6 @@
 #include "KDefaultPropertyFactory.h"
 #include "KPropertyEditorView.h"
 #include "KPropertyEditorDataModel.h"
-#include "KProperty.h"
 
 KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface)
     : QLabel(parent)

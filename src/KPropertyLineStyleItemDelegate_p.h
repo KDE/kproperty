@@ -16,30 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOLINESTYLEMODEL_H
-#define KOLINESTYLEMODEL_H
+#ifndef KPROPERTYLINESTYLEITEMDELEGATE_H
+#define KPROPERTYLINESTYLEITEMDELEGATE_H
 
-#include <QAbstractListModel>
+#include <QAbstractItemDelegate>
 
-#include <QVector>
-
-/// The line style model managing the style data
-class KoLineStyleModel : public QAbstractListModel
+/// The line style item delegate for rendering the styles
+class KPropertyLineStyleItemDelegate : public QAbstractItemDelegate
 {
 public:
-    explicit KoLineStyleModel(QObject *parent = 0);
-    virtual ~KoLineStyleModel() {}
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    /// adds the given style to the model
-    bool addCustomStyle(const QVector<qreal> &style);
-    /// selects the given style
-    int setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes);
-private:
-    QList<QVector<qreal> > m_styles; ///< the added styles
-    QVector<qreal> m_tempStyle; ///< a temporary added style
-    bool m_hasTempStyle;        ///< state of the temporary style
+    explicit KPropertyLineStyleItemDelegate(QObject *parent = 0);
+    virtual ~KPropertyLineStyleItemDelegate();
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif

@@ -20,7 +20,6 @@
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyFactory.h"
 #include "KProperty.h"
-#include "KPropertySet.h"
 
 #include <QHash>
 #include <QDebug>
@@ -68,7 +67,7 @@ KPropertyEditorDataModel::~KPropertyEditorDataModel()
 
 typedef QPair<QByteArray, QString> NameAndCaption;
 
-bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAndCaption &n2)
+static inline bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAndCaption &n2)
 {
     return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;
 }

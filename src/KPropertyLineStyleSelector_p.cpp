@@ -17,37 +17,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoLineStyleSelector.h"
-#include "KoLineStyleModel_p.h"
-#include "KoLineStyleItemDelegate_p.h"
+#include "KPropertyLineStyleSelector_p.h"
+#include "KPropertyLineStyleModel_p.h"
+#include "KPropertyLineStyleItemDelegate_p.h"
 
 #include <QPen>
 #include <QPainter>
 
-class KoLineStyleSelector::Private
+class KPropertyLineStyleSelector::Private
 {
 public:
     Private(QWidget *parent)
-    : model(new KoLineStyleModel(parent))
+    : model(new KPropertyLineStyleModel(parent))
     {
     }
 
-    KoLineStyleModel *model;
+    KPropertyLineStyleModel *model;
 };
 
-KoLineStyleSelector::KoLineStyleSelector(QWidget *parent)
+KPropertyLineStyleSelector::KPropertyLineStyleSelector(QWidget *parent)
     : QComboBox(parent), d(new Private(this))
 {
     setModel(d->model);
-    setItemDelegate(new KoLineStyleItemDelegate(this));
+    setItemDelegate(new KPropertyLineStyleItemDelegate(this));
 }
 
-KoLineStyleSelector::~KoLineStyleSelector()
+KPropertyLineStyleSelector::~KPropertyLineStyleSelector()
 {
     delete d;
 }
 
-void KoLineStyleSelector::paintEvent(QPaintEvent *pe)
+void KPropertyLineStyleSelector::paintEvent(QPaintEvent *pe)
 {
     QComboBox::paintEvent(pe);
 
@@ -66,25 +66,25 @@ void KoLineStyleSelector::paintEvent(QPaintEvent *pe)
     painter.drawLine(r.left(), r.center().y(), r.right(), r.center().y());
 }
 
-bool KoLineStyleSelector::addCustomStyle(const QVector<qreal> &style)
+bool KPropertyLineStyleSelector::addCustomStyle(const QVector<qreal> &style)
 {
     return d->model->addCustomStyle(style);
 }
 
-void KoLineStyleSelector::setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes)
+void KPropertyLineStyleSelector::setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes)
 {
     int index = d->model->setLineStyle(style, dashes);
     if (index >= 0)
         setCurrentIndex(index);
 }
 
-Qt::PenStyle KoLineStyleSelector::lineStyle() const
+Qt::PenStyle KPropertyLineStyleSelector::lineStyle() const
 {
     QPen pen = itemData(currentIndex(), Qt::DecorationRole).value<QPen>();
     return pen.style();
 }
 
-QVector<qreal> KoLineStyleSelector::lineDashes() const
+QVector<qreal> KPropertyLineStyleSelector::lineDashes() const
 {
     QPen pen = itemData(currentIndex(), Qt::DecorationRole).value<QPen>();
     return pen.dashPattern();

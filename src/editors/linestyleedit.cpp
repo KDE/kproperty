@@ -24,7 +24,7 @@
 #include <QPen>
 
 KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
-    : KoLineStyleSelector(parent)
+    : KPropertyLineStyleSelector(parent)
 {
     setFrame(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));

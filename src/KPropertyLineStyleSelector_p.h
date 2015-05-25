@@ -17,21 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KOLINESTYLESELECTOR_H_
-#define _KOLINESTYLESELECTOR_H_
+#ifndef KPROPERTYLINESTYLESELECTOR_H
+#define KPROPERTYLINESTYLESELECTOR_H
 
 #include "kproperty_export.h"
+
 #include <QComboBox>
 
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KPROPERTY_EXPORT KoLineStyleSelector : public QComboBox
+class KPROPERTY_EXPORT KPropertyLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    explicit KoLineStyleSelector(QWidget *parent = 0);
-    virtual ~KoLineStyleSelector();
+    explicit KPropertyLineStyleSelector(QWidget *parent = 0);
+    virtual ~KPropertyLineStyleSelector();
 
     /**
      * Adds a new line style to the combobox.
@@ -67,4 +68,4 @@ private:
     Private * const d;
 };
 
-#endif // _KOLINESTYLESELECTOR_H_
+#endif

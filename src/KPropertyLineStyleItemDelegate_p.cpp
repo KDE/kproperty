@@ -17,17 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoLineStyleItemDelegate_p.h"
+#include "KPropertyLineStyleItemDelegate_p.h"
 
 #include <QPen>
 #include <QPainter>
 
-KoLineStyleItemDelegate::KoLineStyleItemDelegate(QObject * parent)
+KPropertyLineStyleItemDelegate::KPropertyLineStyleItemDelegate(QObject * parent)
     : QAbstractItemDelegate(parent)
 {
 }
 
-void KoLineStyleItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+KPropertyLineStyleItemDelegate::~KPropertyLineStyleItemDelegate()
+{
+}
+
+void KPropertyLineStyleItemDelegate::paint(QPainter *painter,
+                                           const QStyleOptionViewItem &option,
+                                           const QModelIndex &index) const
 {
     painter->save();
 
@@ -37,12 +43,16 @@ void KoLineStyleItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QPen pen = index.data(Qt::DecorationRole).value<QPen>();
     pen.setBrush(option.palette.text()); // use the view-specific palette; the model hardcodes this to black
     painter->setPen(pen);
-    painter->drawLine(option.rect.left(), option.rect.center().y(), option.rect.right(), option.rect.center().y());
+    painter->drawLine(option.rect.left(), option.rect.center().y(),
+                      option.rect.right(), option.rect.center().y());
 
     painter->restore();
 }
 
-QSize KoLineStyleItemDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
+QSize KPropertyLineStyleItemDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                               const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     return QSize(100, 15);
 }

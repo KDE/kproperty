@@ -36,4 +36,3 @@ KPROPERTY_EXPORT void setupDotDotDotButton(QPushButton *button,
 }
 
 #endif
-

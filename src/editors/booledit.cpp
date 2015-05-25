@@ -234,7 +234,7 @@ public:
     }
 };
 
-KPropertyComboBoxEditor::Options initThreeStateBoolOptions()
+static KPropertyComboBoxEditor::Options initThreeStateBoolOptions()
 {
     KPropertyComboBoxEditor::Options options;
     options.iconProvider = new ThreeStateBoolIconProvider();

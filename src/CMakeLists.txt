@@ -37,10 +37,10 @@ set(kproperty_LIB_SRCS
    KPropertyEditorView.cpp
    KPropertyEditorDataModel.cpp
    KPropertyUtils.cpp
-   KoLineStyleSelector.cpp
-   KoUnit.cpp
-   KoLineStyleModel.cpp
-   KoLineStyleItemDelegate.cpp
+   KPropertyUnit_p.cpp
+   KPropertyLineStyleSelector_p.cpp
+   KPropertyLineStyleModel_p.cpp
+   KPropertyLineStyleItemDelegate_p.cpp
    ${libkpropertyeditors_SRCS}
 )
 

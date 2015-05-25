@@ -21,13 +21,13 @@
 #define KPROPERTY_LINESTYLEEDIT_H
 
 #include "KPropertyFactory.h"
-#include "KoLineStyleSelector.h"
+#include "KPropertyLineStyleSelector_p.h"
 
 //! Line style combo box (Property::LineStyle, equivalent of Qt::PenStyle)
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KPROPERTY_EXPORT KPropertyLineStyleComboEditor : public KoLineStyleSelector
+class KPROPERTY_EXPORT KPropertyLineStyleComboEditor : public KPropertyLineStyleSelector
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)

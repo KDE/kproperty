@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoUnit.h"
+#include "KPropertyUnit_p.h"
 
 #include <cmath>
 
@@ -27,8 +27,8 @@
 #include <QApplication>
 #include <QLocale>
 
-// ensure the same order as in KoUnit::Unit
-static const char* const unitNameList[KoUnit::TypeCount] =
+// ensure the same order as in KPropertyUnit::Unit
+static const char* const unitNameList[KPropertyUnit::TypeCount] =
 {
     "mm",
     "pt",
@@ -40,24 +40,24 @@ static const char* const unitNameList[KoUnit::TypeCount] =
     "px"
 };
 
-QString KoUnit::unitDescription(KoUnit::Type type)
+QString KPropertyUnit::unitDescription(KPropertyUnit::Type type)
 {
     switch (type) {
-    case KoUnit::Millimeter:
+    case KPropertyUnit::Millimeter:
         return QObject::tr("Millimeters (mm)");
-    case KoUnit::Centimeter:
+    case KPropertyUnit::Centimeter:
         return QObject::tr("Centimeters (cm)");
-    case KoUnit::Decimeter:
+    case KPropertyUnit::Decimeter:
         return QObject::tr("Decimeters (dm)");
-    case KoUnit::Inch:
+    case KPropertyUnit::Inch:
         return QObject::tr("Inches (in)");
-    case KoUnit::Pica:
+    case KPropertyUnit::Pica:
         return QObject::tr("Pica (pi)");
-    case KoUnit::Cicero:
+    case KPropertyUnit::Cicero:
         return QObject::tr("Cicero (cc)");
-    case KoUnit::Point:
+    case KPropertyUnit::Point:
         return QObject::tr("Points (pt)");
-    case KoUnit::Pixel:
+    case KPropertyUnit::Pixel:
         return QObject::tr("Pixels (px)");
     default:
         return QObject::tr("Unsupported unit");
@@ -65,22 +65,22 @@ QString KoUnit::unitDescription(KoUnit::Type type)
 }
 
 // grouped by units which are similar
-static const KoUnit::Type typesInUi[KoUnit::TypeCount] =
+static const KPropertyUnit::Type typesInUi[KPropertyUnit::TypeCount] =
 {
-    KoUnit::Millimeter,
-    KoUnit::Centimeter,
-    KoUnit::Decimeter,
-    KoUnit::Inch,
-    KoUnit::Pica,
-    KoUnit::Cicero,
-    KoUnit::Point,
-    KoUnit::Pixel,
+    KPropertyUnit::Millimeter,
+    KPropertyUnit::Centimeter,
+    KPropertyUnit::Decimeter,
+    KPropertyUnit::Inch,
+    KPropertyUnit::Pica,
+    KPropertyUnit::Cicero,
+    KPropertyUnit::Point,
+    KPropertyUnit::Pixel,
 };
 
-QStringList KoUnit::listOfUnitNameForUi(ListOptions listOptions)
+QStringList KPropertyUnit::listOfUnitNameForUi(ListOptions listOptions)
 {
     QStringList lst;
-    for (int i = 0; i < KoUnit::TypeCount; ++i) {
+    for (int i = 0; i < KPropertyUnit::TypeCount; ++i) {
         const Type type = typesInUi[i];
         if ((type != Pixel) || ((listOptions & HideMask) == ListAll))
             lst.append(unitDescription(type));
@@ -88,13 +88,13 @@ QStringList KoUnit::listOfUnitNameForUi(ListOptions listOptions)
     return lst;
 }
 
-KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
+KPropertyUnit KPropertyUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
 {
-    KoUnit::Type type = KoUnit::Point;
+    KPropertyUnit::Type type = KPropertyUnit::Point;
 
-    if ((0 <= index) && (index < KoUnit::TypeCount)) {
+    if ((0 <= index) && (index < KPropertyUnit::TypeCount)) {
         // iterate through all enums and skip the Pixel enum if needed
-        for (int i = 0; i < KoUnit::TypeCount; ++i) {
+        for (int i = 0; i < KPropertyUnit::TypeCount; ++i) {
             if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
                 ++index;
                 continue;
@@ -106,10 +106,10 @@ KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
         }
     }
 
-    return KoUnit(type, factor);
+    return KPropertyUnit(type, factor);
 }
 
-int KoUnit::indexInListForUi(ListOptions listOptions) const
+int KPropertyUnit::indexInListForUi(ListOptions listOptions) const
 {
     if ((listOptions&HidePixel) && (m_type == Pixel)) {
         return -1;
@@ -118,7 +118,7 @@ int KoUnit::indexInListForUi(ListOptions listOptions) const
     int result = -1;
 
     int skipped = 0;
-    for (int i = 0; i < KoUnit::TypeCount; ++i) {
+    for (int i = 0; i < KPropertyUnit::TypeCount; ++i) {
         if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
             ++skipped;
             continue;
@@ -132,7 +132,7 @@ int KoUnit::indexInListForUi(ListOptions listOptions) const
     return result;
 }
 
-qreal KoUnit::toUserValue(qreal ptValue) const
+qreal KPropertyUnit::toUserValue(qreal ptValue) const
 {
     switch (m_type) {
     case Millimeter:
@@ -155,7 +155,7 @@ qreal KoUnit::toUserValue(qreal ptValue) const
     }
 }
 
-qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
+qreal KPropertyUnit::ptToUnit(const qreal ptValue, const KPropertyUnit &unit)
 {
     switch (unit.m_type) {
     case Millimeter:
@@ -178,12 +178,12 @@ qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
     }
 }
 
-QString KoUnit::toUserStringValue(qreal ptValue) const
+QString KPropertyUnit::toUserStringValue(qreal ptValue) const
 {
     return QLocale::system().toString(toUserValue(ptValue));
 }
 
-qreal KoUnit::fromUserValue(qreal value) const
+qreal KPropertyUnit::fromUserValue(qreal value) const
 {
     switch (m_type) {
     case Millimeter:
@@ -206,12 +206,12 @@ qreal KoUnit::fromUserValue(qreal value) const
     }
 }
 
-qreal KoUnit::fromUserValue(const QString &value, bool *ok) const
+qreal KPropertyUnit::fromUserValue(const QString &value, bool *ok) const
 {
     return fromUserValue(QLocale::system().toDouble(value, ok));
 }
 
-qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
+qreal KPropertyUnit::parseValue(const QString& _value, qreal defaultVal)
 {
     if (_value.isEmpty())
         return defaultVal;
@@ -240,7 +240,7 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
         return val;
 
     bool ok;
-    KoUnit u = KoUnit::fromSymbol(symbol, &ok);
+    KPropertyUnit u = KPropertyUnit::fromSymbol(symbol, &ok);
     if (ok)
         return u.fromUserValue(val);
 
@@ -248,13 +248,13 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
         return DM_TO_POINT(val * 10.0);
     else if (symbol == QLatin1String("km"))
         return DM_TO_POINT(val * 10000.0);
-    qWarning() << "KoUnit::parseValue: Unit " << symbol << " is not supported, please report.";
+    qWarning() << "KPropertyUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
     return defaultVal;
 }
 
-KoUnit KoUnit::fromSymbol(const QString &symbol, bool *ok)
+KPropertyUnit KPropertyUnit::fromSymbol(const QString &symbol, bool *ok)
 {
     Type result = Point;
 
@@ -275,10 +275,10 @@ KoUnit KoUnit::fromSymbol(const QString &symbol, bool *ok)
         }
     }
 
-    return KoUnit(result);
+    return KPropertyUnit(result);
 }
 
-qreal KoUnit::convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor)
+qreal KPropertyUnit::convertFromUnitToUnit(const qreal value, const KPropertyUnit &fromUnit, const KPropertyUnit &toUnit, qreal factor)
 {
     qreal pt;
     switch (fromUnit.type()) {
@@ -330,12 +330,12 @@ qreal KoUnit::convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, c
 
 }
 
-QString KoUnit::symbol() const
+QString KPropertyUnit::symbol() const
 {
     return QLatin1String(unitNameList[m_type]);
 }
 
-qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
+qreal KPropertyUnit::parseAngle(const QString& _value, qreal defaultVal)
 {
     if (_value.isEmpty())
         return defaultVal;
@@ -370,18 +370,18 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
     return defaultVal;
 }
 
-qreal KoUnit::approxTransformScale(const QTransform &t)
+qreal KPropertyUnit::approxTransformScale(const QTransform &t)
 {
     return std::sqrt(t.determinant());
 }
 
-void KoUnit::adjustByPixelTransform(const QTransform &t)
+void KPropertyUnit::adjustByPixelTransform(const QTransform &t)
 {
     m_pixelConversion *= approxTransformScale(t);
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug operator<<(QDebug debug, const KoUnit &unit)
+QDebug operator<<(QDebug debug, const KPropertyUnit &unit)
 {
 #ifndef NDEBUG
     debug.nospace() << unit.symbol();

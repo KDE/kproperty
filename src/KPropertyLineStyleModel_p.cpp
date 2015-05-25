@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoLineStyleModel_p.h"
+#include "KPropertyLineStyleModel_p.h"
 
 #include <QPen>
 
-KoLineStyleModel::KoLineStyleModel(QObject *parent)
+KPropertyLineStyleModel::KPropertyLineStyleModel(QObject *parent)
     : QAbstractListModel(parent),
     m_hasTempStyle(false)
 {
@@ -32,12 +32,12 @@ KoLineStyleModel::KoLineStyleModel(QObject *parent)
     }
 }
 
-int KoLineStyleModel::rowCount(const QModelIndex &/*parent*/) const
+int KPropertyLineStyleModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return m_styles.count() + (m_hasTempStyle ? 1 : 0);
 }
 
-QVariant KoLineStyleModel::data(const QModelIndex &index, int role) const
+QVariant KPropertyLineStyleModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
          return QVariant();
@@ -64,7 +64,7 @@ QVariant KoLineStyleModel::data(const QModelIndex &index, int role) const
     }
 }
 
-bool KoLineStyleModel::addCustomStyle(const QVector<qreal> &style)
+bool KPropertyLineStyleModel::addCustomStyle(const QVector<qreal> &style)
 {
     if (m_styles.contains(style))
         return false;
@@ -73,7 +73,7 @@ bool KoLineStyleModel::addCustomStyle(const QVector<qreal> &style)
     return true;
 }
 
-int KoLineStyleModel::setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes)
+int KPropertyLineStyleModel::setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes)
 {
     // check if we select a standard or custom style
     if (style < Qt::CustomDashLine) {

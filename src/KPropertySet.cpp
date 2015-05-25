@@ -20,7 +20,6 @@
 */
 
 #include "KPropertySet.h"
-#include "KProperty.h"
 
 #include <QByteArray>
 #include <QDebug>
@@ -224,7 +223,7 @@ KPropertySelector::~KPropertySelector()
 
 typedef QPair<KProperty*, QString> Iterator_PropertyAndString;
 
-bool Iterator_propertyAndStringLessThan(
+static inline bool Iterator_propertyAndStringLessThan(
     const Iterator_PropertyAndString &n1, const Iterator_PropertyAndString &n2)
 {
     return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;

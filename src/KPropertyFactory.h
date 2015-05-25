@@ -20,17 +20,14 @@
 #ifndef KPROPERTY_FACTORY_H
 #define KPROPERTY_FACTORY_H
 
-#include "kproperty_export.h"
 #include "KProperty.h"
+
 #include <QObject>
 #include <QVariant>
 #include <QHash>
 #include <QLabel>
 #include <QPainter>
 #include <QStyleOptionViewItem>
-
-class QStyleOptionViewItem;
-class QModelIndex;
 
 //! An interface for for composed property handlers
 /*! You have to subclass KComposedPropertyInterface to override the behaviour of a property type.\n
