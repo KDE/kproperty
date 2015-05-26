@@ -20,7 +20,6 @@
 
 #include "urledit.h"
 
-#include <QLayout>
 #include <QVariant>
 #include <QHBoxLayout>
 

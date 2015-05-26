@@ -24,7 +24,6 @@
 
 #include "KPropertyFactory.h"
 
-#include <QVariant>
 
 class KPROPERTY_EXPORT KPropertyFontDelegate : public KPropertyEditorCreatorInterface,
                                                public KPropertyValuePainterInterface

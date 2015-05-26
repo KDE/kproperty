@@ -19,7 +19,6 @@
 
 #include <QFont>
 #include <QApplication>
-#include <QObject>
 #include <QCommandLineParser>
 
 #include "window.h"

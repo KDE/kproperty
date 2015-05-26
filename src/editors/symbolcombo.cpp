@@ -22,7 +22,6 @@
 
 #include <QLineEdit>
 #include <QPushButton>
-#include <QLayout>
 #include <QPainter>
 #include <QVariant>
 #include <QHBoxLayout>

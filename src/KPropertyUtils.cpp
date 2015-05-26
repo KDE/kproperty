@@ -28,8 +28,8 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QStyleOptionHeader>
-#include <QLayout>
 #include <QMouseEvent>
+#include <QVBoxLayout>
 
 #include <kstyle.h>
 

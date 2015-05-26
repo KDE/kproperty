@@ -26,7 +26,6 @@
 #include "KPropertyFactory.h"
 
 #include <QEvent>
-#include <QPixmap>
 #include <QResizeEvent>
 #include <QToolButton>
 

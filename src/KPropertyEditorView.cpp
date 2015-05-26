@@ -25,7 +25,6 @@
 
 #include <QIcon>
 #include <QPointer>
-#include <QString>
 #include <QItemDelegate>
 #include <QPainter>
 #include <QMouseEvent>

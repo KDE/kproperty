@@ -43,7 +43,6 @@
 // #include "symbolcombo.h"
 #include "editors/timeedit.h"
 // #include "urledit.h"
-#include <QDebug>
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyFactory()

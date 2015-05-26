@@ -24,18 +24,15 @@
 #include "utils.h"
 
 #include <QObject>
-#include <QLabel>
 #include <QPushButton>
 #include <QPainter>
 #include <QModelIndex>
-#include <QVariant>
 #include <QStyleOptionViewItem>
 #include <QFontDatabase>
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QPushButton>
-#include <QDialog>
 #include <QFontDialog>
 
 KPropertyFontEditRequester::KPropertyFontEditRequester(QWidget *parent)

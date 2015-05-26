@@ -22,7 +22,6 @@
 #include "KProperty.h"
 
 #include <QHash>
-#include <QDebug>
 
 class KPropertyEditorDataModel::Private
 {

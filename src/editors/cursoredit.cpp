@@ -42,11 +42,8 @@
 #include "xpm/wait_cursor.xpm"
 #include "xpm/whatsthis_cursor.xpm"
 
-#include <QMap>
 #include <QVariant>
 #include <QCursor>
-#include <QBitmap>
-#include <QDebug>
 
 class CursorListData : public KPropertyListData
 {

@@ -28,9 +28,6 @@
 #include <climits>
 
 #include <QVariant>
-#include <QPainter>
-#include <QKeyEvent>
-#include <QEvent>
 #include <QLineEdit>
 #include <QLocale>
 

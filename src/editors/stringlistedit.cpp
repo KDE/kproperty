@@ -21,12 +21,10 @@
 #include "stringlistedit.h"
 
 #include <QLineEdit>
-#include <QLayout>
 #include <QDialog>
 #include <QPainter>
 #include <QVariant>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 
 #include <keditlistbox.h>

@@ -24,7 +24,6 @@
 #include <cmath>
 
 #include <QTransform>
-#include <QApplication>
 #include <QLocale>
 
 // ensure the same order as in KPropertyUnit::Unit

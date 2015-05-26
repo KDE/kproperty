@@ -24,13 +24,10 @@
 #include "KProperty.h"
 #include "KPropertyEditorDataModel.h"
 
-#include <QLayout>
 #include <QPainter>
 #include <QLabel>
 #include <QCursor>
-#include <QFont>
 #include <QImage>
-#include <QToolTip>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPixmap>
@@ -41,6 +38,7 @@
 #include <QMouseEvent>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QHBoxLayout>
 
 KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
         : QWidget(parent)

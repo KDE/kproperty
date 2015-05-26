@@ -24,7 +24,6 @@
 
 #include "KPropertyFactory.h"
 
-#include <QVariant>
 #include <QLineEdit>
 
 class KPROPERTY_EXPORT KPropertyStringEditor : public QLineEdit

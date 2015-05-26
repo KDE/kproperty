@@ -27,7 +27,6 @@
 #include <QApplication>
 #include <QPainter>
 #include <QVariant>
-#include <QLayout>
 
 /*! @return name for state with index @a index,
  where 0 means true, 1 means false and 2 means none */
