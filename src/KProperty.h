@@ -25,6 +25,7 @@
 #include <QVariant>
 #include <QStringList>
 #include <QByteArray>
+#include <QDebug>
 #include "kproperty_export.h"
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
@@ -442,7 +443,7 @@ protected:
     friend KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
 };
 
-//! kDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
 KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
 
 #endif

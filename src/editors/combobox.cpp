@@ -80,7 +80,7 @@ KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listDa
     setFrame(false);
 /*    QList<QPointer<QWidget> > children( findChildren<QWidget*>() );
     foreach (QWidget* w, children) {
-        kDebug() << w->objectName() << w->metaObject()->className();
+        qDebug() << w->objectName() << w->metaObject()->className();
         w->setStyleSheet(QString());
     }*/
     //QComboBoxPrivateContainer
@@ -262,9 +262,9 @@ QString KPropertyComboBoxDelegate::displayTextForProperty( const KProperty* prop
         return property->value().toString();
     if (property->value().isNull())
         return QString();
-    //kDebug() << "property->value()==" << property->value();
+    //qDebug() << "property->value()==" << property->value();
     const int idx = listData->keys.indexOf( property->value() );
-    //kDebug() << "idx==" << idx;
+    //qDebug() << "idx==" << idx;
     if (idx == -1) {
       if (!property->option("extraValueAllowed").toBool())
         return QString();

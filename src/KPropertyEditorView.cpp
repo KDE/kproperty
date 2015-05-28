@@ -35,6 +35,7 @@
 
 #if 0 // not sure if we should use it, better to fix Oxygen?
 #include <kexiutils/styleproxy.h>
+#include <QDebug>
 
 //! Used to alter the widget's style at design time
 class EditorViewStyle : public KexiUtils::StyleProxy
@@ -180,7 +181,7 @@ void ItemDelegate::paint(QPainter *painter,
     pen.setWidth(1);
     painter->setPen(pen);
     painter->drawRect(r);
-    //kDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
+    //qDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
     painter->restore();
 }
 
@@ -318,7 +319,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
             Property *property = d->model->propertyForItem(index);
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
-            //    kDebug() << "WTF? a NULL property?";
+            //    qDebug() << "WTF? a NULL property?";
             //else
                 //d->set->setPreviousSelection(property->name());
 #endif
@@ -441,10 +442,10 @@ QRect KPropertyEditorView::revertButtonArea( const QModelIndex& index ) const
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
-//    kDebug() << r;
+//    qDebug() << r;
     r.setLeft(x1);
     r.setRight(x2);
-//    kDebug() << r;
+//    qDebug() << r;
     return r;
 }
 

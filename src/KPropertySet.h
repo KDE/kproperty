@@ -26,6 +26,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QDebug>
 
 //! An interface for functor selecting properties.
 /*! Used in Iterator. */
@@ -312,7 +313,7 @@ protected:
     friend class KPropertyBuffer;
 };
 
-//! kDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
 KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
 
 /*! \brief

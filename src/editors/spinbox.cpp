@@ -30,6 +30,7 @@
 #include <QVariant>
 #include <QLineEdit>
 #include <QLocale>
+#include <QDebug>
 
 #include "KPropertyUnit_p.h"
 
@@ -60,7 +61,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
         : QSpinBox(parent)
         , m_unsigned(prop->type() == KProperty::UInt)
 {
-//    kDebug() << "itemHeight:" << itemHeight;
+//    qDebug() << "itemHeight:" << itemHeight;
     QLineEdit* le = findChild<QLineEdit*>();
     setContentsMargins(0,0,0,0);
     if (le) {
@@ -68,7 +69,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
     }
-//    kDebug() << parent->font().pointSize();
+//    qDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
     KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);

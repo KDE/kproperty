@@ -259,12 +259,12 @@ void KPropertySetIterator::skipNotAcceptable()
 {
     if (!m_selector)
         return;
-    //kDebug() << "FROM:" << *current();
+    //qDebug() << "FROM:" << *current();
     if (current() && !(*m_selector)( *current() )) {
         // skip first items that not are acceptable by the selector
         ++(*this);
     }
-    //kDebug() << "TO:" << *current();
+    //qDebug() << "TO:" << *current();
 }
 
 void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)

@@ -353,7 +353,7 @@ void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useC
     }
     else if (t == QVariant::Double) {
         const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-        //kDebug()
+        //qDebug()
         //    << "double compared:" << currentValue.toDouble() << value.toDouble()
         //    << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);

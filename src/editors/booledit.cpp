@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QVariant>
+#include <QDebug>
 
 /*! @return name for state with index @a index,
  where 0 means true, 1 means false and 2 means none */
@@ -173,7 +174,7 @@ void KPropertyBoolEditor::draw(QPainter *p, const QRect &r, const QVariant &valu
             //draw text state for Three-State editor
             if (value.isNull() || !value.isValid())
                 text = overrideText;*/
-//        kDebug() << r2;
+//        qDebug() << r2;
         p->drawPixmap(
             r.left() + 3,
             r2.top() + (r2.height() - 16) / 2,icon); //16 = SmallSize

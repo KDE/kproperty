@@ -30,7 +30,6 @@
 #include <keditlistbox.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include "KProperty.h"
 
