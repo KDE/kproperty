@@ -28,7 +28,7 @@
 #include <QHBoxLayout>
 
 #include <keditlistbox.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <klocale.h>
 
 #include "KProperty.h"
@@ -88,15 +88,15 @@ KPropertyStringListEditor::drawViewer(QPainter *p, const QColorGroup &cg, const 
 void
 KPropertyStringListEditor::showEditor()
 {
-    KDialog dialog(this->topLevelWidget());
+    QDialog dialog(this->topLevelWidget());
     dialog.setWindowTitle(tr("Edit List of Items", "Window title"));
     dialog.setObjectName("stringlist_dialog");
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog.setDefaultButton(KDialog::Ok);
+    dialog.setButtons(QDialog::Ok | QDialog::Cancel);
+    dialog.setDefaultButton(QDialog::Ok);
     dialog.setModal(false);
-    dialog.showButtonSeparator(true);
     KEditListBox *edit = new KEditListBox(tr("Contents of %1").arg(property()->caption()), &dialog, "editlist");
-    dialog.setMainWidget(edit);
+//PORTING: Verify that widget was added to mainLayout:     dialog.setMainWidget(edit);
+// Add mainLayout->addWidget(edit); if necessary
     edit->insertStringList(m_list);
 
     if (dialog.exec() == QDialog::Accepted) {

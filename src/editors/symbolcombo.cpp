@@ -86,17 +86,17 @@ KPropertySymbolComboEditor::drawViewer(QPainter *p, const QColorGroup &cg, const
 void
 KPropertySymbolComboEditor::selectChar()
 {
-    KDialog dialog(this->topLevelWidget());
+    QDialog dialog(this->topLevelWidget());
     dialog.setWindowTitle(tr("Select Character", "Window title"));
     dialog.setObjectName("charselect_dialog");
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog.setDefaultButton(KDialog::Ok);
+    dialog.setButtons(QDialog::Ok | QDialog::Cancel);
+    dialog.setDefaultButton(QDialog::Ok);
     dialog.setModal(false);
-    dialog.showButtonSeparator(true);
 
     KCharSelect *select = new KCharSelect(&dialog);
     dialog.setObjectName("select_char");
-    dialog.setMainWidget(select);
+//PORTING: Verify that widget was added to mainLayout:     dialog.setMainWidget(select);
+// Add mainLayout->addWidget(select); if necessary
 
     if (!(m_edit->text().isNull()))
         select->setCurrentChar(m_edit->text().at(0));
