@@ -153,9 +153,9 @@ void KPropertyPixmapEditor::selectPixmap()
     /* KDE4:
     #ifdef Q_WS_WIN
       //save last visited path
-      KUrl url(fileName);
+      QUrl url(fileName);
       if (url.isLocalFile())
-        KRecentDirs::add(":lastVisitedImagePath", url.directory());
+        KRecentDirs::add(":lastVisitedImagePath", url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
     #endif
     */
 }
