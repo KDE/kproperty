@@ -122,7 +122,7 @@ QString KPropertyPixmapEditor::selectPixmapFileName()
     #endif*/
     const QString caption(tr("Insert Image From File (for \"%1\" property)").arg(m_property->caption()));
     /*KDE4:
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       QString recentDir;
       QString fileName = Q3FileDialog::getOpenFileName(
         KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(),
@@ -151,7 +151,7 @@ void KPropertyPixmapEditor::selectPixmap()
     setValue(pm);
 
     /* KDE4:
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       //save last visited path
       QUrl url(fileName);
       if (url.isLocalFile())
