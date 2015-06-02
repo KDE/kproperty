@@ -167,7 +167,7 @@ Window::Window()
         p->setVisible(false);
     }
 
-// kDebug(30007) << m_set.groupNames();
+// qDebug() << m_set.groupNames();
     QVBoxLayout *lyr = new QVBoxLayout(this);
     KPropertyEditorView *editorView = new KPropertyEditorView(this);
     lyr->addWidget(editorView);

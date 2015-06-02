@@ -30,6 +30,7 @@ set(libkpropertyeditors_SRCS
 )
 
 set(kproperty_LIB_SRCS
+   kproperty_debug.cpp
    KProperty.cpp
    KPropertySet.cpp
    KPropertyFactory.cpp

@@ -23,8 +23,8 @@
 #include "KProperty_p.h"
 #include "KPropertySet.h"
 #include "KPropertyFactory.h"
+#include "kproperty_debug.h"
 
-#include <QDebug>
 #include <QPointer>
 #include <QSizePolicy>
 
@@ -325,12 +325,12 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
     if (d->name.isEmpty()) {
-        qWarning() << "COULD NOT SET value to a null property";
+        kprWarning() << "COULD NOT SET value to a null property";
         return;
     }
     QVariant currentValue = this->value();
     if (!compatibleTypes(currentValue, value)) {
-        qWarning() << "INCOMPATIBLE TYPES! old=" << currentValue << "new=" << value;
+        kprWarning() << "INCOMPATIBLE TYPES! old=" << currentValue << "new=" << value;
     }
 
     //1. Check if the value should be changed
@@ -353,7 +353,7 @@ void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useC
     }
     else if (t == QVariant::Double) {
         const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-        //qDebug()
+        //kprDebug()
         //    << "double compared:" << currentValue.toDouble() << value.toDouble()
         //    << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
@@ -645,7 +645,7 @@ KProperty::addChild(KProperty *prop)
         d->children->append(prop);
         prop->d->parent = this;
     } else {
-        qWarning() << "property" << name()
+        kprWarning() << "property" << name()
                    << ": child property" << prop->name() << "already added";
         return;
     }
@@ -761,7 +761,7 @@ const QMap<QByteArray, QVariant>& KProperty::options() const
 
 void KProperty::debug() const
 {
-    qDebug() << *this;
+    kprDebug() << *this;
 }
 
 KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)

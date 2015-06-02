@@ -20,9 +20,9 @@
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyFactory.h"
 #include "KProperty.h"
+#include "kproperty_debug.h"
 
 #include <QHash>
-#include <QDebug>
 
 class KPropertyEditorDataModel::Private
 {
@@ -80,7 +80,7 @@ void KPropertyEditorDataModel::collectIndices() const
     }
     d->indicesForNames.clear();
     for (int row = 0; it.current(); row++, ++it) {
-        // qDebug() << it.current()->name() << "->" << row;
+        // kprDebug() << it.current()->name() << "->" << row;
         d->indicesForNames.insert( it.current()->name(), QPersistentModelIndex( createIndex(row, 0, it.current()) ) );
     }
 }

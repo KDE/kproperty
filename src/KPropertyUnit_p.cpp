@@ -20,11 +20,12 @@
 */
 
 #include "KPropertyUnit_p.h"
-
-#include <cmath>
+#include "kproperty_debug.h"
 
 #include <QTransform>
 #include <QLocale>
+
+#include <cmath>
 
 // ensure the same order as in KPropertyUnit::Unit
 static const char* const unitNameList[KPropertyUnit::TypeCount] =
@@ -247,7 +248,7 @@ qreal KPropertyUnit::parseValue(const QString& _value, qreal defaultVal)
         return DM_TO_POINT(val * 10.0);
     else if (symbol == QLatin1String("km"))
         return DM_TO_POINT(val * 10000.0);
-    qWarning() << "KPropertyUnit::parseValue: Unit " << symbol << " is not supported, please report.";
+    kprWarning() << "KPropertyUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
     return defaultVal;

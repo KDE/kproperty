@@ -22,11 +22,11 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include "KProperty.h"
-
 #include <QObject>
 #include <QHash>
 #include <QDebug>
+
+#include "KProperty.h"
 
 //! An interface for functor selecting properties.
 /*! Used in Iterator. */

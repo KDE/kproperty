@@ -22,11 +22,10 @@
 #include "combobox.h"
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
-#include "KProperty.h"
+#include "kproperty_debug.h"
 
 #include <QCompleter>
 #include <QGuiApplication>
-#include <QDebug>
 
 KPropertyComboBoxEditor::Options::Options()
  : iconProvider(0)
@@ -80,7 +79,7 @@ KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listDa
     setFrame(false);
 /*    QList<QPointer<QWidget> > children( findChildren<QWidget*>() );
     foreach (QWidget* w, children) {
-        qDebug() << w->objectName() << w->metaObject()->className();
+        kprDebug() << w->objectName() << w->metaObject()->className();
         w->setStyleSheet(QString());
     }*/
     //QComboBoxPrivateContainer
@@ -106,7 +105,7 @@ KPropertyComboBoxEditor::~KPropertyComboBoxEditor()
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
-        qWarning() << "property listData not available!";
+        kprWarning() << "property listData not available!";
         return false;
     }
     return true;
@@ -134,7 +133,7 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
     if (!m_setValueEnabled)
         return;
     int idx = m_listData.keys.indexOf(value/*.toString()TODO*/);
-//    kDebug(30007) << "**********" << idx << "" << value.toString();
+//    kprDebug() << "**********" << idx << "" << value.toString();
     if (idx >= 0 && idx < count()) {
         setCurrentIndex(idx);
     }
@@ -144,13 +143,13 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            qWarning() << "NO SUCH KEY:" << value.toString()
+            kprWarning() << "NO SUCH KEY:" << value.toString()
                 << "property=" << objectName();
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            qWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+            kprWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
                 << "count=" << count() << "value=" << value.toString()
                 << "property=" << objectName() << "\nActual combobox contents"
                 << list;
@@ -262,9 +261,9 @@ QString KPropertyComboBoxDelegate::displayTextForProperty( const KProperty* prop
         return property->value().toString();
     if (property->value().isNull())
         return QString();
-    //qDebug() << "property->value()==" << property->value();
+    //kprDebug() << "property->value()==" << property->value();
     const int idx = listData->keys.indexOf( property->value() );
-    //qDebug() << "idx==" << idx;
+    //kprDebug() << "idx==" << idx;
     if (idx == -1) {
       if (!property->option("extraValueAllowed").toBool())
         return QString();

@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QByteArray>
 #include <QDebug>
+
 #include "kproperty_export.h"
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.

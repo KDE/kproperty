@@ -22,6 +22,7 @@
 #include "fontedit.h"
 #include "fontedit_p.h"
 #include "utils.h"
+#include "kproperty_debug.h"
 
 #include <QObject>
 #include <QPushButton>
@@ -34,7 +35,6 @@
 #include <QApplication>
 #include <QPushButton>
 #include <QFontDialog>
-#include <QDebug>
 
 KPropertyFontEditRequester::KPropertyFontEditRequester(QWidget *parent)
         : QWidget(parent)
@@ -62,7 +62,7 @@ QFont KPropertyFontEditRequester::value() const
 
 void KPropertyFontEditRequester::setValue(const QFont &value)
 {
-    //qDebug() << QFontDatabase().families();
+    //kprDebug() << QFontDatabase().families();
     m_font = value;
 }
 

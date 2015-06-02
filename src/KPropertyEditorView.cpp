@@ -22,6 +22,7 @@
 #include "KProperty.h"
 #include "KPropertySet.h"
 #include "KPropertyFactory.h"
+#include "kproperty_debug.h"
 
 #include <QIcon>
 #include <QPointer>
@@ -35,7 +36,6 @@
 
 #if 0 // not sure if we should use it, better to fix Oxygen?
 #include <kexiutils/styleproxy.h>
-#include <QDebug>
 
 //! Used to alter the widget's style at design time
 class EditorViewStyle : public KexiUtils::StyleProxy
@@ -181,7 +181,7 @@ void ItemDelegate::paint(QPainter *painter,
     pen.setWidth(1);
     painter->setPen(pen);
     painter->drawRect(r);
-    //qDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
+    //kprDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
     painter->restore();
 }
 
@@ -297,7 +297,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
             //store prev. selection for this prop set
             if (d->currentItem)
                 d->set->setPrevSelection(d->currentItem->property()->name());
-            kDebug(30007) << d->set->prevSelection();
+            kprDebug() << d->set->prevSelection();
         }
         if (!d->setListLater_set) {
             d->setListLater_set = true;
@@ -319,7 +319,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
             Property *property = d->model->propertyForItem(index);
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
-            //    qDebug() << "WTF? a NULL property?";
+            //    kprDebug() << "WTF? a NULL property?";
             //else
                 //d->set->setPreviousSelection(property->name());
 #endif
@@ -442,10 +442,10 @@ QRect KPropertyEditorView::revertButtonArea( const QModelIndex& index ) const
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
-//    qDebug() << r;
+//    kprDebug() << r;
     r.setLeft(x1);
     r.setRight(x2);
-//    qDebug() << r;
+//    kprDebug() << r;
     return r;
 }
 

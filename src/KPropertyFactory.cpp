@@ -318,7 +318,7 @@ QWidget * KPropertyFactoryManager::createEditor(
             QString css =
                 QString::fromLatin1("%1 { border-top: 1px solid %2; } ")
                 .arg(cssClassName).arg(gridLineColor.name());
-//            qDebug() << css;
+//            kprDebug() << css;
             w->setStyleSheet(css);
         }
     }

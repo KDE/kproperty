@@ -24,15 +24,14 @@
 #include "KProperty_p.h"
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
-
-#include <climits>
+#include "KPropertyUnit_p.h"
+#include "kproperty_debug.h"
 
 #include <QVariant>
 #include <QLineEdit>
 #include <QLocale>
-#include <QDebug>
 
-#include "KPropertyUnit_p.h"
+#include <climits>
 
 //! @return font size expressed in points (pt)
 //! or if points are not available - in pixels (px) for @a font
@@ -61,7 +60,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
         : QSpinBox(parent)
         , m_unsigned(prop->type() == KProperty::UInt)
 {
-//    qDebug() << "itemHeight:" << itemHeight;
+//    kprDebug() << "itemHeight:" << itemHeight;
     QLineEdit* le = findChild<QLineEdit*>();
     setContentsMargins(0,0,0,0);
     if (le) {
@@ -69,7 +68,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
     }
-//    qDebug() << parent->font().pointSize();
+//    kprDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
     KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
@@ -100,7 +99,7 @@ void KPropertyIntSpinBox::setValue(const QVariant& value)
 {
     int v( value.toInt() );
     if (m_unsigned && v<0) {
-        qWarning() << "could not assign negative value" << v << "- assigning 0";
+        kprWarning() << "could not assign negative value" << v << "- assigning 0";
         v = 0;
     }
     QSpinBox::setValue(v);

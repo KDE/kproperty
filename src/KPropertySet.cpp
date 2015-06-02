@@ -20,9 +20,9 @@
 */
 
 #include "KPropertySet.h"
+#include "kproperty_debug.h"
 
 #include <QByteArray>
-#include <QDebug>
 
 typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
 
@@ -51,18 +51,18 @@ public:
         if (p)
             return *p;
         nonConstNull.setName(0); //to ensure returned property is null
-        qWarning() << "PROPERTY" << name << "NOT FOUND";
+        kprWarning() << "PROPERTY" << name << "NOT FOUND";
         return nonConstNull;
     }
 
     void addProperty(KProperty *property, QByteArray group/*, bool updateSortingKey*/)
     {
         if (!property) {
-            qWarning() << "property == 0";
+            kprWarning() << "property == 0";
             return;
         }
         if (property->isNull()) {
-            qWarning() << "COULD NOT ADD NULL PROPERTY";
+            kprWarning() << "COULD NOT ADD NULL PROPERTY";
             return;
         }
         if (group.isEmpty())
@@ -94,7 +94,7 @@ public:
             return;
 
         if (!list.removeOne(property)) {
-            qDebug() << "Set does not contain property" << property;
+            kprDebug() << "Set does not contain property" << property;
             return;
         }
         KProperty *p = hash.take(property->name());
@@ -259,12 +259,12 @@ void KPropertySetIterator::skipNotAcceptable()
 {
     if (!m_selector)
         return;
-    //qDebug() << "FROM:" << *current();
+    //kprDebug() << "FROM:" << *current();
     if (current() && !(*m_selector)( *current() )) {
         // skip first items that not are acceptable by the selector
         ++(*this);
     }
-    //qDebug() << "TO:" << *current();
+    //kprDebug() << "TO:" << *current();
 }
 
 void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
@@ -413,7 +413,7 @@ KPropertySet::addToGroup(const QByteArray &group, KProperty *property)
     //do not add the same property to the group twice
     const QByteArray groupLower(group.toLower());
     if (d->groupForProperty(property) == groupLower) {
-        qWarning() << "Group" << group << "already contains property" << property->name();
+        kprWarning() << "Group" << group << "already contains property" << property->name();
         return;
     }
     QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ groupLower ];
@@ -575,7 +575,7 @@ KPropertySet::changeProperty(const QByteArray &property, const QVariant &value)
 
 void KPropertySet::debug() const
 {
-    qDebug() << *this;
+    kprDebug() << *this;
 }
 
 KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
