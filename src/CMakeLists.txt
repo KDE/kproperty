@@ -1,8 +1,3 @@
-find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Widgets Xml)
-find_package(KF5WidgetsAddons REQUIRED)
-find_package(KF5GuiAddons REQUIRED)
-#TODO find_package(KF5KIO REQUIRED)
-
 set(libkpropertyeditors_SRCS
   editors/utils.cpp
   editors/booledit.cpp
