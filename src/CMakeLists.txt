@@ -84,7 +84,7 @@ install(FILES
 
 install(TARGETS KProperty
         EXPORT KPropertyTargets
-        ${INSTALL_TARGETS_DEFAULT_ARGS})
+        ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(EXPORT KPropertyTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
