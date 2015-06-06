@@ -61,6 +61,9 @@ set_target_properties(KProperty
 # Create a Config.cmake and a ConfigVersion.cmake file and install them
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KProperty")
 
+# A place for KProperty plugins
+set(KPROPERTY_PLUGIN_INSTALL_DIR ${PLUGIN_INSTALL_DIR}/kproperty)
+
 ecm_setup_version(${KPROPERTY_VERSION}
     VARIABLE_PREFIX KPROPERTY
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
