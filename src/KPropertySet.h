@@ -316,11 +316,11 @@ protected:
 //! qDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
 KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
 
-/*! \brief
-  \todo find a better name to show it's a set that doesn't own property
+/*! A property buffer
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Adam Treat <treat@kde.org>
+  @todo Find a better name to show it's a set that doesn't own property
  */
 class KPROPERTY_EXPORT KPropertyBuffer : public KPropertySet
 {

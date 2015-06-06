@@ -61,7 +61,7 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
     addEditor( KProperty::Point, new KPropertyPointDelegate );
     addEditor( KProperty::PointF, new KPropertyPointFDelegate );
     addEditor( KProperty::Rect, new KPropertyRectDelegate );
-//TODO    addEditor( KProperty::RectF, new RectFDelegate );
+//! @todo    addEditor( KProperty::RectF, new RectFDelegate );
     addEditor( KProperty::Size, new KPropertySizeDelegate );
     addEditor( KProperty::SizeF, new KPropertySizeFDelegate );
     addEditor( KProperty::SizePolicy, new KPropertySizePolicyDelegate );

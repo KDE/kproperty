@@ -65,8 +65,10 @@ protected:
     QLabel *m_popup;
     QPushButton *m_button;
     KProperty *m_property;
-//todo    QVariant m_recentlyPainted;
-    QPixmap m_pixmap, /* todo? m_scaledPixmap,*/ m_previewPixmap;
+//! @todo    QVariant m_recentlyPainted;
+    QPixmap m_pixmap;
+    //! @todo QPixmap m_scaledPixmap
+    QPixmap m_previewPixmap;
 };
 
 class KPROPERTY_EXPORT KPropertyPixmapDelegate : public KPropertyEditorCreatorInterface,

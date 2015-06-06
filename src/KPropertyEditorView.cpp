@@ -314,10 +314,9 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
         //store prev. selection for this prop set
         QModelIndex index = currentIndex();
         if (index.isValid()) {
-//! @todo
+//! @todo This crashes when changing the interpreter type in the script plugin
 #if 0
             Property *property = d->model->propertyForItem(index);
-            //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
             //    kprDebug() << "WTF? a NULL property?";
             //else

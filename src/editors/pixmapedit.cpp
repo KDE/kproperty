@@ -243,7 +243,8 @@ void KPropertyPixmapDelegate::paint( QPainter * painter,
         img = img.scaled(option.rect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         pm = QPixmap::fromImage(img);
     }
-/*todo    if (m_recentlyPainted != value) {
+//! @todo
+/*    if (m_recentlyPainted != value) {
         m_recentlyPainted = value;
         m_scaledPixmap = value.value<QPixmap>();
         if (m_scaledPixmap.height() > r2.height() || m_scaledPixmap.width() > r2.width()) { //scale down

@@ -364,9 +364,10 @@ KComposedPropertyInterface* KPropertyFactoryManager::createComposedProperty(KPro
     return creator ? creator->createComposedProperty(parent) : 0;
 }
 
+//! @todo
 #if 0
     const int type = parent->type();
-/* TODO
+/*
     CustomPropertyFactory *factory = d->registeredWidgets[type];
     if (factory)
         return factory->createCustomProperty(parent);

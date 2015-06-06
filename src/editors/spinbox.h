@@ -50,7 +50,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void setValue(const QVariant& value);
 
-//todo?    virtual bool eventFilter(QObject *o, QEvent *e);
+//! @todo    virtual bool eventFilter(QObject *o, QEvent *e);
 /*    QLineEdit * lineEdit() const {
         return KIntSpinBox::lineEdit();
     }*/
