@@ -37,16 +37,16 @@ public:
     virtual void setCursorValue(const QCursor &value);
 };
 
-class KPROPERTY_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface, 
+class KPROPERTY_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface,
                                                  public KPropertyValuePainterInterface
 {
 public:
     KPropertyCursorDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent, 
+    virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-    virtual void paint( QPainter * painter, 
+    virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 

@@ -276,7 +276,7 @@ public:
     KPropertyFactoryManager();
     ~KPropertyFactoryManager();
 private:
-    
+
     class Private;
     Private * const d;
 };

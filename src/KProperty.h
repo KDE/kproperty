@@ -182,7 +182,7 @@ public:
         UInt = QVariant::UInt,
         ULongLong = QVariant::ULongLong,
         Url = QVariant::Url,
-    
+
         //predefined custom types
         ValueFromList = 1000          /**<string value from a list*/,
         Symbol                        /**<unicode symbol code*/,
@@ -191,7 +191,7 @@ public:
         PictureFileURL                /**<url of a pixmap*/,
         DirectoryURL                  /**<url of a directory*/,
         LineStyle                     /**<line style*/,
-    
+
         // Child property types
     /*    Size_Height = 3001,
         Size_Width,
@@ -205,7 +205,7 @@ public:
         SizePolicy_VerticalPolicy,
         SizePolicy_HorizontalStretch,
         SizePolicy_VerticalStretch,*/
-    
+
         UserDefined = 4000            /**<plugin defined properties should start here*/
     };
 
