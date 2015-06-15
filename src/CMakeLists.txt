@@ -16,7 +16,7 @@ set(libkpropertyeditors_SRCS
   editors/sizefedit.cpp
   editors/sizepolicyedit.cpp
   editors/spinbox.cpp
-  editors/stringedit.cpp
+  editors/KPropertyStringEditor.cpp
   editors/linestyleedit.cpp
 #  editors/stringlistedit.cpp
 #  editors/symbolcombo.cpp
@@ -44,7 +44,17 @@ add_library(KProperty SHARED ${kproperty_LIB_SRCS})
 
 generate_export_header(KProperty)
 
-target_include_directories(KProperty INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/KProperty>")
+set(kproperty_INCLUDE_DIRS
+    ${CMAKE_CURRENT_BINARY_DIR}/kproperty
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/editors
+)
+
+target_include_directories(KProperty
+    PUBLIC "$<BUILD_INTERFACE:${kproperty_INCLUDE_DIRS}>"
+    INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/KProperty>"
+    PRIVATE editors
+)
 
 target_link_libraries(KProperty
     KF5::WidgetsAddons
@@ -108,6 +118,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
         COMPONENT Devel)
 
 ecm_generate_headers(kproperty_FORWARDING_HEADERS
+    REQUIRED_HEADERS kproperty_HEADERS
     ORIGINAL CAMELCASE
     PREFIX kproperty
     HEADER_NAMES
@@ -118,13 +129,11 @@ ecm_generate_headers(kproperty_FORWARDING_HEADERS
         KPropertyFactory
         KPropertyEditorView
         KPropertyEditorDataModel
-    REQUIRED_HEADERS kproperty_HEADERS
 )
 
 install(
     FILES
         ${kproperty_HEADERS}
-        ${PROJECT_BINARY_DIR}/src/kproperty_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/kproperty
     COMPONENT Devel
 )
@@ -132,6 +141,7 @@ install(
 install(
     FILES
         ${kproperty_FORWARDING_HEADERS}
+        ${PROJECT_BINARY_DIR}/src/kproperty_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty
     COMPONENT Devel
 )

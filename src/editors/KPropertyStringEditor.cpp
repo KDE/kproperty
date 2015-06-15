@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "stringedit.h"
+#include "KPropertyStringEditor.h"
 
 KPropertyStringEditor::KPropertyStringEditor(QWidget *parent)
  : QLineEdit(parent)

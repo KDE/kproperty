@@ -39,7 +39,7 @@
 #include "editors/spinbox.h"
 /*#include "stringlistedit.h"*/
 #include "editors/linestyleedit.h"
-#include "editors/stringedit.h"
+#include "editors/KPropertyStringEditor.h"
 // #include "symbolcombo.h"
 #include "editors/timeedit.h"
 // #include "urledit.h"

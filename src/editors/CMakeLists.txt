@@ -1,5 +1,7 @@
 ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
+    REQUIRED_HEADERS kproperty_editors_HEADERS
     # TODO: rename to camelcase, then uncomment "ORIGINAL CAMELCASE"
+    PREFIX kproperty
     HEADER_NAMES
         Utils
         BoolEdit
@@ -17,18 +19,24 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
         SizeEdit
         SizePolicyEdit
         SpinBox
-        StringEdit
         StringListEdit
         SymbolCombo
         TimeEdit
         UrlEdit
+)
+
+ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
     REQUIRED_HEADERS kproperty_editors_HEADERS
+    ORIGINAL CAMELCASE
+    PREFIX kproperty
+    HEADER_NAMES
+        KPropertyStringEditor
 )
 
 install(
     FILES
         ${kproperty_editors_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/kproperty/editors
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/kproperty
     COMPONENT Devel
 )
 
