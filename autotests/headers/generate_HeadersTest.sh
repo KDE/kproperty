@@ -57,7 +57,7 @@ int main(int, char**)
 EOT
 
 # files to include using <name>, forward headers + some *.h headers
-files=`ls -1 "$builddir/src/$prefix" | grep -v \.h\$`
+files=`find "$builddir/src/$prefix" -type f -printf "%f\n" | grep -v \.h\$`
 files="$files ${prefix}_export.h ${prefix}_version.h config-${prefix}.h"
 for f in $files; do
     fname=${f}_HeaderTest.cpp
@@ -66,7 +66,7 @@ for f in $files; do
 done
 
 # files to include using <prefix/name>, these are .h files
-files=`ls -1 "$builddir/src/$prefix" | grep \.h\$`
+files=`find "$builddir/src/$prefix" -type f -name "*.h" -printf "%f\n"`
 for f in $files; do
     fname=${f}_HeaderTest.cpp
     echo "#include <$prefix/$f>" > $fname
