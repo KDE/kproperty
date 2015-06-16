@@ -1,0 +1,1 @@
+#include <kproperty/KPropertyEditorView.h>

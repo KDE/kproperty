@@ -1,0 +1,1 @@
+#include <kproperty/KPropertySet.h>
