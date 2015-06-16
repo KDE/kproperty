@@ -1,3 +1,10 @@
+# Options
+# simple_option(KPROPERTY_...... "....." OFF)
+
+configure_file(config-kproperty.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kproperty.h)
+
+add_subdirectory(editors)
+
 set(libkpropertyeditors_SRCS
   editors/utils.cpp
   editors/booledit.cpp
@@ -145,5 +152,3 @@ install(
     DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty
     COMPONENT Devel
 )
-
-add_subdirectory(editors)
