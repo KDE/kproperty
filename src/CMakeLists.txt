@@ -53,6 +53,7 @@ generate_export_header(KProperty)
 
 set(kproperty_INCLUDE_DIRS
     ${CMAKE_CURRENT_BINARY_DIR}/kproperty
+    ${CMAKE_CURRENT_BINARY_DIR}/editors
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/editors
 )

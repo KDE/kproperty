@@ -11,4 +11,3 @@ remove_definitions(
 set(kpropertyexample_SRCS main.cpp window.cpp)
 add_executable(kpropertyexample ${kpropertyexample_SRCS})
 target_link_libraries(kpropertyexample Qt5::Widgets KProperty)
-target_include_directories(kpropertyexample PUBLIC ${CMAKE_BINARY_DIR}/src/kproperty)

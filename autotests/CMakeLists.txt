@@ -10,6 +10,11 @@ add_definitions(
     -DFILES_OUTPUT_DIR=\"${FILES_OUTPUT_DIR}\"
 )
 
+include_directories(
+    ${CMAKE_BINARY_DIR}/src/kproperty
+    ${CMAKE_BINARY_DIR}/src/editors/kproperty
+)
+
 include(ECMAddTests)
 
 find_package(Qt5Test REQUIRED)
