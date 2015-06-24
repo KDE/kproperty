@@ -30,8 +30,7 @@
 #include <QStyleOptionHeader>
 #include <QMouseEvent>
 #include <QVBoxLayout>
-
-#include <kstyle.h>
+#include <QPointer>
 
 #define BRANCHBOX_SIZE 9
 

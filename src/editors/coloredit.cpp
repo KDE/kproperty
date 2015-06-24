@@ -20,11 +20,11 @@
 #include "coloredit.h"
 #include "KPropertyUtils_p.h"
 
+#include <KColorCollection>
+
 #include <QVariant>
 #include <QColor>
 #include <QPainter>
-
-#include <kcolorcollection.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, (QLatin1String("Oxygen.colors")))
 

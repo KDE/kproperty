@@ -27,10 +27,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
-#include <keditlistbox.h>
-#include <QDialog>
-#include <klocale.h>
-
 #include "KProperty.h"
 
 KPropertyStringListEditor::KPropertyStringListEditor(KProperty *property, QWidget *parent)

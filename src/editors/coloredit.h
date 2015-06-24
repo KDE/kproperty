@@ -21,7 +21,7 @@
 #define KPROPERTY_COLOREDIT_H
 
 #include "KPropertyFactory.h"
-#include <kcolorcombo.h>
+#include <KColorCombo>
 
 //! Color combo box
 //! @todo enable transparency selection
