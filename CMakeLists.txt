@@ -77,8 +77,8 @@ simple_option(KPROPERTY_UNFINISHED
 simple_option(BUILD_TESTING "Build tests" OFF) # override default from CTest.cmake
 
 if (NOT WIN32)
-  configure_file(${KProperty_SOURCE_DIR}/kproperty.pc.cmake ${KProperty_BINARY_DIR}/kproperty.pc @ONLY)
-  install(FILES ${KProperty_BINARY_DIR}/kproperty.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+  configure_file(${KProperty_SOURCE_DIR}/KProperty.pc.cmake ${KProperty_BINARY_DIR}/KProperty.pc @ONLY)
+  install(FILES ${KProperty_BINARY_DIR}/KProperty.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
