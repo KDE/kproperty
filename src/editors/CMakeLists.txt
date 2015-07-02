@@ -10,7 +10,7 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
         CursorEdit
         DateEdit
         DateTimeEdit
-        DummyWidget
+        #DummyWidget
         FontEdit
         LineStyleEdit
         PixmapEdit
@@ -19,10 +19,10 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
         SizeEdit
         SizePolicyEdit
         SpinBox
-        StringListEdit
-        SymbolCombo
+        #StringListEdit
+        #SymbolCombo
         TimeEdit
-        UrlEdit
+        #TODO UrlEdit
 )
 
 ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS

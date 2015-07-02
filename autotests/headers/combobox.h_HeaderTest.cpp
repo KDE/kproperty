@@ -1,0 +1,1 @@
+#include <kproperty/combobox.h>
