@@ -47,6 +47,8 @@ set(kproperty_LIB_SRCS
    ${libkpropertyeditors_SRCS}
 )
 
+ecm_create_qm_loader(kproperty_LIB_SRCS kproperty_qt)
+
 add_library(KProperty SHARED ${kproperty_LIB_SRCS})
 
 generate_export_header(KProperty)
