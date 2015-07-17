@@ -187,8 +187,7 @@ public:
     /**
      * convert the given value directly from one unit to another
      */
-    static qreal convertFromUnitToUnit(const qreal value, const KPropertyUnit &fromUnit, const KPropertyUnit &toUnit, qreal factor = 1.0);
-
+    static qreal convertFromUnitToUnit(qreal value, const KPropertyUnit &fromUnit, const KPropertyUnit &toUnit, qreal factor = 1.0);
 
     /**
      * This method is the one to use to display a value in a dialog
@@ -201,7 +200,7 @@ public:
      * Unlike KPropertyUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
      * \return the converted value
      */
-    static qreal ptToUnit(const qreal ptValue, const KPropertyUnit &unit);
+    static qreal ptToUnit(qreal ptValue, const KPropertyUnit &unit);
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
