@@ -78,10 +78,10 @@ for f in `find_files $@ | grep -v \.h\$ | grep -v "\\." | sort` $extra_files; do
     echo "    $fname" >> CMakeLists.txt
 done
 
-# files to include using <prefix/name>, these are .h files
+# files to include using <name>, these are .h files
 for f in `find_files $@ | grep \.h\$ | sort`; do
     fname=${f}_HeaderTest.cpp
-    echo "#include <$prefix/$f>" > $fname
+    echo "#include <$f>" > $fname
     echo "    $fname" >> CMakeLists.txt
 done
 

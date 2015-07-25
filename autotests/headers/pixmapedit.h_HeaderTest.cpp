@@ -1,1 +1,1 @@
-#include <kproperty/pixmapedit.h>
+#include <pixmapedit.h>

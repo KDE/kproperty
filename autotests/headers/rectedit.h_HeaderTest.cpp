@@ -1,1 +1,1 @@
-#include <kproperty/rectedit.h>
+#include <rectedit.h>

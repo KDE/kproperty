@@ -1,1 +1,1 @@
-#include <kproperty/KPropertyEditorDataModel.h>
+#include <KPropertyEditorDataModel.h>

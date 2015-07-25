@@ -1,1 +1,1 @@
-#include <kproperty/dateedit.h>
+#include <dateedit.h>

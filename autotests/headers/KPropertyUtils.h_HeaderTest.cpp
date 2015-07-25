@@ -1,1 +1,1 @@
-#include <kproperty/KPropertyUtils.h>
+#include <KPropertyUtils.h>

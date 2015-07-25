@@ -1,1 +1,1 @@
-#include <kproperty/coloredit.h>
+#include <coloredit.h>

@@ -1,1 +1,1 @@
-#include <kproperty/booledit.h>
+#include <booledit.h>

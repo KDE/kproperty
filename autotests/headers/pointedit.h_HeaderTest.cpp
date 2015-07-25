@@ -1,1 +1,1 @@
-#include <kproperty/pointedit.h>
+#include <pointedit.h>

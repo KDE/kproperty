@@ -1,1 +1,1 @@
-#include <kproperty/spinbox.h>
+#include <spinbox.h>

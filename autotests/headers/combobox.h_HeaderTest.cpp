@@ -1,1 +1,1 @@
-#include <kproperty/combobox.h>
+#include <combobox.h>

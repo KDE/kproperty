@@ -1,1 +1,1 @@
-#include <kproperty/KPropertyEditorView.h>
+#include <KPropertyEditorView.h>

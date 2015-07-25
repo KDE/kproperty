@@ -1,1 +1,1 @@
-#include <kproperty/sizeedit.h>
+#include <sizeedit.h>

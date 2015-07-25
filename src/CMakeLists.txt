@@ -130,7 +130,6 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
 ecm_generate_headers(kproperty_FORWARDING_HEADERS
     REQUIRED_HEADERS kproperty_HEADERS
     ORIGINAL CAMELCASE
-    PREFIX kproperty
     HEADER_NAMES
         KPropertyFactory
         KProperty
@@ -144,7 +143,7 @@ ecm_generate_headers(kproperty_FORWARDING_HEADERS
 install(
     FILES
         ${kproperty_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty/kproperty
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty
     COMPONENT Devel
 )
 

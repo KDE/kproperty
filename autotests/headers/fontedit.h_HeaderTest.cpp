@@ -1,1 +1,1 @@
-#include <kproperty/fontedit.h>
+#include <fontedit.h>

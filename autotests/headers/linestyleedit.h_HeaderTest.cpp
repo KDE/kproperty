@@ -1,1 +1,1 @@
-#include <kproperty/linestyleedit.h>
+#include <linestyleedit.h>

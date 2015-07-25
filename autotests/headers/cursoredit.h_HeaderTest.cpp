@@ -1,1 +1,1 @@
-#include <kproperty/cursoredit.h>
+#include <cursoredit.h>
