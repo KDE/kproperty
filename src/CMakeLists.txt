@@ -154,3 +154,5 @@ install(
     DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty
     COMPONENT Devel
 )
+
+enable_testing()

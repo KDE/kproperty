@@ -11,6 +11,10 @@
 //! @brief Indicates the git sha1 commit which was used for compilation of KProperty
 #cmakedefine KPROPERTY_GIT_SHA1_STRING "@KPROPERTY_GIT_SHA1_STRING@"
 
+//! @def KPROPERTY_GIT_BRANCH_STRING
+//! @brief Indicates the git branch which was used for compilation of KProperty
+#cmakedefine KPROPERTY_GIT_BRANCH_STRING "@KPROPERTY_GIT_BRANCH_STRING@"
+
 //! @def BIN_INSTALL_DIR
 //! @brief The subdirectory relative to the install prefix for executables.
 #define BIN_INSTALL_DIR "${BIN_INSTALL_DIR}"
