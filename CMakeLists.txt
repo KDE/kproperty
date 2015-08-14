@@ -5,6 +5,10 @@ project(KProperty)
 find_package(ECM 1.8.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+if(POLICY CMP0063) # Honor visibility properties for all target types (since cmake 3.3)
+    cmake_policy(SET CMP0063 OLD)
+endif()
+
 include(ECMGenerateHeaders)
 include(ECMGeneratePriFile)
 include(ECMPackageConfigHelpers)
