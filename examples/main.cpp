@@ -33,6 +33,7 @@ int main(int argc, char **argv)
     QCoreApplication::setApplicationName("KPropertyExample");
     QCoreApplication::setApplicationVersion(version);
     QCommandLineParser parser;
+    parser.setApplicationDescription(description);
 
     QCommandLineOption flatOption("flat", QCoreApplication::translate("main",
         "Flat display: do not display groups\n(useful for testing)"));
