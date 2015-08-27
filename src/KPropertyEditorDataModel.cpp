@@ -67,10 +67,12 @@ KPropertyEditorDataModel::~KPropertyEditorDataModel()
 
 typedef QPair<QByteArray, QString> NameAndCaption;
 
+#if 0
 static inline bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAndCaption &n2)
 {
     return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;
 }
+#endif
 
 void KPropertyEditorDataModel::collectIndices() const
 {
