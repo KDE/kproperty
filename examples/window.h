@@ -21,6 +21,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <QCommandLineParser>
 #include <QWidget>
 #include <KPropertySet>
 
@@ -34,7 +35,14 @@ public:
     virtual ~Window();
 
 private:
+    void parseCommandLine();
+
     KPropertySet m_set;
+    QCommandLineParser m_parser;
+    QCommandLineOption m_flatOption;
+    QCommandLineOption m_fontSizeOption;
+    QCommandLineOption m_propertyOption;
+    QCommandLineOption m_roOption;
 };
 
 #endif

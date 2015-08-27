@@ -38,23 +38,38 @@
 Window::Window()
         : QWidget()
         , m_set(this, "example")
+        , m_flatOption("flat", QCoreApplication::translate("main",
+                       "Flat display: do not display groups\n(useful for testing)"))
+        , m_fontSizeOption("font-size", QCoreApplication::translate("main",
+                           "Set font size to <size> (in points)\n(useful for testing whether editors keep the font settings)"),
+                           QCoreApplication::translate("main", "size"))
+        , m_propertyOption("property", QCoreApplication::translate("main",
+                           "Display only specified property\n(useful when we want to focus on testing a single\nproperty editor)"),
+                           QCoreApplication::translate("main", "name"))
+        , m_roOption("ro", QCoreApplication::translate("main",
+                     "Set all properties as read-only:\n(useful for testing read-only mode)"))
 {
     setObjectName("kpropertyexamplewindow");
     setWindowIcon(QIcon::fromTheme("document-properties"));
+    m_parser.setApplicationDescription(QCoreApplication::translate("main", "An example application for the KProperty library."));
+    m_parser.addHelpOption();
+    m_parser.addVersionOption();
+    parseCommandLine();
 
-    QCommandLineParser parser;
-
-    parser.process(*(QCoreApplication::instance()));
-
-    const bool flat = parser.isSet("flat");
-    const bool readOnly = parser.isSet("ro");
-    const QString singleProperty = parser.value("property");
+    const QString singleProperty = m_parser.value(m_propertyOption);
+    bool ok;
+    const int fontSize = m_parser.value(m_fontSizeOption).toInt(&ok);
+    if (fontSize > 0 && ok) {
+        QFont f(font());
+        f.setPointSize(fontSize);
+        setFont(f);
+    }
 
     /*  First, create the Set which will hold the properties.  */
     KProperty *p = 0;
-    m_set.setReadOnly(readOnly);
+    m_set.setReadOnly(m_parser.isSet(m_roOption));
     QByteArray group;
-    if (!flat) {
+    if (!m_parser.isSet(m_flatOption)) {
         group = "SimpleGroup";
         m_set.setGroupDescription(group, "Simple Group");
     }
@@ -107,7 +122,7 @@ Window::Window()
     }
 
 //  Complex
-    if (!flat) {
+    if (!m_parser.isSet(m_flatOption)) {
         group = "ComplexGroup";
         m_set.setGroupDescription(group, "Complex Group");
     }
@@ -131,7 +146,7 @@ Window::Window()
     }
 
 //  Appearance
-    if (!flat) {
+    if (!m_parser.isSet(m_flatOption)) {
         group = "Appearance Group";
         m_set.setGroupDescription(group, "Appearance Group");
         m_set.setGroupIcon(group, "appearance");
@@ -179,4 +194,13 @@ Window::Window()
 
 Window::~Window()
 {
+}
+
+void Window::parseCommandLine()
+{
+    m_parser.addOption(m_flatOption);
+    m_parser.addOption(m_fontSizeOption);
+    m_parser.addOption(m_propertyOption);
+    m_parser.addOption(m_roOption);
+    m_parser.process(*(QCoreApplication::instance()));
 }
