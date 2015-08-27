@@ -24,8 +24,6 @@
 
 #include <QByteArray>
 
-typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
-
 //! @internal
 class KPropertySet::Private
 {
@@ -114,6 +112,7 @@ public:
         informAboutClearing = 0;
         emit q->aboutToBeCleared();
         m_visiblePropertiesCount = 0;
+        qDeleteAll(propertiesOfGroup);
         propertiesOfGroup.clear();
         groupNames.clear();
         groupForProperties.clear();
@@ -182,7 +181,7 @@ public:
 
     //groups of properties:
     // list of group name: (list of property names)
-    ByteArrayListMap propertiesOfGroup;
+    QMap<QByteArray, QList<QByteArray>* > propertiesOfGroup;
     QList<QByteArray>  groupNames;
     QHash<QByteArray, QString>  groupDescriptions;
     QHash<QByteArray, QString>  groupIcons;
@@ -416,11 +415,13 @@ KPropertySet::addToGroup(const QByteArray &group, KProperty *property)
         kprWarning() << "Group" << group << "already contains property" << property->name();
         return;
     }
-    QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ groupLower ];
-    if (propertiesOfGroup.isEmpty()) {
+    QList<QByteArray>* propertiesOfGroup = d->propertiesOfGroup.value(groupLower);
+    if (!propertiesOfGroup) {
+        propertiesOfGroup = new QList<QByteArray>();
+        d->propertiesOfGroup.insert(groupLower, propertiesOfGroup);
         d->groupNames.append(groupLower);
     }
-    propertiesOfGroup.append(property->name());
+    propertiesOfGroup->append(property->name());
     d->addPropertyToGroup(property, groupLower);
 }
 
@@ -432,11 +433,14 @@ KPropertySet::removeFromGroup(KProperty *property)
     const QByteArray group( d->groupForProperty(property) );
     if (group.isEmpty())
         return;
-    QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ group ];
-    propertiesOfGroup.removeAt( propertiesOfGroup.indexOf(property->name()) );
-    if (propertiesOfGroup.isEmpty()) {
+    QList<QByteArray>* propertiesOfGroup = d->propertiesOfGroup[ group ];
+    if (propertiesOfGroup) {
+        propertiesOfGroup->removeAt(propertiesOfGroup->indexOf(property->name()));
+    }
+    if (propertiesOfGroup->isEmpty()) {
         //remove group as well
-        d->propertiesOfGroup.remove(group);
+        d->propertiesOfGroup.take(group);
+        delete propertiesOfGroup;
         const int i = d->groupNames.indexOf(group);
         if (i != -1)
             d->groupNames.removeAt(i);
@@ -451,7 +455,8 @@ QList<QByteArray> KPropertySet::groupNames() const
 
 QList<QByteArray> KPropertySet::propertyNamesForGroup(const QByteArray &group) const
 {
-    return d->propertiesOfGroup.value(group);
+    QList<QByteArray>* propertiesOfGroup = d->propertiesOfGroup.value(group);
+    return propertiesOfGroup ? *propertiesOfGroup : QList<QByteArray>();
 }
 
 void
