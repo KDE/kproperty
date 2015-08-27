@@ -752,7 +752,7 @@ void KProperty::emitPropertyChanged()
     }
 }
 
-const QMap<QByteArray, QVariant>& KProperty::options() const
+QMap<QByteArray, QVariant> KProperty::options() const
 {
     return d->options;
 }

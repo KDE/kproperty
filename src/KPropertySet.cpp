@@ -444,14 +444,12 @@ KPropertySet::removeFromGroup(KProperty *property)
     d->removePropertyFromGroup(property);
 }
 
-const QList<QByteArray>
-KPropertySet::groupNames() const
+QList<QByteArray> KPropertySet::groupNames() const
 {
     return d->groupNames;
 }
 
-const QList<QByteArray>
-KPropertySet::propertyNamesForGroup(const QByteArray &group) const
+QList<QByteArray> KPropertySet::propertyNamesForGroup(const QByteArray &group) const
 {
     return d->propertiesOfGroup.value(group);
 }

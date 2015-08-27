@@ -228,15 +228,11 @@ public:
     QString groupIcon(const QByteArray &group) const;
 
     /*! \return a list of all group names. The order of items is undefined. */
-    const QList<QByteArray> groupNames() const;
+    QList<QByteArray> groupNames() const;
 
     /*! \return a list of all property names for group @ group.
      The order of items is undefined. */
-    const QList<QByteArray> propertyNamesForGroup(const QByteArray &group) const;
-
-    /*! \return a list of all property names for group @ group.
-     The order of items is undefined. */
-    const QHash<KProperty*, QByteArray> groupsNamesForProperties() const;
+    QList<QByteArray> propertyNamesForGroup(const QByteArray &group) const;
 
     /*! Used by property editor to preserve previous selection when this set
      is assigned again. */

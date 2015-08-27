@@ -431,7 +431,7 @@ protected:
     void debug() const;
 
     /*! For operator <<. */
-    const QMap<QByteArray, QVariant>& options() const;
+    QMap<QByteArray, QVariant> options() const;
 
     //! @internal
     class Private;
