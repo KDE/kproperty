@@ -70,16 +70,14 @@ function find_files
     done
 }
 
-extra_files="${prefix}_export.h ${prefix}_version.h config-${prefix}.h"
-
-for f in `find_files $@ | grep -v \.h\$ | grep -v "\\." | sort` $extra_files; do
+for f in `find_files $@ | grep -v "\.h\$" | grep -vE "(\\.|Makefile)" | sort`; do
     fname=${f}_HeaderTest.cpp
     echo "#include <$f>" > $fname
     echo "    $fname" >> CMakeLists.txt
 done
 
 # files to include using <name>, these are .h files
-for f in `find_files $@ | grep \.h\$ | sort`; do
+for f in `find_files $@ | grep "\.h\$" | grep -vE "^ui_.*\.h" | sort`; do
     fname=${f}_HeaderTest.cpp
     echo "#include <$f>" > $fname
     echo "    $fname" >> CMakeLists.txt
