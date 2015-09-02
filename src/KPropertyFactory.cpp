@@ -70,7 +70,7 @@ public:
     QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
 };
 
- Q_GLOBAL_STATIC(KPropertyFactoryManager, _self);
+ Q_GLOBAL_STATIC(KPropertyFactoryManager, _self)
 
 //! @internal
 class KPropertyFactory::Private
