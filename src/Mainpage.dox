@@ -1,28 +1,32 @@
 /**
-	\mainpage
-	A generic properties framework.
+    @mainpage
+    %KProperty is a property editing framework with editor widget similar to what is known from Qt Designer.
 
  Main classes of this framework are:
-  - Property, representing a single property with its own type and value
-  - Set, a set of properties
-  - Editor, a widget for displaying and editing properties provided by a Set object. 
-    Every property has its own row displayed using EditorItem object, within Editor
-    widget. 
-  - Widget class provides editing feature for EditorItem objects if a user selects 
-    a given item.
+  - KProperty, representing model for a single property with its own type and value.
+  - KPropertySet, a model for for a set of properties (KProperty objects).
+  - KPropertyEditorView, a view widget for displaying and editing properties provided by
+    a KPropertySet object. Each property has its own row displayed within view widget.
+    The view widget provides inline editing for properties objects.
 
- %KoProperty framework also supports adding custom property types 
- and custom property editor types using Custom Property and
- CustomPropertyFactory.
-  If you cannot store your value type in a QVariant, consider using composed
-  properties (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue() set to true.
+ The %KProperty framework also supports adding custom property types and custom property editor
+ types using KPropertyFactory and KPropertyFactoryManager.
+ Properties that cannot be values types of QVariant can be defined as composed
+ properties.
 
- Take a look at the test application, available in /koproperty/test to see how
- to use %KoProperty.
+ To see how to use %KProperty take a look at the test application available in examples/ directory.
 
- \author Cedric Pasteur <cedric.pasteur@free.fr>
- \author Alexander Dymo <cloudtemple@mskat.net>
- \author Jarosław Staniek <staniek@kde.org>
+ @authors
+ - Alexander Dymo <cloudtemple@mskat.net>
+ - Cédric Pasteur <cedric.pasteur@free.fr>
+ - Adam Pigg <adam@piggz.co.uk>
+ - Jarosław Staniek <staniek@kde.org>
+
+ Maintainers
+ - Jarosław Staniek <staniek@kde.org>
+
+ @licenses
+ @lgpl
 */
-// DOXYGEN_SET_PROJECT_NAME = KoProperty
-// DOXYGEN_SET_IGNORE_PREFIX = Ko K
+// DOXYGEN_SET_PROJECT_NAME = KProperty
+// DOXYGEN_SET_IGNORE_PREFIX = K
