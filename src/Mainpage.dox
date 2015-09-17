@@ -16,6 +16,8 @@
 
  To see how to use %KProperty take a look at the test application available in examples/ directory.
 
+ Project's home page: https://community.kde.org/KProperty
+
  @authors
  - Alexander Dymo <cloudtemple@mskat.net>
  - Cédric Pasteur <cedric.pasteur@free.fr>
@@ -29,4 +31,4 @@
  @lgpl
 */
 // DOXYGEN_SET_PROJECT_NAME = KProperty
-// DOXYGEN_SET_IGNORE_PREFIX = K
+// DOXYGEN_SET_IGNORE_PREFIX = KProperty
