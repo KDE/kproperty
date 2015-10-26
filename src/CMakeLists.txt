@@ -151,6 +151,7 @@ install(
     FILES
         ${kproperty_FORWARDING_HEADERS}
         ${PROJECT_BINARY_DIR}/src/kproperty_export.h
+        ${PROJECT_BINARY_DIR}/src/config-kproperty.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/KProperty
     COMPONENT Devel
 )
