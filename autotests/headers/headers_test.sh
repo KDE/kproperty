@@ -75,7 +75,7 @@ int main(int, char**)
 EOT
 
 # files to include using <name>, forward headers + some *.h headers
-function find_files
+find_files()
 {
     for subdir in "$@" ; do
         find "$builddir/src/$subdir" -maxdepth 1 -type f -printf "%f\n"
