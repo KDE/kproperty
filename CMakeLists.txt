@@ -1,4 +1,12 @@
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+if(EXISTS "/usr/include/sailfishapp/sailfishapp.h") #SailfishOS
+    set(SAILFISH TRUE)
+    cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+else()
+    set(GENERATE_PRI TRUE)
+    cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+endif()
+
+
 project(KProperty)
 
 # ECM setup
@@ -10,7 +18,11 @@ if(POLICY CMP0063) # Honor visibility properties for all target types (since cma
 endif()
 
 include(ECMGenerateHeaders)
-include(ECMGeneratePriFile)
+
+if (GENERATE_PRI)
+    include(ECMGeneratePriFile)
+endif()
+
 include(ECMPackageConfigHelpers)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
@@ -25,21 +37,28 @@ include(GenerateExportHeader)
 include(MacroLogFeature)
 include(KPropertyMacros)
 
-set(KPROPERTY_VERSION "2.96.0") # Update this
+simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
+
+set(KPROPERTY_VERSION "2.97.0") # Update this
 
 # Dependencies
 set(REQUIRED_QT_VERSION "5.2.0")
 
-# Required components to build this framework
-find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core Widgets)
-find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
-#TODO KIO
+find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
-get_git_revision_and_branch()
-add_tests()
-add_examples()
+if(KPROPERTY_WIDGETS)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Widgets)
+    find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
+
+    #TODO KIO
+    get_git_revision_and_branch()
+    add_tests()
+    add_examples()
+endif()
+
 add_unfinished_features_option()
-add_pc_file()
+add_pc_file(KPropertyCore)
+add_pc_file(KPropertyWidgets)
 
 add_subdirectory(src)
 

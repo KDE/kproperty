@@ -18,7 +18,7 @@
 */
 
 #include "KPropertyEditorDataModel.h"
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 #include "KProperty.h"
 #include "kproperty_debug.h"
 
@@ -128,7 +128,7 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
             return prop->value();
         }
         else if (role == Qt::DisplayRole) {
-            return KPropertyFactoryManager::self()->convertValueToText(prop);
+            return KPropertyWidgetsFactoryManager::self()->convertValueToText(prop);
         }
     }
     return QVariant();

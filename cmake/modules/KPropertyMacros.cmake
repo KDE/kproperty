@@ -90,12 +90,12 @@ macro(add_unfinished_features_option)
                 "Include unfinished features (useful for testing but may confuse end-user)" OFF)
 endmacro()
 
-# Adds commands that generate ${PROJECT_NAME}.pc file out of ${PROJECT_NAME}.pc.cmake file
+# Adds commands that generate ${PKGCONFIG_FILE_NAME}.pc file out of ${PKGCONFIG_FILE_NAME}.pc.cmake file
 # and install the .pc file to ${LIB_INSTALL_DIR}/pkgconfig. These commands are not executed for WIN32.
-# ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.pc.cmake should exist.
-macro(add_pc_file)
+# ${CMAKE_SOURCE_DIR}/${PKGCONFIG_FILE_NAME}.pc.cmake should exist.
+macro(add_pc_file PKGCONFIG_FILE_NAME)
   if (NOT WIN32)
-    configure_file(${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.pc.cmake ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc @ONLY)
-    install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    configure_file(${CMAKE_SOURCE_DIR}/${PKGCONFIG_FILE_NAME}.pc.cmake ${CMAKE_BINARY_DIR}/${PKGCONFIG_FILE_NAME}.pc @ONLY)
+    install(FILES ${CMAKE_BINARY_DIR}/${PKGCONFIG_FILE_NAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
   endif()
 endmacro()

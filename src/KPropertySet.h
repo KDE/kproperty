@@ -30,7 +30,7 @@
 
 //! An interface for functor selecting properties.
 /*! Used in Iterator. */
-class KPROPERTY_EXPORT KPropertySelector
+class KPROPERTYCORE_EXPORT KPropertySelector
 {
 public:
     KPropertySelector();
@@ -52,7 +52,7 @@ public:
  Usage with selector:
  @code  for (Set::Iterator it(set, MySelector()); it.current(); ++it) { .... }
  @endcode */
-class KPROPERTY_EXPORT KPropertySetIterator
+class KPROPERTYCORE_EXPORT KPropertySetIterator
 {
 public:
     //! Creates iterator for @a set set of properties.
@@ -108,7 +108,7 @@ private:
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jarosław Staniek <staniek@kde.org>
  */
-class KPROPERTY_EXPORT KPropertySet : public QObject
+class KPROPERTYCORE_EXPORT KPropertySet : public QObject
 {
     Q_OBJECT
 
@@ -310,7 +310,7 @@ protected:
 };
 
 //! qDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
-KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
+KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
 
 /*! A property buffer
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -318,7 +318,7 @@ KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
    \author Adam Treat <treat@kde.org>
   @todo Find a better name to show it's a set that doesn't own property
  */
-class KPROPERTY_EXPORT KPropertyBuffer : public KPropertySet
+class KPROPERTYCORE_EXPORT KPropertyBuffer : public KPropertySet
 {
     Q_OBJECT
 

@@ -22,9 +22,9 @@
 #ifndef KPROPERTY_POINTEDIT_H
 #define KPROPERTY_POINTEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
-class KPROPERTY_EXPORT KPointComposedProperty : public KComposedPropertyInterface
+class KPROPERTYWIDGETS_EXPORT KPointComposedProperty : public KComposedPropertyInterface
 {
 public:
     explicit KPointComposedProperty(KProperty *parent);
@@ -36,7 +36,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT KPropertyPointDelegate : public KPropertyLabelCreator,
+class KPROPERTYWIDGETS_EXPORT KPropertyPointDelegate : public KPropertyLabelCreator,
                                                 public KComposedPropertyCreator<KPointComposedProperty>
 {
 public:

@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_EDITORS_UTILS_H
 #define KPROPERTY_EDITORS_UTILS_H
 
-#include "kproperty_export.h"
+#include "kpropertywidgets_export.h"
 
 #include <QString>
 
@@ -30,7 +30,7 @@ namespace KPropertyUtils
 {
 
 //! Sets up a "..." button with fine-tuned settings.
-KPROPERTY_EXPORT void setupDotDotDotButton(QPushButton *button,
+KPROPERTYWIDGETS_EXPORT void setupDotDotDotButton(QPushButton *button,
     const QString& toolTip = QString(), const QString& whatsThis = QString());
 
 }

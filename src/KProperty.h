@@ -27,7 +27,7 @@
 #include <QByteArray>
 #include <QDebug>
 
-#include "kproperty_export.h"
+#include "kpropertycore_export.h"
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
@@ -53,7 +53,7 @@ class KComposedPropertyInterface;
 class KPropertySet;
 
 /*! Data container for properties of list type. */
-class KPROPERTY_EXPORT KPropertyListData
+class KPROPERTYCORE_EXPORT KPropertyListData
 {
 public:
     /*! Data container for list-value property.
@@ -128,7 +128,7 @@ public:
   \author Alexander Dymo <cloudtemple@mskat.net>
   \author Jarosław Staniek <staniek@kde.org>
 */
-class KPROPERTY_EXPORT KProperty
+class KPROPERTYCORE_EXPORT KProperty
 {
 public:
     /*! Defines types of properties.
@@ -441,10 +441,10 @@ protected:
     friend class KPropertySet;
     friend class KPropertyBuffer;
     friend class KComposedPropertyInterface;
-    friend KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
+    friend KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
 };
 
 //! qDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
-KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
+KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
 
 #endif

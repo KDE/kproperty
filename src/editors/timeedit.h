@@ -22,10 +22,10 @@
 #ifndef KPROPERTY_TIMEEDIT_H
 #define KPROPERTY_TIMEEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 #include <QTimeEdit>
 
-class KPROPERTY_EXPORT KPropertyTimeEditor : public QTimeEdit
+class KPROPERTYWIDGETS_EXPORT KPropertyTimeEditor : public QTimeEdit
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -49,7 +49,7 @@ protected Q_SLOTS:
     void onTimeChanged();
 };
 
-class KPROPERTY_EXPORT KPropertyTimeDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyTimeDelegate : public KPropertyEditorCreatorInterface,
                                                public KPropertyValueDisplayInterface
 {
 public:

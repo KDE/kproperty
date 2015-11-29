@@ -18,5 +18,5 @@
 */
 
 #include "kproperty_debug.h"
-Q_LOGGING_CATEGORY(KPROPERTY_LOG, "org.kde.kproperty.core")
+Q_LOGGING_CATEGORY(KPROPERTY_LOG, "org.kde.kproperty")
 

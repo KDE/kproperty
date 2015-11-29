@@ -22,10 +22,10 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
 
-class KPROPERTY_EXPORT KPropertyFontDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyFontDelegate : public KPropertyEditorCreatorInterface,
                                                public KPropertyValuePainterInterface
 {
 public:

@@ -28,7 +28,7 @@
 class QLineEdit;
 class QPushButton;
 
-class KPROPERTY_EXPORT KPropertyStringListEditor : public Widget
+class KPROPERTYWIDGETS_EXPORT KPropertyStringListEditor : public Widget
 {
     Q_OBJECT
 

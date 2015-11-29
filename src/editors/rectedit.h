@@ -20,9 +20,9 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
-class KPROPERTY_EXPORT KRectComposedProperty : public KComposedPropertyInterface
+class KPROPERTYWIDGETS_EXPORT KRectComposedProperty : public KComposedPropertyInterface
 {
 public:
     explicit KRectComposedProperty(KProperty *parent);
@@ -34,7 +34,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT KPropertyRectDelegate : public KPropertyLabelCreator,
+class KPROPERTYWIDGETS_EXPORT KPropertyRectDelegate : public KPropertyLabelCreator,
                                                public KComposedPropertyCreator<KRectComposedProperty>
 {
 public:

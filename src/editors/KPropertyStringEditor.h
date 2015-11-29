@@ -22,11 +22,11 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QLineEdit>
 
-class KPROPERTY_EXPORT KPropertyStringEditor : public QLineEdit
+class KPROPERTYWIDGETS_EXPORT KPropertyStringEditor : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
@@ -50,7 +50,7 @@ private:
     bool m_slotTextChangedEnabled;
 };
 
-class KPROPERTY_EXPORT KPropertyStringDelegate : public KPropertyEditorCreatorInterface
+class KPROPERTYWIDGETS_EXPORT KPropertyStringDelegate : public KPropertyEditorCreatorInterface
 {
 public:
     KPropertyStringDelegate() {}

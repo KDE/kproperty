@@ -18,7 +18,6 @@
 */
 
 #include "KDefaultPropertyFactory.h"
-#include "KProperty.h"
 /*
 #include "customproperty.h"*/
 #include "editors/booledit.h"
@@ -45,7 +44,7 @@
 // #include "urledit.h"
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
- : KPropertyFactory()
+ : KPropertyWidgetsFactory()
 {
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
     addEditor( KProperty::Cursor, new KPropertyCursorDelegate );

@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_PIXMAPEDIT_H
 #define KPROPERTY_PIXMAPEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QPixmap>
 #include <QVariant>
@@ -30,7 +30,7 @@
 class QLabel;
 class QPushButton;
 
-class KPROPERTY_EXPORT KPropertyPixmapEditor : public QWidget
+class KPROPERTYWIDGETS_EXPORT KPropertyPixmapEditor : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -71,7 +71,7 @@ protected:
     QPixmap m_previewPixmap;
 };
 
-class KPROPERTY_EXPORT KPropertyPixmapDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyPixmapDelegate : public KPropertyEditorCreatorInterface,
                                                  public KPropertyValuePainterInterface
 {
 public:

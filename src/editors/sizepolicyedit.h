@@ -20,9 +20,9 @@
 #ifndef KPROPERTY_SIZEPOLICYEDIT_H
 #define KPROPERTY_SIZEPOLICYEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
-class KPROPERTY_EXPORT KSizePolicyComposedProperty : public KComposedPropertyInterface
+class KPROPERTYWIDGETS_EXPORT KSizePolicyComposedProperty : public KComposedPropertyInterface
 {
 public:
     explicit KSizePolicyComposedProperty(KProperty *parent);
@@ -34,7 +34,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT KPropertySizePolicyDelegate : public KPropertyLabelCreator,
+class KPROPERTYWIDGETS_EXPORT KPropertySizePolicyDelegate : public KPropertyLabelCreator,
                                                      public KComposedPropertyCreator<KSizePolicyComposedProperty>
 {
 public:

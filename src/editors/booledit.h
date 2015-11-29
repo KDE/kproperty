@@ -32,7 +32,7 @@
 //! A bool editor supporting two states: true and false.
 /*! For null values, false is displayed.
 */
-class KPROPERTY_EXPORT KPropertyBoolEditor : public QToolButton
+class KPROPERTYWIDGETS_EXPORT KPropertyBoolEditor : public QToolButton
 {
     Q_OBJECT
     Q_PROPERTY(bool value READ value WRITE setValue USER true)
@@ -70,7 +70,7 @@ private:
 //! A bool editor supporting three states: true, false and null.
 /*! The editor is implemented as a drop-down list.
 */
-class KPROPERTY_EXPORT KPropertyThreeStateBoolEditor : public KPropertyComboBoxEditor
+class KPROPERTYWIDGETS_EXPORT KPropertyThreeStateBoolEditor : public KPropertyComboBoxEditor
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -86,7 +86,7 @@ Q_SIGNALS:
     void commitData( QWidget * editor );
 };
 
-class KPROPERTY_EXPORT KPropertyBoolDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyBoolDelegate : public KPropertyEditorCreatorInterface,
                                                public KPropertyValuePainterInterface
 {
 public:
