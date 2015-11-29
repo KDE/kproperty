@@ -26,7 +26,10 @@
 #include "kproperty_debug.h"
 
 #include <QPointer>
+
+#ifdef KPROPERTY_WIDGET
 #include <QSizePolicy>
+#endif
 
 //! @internal
 class KProperty::Private
@@ -359,8 +362,10 @@ void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useC
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
+#ifdef KPROPERTY_WIDGET
     } else if (t == QVariant::SizePolicy) {
         ch = (currentValue.value<QSizePolicy>() != value.value<QSizePolicy>());
+#endif
     }
     else {
         ch = (currentValue != value);
@@ -764,7 +769,7 @@ void KProperty::debug() const
     kprDebug() << *this;
 }
 
-KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
+KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
 {
     dbg.nospace() << "KProperty("
         << "NAME=" << p.name();

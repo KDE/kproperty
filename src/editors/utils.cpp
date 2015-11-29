@@ -22,7 +22,7 @@
 #include <QPushButton>
 #include <QFontMetrics>
 
-KPROPERTY_EXPORT void KPropertyUtils::setupDotDotDotButton(QPushButton *button, const QString& toolTip, const QString& whatsThis)
+KPROPERTYCORE_EXPORT void KPropertyUtils::setupDotDotDotButton(QPushButton *button, const QString& toolTip, const QString& whatsThis)
 {
     button->setText(QObject::tr("...", "Three dots for 'Insert image from file' button"));
     if (!toolTip.isEmpty())

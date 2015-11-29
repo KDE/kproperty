@@ -22,7 +22,8 @@
 #include "combobox.h"
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
-#include "kproperty_debug.h"
+#include "kpropertywidgets_debug.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QCompleter>
 #include <QGuiApplication>
@@ -105,7 +106,7 @@ KPropertyComboBoxEditor::~KPropertyComboBoxEditor()
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
-        kprWarning() << "property listData not available!";
+        kprwWarning() << "property listData not available!";
         return false;
     }
     return true;
@@ -143,13 +144,13 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            kprWarning() << "NO SUCH KEY:" << value.toString()
+            kprwWarning() << "NO SUCH KEY:" << value.toString()
                 << "property=" << objectName();
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            kprWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+            kprwWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
                 << "count=" << count() << "value=" << value.toString()
                 << "property=" << objectName() << "\nActual combobox contents"
                 << list;
@@ -218,7 +219,7 @@ void KPropertyComboBoxEditor::slotValueChanged(int)
 void KPropertyComboBoxEditor::paintEvent( QPaintEvent * event )
 {
     QComboBox::paintEvent(event);
-    KPropertyFactory::paintTopGridLine(this);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }
 
 /*

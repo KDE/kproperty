@@ -22,11 +22,12 @@
 #ifndef KPROPERTY_COMBOBOX_H
 #define KPROPERTY_COMBOBOX_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
+#include "kpropertywidgets_export.h"
 
 #include <QComboBox>
 
-class KPROPERTY_EXPORT KPropertyComboBoxEditor : public QComboBox
+class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxEditor : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -87,7 +88,7 @@ protected:
     Options m_options;
 };
 
-class KPROPERTY_EXPORT KPropertyComboBoxDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxDelegate : public KPropertyEditorCreatorInterface,
                                                    public KPropertyValueDisplayInterface
 {
 public:

@@ -22,10 +22,10 @@
 #ifndef KPROPERTY_DATEEDIT_H
 #define KPROPERTY_DATEEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 #include <QDateEdit>
 
-class KPROPERTY_EXPORT KPropertyDateEditor : public QDateEdit
+class KPROPERTYWIDGETS_EXPORT KPropertyDateEditor : public QDateEdit
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -49,7 +49,7 @@ protected Q_SLOTS:
     void onDateChanged();
 };
 
-class KPROPERTY_EXPORT KPropertyDateDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyDateDelegate : public KPropertyEditorCreatorInterface,
                                                public KPropertyValueDisplayInterface
 {
 public:

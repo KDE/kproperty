@@ -1,4 +1,10 @@
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+if(EXISTS "/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml") #SailfishOS
+    cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+else()
+    cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+endif()
+
+
 project(KProperty)
 
 # ECM setup
@@ -25,21 +31,28 @@ include(GenerateExportHeader)
 include(MacroLogFeature)
 include(KPropertyMacros)
 
+simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
+
 set(KPROPERTY_VERSION "2.96.0") # Update this
 
 # Dependencies
 set(REQUIRED_QT_VERSION "5.2.0")
 
-# Required components to build this framework
-find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core Widgets)
-find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
-#TODO KIO
+find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
+    
+if(KPROPERTY_WIDGETS)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Widgets)
+    find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
+    
+    #TODO KIO
+    get_git_revision_and_branch()
+    add_tests()
+    add_examples()
+endif()
 
-get_git_revision_and_branch()
-add_tests()
-add_examples()
 add_unfinished_features_option()
-add_pc_file()
+add_pc_file(KPropertyCore)
+add_pc_file(KPropertyWidgets)
 
 add_subdirectory(src)
 

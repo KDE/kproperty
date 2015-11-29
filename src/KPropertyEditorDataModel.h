@@ -20,17 +20,18 @@
 #ifndef KPROPERTY_EDITORDATAMODEL_H
 #define KPROPERTY_EDITORDATAMODEL_H
 
+#include "kpropertywidgets_export.h"
+#include "KPropertySet.h"
+
 #include <QAbstractItemModel>
 #include <QModelIndex>
-
-#include "KPropertySet.h"
 
 class KProperty;
 
 /*! @short A data model for using Set objects within the Qt's model/view API.
  @see KPropertyEditorView
 */
-class KPROPERTY_EXPORT KPropertyEditorDataModel : public QAbstractItemModel
+class KPROPERTYWIDGETS_EXPORT KPropertyEditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
 

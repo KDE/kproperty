@@ -60,7 +60,7 @@ void KPropertyTimeEditor::setValue(const QVariant& value)
 void KPropertyTimeEditor::paintEvent(QPaintEvent* event)
 {
     QTimeEdit::paintEvent(event);
-    KPropertyFactory::paintTopGridLine(this);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }
 
 

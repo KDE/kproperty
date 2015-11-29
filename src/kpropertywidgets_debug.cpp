@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2015 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,21 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_FONTEDIT_H
-#define KPROPERTY_FONTEDIT_H
+#include "kpropertywidgets_debug.h"
+Q_LOGGING_CATEGORY(KPROPERTYW_LOG, "org.kde.kproperty.widgets")
 
-#include "KPropertyWidgetsFactory.h"
-
-
-class KPROPERTYWIDGETS_EXPORT KPropertyFontDelegate : public KPropertyEditorCreatorInterface,
-                                               public KPropertyValuePainterInterface
-{
-public:
-    KPropertyFontDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-};
-
-#endif

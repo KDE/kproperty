@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QSpinBox>
 #include <QDoubleSpinBox>
@@ -31,7 +31,7 @@
 /*! Note that due to KIntNumInput limitations, for UInt the maximum value
     is INT_MAX, not UINT_MAX.
 */
-class KPROPERTY_EXPORT KPropertyIntSpinBox : public QSpinBox
+class KPROPERTYWIDGETS_EXPORT KPropertyIntSpinBox : public QSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -62,7 +62,7 @@ private:
 };
 
 //! Double editor
-class KPROPERTY_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
+class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)
@@ -97,7 +97,7 @@ protected:
 };
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
-class KPROPERTY_EXPORT KPropertyIntSpinBoxDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyIntSpinBoxDelegate : public KPropertyEditorCreatorInterface,
                                                      public KPropertyValueDisplayInterface
 {
 public:
@@ -109,7 +109,7 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class KPROPERTY_EXPORT KPropertyDoubleSpinBoxDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBoxDelegate : public KPropertyEditorCreatorInterface,
                                                         public KPropertyValueDisplayInterface
 {
 public:

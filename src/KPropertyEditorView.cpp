@@ -21,7 +21,7 @@
 #include "KPropertyEditorDataModel.h"
 #include "KProperty.h"
 #include "KPropertySet.h"
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 #include "kproperty_debug.h"
 
 #include <QIcon>
@@ -143,7 +143,7 @@ void ItemDelegate::paint(QPainter *painter,
     KProperty *property = editorModel->propertyForItem(index);
     const int t = typeForProperty( property );
     bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
-    if (index.column() == 1 && KPropertyFactoryManager::self()->paint(t, painter, alteredOption, index)) {
+    if (index.column() == 1 && KPropertyWidgetsFactoryManager::self()->paint(t, painter, alteredOption, index)) {
         useQItemDelegatePaint = false;
     }
     if (useQItemDelegatePaint) {
@@ -201,7 +201,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     KProperty *property = editorModel->propertyForItem(index);
     int t = typeForProperty(property);
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
-    QWidget *w = KPropertyFactoryManager::self()->createEditor(t, parent, alteredOption, index);
+    QWidget *w = KPropertyWidgetsFactoryManager::self()->createEditor(t, parent, alteredOption, index);
     if (w) {
         if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)").constData())
             && property && !property->children())

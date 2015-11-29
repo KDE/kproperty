@@ -3,10 +3,10 @@ exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
-Name: KProperty
-Description: A property editing framework with editor
+Name: KPropertyCore
+Description: A property editing framework with editor (core)
 Version: @KPROPERTY_VERSION@
 URL: https://community.kde.org/KProperty
-Requires: Qt5Core Qt5Gui KF5WidgetsAddons KF5GuiAddons
+Requires: Qt5Core
 Libs: -L${libdir}
 Cflags: -I${includedir}

@@ -24,7 +24,7 @@
 
 #include "combobox.h"
 
-class KPROPERTY_EXPORT KPropertyCursorEditor : public KPropertyComboBoxEditor
+class KPROPERTYWIDGETS_EXPORT KPropertyCursorEditor : public KPropertyComboBoxEditor
 {
     Q_OBJECT
     Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
@@ -37,7 +37,7 @@ public:
     virtual void setCursorValue(const QCursor &value);
 };
 
-class KPROPERTY_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface,
+class KPROPERTYWIDGETS_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface,
                                                  public KPropertyValuePainterInterface
 {
 public:

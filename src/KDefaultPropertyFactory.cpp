@@ -18,6 +18,7 @@
 */
 
 #include "KDefaultPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 #include "KProperty.h"
 /*
 #include "customproperty.h"*/
@@ -45,7 +46,7 @@
 // #include "urledit.h"
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
- : KPropertyFactory()
+ : KPropertyWidgetsFactory()
 {
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
     addEditor( KProperty::Cursor, new KPropertyCursorDelegate );

@@ -24,7 +24,7 @@
 #ifndef KPROPERTYUNIT_H
 #define KPROPERTYUNIT_H
 
-#include "kproperty_export.h"
+#include "kpropertycore_export.h"
 
 #include <QString>
 #include <QStringList>
@@ -64,7 +64,7 @@
  * bound to the order in the enum (so ABI-compatible extension is possible) and
  * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
-class KPROPERTY_EXPORT KPropertyUnit
+class KPROPERTYCORE_EXPORT KPropertyUnit
 {
 public:
     /** Length units supported by Calligra. */
@@ -240,6 +240,8 @@ public:
         return symbol();
     }
 
+#ifdef KPROPERTY_WIDGET
+
     /**
      * Get an approximate scale of a unit vector that was converted by
      * the transfomation.
@@ -257,14 +259,15 @@ public:
      * average scale of the matrix.
      */
     void adjustByPixelTransform(const QTransform &t);
-
+#endif
+    
 private:
     Type m_type;
     qreal m_pixelConversion;
 };
 
 #ifndef QT_NO_DEBUG_STREAM
-KPROPERTY_EXPORT QDebug operator<<(QDebug, const KPropertyUnit &);
+KPROPERTYCORE_EXPORT QDebug operator<<(QDebug, const KPropertyUnit &);
 #endif
 
 Q_DECLARE_METATYPE(KPropertyUnit)
