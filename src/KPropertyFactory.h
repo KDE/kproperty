@@ -25,9 +25,6 @@
 #include <QObject>
 #include <QVariant>
 #include <QHash>
-#include <QLabel>
-#include <QPainter>
-#include <QStyleOptionViewItem>
 
 //! An interface for for composed property handlers
 /*! You have to subclass KComposedPropertyInterface to override the behaviour of a property type.\n
@@ -36,7 +33,7 @@
 
   Example implementation of composed properties can be found in editors/ directory.
 */
-class KPROPERTY_EXPORT KComposedPropertyInterface
+class KPROPERTYCORE_EXPORT KComposedPropertyInterface
 {
 public:
     explicit KComposedPropertyInterface(KProperty *parent);
@@ -66,7 +63,7 @@ protected:
     bool m_childValueChangedEnabled : 1;
 };
 
-class KPROPERTY_EXPORT KComposedPropertyCreatorInterface
+class KPROPERTYCORE_EXPORT KComposedPropertyCreatorInterface
 {
 public:
     KComposedPropertyCreatorInterface();
@@ -76,114 +73,9 @@ public:
     virtual KComposedPropertyInterface* createComposedProperty(KProperty *parent) const = 0;
 };
 
-//! An interface for editor widget creators.
-/*! Options can be set in the options attribute in order to customize
-    widget creation process. Do this in the EditorCreatorInterface constructor.
-*/
-class KPROPERTY_EXPORT KPropertyEditorCreatorInterface
-{
-public:
-    KPropertyEditorCreatorInterface();
-
-    virtual ~KPropertyEditorCreatorInterface();
-
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
-
-    /*! Options for altering the editor widget creation process,
-        used by KPropertyFactoryManager::createEditor(). */
-    class Options {
-    public:
-        Options();
-        /*! In order to have better look of the widget within the property editor view,
-            we usually remove borders from the widget (see FactoryManager::createEditor()).
-            and adding 1 pixel 'gray border' on the top. Default value is true. */
-        bool removeBorders;
-    };
-
-    //! Options for altering the editor widget creation process
-    Options options;
-};
-
-class KPROPERTY_EXPORT KPropertyValuePainterInterface
-{
-public:
-    KPropertyValuePainterInterface();
-    virtual ~KPropertyValuePainterInterface();
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
-};
-
-class KPROPERTY_EXPORT KPropertyValueDisplayInterface
-{
-public:
-    KPropertyValueDisplayInterface();
-    virtual ~KPropertyValueDisplayInterface();
-    virtual QString displayTextForProperty( const KProperty* property ) const
-        { return displayText(property->value()); }
-    virtual QString displayText( const QVariant& value ) const
-        { return value.toString(); }
-};
-
-//! Label widget that can be used for displaying text-based read-only items
-//! Used in LabelCreator.
-class KPROPERTY_EXPORT KPropertyLabel : public QLabel
-{
-    Q_OBJECT
-    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
-public:
-    KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface);
-    QVariant value() const;
-Q_SIGNALS:
-    void commitData( QWidget * editor );
-public Q_SLOTS:
-    void setValue(const QVariant& value);
-
-protected:
-    virtual void paintEvent( QPaintEvent * event );
-
-private:
-    const KPropertyValueDisplayInterface *m_iface;
-    QVariant m_value;
-};
-
-//! Creator returning editor
-template<class Widget>
-class KPROPERTY_EXPORT KPropertyEditorCreator : public KPropertyEditorCreatorInterface,
-                                        public KPropertyValueDisplayInterface,
-                                        public KPropertyValuePainterInterface
-{
-public:
-    KPropertyEditorCreator() : KPropertyEditorCreatorInterface() {}
-
-    virtual ~KPropertyEditorCreator() {}
-
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const
-    {
-        Q_UNUSED(type);
-        Q_UNUSED(option);
-        Q_UNUSED(index);
-        return new Widget(parent, this);
-    }
-
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const
-    {
-        painter->save();
-        QRect r(option.rect);
-        r.setLeft(r.left()+1);
-        painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
-            displayText( index.data(Qt::EditRole) ) );
-        painter->restore();
-    }
-};
-
-typedef KPropertyEditorCreator<KPropertyLabel> KPropertyLabelCreator;
-
 //! Creator returning composed property object
 template<class ComposedProperty>
-class KPROPERTY_EXPORT KComposedPropertyCreator : public KComposedPropertyCreatorInterface
+class KPROPERTYCORE_EXPORT KComposedPropertyCreator : public KComposedPropertyCreatorInterface
 {
 public:
     KComposedPropertyCreator() : KComposedPropertyCreatorInterface() {}
@@ -195,43 +87,17 @@ public:
     }
 };
 
-class KPROPERTY_EXPORT KPropertyFactory
+class KPROPERTYCORE_EXPORT KPropertyFactory
 {
 public:
     KPropertyFactory();
     virtual ~KPropertyFactory();
     QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators() const;
-    QHash<int, KPropertyEditorCreatorInterface*> editorCreators() const;
-    QHash<int, KPropertyValuePainterInterface*> valuePainters() const;
-    QHash<int, KPropertyValueDisplayInterface*> valueDisplays() const;
-
-    //! Adds editor creator @a creator for type @a type.
-    //! The creator becomes owned by the factory.
-    void addEditor(int type, KPropertyEditorCreatorInterface *creator);
-
     void addComposedPropertyCreator( int type, KComposedPropertyCreatorInterface* creator );
 
-    void addPainter(int type, KPropertyValuePainterInterface *painter);
-
-    void addDisplay(int type, KPropertyValueDisplayInterface *display);
-
-    static void paintTopGridLine(QWidget *widget);
-    static void setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent,
-        const QString& extraStyleSheet = QString());
-
 protected:
-    void addEditorInternal(int type, KPropertyEditorCreatorInterface *editor, bool own = true);
-
     void addComposedPropertyCreatorInternal(int type,
         KComposedPropertyCreatorInterface* creator, bool own = true);
-
-    //! Adds value painter @a painter for type @a type.
-    //! The painter becomes owned by the factory.
-    void addPainterInternal(int type, KPropertyValuePainterInterface *painter, bool own = true);
-
-    //! Adds value-to-text converted @a painter for type @a type.
-    //! The converter becomes owned by the factory.
-    void addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own = true);
 
     class Private;
     Private * const d;
@@ -240,30 +106,13 @@ protected:
 class KProperty;
 class KCustomProperty;
 
-class KPROPERTY_EXPORT KPropertyFactoryManager : public QObject
+class KPROPERTYCORE_EXPORT KPropertyFactoryManager : public QObject
 {
     Q_OBJECT
 public:
     bool isEditorForTypeAvailable( int type ) const;
 
-    QWidget * createEditor(
-        int type,
-        QWidget *parent,
-        const QStyleOptionViewItem & option,
-        const QModelIndex & index ) const;
-
-    bool paint( int type,
-        QPainter * painter,
-        const QStyleOptionViewItem & option,
-        const QModelIndex & index ) const;
-
     KComposedPropertyInterface* createComposedProperty(KProperty *parent);
-
-    bool canConvertValueToText( int type ) const;
-
-    bool canConvertValueToText( const KProperty* property ) const;
-
-    QString convertValueToText( const KProperty* property ) const;
 
     //! Registers factory @a factory. It becomes owned by the manager.
     void registerFactory(KPropertyFactory *factory);

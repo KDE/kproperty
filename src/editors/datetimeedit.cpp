@@ -22,6 +22,7 @@
 #include "datetimeedit.h"
 
 #include "KPropertyEditorDataModel.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QLocale>
 
@@ -64,7 +65,7 @@ void KPropertyDateTimeEditor::setValue(const QVariant& value)
 void KPropertyDateTimeEditor::paintEvent(QPaintEvent* event)
 {
     QDateTimeEdit::paintEvent(event);
-    KPropertyFactory::paintTopGridLine(this);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }
 
 

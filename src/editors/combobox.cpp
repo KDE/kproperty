@@ -23,6 +23,7 @@
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
 #include "kproperty_debug.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QCompleter>
 #include <QGuiApplication>
@@ -218,7 +219,7 @@ void KPropertyComboBoxEditor::slotValueChanged(int)
 void KPropertyComboBoxEditor::paintEvent( QPaintEvent * event )
 {
     QComboBox::paintEvent(event);
-    KPropertyFactory::paintTopGridLine(this);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }
 
 /*

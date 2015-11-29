@@ -20,13 +20,13 @@
 #ifndef KPROPERTY_UTILS_H
 #define KPROPERTY_UTILS_H
 
-#include "kproperty_export.h"
+#include "kpropertywidgets_export.h"
 
 #include <QWidget>
 
 //! @short A container widget that can be used to split information into hideable sections
 //! for a property editor-like panes.
-class KPROPERTY_EXPORT KPropertyGroupWidget : public QWidget
+class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
 {
 public:
     KPropertyGroupWidget(const QString& title, QWidget* parent);

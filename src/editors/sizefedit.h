@@ -22,9 +22,9 @@
 #ifndef KPROPERTY_SIZEFEDIT_H
 #define KPROPERTY_SIZEFEDIT_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
-class KPROPERTY_EXPORT KSizeFComposedProperty : public KComposedPropertyInterface
+class KPROPERTYWIDGETS_EXPORT KSizeFComposedProperty : public KComposedPropertyInterface
 {
 public:
     explicit KSizeFComposedProperty(KProperty *parent);
@@ -36,7 +36,7 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTY_EXPORT KPropertySizeFDelegate : public KPropertyLabelCreator,
+class KPROPERTYWIDGETS_EXPORT KPropertySizeFDelegate : public KPropertyLabelCreator,
                                                 public KComposedPropertyCreator<KSizeFComposedProperty>
 {
 public:

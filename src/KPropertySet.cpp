@@ -581,7 +581,7 @@ void KPropertySet::debug() const
     kprDebug() << *this;
 }
 
-KPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
+KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
 {
     dbg.nospace() << "KPropertySet(";
     if (!set.typeName().isEmpty()) {

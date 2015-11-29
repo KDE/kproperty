@@ -25,7 +25,7 @@
 
 class KUrlRequester;
 
-class KPROPERTY_EXPORT KPropertyUrlEditor : public Widget
+class KPROPERTYWIDGETS_EXPORT KPropertyUrlEditor : public Widget
 {
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
     Q_OBJECT

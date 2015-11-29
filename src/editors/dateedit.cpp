@@ -62,7 +62,7 @@ void KPropertyDateEditor::setValue(const QVariant& value)
 void KPropertyDateEditor::paintEvent(QPaintEvent* event)
 {
     QDateEdit::paintEvent(event);
-    KPropertyFactory::paintTopGridLine(this);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }
 
 

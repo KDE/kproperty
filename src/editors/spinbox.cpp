@@ -25,6 +25,7 @@
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
 #include "KPropertyUnit_p.h"
+#include "KPropertyWidgetsFactory.h"
 #include "kproperty_debug.h"
 
 #include <QVariant>
@@ -71,7 +72,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
 //    kprDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
-    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
+    KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
@@ -150,7 +151,7 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
         ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
     );*/
     QString css = cssForSpinBox("QDoubleSpinBox", font(), itemHeight);
-    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
+    KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min"));

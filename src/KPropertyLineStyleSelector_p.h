@@ -20,14 +20,14 @@
 #ifndef KPROPERTYLINESTYLESELECTOR_H
 #define KPROPERTYLINESTYLESELECTOR_H
 
-#include "kproperty_export.h"
+#include "kpropertywidgets_export.h"
 
 #include <QComboBox>
 
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KPROPERTY_EXPORT KPropertyLineStyleSelector : public QComboBox
+class KPROPERTYWIDGETS_EXPORT KPropertyLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:

@@ -25,7 +25,7 @@
 
 #include <QVariant>
 
-class KPROPERTY_EXPORT KPropertyDummyWidget: public Widget
+class KPROPERTYWIDGETS_EXPORT KPropertyDummyWidget: public Widget
 {
     Q_OBJECT
 

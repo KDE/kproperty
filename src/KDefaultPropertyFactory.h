@@ -20,9 +20,9 @@
 #ifndef KDEFAULTPROPERTYFACTORY_H
 #define KDEFAULTPROPERTYFACTORY_H
 
-#include "KPropertyFactory.h"
+#include "KPropertyWidgetsFactory.h"
 
-class KDefaultPropertyFactory : public KPropertyFactory
+class KDefaultPropertyFactory : public KPropertyWidgetsFactory
 {
 public:
     KDefaultPropertyFactory();
