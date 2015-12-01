@@ -19,4 +19,4 @@ include(ECMAddTests)
 
 find_package(Qt5Test REQUIRED)
 
-#TODO fix add_subdirectory(headers)
+add_subdirectory(headers)
