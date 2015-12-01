@@ -68,7 +68,7 @@ target_link_libraries(KPropertyCore
 generate_export_header(KPropertyCore)
 
 target_include_directories(KPropertyCore
-    PUBLIC "$<BUILD_INTERFACE:${kpropertycore_INCLUDE_DIRS}>"
+    PUBLIC $<BUILD_INTERFACE:${kpropertycore_INCLUDE_DIRS}>
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/KPropertyCore>"
 )
 
@@ -123,6 +123,10 @@ install(FILES
             DESTINATION "${CMAKECONFIG_CORE_INSTALL_DIR}"
             COMPONENT Devel)
 
+if(${SAILFISH})
+  set(KDE_INSTALL_TARGETS_DEFAULT_ARGS LIBRARY DESTINATION lib)
+endif()
+ 
 install(TARGETS KPropertyCore
             EXPORT KPropertyCoreTargets
             ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
@@ -163,6 +167,7 @@ endif()
 install(FILES ${PRI_FILENAME}
         DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
+if (NOT ${SAILFISH})
 ecm_generate_pri_file(
     BASE_NAME KPropertyCore
     LIB_NAME KPropertyCore
@@ -170,8 +175,9 @@ ecm_generate_pri_file(
     FILENAME_VAR PRI_FILENAME
     INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/KPropertyCore
 )
+endif()
 
-if(KPROPERTY_WIDGETS)
+if(KPROPERTY_WIDGETS AND NOT ${SAILFISH})
     ecm_generate_pri_file(
         BASE_NAME KPropertyWidgets
         LIB_NAME KPropertyWidgets

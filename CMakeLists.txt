@@ -1,4 +1,5 @@
 if(EXISTS "/usr/include/sailfishapp/sailfishapp.h") #SailfishOS
+    set(SAILFISH TRUE)
     cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 else()
     cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
@@ -16,7 +17,11 @@ if(POLICY CMP0063) # Honor visibility properties for all target types (since cma
 endif()
 
 include(ECMGenerateHeaders)
+
+if (NOT ${SAILFISH})
 include(ECMGeneratePriFile)
+endif()
+
 include(ECMPackageConfigHelpers)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
