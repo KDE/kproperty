@@ -240,7 +240,7 @@ public:
         return symbol();
     }
 
-#ifdef KPROPERTY_WIDGET
+#ifdef KPROPERTY_WIDGETS
 
     /**
      * Get an approximate scale of a unit vector that was converted by
@@ -260,7 +260,7 @@ public:
      */
     void adjustByPixelTransform(const QTransform &t);
 #endif
-    
+
 private:
     Type m_type;
     qreal m_pixelConversion;

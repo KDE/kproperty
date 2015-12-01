@@ -22,7 +22,7 @@
 #include "KPropertyUnit_p.h"
 #include "kproperty_debug.h"
 
-#ifdef KPROPERTY_WIDGET
+#ifdef KPROPERTY_WIDGETS
 #include <QTransform>
 #endif
 
@@ -373,7 +373,7 @@ qreal KPropertyUnit::parseAngle(const QString& _value, qreal defaultVal)
     return defaultVal;
 }
 
-#ifdef KPROPERTY_WIDGET
+#ifdef KPROPERTY_WIDGETS
 qreal KPropertyUnit::approxTransformScale(const QTransform &t)
 {
     return std::sqrt(t.determinant());

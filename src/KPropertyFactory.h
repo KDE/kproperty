@@ -98,7 +98,7 @@ public:
 protected:
     void addComposedPropertyCreatorInternal(int type,
         KComposedPropertyCreatorInterface* creator, bool own = true);
-    
+
     class Private;
     Private * const d;
 };
@@ -111,7 +111,7 @@ class KPROPERTYCORE_EXPORT KPropertyFactoryManager : public QObject
     Q_OBJECT
 public:
     bool isEditorForTypeAvailable( int type ) const;
-        
+
     KComposedPropertyInterface* createComposedProperty(KProperty *parent);
 
     //! Registers factory @a factory. It becomes owned by the manager.

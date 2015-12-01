@@ -27,7 +27,7 @@
 
 #include <QPointer>
 
-#ifdef KPROPERTY_WIDGET
+#ifdef KPROPERTY_WIDGETS
 #include <QSizePolicy>
 #endif
 
@@ -362,7 +362,7 @@ void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useC
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
-#ifdef KPROPERTY_WIDGET
+#ifdef KPROPERTY_WIDGETS
     } else if (t == QVariant::SizePolicy) {
         ch = (currentValue.value<QSizePolicy>() != value.value<QSizePolicy>());
 #endif

@@ -18,8 +18,6 @@
 */
 
 #include "KDefaultPropertyFactory.h"
-#include "KPropertyWidgetsFactory.h"
-#include "KProperty.h"
 /*
 #include "customproperty.h"*/
 #include "editors/booledit.h"

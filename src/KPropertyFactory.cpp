@@ -70,7 +70,7 @@ QHash<int, KComposedPropertyCreatorInterface*> KPropertyFactory::composedPropert
     return d->composedPropertyCreators;
 }
 
-#ifdef KPROPERTY_WIDGET
+#ifdef KPROPERTY_WIDGETS
 QHash<int, KPropertyEditorCreatorInterface*> KPropertyFactory::editorCreators() const
 {
     return d->editorCreators;

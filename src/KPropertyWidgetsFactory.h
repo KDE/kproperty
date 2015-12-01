@@ -171,7 +171,7 @@ protected:
     //! Adds value-to-text converted @a painter for type @a type.
     //! The converter becomes owned by the factory.
     void addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own = true);
-    
+
     class Private;
     Private * const d;
 };
@@ -195,7 +195,7 @@ public:
         QPainter * painter,
         const QStyleOptionViewItem & option,
         const QModelIndex & index ) const;
-        
+
     KComposedPropertyInterface* createComposedProperty(KProperty *parent);
 
     bool canConvertValueToText( int type ) const;

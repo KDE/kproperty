@@ -31,8 +31,8 @@
 //! @brief Defined if unfinished features of KProperty are enabled
 #cmakedefine KPROPERTY_UNFINISHED
 
-//! @def KPROPERTY_WIDGET
+//! @def KPROPERTY_WIDGETS
 //! @brief Defined if QtWidgets components of KProperty are enabled
-#cmakedefine KPROPERTY_WIDGET
+#cmakedefine KPROPERTY_WIDGETS
 
 #endif

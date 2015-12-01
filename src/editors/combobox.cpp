@@ -22,7 +22,7 @@
 #include "combobox.h"
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
-#include "kpropertywidgets_debug.h"
+#include "kproperty_debug.h"
 #include "KPropertyWidgetsFactory.h"
 
 #include <QCompleter>
@@ -106,7 +106,7 @@ KPropertyComboBoxEditor::~KPropertyComboBoxEditor()
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
-        kprwWarning() << "property listData not available!";
+        kprWarning() << "property listData not available!";
         return false;
     }
     return true;
@@ -144,13 +144,13 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            kprwWarning() << "NO SUCH KEY:" << value.toString()
+            kprWarning() << "NO SUCH KEY:" << value.toString()
                 << "property=" << objectName();
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            kprwWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+            kprWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
                 << "count=" << count() << "value=" << value.toString()
                 << "property=" << objectName() << "\nActual combobox contents"
                 << list;

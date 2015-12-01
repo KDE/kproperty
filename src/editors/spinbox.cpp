@@ -26,7 +26,7 @@
 #include "KPropertyEditorView.h"
 #include "KPropertyUnit_p.h"
 #include "KPropertyWidgetsFactory.h"
-#include "kpropertywidgets_debug.h"
+#include "kproperty_debug.h"
 
 #include <QVariant>
 #include <QLineEdit>
@@ -100,7 +100,7 @@ void KPropertyIntSpinBox::setValue(const QVariant& value)
 {
     int v( value.toInt() );
     if (m_unsigned && v<0) {
-        kprwWarning() << "could not assign negative value" << v << "- assigning 0";
+        kprWarning() << "could not assign negative value" << v << "- assigning 0";
         v = 0;
     }
     QSpinBox::setValue(v);
