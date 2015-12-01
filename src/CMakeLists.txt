@@ -68,7 +68,7 @@ target_link_libraries(KPropertyCore
 generate_export_header(KPropertyCore)
 
 target_include_directories(KPropertyCore
-    PUBLIC $<BUILD_INTERFACE:${kpropertycore_INCLUDE_DIRS}>
+    PUBLIC "$<BUILD_INTERFACE:${kpropertycore_INCLUDE_DIRS}>"
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/KPropertyCore>"
 )
 
