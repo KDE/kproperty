@@ -123,7 +123,7 @@ install(FILES
             DESTINATION "${CMAKECONFIG_CORE_INSTALL_DIR}"
             COMPONENT Devel)
 
-if(${SAILFISH})
+if(SAILFISH)
   set(KDE_INSTALL_TARGETS_DEFAULT_ARGS LIBRARY DESTINATION lib)
 endif()
  
@@ -167,7 +167,7 @@ endif()
 install(FILES ${PRI_FILENAME}
         DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
-if (NOT ${SAILFISH})
+if (NOT SAILFISH)
 ecm_generate_pri_file(
     BASE_NAME KPropertyCore
     LIB_NAME KPropertyCore
@@ -177,7 +177,7 @@ ecm_generate_pri_file(
 )
 endif()
 
-if(KPROPERTY_WIDGETS AND NOT ${SAILFISH})
+if(KPROPERTY_WIDGETS AND NOT SAILFISH)
     ecm_generate_pri_file(
         BASE_NAME KPropertyWidgets
         LIB_NAME KPropertyWidgets

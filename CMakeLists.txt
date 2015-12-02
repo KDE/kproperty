@@ -18,7 +18,7 @@ endif()
 
 include(ECMGenerateHeaders)
 
-if (NOT ${SAILFISH})
+if (NOT SAILFISH)
 include(ECMGeneratePriFile)
 endif()
 
