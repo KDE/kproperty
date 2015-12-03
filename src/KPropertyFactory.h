@@ -75,7 +75,7 @@ public:
 
 //! Creator returning composed property object
 template<class ComposedProperty>
-class KPROPERTYCORE_EXPORT KComposedPropertyCreator : public KComposedPropertyCreatorInterface
+class KComposedPropertyCreator : public KComposedPropertyCreatorInterface
 {
 public:
     KComposedPropertyCreator() : KComposedPropertyCreatorInterface() {}
