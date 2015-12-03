@@ -1,10 +1,6 @@
-ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
-    REQUIRED_HEADERS kproperty_editors_HEADERS
-    # TODO: rename to camelcase, then uncomment "ORIGINAL CAMELCASE"
-    HEADER_NAMES
+set(KPROPERTY_EDITORS_HEADERS
         Utils
         BoolEdit
-        ColorEdit
         ComboBox
         CursorEdit
         DateEdit
@@ -22,6 +18,17 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
         #SymbolCombo
         TimeEdit
         #TODO UrlEdit
+)
+if(KPROPERTY_KF)
+    list(APPEND KPROPERTY_EDITORS_HEADERS
+        ColorEdit
+    )
+endif()
+
+ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
+    REQUIRED_HEADERS kproperty_editors_HEADERS
+    # TODO: rename to camelcase, then uncomment "ORIGINAL CAMELCASE"
+    HEADER_NAMES ${KPROPERTY_EDITORS_HEADERS}
 )
 
 ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS

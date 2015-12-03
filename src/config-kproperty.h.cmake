@@ -35,4 +35,8 @@
 //! @brief Defined if QtWidgets components of KProperty are enabled
 #cmakedefine KPROPERTY_WIDGETS
 
+//! @def KPROPERTY_KF
+//! @brief Defined if components depending on KDE Frameworks are enabled
+#cmakedefine KPROPERTY_KF
+
 #endif
