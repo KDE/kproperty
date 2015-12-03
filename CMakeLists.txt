@@ -38,6 +38,7 @@ include(MacroLogFeature)
 include(KPropertyMacros)
 
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
+simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
 
 set(KPROPERTY_VERSION "2.97.0") # Update this
 
@@ -48,12 +49,13 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
 if(KPROPERTY_WIDGETS)
     find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Widgets)
-    find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
-
-    #TODO KIO
+    if(KPROPERTY_KF)
+        find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
+        #TODO KIO
+    endif()
     get_git_revision_and_branch()
-    add_tests()
-    add_examples()
+    add_tests()    #TODO add tests for KPropertyCore, also working when KPROPERTY_WIDGETS is OFF
+    add_examples() #TODO add example for KPropertyCore, also working when KPROPERTY_WIDGETS is OFF
 endif()
 
 add_unfinished_features_option()

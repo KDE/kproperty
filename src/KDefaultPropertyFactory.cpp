@@ -18,11 +18,11 @@
 */
 
 #include "KDefaultPropertyFactory.h"
+#include "config-kproperty.h"
 /*
 #include "customproperty.h"*/
 #include "editors/booledit.h"
 #include "editors/combobox.h"
-#include "editors/coloredit.h"
 #include "editors/cursoredit.h"
 #include "editors/dateedit.h"
 #include "editors/datetimeedit.h"
@@ -42,13 +42,15 @@
 // #include "symbolcombo.h"
 #include "editors/timeedit.h"
 // #include "urledit.h"
+#ifdef KPROPERTY_KF
+# include "editors/coloredit.h"
+#endif
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyWidgetsFactory()
 {
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
     addEditor( KProperty::Cursor, new KPropertyCursorDelegate );
-    addEditor( KProperty::Color, new KPropertyColorComboDelegate );
     addEditor( KProperty::Date, new KPropertyDateDelegate );
     addEditor( KProperty::DateTime, new KPropertyDateTimeDelegate );
     addEditor( KProperty::Double, new KPropertyDoubleSpinBoxDelegate );
@@ -69,6 +71,9 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
 //! @todo    addEditor( KProperty::UInt, new IntSpinBoxDelegate );
 //! @todo addEditor( KProperty::ULongLong, new LongLongSpinBoxDelegate );
     addEditor( KProperty::ValueFromList, new KPropertyComboBoxDelegate );
+#ifdef KPROPERTY_KF
+    addEditor( KProperty::Color, new KPropertyColorComboDelegate );
+#endif
 }
 
 KDefaultPropertyFactory::~KDefaultPropertyFactory()

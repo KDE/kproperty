@@ -15,7 +15,6 @@ if(KPROPERTY_WIDGETS)
     set(kpropertywidgets_LIB_SRCS
         editors/utils.cpp
         editors/booledit.cpp
-        editors/coloredit.cpp
         editors/combobox.cpp
         editors/cursoredit.cpp
         editors/dateedit.cpp
@@ -47,6 +46,12 @@ if(KPROPERTY_WIDGETS)
         KPropertyLineStyleModel_p.cpp
         KPropertyLineStyleItemDelegate_p.cpp
     )
+
+    if(KPROPERTY_KF)
+        list(APPEND kpropertywidgets_LIB_SRCS
+            editors/coloredit.cpp
+        )
+    endif()
 
     ecm_create_qm_loader(kpropertywidgets_LIB_SRCS kpropertywidgets_qt)
 
@@ -82,9 +87,17 @@ if(KPROPERTY_WIDGETS)
     add_library(KPropertyWidgets SHARED ${kpropertywidgets_LIB_SRCS})
     target_link_libraries(KPropertyWidgets
         KPropertyCore
-        KF5::WidgetsAddons
-        KF5::GuiAddons
     )
+    if(KPROPERTY_KF)
+        target_link_libraries(KPropertyWidgets
+            KF5::WidgetsAddons
+            KF5::GuiAddons
+        )
+    else()
+        target_link_libraries(KPropertyWidgets
+            Qt5::Widgets
+        )
+    endif()
     generate_export_header(KPropertyWidgets)
     target_include_directories(KPropertyWidgets
         PUBLIC "$<BUILD_INTERFACE:${kpropertywidgets_INCLUDE_DIRS}>"
