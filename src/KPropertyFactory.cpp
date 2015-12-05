@@ -70,38 +70,6 @@ QHash<int, KComposedPropertyCreatorInterface*> KPropertyFactory::composedPropert
     return d->composedPropertyCreators;
 }
 
-#ifdef KPROPERTY_WIDGETS
-QHash<int, KPropertyEditorCreatorInterface*> KPropertyFactory::editorCreators() const
-{
-    return d->editorCreators;
-}
-
-QHash<int, KPropertyValuePainterInterface*> KPropertyFactory::valuePainters() const
-{
-    return d->valuePainters;
-}
-
-QHash<int, KPropertyValueDisplayInterface*> KPropertyFactory::valueDisplays() const
-{
-    return d->valueDisplays;
-}
-
-void KPropertyFactory::addEditor(int type, KPropertyEditorCreatorInterface *creator)
-{
-    addEditorInternal( type, creator, true );
-    if (dynamic_cast<KComposedPropertyCreatorInterface*>(creator)) {
-        addComposedPropertyCreatorInternal( type,
-            dynamic_cast<KComposedPropertyCreatorInterface*>(creator), false/* !own*/ );
-    }
-    if (dynamic_cast<KPropertyValuePainterInterface*>(creator)) {
-        addPainterInternal( type, dynamic_cast<KPropertyValuePainterInterface*>(creator), false/* !own*/ );
-    }
-    if (dynamic_cast<KPropertyValueDisplayInterface*>(creator)) {
-        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(creator), false/* !own*/ );
-    }
-}
-#endif
-
 void KPropertyFactory::addComposedPropertyCreator( int type, KComposedPropertyCreatorInterface* creator )
 {
     addComposedPropertyCreatorInternal( type, creator, true );
