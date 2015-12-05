@@ -27,10 +27,6 @@
 
 #include <QPointer>
 
-#ifdef KPROPERTY_WIDGETS
-#include <QSizePolicy>
-#endif
-
 //! @internal
 class KProperty::Private
 {
@@ -331,7 +327,7 @@ void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useC
         kprWarning() << "COULD NOT SET value to a null property";
         return;
     }
-    QVariant currentValue = this->value();
+    const QVariant currentValue = this->value();
     if (!compatibleTypes(currentValue, value)) {
         kprWarning() << "INCOMPATIBLE TYPES! old=" << currentValue << "new=" << value;
     }
@@ -362,10 +358,8 @@ void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useC
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
-#ifdef KPROPERTY_WIDGETS
-    } else if (t == QVariant::SizePolicy) {
-        ch = (currentValue.value<QSizePolicy>() != value.value<QSizePolicy>());
-#endif
+    } else if (d->composed && useComposedProperty) {
+        ch = !d->composed->valuesEqual(currentValue, value);
     }
     else {
         ch = (currentValue != value);
