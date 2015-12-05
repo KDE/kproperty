@@ -20,8 +20,8 @@
 #ifndef KPROPERTY_COLOREDIT_H
 #define KPROPERTY_COLOREDIT_H
 
-#include "kpropertywidgets_export.h"
 #include "KPropertyWidgetsFactory.h"
+
 #include <KColorCombo>
 
 //! Color combo box

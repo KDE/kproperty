@@ -23,7 +23,6 @@
 #define KPROPERTY_COMBOBOX_H
 
 #include "KPropertyWidgetsFactory.h"
-#include "kpropertywidgets_export.h"
 
 #include <QComboBox>
 
