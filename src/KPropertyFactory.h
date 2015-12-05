@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,6 +53,11 @@ public:
     }
 
     void setChildValueChangedEnabled(bool set) { m_childValueChangedEnabled = set; }
+
+    /*! @return true if values @a first and @a second are equal. Used in KProperty::setValue()
+     to check if value has been changed before setting value.
+     Default implementation uses operator==. */
+    inline virtual bool valuesEqual(const QVariant &first, const QVariant &second) { return first == second; }
 
 protected:
     virtual void childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue) = 0;

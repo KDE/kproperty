@@ -130,3 +130,8 @@ void KSizePolicyComposedProperty::childValueChanged(KProperty *child,
 
     child->parent()->setValue(sp, true, false);
 }
+
+bool KSizePolicyComposedProperty::valuesEqual(const QVariant &first, const QVariant &second)
+{
+    return first.value<QSizePolicy>() == second.value<QSizePolicy>();
+}

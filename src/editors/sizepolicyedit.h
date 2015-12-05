@@ -32,6 +32,8 @@ public:
 
     virtual void childValueChanged(KProperty *child,
         const QVariant &value, bool rememberOldValue);
+
+    virtual bool valuesEqual(const QVariant &first, const QVariant &second) Q_DECL_OVERRIDE;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertySizePolicyDelegate : public KPropertyLabelCreator,
