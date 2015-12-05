@@ -125,6 +125,11 @@ public:
 
     KPropertyFactoryManager();
     ~KPropertyFactoryManager();
+
+    //! Adds function @a initFunction that will be called after the manager is created.
+    //! Useful for creation custom factories.
+    static void addInitFunction(void (*initFunction)());
+
 private:
 
     class Private;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,17 +61,26 @@ public:
     }
     ~Private()
     {
-        qDeleteAll(factories);
     }
 
-    QSet<KPropertyFactory*> factories;
     QHash<int, KPropertyEditorCreatorInterface*> editorCreators;
     QHash<int, KPropertyValuePainterInterface*> valuePainters;
     QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
-
 };
 
- Q_GLOBAL_STATIC(KPropertyWidgetsFactoryManager, _self)
+Q_GLOBAL_STATIC(KPropertyWidgetsFactoryManager, _self)
+
+//! @internal Make sure sure the KPropertyWidgetsFactoryManager is created after
+//! KPropertyFactoryManager (delayed). Unless KPropertyFactoryManager is created,
+//! KPropertyWidgetsFactoryManager isn't created.
+//! @todo is this worth putting in a reusable macro?
+struct KPropertyWidgetsFactoryManagerInitializer {
+    KPropertyWidgetsFactoryManagerInitializer() {
+        KPropertyFactoryManager::addInitFunction(&initMe);
+    }
+    static void initMe() { KPropertyWidgetsFactoryManager::self(); }
+};
+KPropertyWidgetsFactoryManagerInitializer init;
 
 //! @internal
 class KPropertyWidgetsFactory::Private
@@ -94,7 +103,6 @@ public:
     QSet<KPropertyEditorCreatorInterface*> editorCreatorsSet;
     QSet<KPropertyValuePainterInterface*> valuePaintersSet;
     QSet<KPropertyValueDisplayInterface*> valueDisplaysSet;
-
 };
 
 KPropertyWidgetsFactory::KPropertyWidgetsFactory()
@@ -215,10 +223,8 @@ void KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(QWidget *wid
 //------------
 
 KPropertyWidgetsFactoryManager::KPropertyWidgetsFactoryManager()
-        : KPropertyFactoryManager()
-        , d(new Private)
+        : d(new Private)
 {
-    setObjectName(QLatin1String("KPropertyWidgetsFactoryManager"));
     registerFactory(new KDefaultPropertyFactory);
 }
 
@@ -234,7 +240,7 @@ KPropertyWidgetsFactoryManager* KPropertyWidgetsFactoryManager::self()
 
 void KPropertyWidgetsFactoryManager::registerFactory(KPropertyWidgetsFactory *factory)
 {
-    d->factories.insert(factory);
+    KPropertyFactoryManager::self()->registerFactory(factory);
 
     QHash<int, KPropertyEditorCreatorInterface*>::ConstIterator editorCreatorsItEnd
         = factory->editorCreators().constEnd();
