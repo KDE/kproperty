@@ -22,13 +22,7 @@
 #include "KPropertyUnit_p.h"
 #include "kproperty_debug.h"
 
-#ifdef KPROPERTY_WIDGETS
-#include <QTransform>
-#endif
-
 #include <QLocale>
-
-#include <cmath>
 
 // ensure the same order as in KPropertyUnit::Unit
 static const char* const unitNameList[KPropertyUnit::TypeCount] =
@@ -372,18 +366,6 @@ qreal KPropertyUnit::parseAngle(const QString& _value, qreal defaultVal)
 
     return defaultVal;
 }
-
-#ifdef KPROPERTY_WIDGETS
-qreal KPropertyUnit::approxTransformScale(const QTransform &t)
-{
-    return std::sqrt(t.determinant());
-}
-
-void KPropertyUnit::adjustByPixelTransform(const QTransform &t)
-{
-    m_pixelConversion *= approxTransformScale(t);
-}
-#endif
 
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, const KPropertyUnit &unit)
