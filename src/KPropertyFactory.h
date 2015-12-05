@@ -115,14 +115,10 @@ class KPROPERTYCORE_EXPORT KPropertyFactoryManager : public QObject
 {
     Q_OBJECT
 public:
-    bool isEditorForTypeAvailable( int type ) const;
-
     KComposedPropertyInterface* createComposedProperty(KProperty *parent);
 
     //! Registers factory @a factory. It becomes owned by the manager.
     void registerFactory(KPropertyFactory *factory);
-
-    KCustomProperty* createCustomProperty( KProperty *parent );
 
     /*! \return a pointer to a factory manager instance.*/
     static KPropertyFactoryManager* self();
