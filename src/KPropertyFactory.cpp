@@ -38,7 +38,7 @@ public:
     QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators;
 };
 
- Q_GLOBAL_STATIC(KPropertyFactoryManager, _self)
+Q_GLOBAL_STATIC(KPropertyFactoryManager, _self)
 
 //! @internal
 class KPropertyFactory::Private
@@ -54,6 +54,10 @@ public:
     QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators;
     QSet<KComposedPropertyCreatorInterface*> composedPropertyCreatorsSet;
 };
+
+typedef QList<void (*)()> InitFunctions;
+//! @internal Used by KPropertyFactoryManager::addInitFunction()
+Q_GLOBAL_STATIC(InitFunctions, _initFunctions)
 
 KPropertyFactory::KPropertyFactory()
     : d( new Private )
@@ -89,8 +93,6 @@ KPropertyFactoryManager::KPropertyFactoryManager()
         , d(new Private)
 {
     setObjectName(QLatin1String("KPropertyFactoryManager"));
-    //TODO ??? registerFactory(new KDefaultPropertyFactory);
-
 }
 
 KPropertyFactoryManager::~KPropertyFactoryManager()
@@ -100,6 +102,14 @@ KPropertyFactoryManager::~KPropertyFactoryManager()
 
 KPropertyFactoryManager* KPropertyFactoryManager::self()
 {
+    if (_self.exists()) { // avoid recursion: initFunctions below may call self()
+        return _self;
+    }
+    _self(); // KPropertyFactoryManager should exist as initFunctions may need it
+    foreach(void (*initFunction)(), *_initFunctions) {
+        initFunction();
+    }
+    _initFunctions->clear();
     return _self;
 }
 
@@ -119,6 +129,12 @@ KComposedPropertyInterface* KPropertyFactoryManager::createComposedProperty(KPro
 {
     const KComposedPropertyCreatorInterface *creator = d->composedPropertyCreators.value( parent->type() );
     return creator ? creator->createComposedProperty(parent) : 0;
+}
+
+//static
+void KPropertyFactoryManager::addInitFunction(void (*initFunction)())
+{
+    _initFunctions->append(initFunction);
 }
 
 //! @todo
