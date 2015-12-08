@@ -235,6 +235,8 @@ KPropertyWidgetsFactoryManager::~KPropertyWidgetsFactoryManager()
 
 KPropertyWidgetsFactoryManager* KPropertyWidgetsFactoryManager::self()
 {
+    KPropertyFactoryManager::self(); // make sure KPropertyFactoryManager instance exists
+                                     // before KPropertyWidgetsFactoryManager ctor is called
     return _self;
 }
 

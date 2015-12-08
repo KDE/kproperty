@@ -40,7 +40,7 @@ include(KPropertyMacros)
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
 
-set(KPROPERTY_VERSION "2.97.0") # Update this
+set(KPROPERTY_VERSION "2.98.0") # Update this
 
 # Dependencies
 set(REQUIRED_QT_VERSION "5.2.0")
