@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@ class KProperty::Private
 {
 public:
     Private()
-            : type(0), caption(0), listData(0), changed(false), storable(true),
+            : type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
             sets(0), parent(0), children(0), relatedProperties(0)
@@ -150,12 +150,10 @@ KProperty::KProperty(const QByteArray &name, const QVariant &value,
     d->setCaptionForDisplaying(caption);
     d->description = description;
 
-    if (type == (int)Auto)
-        d->type = value.type();
-    else
-        d->type = type;
-
-    d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
+    if (type == int(Auto)) {
+        type = value.type();
+    }
+    setType(type);
 
     if (parent)
         parent->addChild(this);
@@ -170,10 +168,11 @@ KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStr
     d->name = name;
     d->setCaptionForDisplaying(caption);
     d->description = description;
-    d->type = type;
     setListData(keys, strings);
-
-    d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
+    if (type == int(Auto)) {
+        type = value.type();
+    }
+    setType(type);
 
     if (parent)
         parent->addChild(this);
@@ -188,10 +187,11 @@ KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
     d->name = name;
     d->setCaptionForDisplaying(caption);
     d->description = description;
-    d->type = type;
     d->listData = listData;
-
-    d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
+    if (type == int(Auto)) {
+        type = value.type();
+    }
+    setType(type);
 
     if (parent)
         parent->addChild(this);
@@ -265,7 +265,11 @@ KProperty::type() const
 void
 KProperty::setType(int type)
 {
-    d->type = type;
+    if (d->type != type) {
+        d->type = type;
+        delete d->composed;
+        d->composed = KPropertyFactoryManager::self()->createComposedProperty(this);
+    }
 }
 
 QString
