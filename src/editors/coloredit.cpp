@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,11 +20,11 @@
 #include "coloredit.h"
 #include "KPropertyUtils_p.h"
 
-#include <KColorCollection>
-
-#include <QVariant>
 #include <QColor>
 #include <QPainter>
+
+#ifdef KPROPERTY_KF
+#include <KColorCollection>
 
 Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, (QLatin1String("Oxygen.colors")))
 
@@ -39,6 +39,16 @@ KPropertyColorComboEditor::KPropertyColorComboEditor(QWidget *parent)
         colors += g_oxygenColors->color(i);
     }
     setColors(colors);
+
+    int paddingTop = 1;
+    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+        setFrame(false);
+        paddingTop = 0;
+    }
+    QString styleSheet = QString::fromLatin1("QComboBox { \
+        border: 1px; \
+        padding-top: %1px; padding-left: 1px; }").arg(paddingTop);
+    setStyleSheet(styleSheet);
 }
 
 KPropertyColorComboEditor::~KPropertyColorComboEditor()
@@ -59,14 +69,28 @@ void KPropertyColorComboEditor::slotValueChanged(const QColor&)
 {
     emit commitData(this);
 }
+#endif // KPROPERTY_KF
 
-QWidget * KPropertyColorComboDelegate::createEditor( int type, QWidget *parent,
-    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+QWidget * KPropertyColorComboDelegate::createEditor(int type, QWidget *parent,
+    const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(type)
     Q_UNUSED(option)
     Q_UNUSED(index)
+#ifdef KPROPERTY_KF
     return new KPropertyColorComboEditor(parent);
+#else
+    return KPropertyEditorCreatorInterface::createEditor(type, parent, option, index);
+#endif
+}
+
+static QString colorToName(const QColor &color, const QLocale &locale)
+{
+    if (!color.isValid()) {
+        return locale.language() == QLocale::C ? QString::fromLatin1("#invalid")
+                                     : QObject::tr("#invalid", "Invalid color");
+    }
+    return color.alpha() == 255 ? color.name(QColor::HexRgb) : color.name(QColor::HexArgb);
 }
 
 void KPropertyColorComboDelegate::paint( QPainter * painter,
@@ -82,6 +106,11 @@ void KPropertyColorComboDelegate::paint( QPainter * painter,
     QFont f(option.font);
     f.setFamily(QLatin1String("courier"));
     painter->setFont(f);
-    painter->drawText(option.rect, Qt::AlignCenter, b.color().name());
+    painter->drawText(option.rect, Qt::AlignCenter, colorToName(b.color(), QLocale()));
     painter->restore();
+}
+
+QString KPropertyColorComboDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    return colorToName(value.value<QColor>(), locale);
 }

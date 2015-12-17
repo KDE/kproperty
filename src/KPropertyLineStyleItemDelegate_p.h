@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +30,10 @@ public:
     virtual ~KPropertyLineStyleItemDelegate();
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    static void paintItem(QPainter *painter, const QPen &pen_, const QRect &rect, const QStyleOption &option);
+
+    static QString styleName(Qt::PenStyle style, const QLocale &locale);
 };
 
 #endif

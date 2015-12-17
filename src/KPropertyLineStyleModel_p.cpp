@@ -45,7 +45,7 @@ QVariant KPropertyLineStyleModel::data(const QModelIndex &index, int role) const
     switch(role) {
     case Qt::DecorationRole: {
         QPen pen(Qt::black);
-        pen.setWidth(2);
+        pen.setWidth(3);
         if (index.row() < Qt::CustomDashLine)
             pen.setStyle(static_cast<Qt::PenStyle>(index.row()));
         else if (index.row() < m_styles.count())

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_RECTEDIT_H
-#define KPROPERTY_RECTEDIT_H
+#ifndef KPROPERTY_RECTFEDITOR_H
+#define KPROPERTY_RECTFEDITOR_H
 
 #include "KPropertyWidgetsFactory.h"
 
-class KPROPERTYWIDGETS_EXPORT KRectComposedProperty : public KComposedPropertyInterface
+class KPROPERTYWIDGETS_EXPORT KRectFComposedProperty : public KComposedPropertyInterface
 {
 public:
-    explicit KRectComposedProperty(KProperty *parent);
+    explicit KRectFComposedProperty(KProperty *parent);
 
     virtual void setValue(KProperty *property,
         const QVariant &value, bool rememberOldValue);
@@ -34,11 +34,11 @@ public:
         const QVariant &value, bool rememberOldValue);
 };
 
-class KPROPERTYWIDGETS_EXPORT KPropertyRectDelegate : public KPropertyLabelCreator,
-                                                      public KComposedPropertyCreator<KRectComposedProperty>
+class KPROPERTYWIDGETS_EXPORT KPropertyRectFDelegate : public KPropertyLabelCreator,
+                                                       public KComposedPropertyCreator<KRectFComposedProperty>
 {
 public:
-    KPropertyRectDelegate();
+    KPropertyRectFDelegate();
 
     virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };

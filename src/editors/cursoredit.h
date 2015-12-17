@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,7 +38,8 @@ public:
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface,
-                                                 public KPropertyValuePainterInterface
+                                                        public KPropertyValuePainterInterface,
+                                                        public KPropertyValueDisplayInterface
 {
 public:
     KPropertyCursorDelegate();
@@ -48,6 +49,8 @@ public:
 
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };
 
 #endif

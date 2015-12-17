@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,28 +17,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_UTILS_H
-#define KPROPERTY_UTILS_H
+#ifndef KPROPERTYCORE_UTILS_P_H
+#define KPROPERTYCORE_UTILS_P_H
 
-#include "kpropertywidgets_export.h"
+#include "kpropertycore_export.h"
+#include <QString>
 
-#include <QWidget>
-
-//! @short A container widget that can be used to split information into hideable sections
-//! for a property editor-like panes.
-class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
+namespace KPropertyUtils
 {
-public:
-    KPropertyGroupWidget(const QString& title, QWidget* parent);
-    ~KPropertyGroupWidget();
 
-    void setContents(QWidget* contents);
+//! @return key for enum value with @a enumIndex of enum @a enumName
+//! Example call: keyForEnumValue("CursorShape", Qt::WaitCursor) returns "WaitCursor".
+KPROPERTYCORE_EXPORT QString keyForEnumValue(const char *enumName, int enumIndex);
 
-protected:
-    virtual bool event(QEvent * e);
-
-    class Private;
-    Private * const d;
-};
+}
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,12 +37,12 @@ public:
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertySizePolicyDelegate : public KPropertyLabelCreator,
-                                                     public KComposedPropertyCreator<KSizePolicyComposedProperty>
+                                                            public KComposedPropertyCreator<KSizePolicyComposedProperty>
 {
 public:
-    KPropertySizePolicyDelegate() {}
+    KPropertySizePolicyDelegate();
 
-    virtual QString displayText( const QVariant& value ) const;
+    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 
     static const KPropertyListData& listData();
 };

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,13 +81,11 @@ public:
 
     QVariant value() const;
     void setValue(const QVariant &value);
-
-Q_SIGNALS:
-    void commitData( QWidget * editor );
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyBoolDelegate : public KPropertyEditorCreatorInterface,
-                                               public KPropertyValuePainterInterface
+                                                      public KPropertyValuePainterInterface,
+                                                      public KPropertyValueDisplayInterface
 {
 public:
     KPropertyBoolDelegate();
@@ -97,6 +95,10 @@ public:
 
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual QString propertyValueToString(const KProperty* prop, const QLocale &locale) const;
+
+    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };
 
 #endif

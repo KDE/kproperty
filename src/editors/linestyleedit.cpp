@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +18,10 @@
 */
 
 #include "linestyleedit.h"
+#include "KPropertyWidgetsFactory.h"
+#include "combobox.h"
+#include "KPropertyLineStyleItemDelegate_p.h"
+#include "KPropertyUtils_p.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -26,18 +30,24 @@
 KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
     : KPropertyLineStyleSelector(parent)
 {
-    setFrame(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 
-    QString styleSheet;
-    QPalette p = QGuiApplication::palette();
-    QColor focus = p.highlight().color();
-
-    styleSheet = QString::fromLatin1("KoLineStyleSelector { \
-    border: 1px solid %1; \
-    border-radius: 0px; \
-    padding: 0px 18px; }").arg(focus.name());
-
+    int paddingTop = 1;
+    int paddingLeft = 0;
+    const QString style(parent->style()->objectName());
+    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+        setFrame(false);
+        paddingTop = 0;
+    }
+    if (style == QLatin1String("windows") || style == QLatin1String("fusion")) {
+        paddingLeft = 3;
+    } else if (style == QLatin1String("windowsvista")) {
+        paddingLeft = 2;
+    }
+    QString styleSheet = QString::fromLatin1("KPropertyLineStyleSelector { \
+        %1 \
+        padding-top: %2px; padding-left: %3px; }").arg(KPropertyComboBoxEditor::borderSheet(this))
+                                                  .arg(paddingTop).arg(paddingLeft);
     setStyleSheet(styleSheet);
 }
 
@@ -52,7 +62,8 @@ QVariant KPropertyLineStyleComboEditor::value() const
 
 static bool hasVisibleStyle(const QVariant &value)
 {
-    return !value.isNull() && value.canConvert(QVariant::Int) && value.toInt() < Qt::CustomDashLine;
+    return !value.isNull() && value.canConvert(QVariant::Int) && value.toInt() < Qt::CustomDashLine
+            && value.toInt() >= Qt::NoPen;
 }
 
 void KPropertyLineStyleComboEditor::setValue(const QVariant &value)
@@ -82,19 +93,23 @@ void KPropertyLineStyleComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
-    QPen pen(Qt::NoPen);
+    Qt::PenStyle penStyle = Qt::NoPen;
     if (hasVisibleStyle(index.data(Qt::EditRole))) {
-        pen.setBrush(option.palette.text());
-        pen.setWidth(3);
-        pen.setStyle(static_cast<Qt::PenStyle>(index.data(Qt::EditRole).toInt()));
+        penStyle = static_cast<Qt::PenStyle>(index.data(Qt::EditRole).toInt());
     }
-    painter->setPen(pen);
     const QWidget *paintedWidget = dynamic_cast<QWidget*>(painter->device());
     const QStyle *style = paintedWidget ? paintedWidget->style() : qApp->style();
     QStyleOptionComboBox cbOption;
     cbOption.rect = option.rect;
     QRect r = style->subControlRect(QStyle::CC_ComboBox, &cbOption, QStyle::SC_ComboBoxEditField, 0);
     r.setRight(option.rect.right() - (r.left() - option.rect.left()));
-    painter->drawLine(r.left(), r.center().y(), r.right(), r.center().y());
+    KPropertyLineStyleItemDelegate::paintItem(painter, QPen(penStyle), r, option);
     painter->restore();
+}
+
+QString KPropertyLineStyleComboDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    Qt::PenStyle style = (value.isNull() || !value.canConvert(QVariant::Int) || value.toInt() > Qt::CustomDashLine
+                          || value.toInt() < Qt::NoPen) ? Qt::NoPen : static_cast<Qt::PenStyle>(value.toInt());
+    return KPropertyLineStyleItemDelegate::styleName(style, locale);
 }
