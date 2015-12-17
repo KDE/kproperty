@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,8 @@
 #include <QIcon>
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QDate>
+#include <QCheckBox>
 
 Window::Window()
         : QWidget()
@@ -82,7 +84,8 @@ Window::Window()
         m_set.addProperty(new KProperty("Int", 2, "Int"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Double") {
-        m_set.addProperty(new KProperty("Double", 3.1415, "Double"), group);
+        m_set.addProperty(p = new KProperty("Double", 3.14159, "Double"), group);
+        p->setOption("precision", 4); // will round to 3.1416
     }
     if (singleProperty.isEmpty() || singleProperty=="Bool") {
         m_set.addProperty(new KProperty("Bool", QVariant(true), "Bool"), group);
@@ -160,7 +163,8 @@ Window::Window()
         p->setIcon("kpaint");
     }
     if (singleProperty.isEmpty() || singleProperty=="Font") {
-        QFont myFont("Times", 12);
+        QFont myFont("Times New Roman", 12);
+        myFont.setUnderline(true);
         m_set.addProperty(p = new KProperty("Font", myFont, "Font"), group);
         p->setIcon("fonts");
     }
@@ -184,11 +188,22 @@ Window::Window()
 
 // qDebug() << m_set.groupNames();
     QVBoxLayout *lyr = new QVBoxLayout(this);
-    KPropertyEditorView *editorView = new KPropertyEditorView(this);
-    lyr->addWidget(editorView);
-    editorView->changeSet(&m_set, KPropertyEditorView::ExpandChildItems);
+    m_editorView = new KPropertyEditorView(this);
+    lyr->addWidget(m_editorView);
+    m_editorView->changeSet(&m_set, KPropertyEditorView::ExpandChildItems);
+    m_showGrid = new QCheckBox("Show grid");
+    m_showGrid->setChecked(true);
+    connect(m_showGrid, &QCheckBox::stateChanged, this, &Window::showGrid);
+    QHBoxLayout *hlyr = new QHBoxLayout;
+    lyr->addLayout(hlyr);
+    hlyr->addWidget(m_showGrid);
+    m_showFrame = new QCheckBox("Show frame");
+    m_showFrame->setChecked(true);
+    connect(m_showFrame, &QCheckBox::stateChanged, this, &Window::showFrame);
+    hlyr->addWidget(m_showFrame);
+    hlyr->addStretch(1);
     resize(400, qApp->desktop()->height() - 200);
-    editorView->setFocus();
+    m_editorView->setFocus();
     qDebug() << m_set;
 }
 
@@ -203,4 +218,15 @@ void Window::parseCommandLine()
     m_parser.addOption(m_propertyOption);
     m_parser.addOption(m_roOption);
     m_parser.process(*(QCoreApplication::instance()));
+}
+
+void Window::showGrid(int state)
+{
+    m_editorView->setGridLineColor(
+        state == Qt::Checked ? KPropertyEditorView::defaultGridLineColor() : QColor());
+}
+
+void Window::showFrame(int state)
+{
+    m_editorView->setFrameStyle(state == Qt::Checked ? QFrame::Box : QFrame::NoFrame);
 }

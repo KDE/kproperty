@@ -42,8 +42,8 @@ public:
 
     virtual ~KPropertyEditorCreatorInterface();
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
+    virtual QWidget * createEditor(int type, QWidget *parent,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     /*! Options for altering the editor widget creation process,
         used by KPropertyFactoryManager::createEditor(). */
@@ -69,20 +69,8 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
 };
 
-class KPROPERTYWIDGETS_EXPORT KPropertyValueDisplayInterface
-{
-public:
-    KPropertyValueDisplayInterface();
-    virtual ~KPropertyValueDisplayInterface();
-    virtual QString displayTextForProperty( const KProperty* property ) const
-        { return displayText(property->value()); }
-    virtual QString displayText( const QVariant& value ) const
-        { return value.toString(); }
-};
-
-
 //! Label widget that can be used for displaying text-based read-only items
-//! Used in LabelCreator.
+//! Used in KPropertyLabelCreator.
 class KPROPERTYWIDGETS_EXPORT KPropertyLabel : public QLabel
 {
     Q_OBJECT
@@ -102,6 +90,9 @@ private:
     const KPropertyValueDisplayInterface *m_iface;
     QVariant m_value;
 };
+
+KPROPERTYWIDGETS_EXPORT void paintInternal(const KPropertyValueDisplayInterface *iface, QPainter *painter,
+                                           const QStyleOptionViewItem & option, const QModelIndex & index);
 
 //! Creator returning editor
 template<class Widget>
@@ -123,15 +114,10 @@ public:
         return new Widget(parent, this);
     }
 
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    virtual void paint(QPainter *painter,
+        const QStyleOptionViewItem & option, const QModelIndex & index) const
     {
-        painter->save();
-        QRect r(option.rect);
-        r.setLeft(r.left()+1);
-        painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
-            displayText( index.data(Qt::EditRole) ) );
-        painter->restore();
+        paintInternal(this, painter, option, index);
     }
 };
 
@@ -146,7 +132,6 @@ public:
 
     QHash<int, KPropertyEditorCreatorInterface*> editorCreators() const;
     QHash<int, KPropertyValuePainterInterface*> valuePainters() const;
-    QHash<int, KPropertyValueDisplayInterface*> valueDisplays() const;
 
     //! Adds editor creator @a creator for type @a type.
     //! The creator becomes owned by the factory.
@@ -154,11 +139,9 @@ public:
 
     void addPainter(int type, KPropertyValuePainterInterface *painter);
 
-    void addDisplay(int type, KPropertyValueDisplayInterface *display);
-
     static void paintTopGridLine(QWidget *widget);
-    static void setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent,
-        const QString& extraStyleSheet = QString());
+    static void setTopAndBottomBordersUsingStyleSheet(QWidget *widget,
+                                              const QString& extraStyleSheet = QString());
 
 protected:
     void addEditorInternal(int type, KPropertyEditorCreatorInterface *editor, bool own = true);
@@ -166,10 +149,6 @@ protected:
     //! Adds value painter @a painter for type @a type.
     //! The painter becomes owned by the factory.
     void addPainterInternal(int type, KPropertyValuePainterInterface *painter, bool own = true);
-
-    //! Adds value-to-text converted @a painter for type @a type.
-    //! The converter becomes owned by the factory.
-    void addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own = true);
 
     class Private;
     Private * const d;
@@ -193,12 +172,6 @@ public:
         QPainter * painter,
         const QStyleOptionViewItem & option,
         const QModelIndex & index ) const;
-
-    bool canConvertValueToText( int type ) const;
-
-    bool canConvertValueToText( const KProperty* property ) const;
-
-    QString convertValueToText( const KProperty* property ) const;
 
     //! Registers factory @a factory. It becomes owned by the manager.
     void registerFactory(KPropertyWidgetsFactory *factory);

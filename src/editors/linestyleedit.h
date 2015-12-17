@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,7 +50,8 @@ protected Q_SLOTS:
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyLineStyleComboDelegate : public KPropertyEditorCreatorInterface,
-                                                         public KPropertyValuePainterInterface
+                                                                public KPropertyValuePainterInterface,
+                                                                public KPropertyValueDisplayInterface
 {
 public:
     KPropertyLineStyleComboDelegate() {options.removeBorders = false;}
@@ -60,6 +61,8 @@ public:
 
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,14 +21,25 @@
 
 #include <QSize>
 
-static const char SIZEEDIT_MASK[] = "%1x%2";
+KPropertySizeDelegate::KPropertySizeDelegate()
+{
+}
 
-QString KPropertySizeDelegate::displayText( const QVariant& value ) const
+QString KPropertySizeDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QSize s(value.toSize());
-    return QString::fromLatin1(SIZEEDIT_MASK)
-        .arg(s.width())
-        .arg(s.height());
+    if (s.isNull()) {
+        if (locale.language() == QLocale::C) {
+            return QString();
+        }
+        return QObject::tr("None", "Null value");
+    }
+    if (locale.language() == QLocale::C) {
+        return QString::fromLatin1("%1x%2").arg(s.width()).arg(s.height());
+    }
+    return QObject::tr("%1x%2", "Size")
+        .arg(locale.toString(s.width()))
+        .arg(locale.toString(s.height()));
 }
 
 //------------

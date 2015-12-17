@@ -112,7 +112,7 @@ public Q_SLOTS:
      (as if the user had pressed Enter key). */
     void acceptInput();
 
-    //! Sets grid line color
+    //! Sets color of grid lines. Use invalid color QColor() to hide grid lines.
     void setGridLineColor(const QColor& color);
 
 Q_SIGNALS:

@@ -128,7 +128,7 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
             return prop->value();
         }
         else if (role == Qt::DisplayRole) {
-            return KPropertyWidgetsFactoryManager::self()->convertValueToText(prop);
+            return KPropertyFactoryManager::self()->propertyValueToLocalizedString(prop);
         }
     }
     return QVariant();

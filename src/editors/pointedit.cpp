@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,14 +23,25 @@
 
 #include <QPoint>
 
-static const char POINTEDIT_MASK[] = "%1, %2";
+KPropertyPointDelegate::KPropertyPointDelegate()
+{
+}
 
-QString KPropertyPointDelegate::displayText( const QVariant& value ) const
+QString KPropertyPointDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QPoint p(value.toPoint());
-    return QString::fromLatin1(POINTEDIT_MASK)
-        .arg(p.x())
-        .arg(p.y());
+    if (p.isNull()) {
+        if (locale.language() == QLocale::C) {
+            return QString();
+        }
+        return QObject::tr("None", "Null value");
+    }
+    if (locale.language() == QLocale::C) {
+        return QString::fromLatin1("%1, %2").arg(p.x()).arg(p.y());
+    }
+    return QObject::tr("%1, %2", "Point")
+        .arg(locale.toString(p.x()))
+        .arg(locale.toString(p.y()));
 }
 
 //------------

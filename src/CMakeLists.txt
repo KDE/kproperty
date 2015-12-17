@@ -6,6 +6,7 @@ set(kpropertycore_LIB_SRCS
    KPropertySet.cpp
    KPropertyUnit_p.cpp
    KPropertyFactory.cpp
+   KPropertyCoreUtils.cpp
    kproperty_debug.cpp
 )
 
@@ -15,6 +16,7 @@ if(KPROPERTY_WIDGETS)
     set(kpropertywidgets_LIB_SRCS
         editors/utils.cpp
         editors/booledit.cpp
+        editors/coloredit.cpp
         editors/combobox.cpp
         editors/cursoredit.cpp
         editors/dateedit.cpp
@@ -25,6 +27,7 @@ if(KPROPERTY_WIDGETS)
         editors/pointedit.cpp
         editors/pointfedit.cpp
         editors/rectedit.cpp
+        editors/KPropertyRectFEditor.cpp
         editors/sizeedit.cpp
         editors/sizefedit.cpp
         editors/sizepolicyedit.cpp
@@ -46,12 +49,6 @@ if(KPROPERTY_WIDGETS)
         KPropertyLineStyleModel_p.cpp
         KPropertyLineStyleItemDelegate_p.cpp
     )
-
-    if(KPROPERTY_KF)
-        list(APPEND kpropertywidgets_LIB_SRCS
-            editors/coloredit.cpp
-        )
-    endif()
 
     ecm_create_qm_loader(kpropertywidgets_LIB_SRCS kpropertywidgets_qt)
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,7 +72,7 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
 //    kprDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
-    KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
+    KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
@@ -143,7 +143,7 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
         le->setContentsMargins(0,0,0,0);
         le->setFrame(false);
     }
-/*    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
+/*    KPropertyFactory::setTopAndBottomBordersUsingStyleSheet(sb,
         QString::fromLatin1(
             "QDoubleSpinBox { border-left: 0; border-right: 0; } "
             "QDoubleSpinBox::down-button { height: %1px; } "
@@ -151,7 +151,7 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
         ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
     );*/
     QString css = cssForSpinBox("QDoubleSpinBox", font(), itemHeight);
-    KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, parent, css);
+    KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, css);
     setStyleSheet(css);
 
     QVariant minVal(prop->option("min"));
@@ -219,8 +219,12 @@ KPropertyIntSpinBoxDelegate::KPropertyIntSpinBoxDelegate()
 {
 }
 
-QString KPropertyIntSpinBoxDelegate::displayTextForProperty( const KProperty* prop ) const
+QString KPropertyIntSpinBoxDelegate::propertyValueToString(const KProperty* prop,
+                                                           const QLocale &locale) const
 {
+    KPropertyUnit unit;
+    bool hasUnit;
+    decodeUnit(*prop, &unit, &hasUnit);
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
         QVariant minValue(prop->option("min"));
@@ -231,7 +235,16 @@ QString KPropertyIntSpinBoxDelegate::displayTextForProperty( const KProperty* pr
             return minValueText;
         }
     }
-    return QString::number(prop->value().toInt());
+    if (hasUnit && locale.language() != QLocale::C) {
+        return QObject::tr("%1 %2", "<text> <unit>")
+                .arg(valueToString(prop->value(), locale)).arg(unit.toString());
+    }
+    return valueToString(prop->value(), locale);
+}
+
+QString KPropertyIntSpinBoxDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    return locale.toString(value.toInt());
 }
 
 QWidget* KPropertyIntSpinBoxDelegate::createEditor( int type, QWidget *parent,
@@ -251,12 +264,13 @@ KPropertyDoubleSpinBoxDelegate::KPropertyDoubleSpinBoxDelegate()
 {
 }
 
-QString KPropertyDoubleSpinBoxDelegate::displayTextForProperty( const KProperty* prop ) const
+QString KPropertyDoubleSpinBoxDelegate::propertyValueToString(const KProperty* prop,
+                                                              const QLocale &locale) const
 {
     KPropertyUnit unit;
     bool hasUnit;
     decodeUnit(*prop, &unit, &hasUnit);
-    QLocale locale;
+    int precision = -1;
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
         QVariant minValue(prop->option("min"));
@@ -264,19 +278,27 @@ QString KPropertyDoubleSpinBoxDelegate::displayTextForProperty( const KProperty*
         if (!minValue.isNull() && !minValueText.isEmpty()
             && minValue.toDouble() == prop->value().toDouble())
         {
-            if (hasUnit)
-                return QObject::tr("%1 %2", "<text> <unit>").arg(minValueText).arg(unit.toString());
-            else
-                return minValueText;
+            return minValueText;
+        }
+        if (prop->option("precision").canConvert(QMetaType::Int)) {
+            precision = prop->option("precision").toInt();
         }
     }
 //! @todo precision?
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
-    if (hasUnit) {
+    if (hasUnit && locale.language() != QLocale::C) {
         return QObject::tr("%1 %2", "<text> <unit>")
-                .arg(locale.toString(prop->value().toDouble())).arg(unit.toString());
+                .arg(valueToString(prop->value(), locale)).arg(unit.toString());
     }
-    return locale.toString(prop->value().toDouble());
+    if (prop->value().canConvert(QMetaType::Double) && precision >= 0) {
+        return locale.toString(prop->value().toDouble(), 'f', precision);
+    }
+    return valueToString(prop->value(), locale);
+}
+
+QString KPropertyDoubleSpinBoxDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    return locale.toString(value.toDouble());
 }
 
 QWidget* KPropertyDoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,

@@ -36,6 +36,7 @@ public:
 
     QSet<KPropertyFactory*> factories;
     QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators;
+    QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
 };
 
 Q_GLOBAL_STATIC(KPropertyFactoryManager, _self)
@@ -49,10 +50,13 @@ public:
     }
     ~Private()
     {
+        qDeleteAll(valueDisplaysSet);
     }
 
     QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators;
     QSet<KComposedPropertyCreatorInterface*> composedPropertyCreatorsSet;
+    QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
+    QSet<KPropertyValueDisplayInterface*> valueDisplaysSet;
 };
 
 typedef QList<void (*)()> InitFunctions;
@@ -74,6 +78,11 @@ QHash<int, KComposedPropertyCreatorInterface*> KPropertyFactory::composedPropert
     return d->composedPropertyCreators;
 }
 
+QHash<int, KPropertyValueDisplayInterface*> KPropertyFactory::valueDisplays() const
+{
+    return d->valueDisplays;
+}
+
 void KPropertyFactory::addComposedPropertyCreator( int type, KComposedPropertyCreatorInterface* creator )
 {
     addComposedPropertyCreatorInternal( type, creator, true );
@@ -84,6 +93,53 @@ void KPropertyFactory::addComposedPropertyCreatorInternal(int type, KComposedPro
     if (own)
         d->composedPropertyCreatorsSet.insert(creator);
     d->composedPropertyCreators.insert(type, creator);
+}
+
+void KPropertyFactory::addDisplay(int type, KPropertyValueDisplayInterface *display)
+{
+    addDisplayInternal(type, display, true);
+    if (dynamic_cast<KComposedPropertyCreatorInterface*>(display)) {
+        addComposedPropertyCreatorInternal( type,
+        dynamic_cast<KComposedPropertyCreatorInterface*>(display), false/* !own*/ );
+    }
+    if (dynamic_cast<KPropertyValueDisplayInterface*>(display)) {
+        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(display), false/* !own*/ );
+    }
+}
+
+void KPropertyFactory::addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own)
+{
+    if (own) {
+        d->valueDisplaysSet.insert(display);
+    }
+    d->valueDisplays.insert(type, display);
+}
+
+//------------
+
+KPropertyValueDisplayInterface::KPropertyValueDisplayInterface()
+{
+}
+
+KPropertyValueDisplayInterface::~KPropertyValueDisplayInterface()
+{
+}
+
+//static
+int KPropertyValueDisplayInterface::maxStringValueLength()
+{
+    return 250;
+}
+
+//static
+QString KPropertyValueDisplayInterface::valueToLocalizedString(const QVariant& value)
+{
+    QString s(value.toString());
+    if (KPropertyValueDisplayInterface::maxStringValueLength() < s.length()) {
+        s.truncate(KPropertyValueDisplayInterface::maxStringValueLength());
+        return QObject::tr("%1...", "Truncated string").arg(s);
+    }
+    return s;
 }
 
 //------------
@@ -123,6 +179,13 @@ void KPropertyFactoryManager::registerFactory(KPropertyFactory *factory)
     {
         d->composedPropertyCreators.insert(it.key(), it.value());
     }
+    QHash<int, KPropertyValueDisplayInterface*>::ConstIterator valueDisplaysItEnd
+        = factory->valueDisplays().constEnd();
+    for (QHash<int, KPropertyValueDisplayInterface*>::ConstIterator it( factory->valueDisplays().constBegin() );
+        it != valueDisplaysItEnd; ++it)
+    {
+        d->valueDisplays.insert(it.key(), it.value());
+    }
 }
 
 KComposedPropertyInterface* KPropertyFactoryManager::createComposedProperty(KProperty *parent)
@@ -135,6 +198,40 @@ KComposedPropertyInterface* KPropertyFactoryManager::createComposedProperty(KPro
 void KPropertyFactoryManager::addInitFunction(void (*initFunction)())
 {
     _initFunctions->append(initFunction);
+}
+
+bool KPropertyFactoryManager::canConvertValueToText(int type) const
+{
+    return d->valueDisplays.value(type) != 0;
+}
+
+bool KPropertyFactoryManager::canConvertValueToText(const KProperty* property) const
+{
+    return canConvertValueToText(property->type());
+}
+
+QString KPropertyFactoryManager::propertyValueToString(const KProperty* property) const
+{
+    const KPropertyValueDisplayInterface *display = d->valueDisplays.value(property->type());
+    return display ? display->propertyValueToString(property, QLocale::c()) : property->value().toString();
+}
+
+QString KPropertyFactoryManager::valueToString(int type, const QVariant &value) const
+{
+    const KPropertyValueDisplayInterface *display = d->valueDisplays.value(type);
+    return display ? display->valueToString(value, QLocale::c()) : value.toString();
+}
+
+QString KPropertyFactoryManager::propertyValueToLocalizedString(const KProperty* property) const
+{
+    const KPropertyValueDisplayInterface *display = d->valueDisplays.value(property->type());
+    return display ? display->propertyValueToString(property, QLocale()) : KPropertyValueDisplayInterface::valueToLocalizedString(property->value());
+}
+
+QString KPropertyFactoryManager::valueToLocalizedString(int type, const QVariant &value) const
+{
+    const KPropertyValueDisplayInterface *display = d->valueDisplays.value(type);
+    return display ? display->valueToString(value, QLocale()) : KPropertyValueDisplayInterface::valueToLocalizedString(value.toString());
 }
 
 //! @todo

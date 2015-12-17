@@ -92,24 +92,55 @@ public:
     }
 };
 
+//! Provides a specialized conversion of value to string depending on type
+class KPROPERTYCORE_EXPORT KPropertyValueDisplayInterface
+{
+public:
+    KPropertyValueDisplayInterface();
+
+    virtual ~KPropertyValueDisplayInterface();
+
+    virtual QString propertyValueToString(const KProperty* property, const QLocale &locale) const
+        { return valueToString(property->value(), locale); }
+
+    virtual QString valueToString(const QVariant& value, const QLocale &locale) const = 0;
+
+    //! Maximum length of strings to display in valueToString(), propertyValueToString()
+    //! and KPropertyValuePainterInterface::paint().
+    //! Used to avoid inefficiences. Equal to 250.
+    //! @todo Make configurable?
+    static int maxStringValueLength();
+
+    //! @return @a value converted to string usign QVariant::toString(), truncated if it's longer than @ref maxStringValueLength()
+    //! @see maxStringValueLength();
+    static QString valueToLocalizedString(const QVariant& value);
+};
+
 class KPROPERTYCORE_EXPORT KPropertyFactory
 {
 public:
     KPropertyFactory();
+
     virtual ~KPropertyFactory();
+
     QHash<int, KComposedPropertyCreatorInterface*> composedPropertyCreators() const;
-    void addComposedPropertyCreator( int type, KComposedPropertyCreatorInterface* creator );
+    QHash<int, KPropertyValueDisplayInterface*> valueDisplays() const;
+
+    void addComposedPropertyCreator(int type, KComposedPropertyCreatorInterface* creator);
+
+    void addDisplay(int type, KPropertyValueDisplayInterface *display);
 
 protected:
     void addComposedPropertyCreatorInternal(int type,
         KComposedPropertyCreatorInterface* creator, bool own = true);
 
+    //! Adds value-to-text converted @a painter for type @a type.
+    //! The converter becomes owned by the factory.
+    void addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own = true);
+
     class Private;
     Private * const d;
 };
-
-class KProperty;
-class KCustomProperty;
 
 class KPROPERTYCORE_EXPORT KPropertyFactoryManager : public QObject
 {
@@ -122,6 +153,18 @@ public:
 
     /*! \return a pointer to a factory manager instance.*/
     static KPropertyFactoryManager* self();
+
+    bool canConvertValueToText(int type) const;
+
+    bool canConvertValueToText(const KProperty* property) const;
+
+    QString propertyValueToString(const KProperty* property) const;
+
+    QString valueToString(int type, const QVariant &value) const;
+
+    QString propertyValueToLocalizedString(const KProperty* property) const;
+
+    QString valueToLocalizedString(int type, const QVariant &value) const;
 
     KPropertyFactoryManager();
     ~KPropertyFactoryManager();

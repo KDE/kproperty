@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
+   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@ KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)
   : QTimeEdit(parent)
 {
     setFrame(false);
+    setContentsMargins(0,1,0,0);
 
     const QTime minTime = prop->option("min").toTime();
     if (minTime.isValid()) {
@@ -75,11 +77,16 @@ KPropertyTimeDelegate::KPropertyTimeDelegate()
 {
 }
 
-QString KPropertyTimeDelegate::displayTextForProperty(const KProperty* prop) const
+QString KPropertyTimeDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
-    const QLocale locale;
+    if (locale.language() == QLocale::C) {
+        if (value.isNull()) {
+            return QString();
+        }
+        return value.toTime().toString(Qt::ISODate);
+    }
     const QString defaultTimeFormat = locale.timeFormat(QLocale::ShortFormat);
-    return prop->value().toTime().toString(defaultTimeFormat);
+    return value.toTime().toString(defaultTimeFormat);
 }
 
 QWidget* KPropertyTimeDelegate::createEditor(int type, QWidget* parent,

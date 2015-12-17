@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,6 +57,10 @@ void KPropertyStringEditor::slotTextChanged( const QString & text )
     emit commitData(this);
 }
 
+KPropertyStringDelegate::KPropertyStringDelegate()
+{
+}
+
 QWidget* KPropertyStringDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
@@ -64,4 +68,12 @@ QWidget* KPropertyStringDelegate::createEditor( int type, QWidget *parent,
     Q_UNUSED(option);
     Q_UNUSED(index);
     return new KPropertyStringEditor(parent);
+}
+
+QString KPropertyStringDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    if (locale.language() == QLocale::C) {
+        return value.toString();
+    }
+    return valueToLocalizedString(value);
 }

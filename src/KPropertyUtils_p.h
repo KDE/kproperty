@@ -20,12 +20,18 @@
 #ifndef KPROPERTY_UTILS_P_H
 #define KPROPERTY_UTILS_P_H
 
-#include <QColor>
+class QColor;
+class QWidget;
 
 namespace KPropertyUtils
 {
 
+//! @return contrast color for @a c color.
 QColor contrastColor(const QColor& c);
+
+//! @return grid line color defined by a KPropertyEditorView widget contains @a widget
+//! Invalid  color is returned if no grid is defined or KPropertyEditorView was not found.
+QColor gridLineColor(const QWidget *widget);
 
 }
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "KPropertyEditorView.h"
 #include "kproperty_debug.h"
 #include "KPropertyWidgetsFactory.h"
+#include "KPropertyUtils_p.h"
 
 #include <QCompleter>
 #include <QGuiApplication>
@@ -77,30 +78,39 @@ KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listDa
 //    setFocusWidget(m_edit);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 
-    setFrame(false);
-/*    QList<QPointer<QWidget> > children( findChildren<QWidget*>() );
-    foreach (QWidget* w, children) {
-        kprDebug() << w->objectName() << w->metaObject()->className();
-        w->setStyleSheet(QString());
-    }*/
-    //QComboBoxPrivateContainer
-
+    int paddingTop = 2;
+    int paddingLeft = 3;
+    const QString style(parent->style()->objectName());
+    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+        setFrame(false);
+        paddingTop = 0;
+    }
+    if (style == QLatin1String("windowsvista") || style == QLatin1String("fusion")) {
+        paddingLeft = 2;
+    }
 
     //Set the stylesheet to a plain style
-    QString styleSheet;
-    QPalette p = QGuiApplication::palette();
-    QColor focus = p.highlight().color();
-
-    styleSheet = QString::fromLatin1("QComboBox { \
-    border: 1px solid %1; \
-    border-radius: 0px; \
-    padding: 0px 18px; }").arg(focus.name());
-
+    QString styleSheet = QString::fromLatin1("QComboBox { \
+        %1 \
+        padding-top: %2px; padding-left: %3px; }").arg(borderSheet(this)).arg(paddingTop).arg(paddingLeft);
     setStyleSheet(styleSheet);
 }
 
 KPropertyComboBoxEditor::~KPropertyComboBoxEditor()
 {
+}
+
+//static
+QString KPropertyComboBoxEditor::borderSheet(const QWidget *widget)
+{
+    Q_ASSERT(widget);
+    const QString style(widget->parentWidget() ? widget->parentWidget()->style()->objectName() : QString());
+    if (style == QLatin1String("windowsvista") // a hack
+        || style == QLatin1String("fusion"))
+    {
+        return QString();
+    }
+    return QLatin1String("border: 0px; ");
 }
 
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
@@ -255,8 +265,9 @@ KPropertyComboBoxDelegate::KPropertyComboBoxDelegate()
     options.removeBorders = false;
 }
 
-QString KPropertyComboBoxDelegate::displayTextForProperty( const KProperty* property ) const
+QString KPropertyComboBoxDelegate::propertyValueToString(const KProperty* property, const QLocale &locale) const
 {
+    Q_UNUSED(locale)
     KPropertyListData *listData = property->listData();
     if (!listData)
         return property->value().toString();
@@ -272,6 +283,12 @@ QString KPropertyComboBoxDelegate::displayTextForProperty( const KProperty* prop
         return property->value().toString();
     }
     return property->listData()->names[ idx ];
+}
+
+QString KPropertyComboBoxDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    Q_UNUSED(locale)
+    return value.toString();
 }
 
 QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,

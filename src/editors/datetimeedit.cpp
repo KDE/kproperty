@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
+   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,8 +30,6 @@
 KPropertyDateTimeEditor::KPropertyDateTimeEditor(const KProperty* prop, QWidget* parent)
   : QDateTimeEdit(parent)
 {
-    Q_UNUSED(prop);
-
     setFrame(false);
     setCalendarPopup(true);
 
@@ -80,11 +79,10 @@ KPropertyDateTimeDelegate::KPropertyDateTimeDelegate()
 {
 }
 
-QString KPropertyDateTimeDelegate::displayTextForProperty(const KProperty* prop) const
+QString KPropertyDateTimeDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
-    const QLocale locale;
     const QString defaultDateTimeFormat = locale.dateTimeFormat(QLocale::ShortFormat);
-    return prop->value().toDateTime().toString(defaultDateTimeFormat);
+    return value.toDateTime().toString(defaultDateTimeFormat);
 }
 
 QWidget* KPropertyDateTimeDelegate::createEditor(int type, QWidget* parent,

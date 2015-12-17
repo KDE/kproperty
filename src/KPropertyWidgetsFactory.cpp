@@ -23,13 +23,22 @@
 #include "KDefaultPropertyFactory.h"
 #include "KPropertyEditorView.h"
 #include "KPropertyEditorDataModel.h"
+#include "KPropertyStringEditor.h"
 
 KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface)
     : QLabel(parent)
     , m_iface(iface)
 {
   setAutoFillBackground(true);
-  setContentsMargins(0,1,0,0);
+
+  KPropertyEditorView* view = 0;
+  if (parent) {
+      view = qobject_cast<KPropertyEditorView*>(parent->parentWidget());
+  }
+  const QColor gridLineColor(view ? view->gridLineColor() : KPropertyEditorView::defaultGridLineColor());
+  const int top = 1 + (gridLineColor.isValid() ? 1 : 0);
+
+  setContentsMargins(0, top, 0, 0);
   setIndent(1);
 }
 
@@ -40,7 +49,7 @@ QVariant KPropertyLabel::value() const
 
 void KPropertyLabel::setValue(const QVariant& value)
 {
-    setText( m_iface->displayText(value) );
+    setText( m_iface->valueToString(value, QLocale()) );
     m_value = value;
 }
 
@@ -48,6 +57,19 @@ void KPropertyLabel::paintEvent( QPaintEvent * event )
 {
     QLabel::paintEvent(event);
     KPropertyWidgetsFactory::paintTopGridLine(this);
+}
+
+//---------------
+
+void paintInternal(const KPropertyValueDisplayInterface *iface,
+                   QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    painter->save();
+    QRect r(option.rect);
+    r.setLeft(r.left()+1);
+    painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
+        iface->valueToString(index.data(Qt::EditRole), QLocale()));
+    painter->restore();
 }
 
 //---------------
@@ -65,7 +87,6 @@ public:
 
     QHash<int, KPropertyEditorCreatorInterface*> editorCreators;
     QHash<int, KPropertyValuePainterInterface*> valuePainters;
-    QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
 };
 
 Q_GLOBAL_STATIC(KPropertyWidgetsFactoryManager, _self)
@@ -93,16 +114,13 @@ public:
     {
         qDeleteAll(editorCreatorsSet);
         qDeleteAll(valuePaintersSet);
-        qDeleteAll(valueDisplaysSet);
     }
 
     QHash<int, KPropertyEditorCreatorInterface*> editorCreators;
     QHash<int, KPropertyValuePainterInterface*> valuePainters;
-    QHash<int, KPropertyValueDisplayInterface*> valueDisplays;
 
     QSet<KPropertyEditorCreatorInterface*> editorCreatorsSet;
     QSet<KPropertyValuePainterInterface*> valuePaintersSet;
-    QSet<KPropertyValueDisplayInterface*> valueDisplaysSet;
 };
 
 KPropertyWidgetsFactory::KPropertyWidgetsFactory()
@@ -123,11 +141,6 @@ QHash<int, KPropertyEditorCreatorInterface*> KPropertyWidgetsFactory::editorCrea
 QHash<int, KPropertyValuePainterInterface*> KPropertyWidgetsFactory::valuePainters() const
 {
     return d->valuePainters;
-}
-
-QHash<int, KPropertyValueDisplayInterface*> KPropertyWidgetsFactory::valueDisplays() const
-{
-    return d->valueDisplays;
 }
 
 void KPropertyWidgetsFactory::addEditor(int type, KPropertyEditorCreatorInterface *creator)
@@ -160,21 +173,6 @@ void KPropertyWidgetsFactory::addPainter(int type, KPropertyValuePainterInterfac
     }
 }
 
-void KPropertyWidgetsFactory::addDisplay(int type, KPropertyValueDisplayInterface *display)
-{
-    addDisplayInternal(type, display, true);
-    if (dynamic_cast<KComposedPropertyCreatorInterface*>(display)) {
-        addComposedPropertyCreatorInternal( type,
-        dynamic_cast<KComposedPropertyCreatorInterface*>(display), false/* !own*/ );
-    }
-    if (dynamic_cast<KPropertyEditorCreatorInterface*>(display)) {
-        addEditorInternal( type, dynamic_cast<KPropertyEditorCreatorInterface*>(display), false/* !own*/ );
-    }
-    if (dynamic_cast<KPropertyValueDisplayInterface*>(display)) {
-        addDisplayInternal( type, dynamic_cast<KPropertyValueDisplayInterface*>(display), false/* !own*/ );
-    }
-}
-
 void KPropertyWidgetsFactory::addEditorInternal(int type, KPropertyEditorCreatorInterface *editor, bool own)
 {
     if (own)
@@ -189,31 +187,31 @@ void KPropertyWidgetsFactory::addPainterInternal(int type, KPropertyValuePainter
     d->valuePainters.insert(type, painter);
 }
 
-void KPropertyWidgetsFactory::addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own)
-{
-    if (own)
-        d->valueDisplaysSet.insert(display);
-    d->valueDisplays.insert(type, display);
-}
-
 //static
 void KPropertyWidgetsFactory::paintTopGridLine(QWidget *widget)
 {
     // paint top grid line
-    QPainter p(widget);
-    QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(widget->parentWidget()) ?
-        dynamic_cast<KPropertyEditorView*>(widget->parentWidget())->gridLineColor()
-        : KPropertyEditorView::defaultGridLineColor() );
-    p.setPen(QPen( QBrush(gridLineColor), 1));
-    p.drawLine(0, 0, widget->width()-1, 0);
+    KPropertyEditorView* view = 0;
+    if (widget->parentWidget()) {
+        view = qobject_cast<KPropertyEditorView*>(widget->parentWidget()->parentWidget());
+    }
+    const QColor gridLineColor(view ? view->gridLineColor() : KPropertyEditorView::defaultGridLineColor());
+    if (gridLineColor.isValid()) {
+        QPainter p(widget);
+        p.setPen(QPen( QBrush(gridLineColor), 1));
+        p.drawLine(0, 0, widget->width()-1, 0);
+    }
 }
 
 //static
-void KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent, const QString& extraStyleSheet)
+void KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget,
+                                                                    const QString& extraStyleSheet)
 {
-    QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(parent) ?
-        dynamic_cast<KPropertyEditorView*>(parent)->gridLineColor()
-        : KPropertyEditorView::defaultGridLineColor() );
+    KPropertyEditorView* view = 0;
+    if (widget->parentWidget()) {
+        view = qobject_cast<KPropertyEditorView*>(widget->parentWidget()->parentWidget());
+    }
+    const QColor gridLineColor(view ? view->gridLineColor() : KPropertyEditorView::defaultGridLineColor());
     widget->setStyleSheet(
         QString::fromLatin1("%1 { border-top: 1px solid %2;border-bottom: 1px solid %2; } %3")
         .arg(QLatin1String(widget->metaObject()->className()))
@@ -258,13 +256,6 @@ void KPropertyWidgetsFactoryManager::registerFactory(KPropertyWidgetsFactory *fa
     {
         d->valuePainters.insert(it.key(), it.value());
     }
-    QHash<int, KPropertyValueDisplayInterface*>::ConstIterator valueDisplaysItEnd
-        = factory->valueDisplays().constEnd();
-    for (QHash<int, KPropertyValueDisplayInterface*>::ConstIterator it( factory->valueDisplays().constBegin() );
-        it != valueDisplaysItEnd; ++it)
-    {
-        d->valueDisplays.insert(it.key(), it.value());
-    }
 }
 
 bool KPropertyWidgetsFactoryManager::isEditorForTypeAvailable( int type ) const
@@ -287,9 +278,9 @@ QWidget * KPropertyWidgetsFactoryManager::createEditor(
        w->setObjectName(QLatin1String(property->name()));
        if (creator->options.removeBorders) {
 //! @todo get real border color from the palette
-            QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(parent) ?
-                dynamic_cast<KPropertyEditorView*>(parent)->gridLineColor()
-                : KPropertyEditorView::defaultGridLineColor() );
+            QColor gridLineColor(qobject_cast<KPropertyEditorView*>(parent->parentWidget()) ?
+                qobject_cast<KPropertyEditorView*>(parent->parentWidget())->gridLineColor()
+                : KPropertyEditorView::defaultGridLineColor());
             QString cssClassName = QLatin1String(w->metaObject()->className());
             cssClassName.replace(QLatin1String("KProperty"), QString()); //!< @todo
             QString css =
@@ -317,22 +308,6 @@ bool KPropertyWidgetsFactoryManager::paint( int type, QPainter * painter,
     painter->setPen(realOption.palette.text().color());
     _painter->paint(painter, realOption, index);
     return true;
-}
-
-bool KPropertyWidgetsFactoryManager::canConvertValueToText( int type ) const
-{
-    return d->valueDisplays.value(type) != 0;
-}
-
-bool KPropertyWidgetsFactoryManager::canConvertValueToText( const KProperty* property ) const
-{
-    return d->valueDisplays.value( property->type() ) != 0;
-}
-
-QString KPropertyWidgetsFactoryManager::convertValueToText( const KProperty* property ) const
-{
-    const KPropertyValueDisplayInterface *display = d->valueDisplays.value( property->type() );
-    return display ? display->displayTextForProperty( property ) : property->value().toString();
 }
 
 //! @todo
@@ -377,6 +352,16 @@ KPropertyEditorCreatorInterface::~KPropertyEditorCreatorInterface()
 {
 }
 
+QWidget* KPropertyEditorCreatorInterface::createEditor(int type, QWidget *parent,
+                                                       const QStyleOptionViewItem & option,
+                                                       const QModelIndex & index) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    return new KPropertyStringEditor(parent);
+}
+
 KPropertyEditorCreatorInterface::Options::Options()
  : removeBorders(true)
 {
@@ -389,12 +374,3 @@ KPropertyValuePainterInterface::KPropertyValuePainterInterface()
 KPropertyValuePainterInterface::~KPropertyValuePainterInterface()
 {
 }
-
-KPropertyValueDisplayInterface::KPropertyValueDisplayInterface()
-{
-}
-
-KPropertyValueDisplayInterface::~KPropertyValueDisplayInterface()
-{
-}
-

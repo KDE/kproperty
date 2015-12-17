@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +18,7 @@
 */
 
 #include "sizepolicyedit.h"
+#include "KPropertyCoreUtils_p.h"
 
 #include <QSizePolicy>
 
@@ -66,17 +67,25 @@ Q_GLOBAL_STATIC(SizePolicyListData, s_sizePolicyListData)
 
 //---------
 
-static const char SIZEPOLICY_MASK[] = "%1, %2, %3, %4";
+KPropertySizePolicyDelegate::KPropertySizePolicyDelegate()
+{
+}
 
-QString KPropertySizePolicyDelegate::displayText( const QVariant& value ) const
+QString KPropertySizePolicyDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QSizePolicy sp(value.value<QSizePolicy>());
-
-    return QString::fromLatin1(SIZEPOLICY_MASK)
+    if (locale.language() == QLocale::C) {
+        return QString::fromLatin1("%1, %2, %3, %4")
+                .arg(KPropertyUtils::keyForEnumValue("SizePolicy", sp.horizontalPolicy()))
+                .arg(KPropertyUtils::keyForEnumValue("SizePolicy", sp.verticalPolicy()))
+                .arg(sp.horizontalStretch())
+                .arg(sp.verticalStretch());
+    }
+    return QObject::tr("%1, %2, %3, %4", "Size Policy")
         .arg(s_sizePolicyListData->nameForPolicy(sp.horizontalPolicy()))
         .arg(s_sizePolicyListData->nameForPolicy(sp.verticalPolicy()))
-        .arg(sp.horizontalStretch())
-        .arg(sp.verticalStretch());
+        .arg(locale.toString(sp.horizontalStretch()))
+        .arg(locale.toString(sp.verticalStretch()));
 }
 
 //static

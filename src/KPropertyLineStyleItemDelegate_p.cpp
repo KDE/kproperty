@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
  */
 
 #include "KPropertyLineStyleItemDelegate_p.h"
+#include "KPropertyCoreUtils_p.h"
 
 #include <QPen>
 #include <QPainter>
@@ -31,6 +33,51 @@ KPropertyLineStyleItemDelegate::~KPropertyLineStyleItemDelegate()
 {
 }
 
+class PenStyleData : public QHash<Qt::PenStyle, QString>
+{
+public:
+    PenStyleData() {
+        insert(Qt::NoPen, QObject::tr("None", "No Line"));
+        insert(Qt::SolidLine, QObject::tr("Solid Line"));
+        insert(Qt::DashLine, QObject::tr("Dash Line"));
+        insert(Qt::DotLine, QObject::tr("Dot Line"));
+        insert(Qt::DashDotLine, QObject::tr("Dash-Dot Line"));
+        insert(Qt::DashDotDotLine, QObject::tr("Dash-Dot-Dot Line"));
+        insert(Qt::CustomDashLine, QObject::tr("Custom Dash Line"));
+    }
+};
+
+Q_GLOBAL_STATIC(PenStyleData, g_penStyleData)
+
+//static
+QString KPropertyLineStyleItemDelegate::styleName(Qt::PenStyle style, const QLocale &locale)
+{
+    if (locale.language() == QLocale::C) {
+        return KPropertyUtils::keyForEnumValue("PenStyle", style);
+    }
+    return g_penStyleData->value(style);
+}
+
+//static
+void KPropertyLineStyleItemDelegate::paintItem(QPainter *painter, const QPen &pen_,
+                                               const QRect &rect, const QStyleOption &option)
+{
+    painter->save();
+    QPen pen(pen_);
+    pen.setBrush(option.state & QStyle::State_Selected ? option.palette.highlightedText() : option.palette.text());
+    if (pen.style() == Qt::NoPen) {
+        pen.setWidth(0);
+        pen.setStyle(Qt::SolidLine);
+        painter->setPen(pen);
+        painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, g_penStyleData->value(Qt::NoPen));
+    } else {
+        pen.setWidth(3);
+        painter->setPen(pen);
+        painter->drawLine(rect.left(), rect.center().y(), rect.right(), rect.center().y());
+    }
+    painter->restore();
+}
+
 void KPropertyLineStyleItemDelegate::paint(QPainter *painter,
                                            const QStyleOptionViewItem &option,
                                            const QModelIndex &index) const
@@ -41,11 +88,7 @@ void KPropertyLineStyleItemDelegate::paint(QPainter *painter,
         painter->fillRect(option.rect, option.palette.highlight());
 
     QPen pen = index.data(Qt::DecorationRole).value<QPen>();
-    pen.setBrush(option.palette.text()); // use the view-specific palette; the model hardcodes this to black
-    painter->setPen(pen);
-    painter->drawLine(option.rect.left(), option.rect.center().y(),
-                      option.rect.right(), option.rect.center().y());
-
+    paintItem(painter, pen, option.rect, option);
     painter->restore();
 }
 

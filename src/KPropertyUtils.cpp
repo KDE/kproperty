@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QPointer>
+#include <QMetaEnum>
 
 #define BRANCHBOX_SIZE 9
 
@@ -231,4 +232,14 @@ QColor KPropertyUtils::contrastColor(const QColor& c)
     else if (g > 20)
         return c.light(400);
     return Qt::lightGray;
+}
+
+QColor KPropertyUtils::gridLineColor(const QWidget *widget)
+{
+    Q_ASSERT(widget);
+    KPropertyEditorView *view = 0;
+    if (widget->parentWidget()) {
+        view = qobject_cast<KPropertyEditorView*>(widget->parentWidget()->parentWidget());
+    }
+    return view ? view->gridLineColor() : QColor();
 }

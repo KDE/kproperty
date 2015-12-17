@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 /*
 #include "customproperty.h"*/
 #include "editors/booledit.h"
+#include "editors/coloredit.h"
 #include "editors/combobox.h"
 #include "editors/cursoredit.h"
 #include "editors/dateedit.h"
@@ -32,6 +33,7 @@
 #include "editors/pointfedit.h"
 #include "editors/fontedit.h"
 #include "editors/rectedit.h"
+#include "editors/KPropertyRectFEditor.h"
 #include "editors/sizeedit.h"
 #include "editors/sizefedit.h"
 #include "editors/sizepolicyedit.h"
@@ -42,14 +44,13 @@
 // #include "symbolcombo.h"
 #include "editors/timeedit.h"
 // #include "urledit.h"
-#ifdef KPROPERTY_KF
-# include "editors/coloredit.h"
-#endif
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyWidgetsFactory()
 {
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
+//! @todo    addEditor( KProperty::ByteArray, new KPropertyByteArrayDelegate );
+    addEditor( KProperty::Color, new KPropertyColorComboDelegate );
     addEditor( KProperty::Cursor, new KPropertyCursorDelegate );
     addEditor( KProperty::Date, new KPropertyDateDelegate );
     addEditor( KProperty::DateTime, new KPropertyDateTimeDelegate );
@@ -57,23 +58,20 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
     addEditor( KProperty::Font, new KPropertyFontDelegate );
     addEditor( KProperty::Int, new KPropertyIntSpinBoxDelegate );
     addEditor( KProperty::LineStyle, new KPropertyLineStyleComboDelegate );
-//! @todo addEditor( KProperty::LongLong, new LongLongSpinBoxDelegate );
+    addEditor( KProperty::LongLong, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
     addEditor( KProperty::Pixmap, new KPropertyPixmapDelegate );
     addEditor( KProperty::Point, new KPropertyPointDelegate );
     addEditor( KProperty::PointF, new KPropertyPointFDelegate );
     addEditor( KProperty::Rect, new KPropertyRectDelegate );
-//! @todo    addEditor( KProperty::RectF, new RectFDelegate );
+    addEditor( KProperty::RectF, new KPropertyRectFDelegate );
     addEditor( KProperty::Size, new KPropertySizeDelegate );
     addEditor( KProperty::SizeF, new KPropertySizeFDelegate );
     addEditor( KProperty::SizePolicy, new KPropertySizePolicyDelegate );
     addEditor( KProperty::String, new KPropertyStringDelegate );
     addEditor( KProperty::Time, new KPropertyTimeDelegate );
-//! @todo    addEditor( KProperty::UInt, new IntSpinBoxDelegate );
-//! @todo addEditor( KProperty::ULongLong, new LongLongSpinBoxDelegate );
+    addEditor( KProperty::UInt, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
+    addEditor( KProperty::ULongLong, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
     addEditor( KProperty::ValueFromList, new KPropertyComboBoxDelegate );
-#ifdef KPROPERTY_KF
-    addEditor( KProperty::Color, new KPropertyColorComboDelegate );
-#endif
 }
 
 KDefaultPropertyFactory::~KDefaultPropertyFactory()

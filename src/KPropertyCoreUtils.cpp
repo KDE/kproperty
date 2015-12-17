@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,28 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_UTILS_H
-#define KPROPERTY_UTILS_H
+#include "KPropertyCoreUtils_p.h"
 
-#include "kpropertywidgets_export.h"
+#include <QMetaEnum>
 
-#include <QWidget>
-
-//! @short A container widget that can be used to split information into hideable sections
-//! for a property editor-like panes.
-class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
+//! @internal Needed by keyForEnumValue() to get access to staticQtMetaObject
+struct StaticQtMetaObject : public QObject
 {
-public:
-    KPropertyGroupWidget(const QString& title, QWidget* parent);
-    ~KPropertyGroupWidget();
-
-    void setContents(QWidget* contents);
-
-protected:
-    virtual bool event(QEvent * e);
-
-    class Private;
-    Private * const d;
+    static inline const QMetaObject& get() {return staticQtMetaObject;}
 };
 
-#endif
+QString KPropertyUtils::keyForEnumValue(const char *enumName, int enumIndex)
+{
+    const QMetaObject& mo = StaticQtMetaObject::get();
+    const int index = mo.indexOfEnumerator(enumName);
+    if (index < 0) {
+        return QString();
+    }
+    QMetaEnum me = mo.enumerator(index);
+    return QString::fromLatin1(me.valueToKey(enumIndex));
+}

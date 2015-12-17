@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -38,11 +38,12 @@ public:
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyPointFDelegate : public KPropertyLabelCreator,
-                                        public KComposedPropertyCreator<KPointFComposedProperty>
+                                                        public KComposedPropertyCreator<KPointFComposedProperty>
 {
 public:
-    KPropertyPointFDelegate() {}
-    virtual QString displayText( const QVariant& value ) const;
+    KPropertyPointFDelegate();
+
+    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };
 
 #endif

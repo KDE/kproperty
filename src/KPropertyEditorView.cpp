@@ -23,6 +23,7 @@
 #include "KPropertySet.h"
 #include "KPropertyWidgetsFactory.h"
 #include "kproperty_debug.h"
+#include "KPropertyUtils_p.h"
 
 #include <QIcon>
 #include <QPointer>
@@ -75,7 +76,7 @@ static bool computeAutoSync(KProperty *property, bool defaultAutoSync)
 class ItemDelegate : public QItemDelegate
 {
 public:
-    explicit ItemDelegate(QWidget *parent);
+    explicit ItemDelegate(KPropertyEditorView *parent);
     virtual ~ItemDelegate();
     virtual void paint(QPainter *painter,
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -86,7 +87,7 @@ public:
     mutable QPointer<QWidget> m_currentEditor;
 };
 
-ItemDelegate::ItemDelegate(QWidget *parent)
+ItemDelegate::ItemDelegate(KPropertyEditorView *parent)
 : QItemDelegate(parent)
 {
 }
@@ -113,7 +114,10 @@ void ItemDelegate::paint(QPainter *painter,
                          const QModelIndex &index) const
 {
     QStyleOptionViewItem alteredOption(option);
-    alteredOption.rect.setTop(alteredOption.rect.top() + 1);
+    const QColor gridLineColor(qobject_cast<KPropertyEditorView*>(parent())->gridLineColor());
+    if (gridLineColor.isValid()) {
+        alteredOption.rect.setTop(alteredOption.rect.top() + 1);
+    }
     painter->save();
     QRect r(option.rect);
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
@@ -174,13 +178,16 @@ void ItemDelegate::paint(QPainter *painter,
         //   y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
     }
 
-    QColor gridLineColor( dynamic_cast<KPropertyEditorView*>(painter->device()) ?
-        dynamic_cast<KPropertyEditorView*>(painter->device())->gridLineColor()
-        : KPropertyEditorView::defaultGridLineColor() );
-    QPen pen(gridLineColor);
-    pen.setWidth(1);
-    painter->setPen(pen);
-    painter->drawRect(r);
+    if (gridLineColor.isValid()) {
+        QPen pen(gridLineColor);
+        painter->setPen(pen);
+        painter->drawRect(r);
+    }
+    else {
+        QPen pen(alteredOption.palette.color(QPalette::AlternateBase));
+        painter->setPen(pen);
+        painter->drawLine(r.topLeft(), r.topRight());
+    }
     //kprDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
     painter->restore();
 }
@@ -199,9 +206,13 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     QStyleOptionViewItem alteredOption(option);
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
     KProperty *property = editorModel->propertyForItem(index);
-    int t = typeForProperty(property);
+    const int t = typeForProperty(property);
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = KPropertyWidgetsFactoryManager::self()->createEditor(t, parent, alteredOption, index);
+    if (!w) {
+        // fall back to String type
+        w = KPropertyWidgetsFactoryManager::self()->createEditor(KProperty::String, parent, alteredOption, index);
+    }
     if (w) {
         if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)").constData())
             && property && !property->children())
@@ -512,6 +523,7 @@ QColor KPropertyEditorView::gridLineColor() const
 void KPropertyEditorView::setGridLineColor(const QColor& color)
 {
     d->gridLineColor = color;
+    viewport()->update();
 }
 
 static QModelIndex findChildItem(const KProperty& property, const QModelIndex &parent)

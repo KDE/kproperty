@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,8 @@
 
 #include "cursoredit.h"
 #include "KProperty.h"
+#include "KPropertyCoreUtils_p.h"
+#include "KPropertyUtils_p.h"
 
 #include "xpm/blank_cursor.xpm"
 #include "xpm/arrow_cursor.xpm"
@@ -82,7 +84,7 @@ public:
         bg.setAlpha(127);
         px.fill(bg);
         QPainter p(&px);
-        p.drawPixmap(0, 0, xpm);
+        p.drawPixmap(0, 2, xpm);
         return px;
     }
 private:
@@ -190,6 +192,21 @@ static KPropertyComboBoxEditor::Options initComboBoxOptions(QWidget* parent)
 KPropertyCursorEditor::KPropertyCursorEditor(QWidget *parent)
         : KPropertyComboBoxEditor(*s_cursorListData, initComboBoxOptions( this ), parent)
 {
+    int paddingTop = 1;
+    int paddingLeft = 2;
+    const QString style(parent->style()->objectName());
+    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+        setFrame(false);
+        paddingTop = 0;
+    }
+    if (style == QLatin1String("windowsvista") || style == QLatin1String("fusion")) {
+        paddingLeft = 1;
+    }
+    QString styleSheet = QString::fromLatin1("QComboBox { \
+        %1 \
+        padding-top: %2px; padding-left: %3px; }").arg(KPropertyComboBoxEditor::borderSheet(this))
+            .arg(paddingTop).arg(paddingLeft);
+    setStyleSheet(styleSheet);
 }
 
 KPropertyCursorEditor::~KPropertyCursorEditor()
@@ -230,12 +247,20 @@ void KPropertyCursorDelegate::paint( QPainter * painter,
     int pmSize = (option.rect.height() >= 32) ? 32 : 16;
     const QPixmap pm( s_cursorListData->pixmapForIndex(comboIndex, option.palette)
         .scaled(pmSize, pmSize, Qt::KeepAspectRatio, Qt::SmoothTransformation) );
-    QPoint pmPoint(option.rect.topLeft());
-    pmPoint.setX(pmPoint.x() + 2);
+    QPoint pmPoint(option.rect.topLeft() + QPoint(2, 1));
     painter->drawPixmap(pmPoint, pm);
     QRect r(option.rect);
-    r.setLeft(2 + r.left() + 1 + pm.width());
-    painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft,
-        s_cursorListData->names[ comboIndex ] );
+    r.setLeft(7 + r.left() + 1 + pm.width());
+    painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, valueToString(index.data(Qt::EditRole), QLocale()));
     painter->restore();
+}
+
+QString KPropertyCursorDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    const Qt::CursorShape shape = value.value<QCursor>().shape();
+    if (locale.language() == QLocale::C) {
+        return KPropertyUtils::keyForEnumValue("CursorShape", shape);
+    }
+    const int comboIndex = s_cursorListData->shapeToIndex(shape);
+    return s_cursorListData->names[comboIndex];
 }

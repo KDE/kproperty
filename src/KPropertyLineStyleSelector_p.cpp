@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #include "KPropertyLineStyleSelector_p.h"
 #include "KPropertyLineStyleModel_p.h"
 #include "KPropertyLineStyleItemDelegate_p.h"
+#include "KPropertyWidgetsFactory.h"
 
 #include <QPen>
 #include <QPainter>
@@ -40,6 +42,9 @@ KPropertyLineStyleSelector::KPropertyLineStyleSelector(QWidget *parent)
 {
     setModel(d->model);
     setItemDelegate(new KPropertyLineStyleItemDelegate(this));
+    setEditable(false);
+    setInsertPolicy(QComboBox::NoInsert);
+    setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 KPropertyLineStyleSelector::~KPropertyLineStyleSelector()
@@ -55,15 +60,10 @@ void KPropertyLineStyleSelector::paintEvent(QPaintEvent *pe)
     option.initFrom(this);
     option.frame = hasFrame();
     QRect r = style()->subControlRect(QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this);
-    if (!option.frame) // frameless combo boxes have smaller margins but styles do not take this into account
-        r.adjust(-14, 0, 14, 1);
-
     QPen pen = itemData(currentIndex(), Qt::DecorationRole).value<QPen>();
-    pen.setBrush(option.palette.text()); // use the view-specific palette; the model hardcodes this to black
-
     QPainter painter(this);
-    painter.setPen(pen);
-    painter.drawLine(r.left(), r.center().y(), r.right(), r.center().y());
+    KPropertyLineStyleItemDelegate::paintItem(&painter, pen, r, option);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }
 
 bool KPropertyLineStyleSelector::addCustomStyle(const QVector<qreal> &style)

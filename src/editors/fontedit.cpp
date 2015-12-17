@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,7 +70,7 @@ void KPropertyFontEditRequester::slotSelectFontClicked()
 {
     bool ok;
     QFont font;
-    font = QFontDialog::getFont( &ok, parentWidget() );
+    font = QFontDialog::getFont(&ok, m_font, parentWidget());
     if (ok) {
         m_font = font;
         setValue(m_font);
@@ -84,6 +84,10 @@ bool KPropertyFontEditRequester::event( QEvent * event )
 }
 
 // -----------
+
+KPropertyFontDelegate::KPropertyFontDelegate()
+{
+}
 
 QWidget * KPropertyFontDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
@@ -100,10 +104,6 @@ void KPropertyFontDelegate::paint( QPainter * painter,
     painter->save();
     const QFont origFont( painter->font() );
     QFont f( index.data(Qt::EditRole).value<QFont>() );
-    int size = f.pointSize(); // will be needed later
-    if (size == -1) {
-        size = f.pixelSize();
-    }
     if (option.font.pointSize() > 0)
         f.setPointSize(option.font.pointSize());
     else if (option.font.pixelSize() > 0)
@@ -117,7 +117,38 @@ void KPropertyFontDelegate::paint( QPainter * painter,
 
     rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
     painter->setFont(origFont);
-    painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        QObject::tr("%1, %2pt", "Font family and size, e.g. Arial, 2pt").arg(f.family()).arg(size));
+    painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, valueToString(index.data(Qt::EditRole), QLocale()));
     painter->restore();
+}
+
+QString KPropertyFontDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    const QFont f(value.value<QFont>());
+    qreal size = f.pointSizeF();
+    QString unit;
+    if (size == -1) {
+        size = f.pixelSize();
+        unit = QLatin1String("px");
+    }
+    else {
+        unit = QLatin1String("pt");
+    }
+    QStringList list;
+    list << f.family();
+    const bool translate = locale.language() == QLocale::C;
+    list << (translate ? QObject::tr("%1%2", "<fontsize><unit>, e.g. 12pt").arg(size).arg(unit)
+                      : QString::fromLatin1("%1%2").arg(size).arg(unit));
+    if (f.bold()) {
+        list << (translate ? QObject::tr("bold", "bold font") : QLatin1String("bold"));
+    }
+    if (f.italic()) {
+        list << (translate ? QObject::tr("italic", "italic font") : QLatin1String("italic"));
+    }
+    if (f.strikeOut()) {
+        list << (translate ? QObject::tr("strikeout", "strikeout font") : QLatin1String("strikeout"));
+    }
+    if (f.underline()) {
+        list << (translate ? QObject::tr("underline", "underline font") : QLatin1String("underline"));
+    }
+    return QLocale::c().createSeparatedList(list); // yes, C locale, we just want ',' separator.
 }

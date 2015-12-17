@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -235,14 +235,13 @@ void KPropertyPixmapDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     QPixmap pm( index.data(Qt::EditRole).value<QPixmap>() );
-    if (pm.isNull())
-        return;
     painter->save();
-    if (pm.height() > option.rect.height() || pm.width() > option.rect.width()) { //scale down
-        QImage img(pm.toImage());
-        img = img.scaled(option.rect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        pm = QPixmap::fromImage(img);
-    }
+    if (!pm.isNull()) {
+        if (pm.height() > option.rect.height() || pm.width() > option.rect.width()) { //scale down
+            QImage img(pm.toImage());
+            img = img.scaled(option.rect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            pm = QPixmap::fromImage(img);
+        }
 //! @todo
 /*    if (m_recentlyPainted != value) {
         m_recentlyPainted = value;
@@ -253,7 +252,26 @@ void KPropertyPixmapDelegate::paint( QPainter * painter,
             m_scaledPixmap = QPixmap::fromImage(img);
         }
     }*/
-    painter->drawPixmap(option.rect.topLeft().x(),
-                  option.rect.topLeft().y() + (option.rect.height() - pm.height()) / 2, pm);
+        painter->drawPixmap(option.rect.topLeft().x(),
+                            option.rect.topLeft().y() + (option.rect.height() - pm.height()) / 2, pm);
+    }
+    QRect r(option.rect);
+    r.setLeft(r.left() + pm.width() + 2);
+    painter->drawText(r, valueToString(index.data(Qt::EditRole), QLocale()));
     painter->restore();
+}
+
+QString KPropertyPixmapDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+{
+    const QPixmap pm(value.value<QPixmap>());
+    if (pm.isNull()) {
+        if (locale.language() == QLocale::C) {
+            return QString();
+        }
+        return QObject::tr("None", "No pixmap");
+    }
+    if (locale.language() == QLocale::C) {
+        return QString::fromLatin1("%1x%2px").arg(pm.width()).arg(pm.height());
+    }
+    return QObject::tr("%1x%2px").arg(locale.toString(pm.width())).arg(locale.toString(pm.height()));
 }

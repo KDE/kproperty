@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rectedit.h"
+#include "KPropertyRectFEditor.h"
 
 #include <QRect>
 
-KPropertyRectDelegate::KPropertyRectDelegate()
+KPropertyRectFDelegate::KPropertyRectFDelegate()
 {
 }
 
-QString KPropertyRectDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+QString KPropertyRectFDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QRect r(value.toRect());
     if (r.isNull()) {
@@ -46,47 +46,47 @@ QString KPropertyRectDelegate::valueToString(const QVariant& value, const QLocal
 
 //------------
 
-KRectComposedProperty::KRectComposedProperty(KProperty *property)
+KRectFComposedProperty::KRectFComposedProperty(KProperty *property)
         : KComposedPropertyInterface(property)
 {
     (void)new KProperty("x",
         QVariant(), QObject::tr("X", "Property: X coordinate"),
-        QObject::tr("X Coordinate", "Property: X coordinate"), KProperty::Int, property);
+        QObject::tr("X Coordinate", "Property: X coordinate"), KProperty::Double, property);
     (void)new KProperty("y",
         QVariant(), QObject::tr("Y", "Property: Y coordinate"),
-        QObject::tr("Y Coordinate", "Property: Y coordinate"), KProperty::Int, property);
+        QObject::tr("Y Coordinate", "Property: Y coordinate"), KProperty::Double, property);
     (void)new KProperty("width",
         QVariant(), QObject::tr("Width", "Property: width of rectangle"),
-        QObject::tr("Width", "Property: width of rectangle"), KProperty::UInt, property);
+        QObject::tr("Width", "Property: width of rectangle"), KProperty::Double, property);
     (void)new KProperty("height",
         QVariant(), QObject::tr("Height", "Property: height of rectangle"),
-        QObject::tr("Height", "Property: height of rectangle"), KProperty::UInt, property);
+        QObject::tr("Height", "Property: height of rectangle"), KProperty::Double, property);
 }
 
-void KRectComposedProperty::setValue(KProperty *property,
+void KRectFComposedProperty::setValue(KProperty *property,
     const QVariant &value, bool rememberOldValue)
 {
-    const QRect r( value.toRect() );
+    const QRectF r(value.toRectF());
     property->child("x")->setValue(r.x(), rememberOldValue, false);
     property->child("y")->setValue(r.y(), rememberOldValue, false);
     property->child("width")->setValue(r.width(), rememberOldValue, false);
     property->child("height")->setValue(r.height(), rememberOldValue, false);
 }
 
-void KRectComposedProperty::childValueChanged(KProperty *child,
-    const QVariant &value, bool rememberOldValue)
+void KRectFComposedProperty::childValueChanged(KProperty *child, const QVariant &value,
+                                               bool rememberOldValue)
 {
     Q_UNUSED(rememberOldValue);
-    QRect r( child->parent()->value().toRect() );
+    QRectF r(child->parent()->value().toRectF());
 
     if (child->name() == "x")
-        r.moveLeft(value.toInt());
+        r.moveLeft(value.toReal());
     else if (child->name() == "y")
-        r.moveTop(value.toInt());
+        r.moveTop(value.toReal());
     else if (child->name() == "width")
-        r.setWidth(value.toInt());
+        r.setWidth(value.toReal());
     else if (child->name() == "height")
-        r.setHeight(value.toInt());
+        r.setHeight(value.toReal());
 
     child->parent()->setValue(r, true, false);
 }

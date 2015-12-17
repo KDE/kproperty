@@ -25,6 +25,9 @@
 #include <QWidget>
 #include <KPropertySet>
 
+class QCheckBox;
+class KPropertyEditorView;
+
 /*! @internal
  * @short KPropertyExample application's main window */
 class Window : public QWidget
@@ -33,6 +36,10 @@ class Window : public QWidget
 public:
     Window();
     virtual ~Window();
+
+protected Q_SLOTS:
+    void showGrid(int state);
+    void showFrame(int state);
 
 private:
     void parseCommandLine();
@@ -43,6 +50,9 @@ private:
     QCommandLineOption m_fontSizeOption;
     QCommandLineOption m_propertyOption;
     QCommandLineOption m_roOption;
+    KPropertyEditorView *m_editorView;
+    QCheckBox *m_showGrid;
+    QCheckBox *m_showFrame;
 };
 
 #endif
