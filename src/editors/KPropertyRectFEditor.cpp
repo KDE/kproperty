@@ -19,7 +19,7 @@
 
 #include "KPropertyRectFEditor.h"
 
-#include <QRect>
+#include <QRectF>
 
 KPropertyRectFDelegate::KPropertyRectFDelegate()
 {
@@ -27,7 +27,7 @@ KPropertyRectFDelegate::KPropertyRectFDelegate()
 
 QString KPropertyRectFDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
-    const QRect r(value.toRect());
+    const QRectF r(value.toRectF());
     if (r.isNull()) {
         if (locale.language() == QLocale::C) {
             return QString();
