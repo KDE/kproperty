@@ -68,7 +68,6 @@ class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
     Q_PROPERTY(double value READ value WRITE setValue USER true)
 
 public:
-//! @todo Support setting precision limits, step, etc.
     KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
     virtual ~KPropertyDoubleSpinBox();
 

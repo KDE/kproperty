@@ -176,6 +176,11 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
     decodeUnit(*prop, &d->unit, &d->hasUnit);
+    if (d->hasUnit) {
+        setSuffix(
+            QObject::tr("%1 %2", "<value> <unit>") // this adds necessary space
+                    .arg(QString()).arg(d->unit.toString()));
+    }
     connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged(double)));
 }
 
@@ -235,16 +240,22 @@ QString KPropertyIntSpinBoxDelegate::propertyValueToString(const KProperty* prop
             return minValueText;
         }
     }
-    if (hasUnit && locale.language() != QLocale::C) {
-        return QObject::tr("%1 %2", "<text> <unit>")
-                .arg(valueToString(prop->value(), locale)).arg(unit.toString());
+    if (!hasUnit) {
+        return valueToString(prop->value(), locale);
     }
-    return valueToString(prop->value(), locale);
+    if (locale.language() == QLocale::C) {
+        return QString::fromLatin1("%1 %2")
+                                   .arg(valueToString(prop->value(), locale))
+                                   .arg(unit.toString());
+    }
+    return QObject::tr("%1 %2", "<value> <unit>")
+                       .arg(valueToString(unit.toUserValue(prop->value().toDouble()), locale))
+                       .arg(unit.toString());
 }
 
 QString KPropertyIntSpinBoxDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
-    return locale.toString(value.toInt());
+    return locale.toString(value.toDouble(), 'f', 0);
 }
 
 QWidget* KPropertyIntSpinBoxDelegate::createEditor( int type, QWidget *parent,
@@ -284,16 +295,21 @@ QString KPropertyDoubleSpinBoxDelegate::propertyValueToString(const KProperty* p
             precision = prop->option("precision").toInt();
         }
     }
-//! @todo precision?
-//! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
-    if (hasUnit && locale.language() != QLocale::C) {
-        return QObject::tr("%1 %2", "<text> <unit>")
-                .arg(valueToString(prop->value(), locale)).arg(unit.toString());
+    const qreal realValue = hasUnit ? unit.toUserValue(prop->value().toReal()) : prop->value().toReal();
+    QString valueString;
+    if (precision >= 0) {
+        valueString = locale.toString(realValue, 'f', precision);
+    } else {
+        valueString = valueToString(realValue, locale);
     }
-    if (prop->value().canConvert(QMetaType::Double) && precision >= 0) {
-        return locale.toString(prop->value().toDouble(), 'f', precision);
+
+    if (!hasUnit) {
+        return valueString;
     }
-    return valueToString(prop->value(), locale);
+    if (locale.language() == QLocale::C) {
+        return QString::fromLatin1("%1 %2").arg(valueString).arg(unit.toString());
+    }
+    return QObject::tr("%1 %2", "<value> <unit>").arg(valueString).arg(unit.toString());
 }
 
 QString KPropertyDoubleSpinBoxDelegate::valueToString(const QVariant& value, const QLocale &locale) const

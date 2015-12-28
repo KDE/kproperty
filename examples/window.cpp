@@ -22,6 +22,7 @@
 
 #include <KProperty>
 #include <KPropertyEditorView>
+#include <KPropertyUnit_p.h>
 
 #include <QDate>
 #include <QDateTime>
@@ -86,6 +87,13 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="Double") {
         m_set.addProperty(p = new KProperty("Double", 3.14159, "Double"), group);
         p->setOption("precision", 4); // will round to 3.1416
+    }
+    if (singleProperty.isEmpty() || singleProperty=="cm") {
+        const qreal cm = 1.0; // 28.3465058 points
+        const qreal points = KPropertyUnit(KPropertyUnit::Centimeter).fromUserValue(cm);
+        m_set.addProperty(p = new KProperty("cm", points, "Double cm"), group);
+        p->setOption("unit", "cm");
+        // default precision == 2
     }
     if (singleProperty.isEmpty() || singleProperty=="Bool") {
         m_set.addProperty(new KProperty("Bool", QVariant(true), "Bool"), group);
