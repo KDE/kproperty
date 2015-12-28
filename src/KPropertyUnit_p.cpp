@@ -226,25 +226,29 @@ qreal KPropertyUnit::parseValue(const QString& _value, qreal defaultVal)
         }
     }
 
-    if (firstLetter == -1)
-        return value.toDouble();
+    bool ok;
+    if (firstLetter == -1) {
+        const qreal result = QVariant(value).toReal(&ok);
+        return ok ? result : defaultVal;
+    }
 
-    const QString symbol = value.mid(firstLetter);
+    const QByteArray symbol = value.mid(firstLetter).toLatin1();
     value.truncate(firstLetter);
     const qreal val = value.toDouble();
 
-    if (symbol == QLatin1String("pt"))
+    if (symbol == "pt" || symbol.isEmpty()) {
         return val;
+    }
 
-    bool ok;
-    KPropertyUnit u = KPropertyUnit::fromSymbol(symbol, &ok);
+    KPropertyUnit u = KPropertyUnit::fromSymbol(QLatin1String(symbol), &ok);
     if (ok)
         return u.fromUserValue(val);
 
-    if (symbol == QLatin1String("m"))
+    if (symbol == "m") {
         return DM_TO_POINT(val * 10.0);
-    else if (symbol == QLatin1String("km"))
+    } else if (symbol == "km") {
         return DM_TO_POINT(val * 10000.0);
+    }
     kprWarning() << "KPropertyUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     //! @todo add support for mi/ft ?

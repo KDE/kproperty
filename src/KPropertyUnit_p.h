@@ -55,7 +55,7 @@
 #define PI_TO_POINT(pi) qreal((pi)*12)
 #define CC_TO_POINT(cc) qreal((cc)*12.840103)
 /**
- * %Calligra stores everything in pt (using "qreal") internally.
+ * %KProperty stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  *
@@ -67,7 +67,7 @@
 class KPROPERTYCORE_EXPORT KPropertyUnit
 {
 public:
-    /** Length units supported by Calligra. */
+    /** Length units supported by %KProperty. */
     enum Type {
         Millimeter = 0,
         Point,  ///< Postscript point, 1/72th of an Inco
@@ -230,7 +230,10 @@ public:
     /// if it is controlled with the given @p listOptions.
     int indexInListForUi(ListOptions listOptions = ListAll) const;
 
-    /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
+    /**
+     * Parses common %KProperty and ODF values, like "10cm", "5mm" to pt.
+     * If no unit is specified, pt is assumed.
+     */
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
     /// parse an angle to its value in degrees
