@@ -32,7 +32,9 @@ if(KPROPERTY_WIDGETS)
         editors/sizefedit.cpp
         editors/sizepolicyedit.cpp
         editors/spinbox.cpp
+        editors/KPropertyGenericSelectionEditor.cpp
         editors/KPropertyStringEditor.cpp
+        editors/KPropertyUrlEditor.cpp
         editors/linestyleedit.cpp
         #  editors/stringlistedit.cpp
         #  editors/symbolcombo.cpp

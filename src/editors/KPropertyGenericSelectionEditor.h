@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,40 +17,38 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_URLEDIT_H
-#define KPROPERTY_URLEDIT_H
+#ifndef KPROPERTYGENERICSELECTIONEDITOR_H
+#define KPROPERTYGENERICSELECTIONEDITOR_H
 
-#include "KPropertyFactory.h"
+#include "kpropertywidgets_export.h"
 
-class KUrlRequester;
+#include <QWidget>
+#include <QScopedPointer>
 
-class KPROPERTYWIDGETS_EXPORT KPropertyUrlEditor : public Widget
+//! A base class for use by editors that have widget on the left and "..." select button on the right
+class KPROPERTYWIDGETS_EXPORT KPropertyGenericSelectionEditor : public QWidget
 {
-    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
     Q_OBJECT
 
 public:
-    explicit KPropertyUrlEditor(KProperty *property, QWidget *parent = 0);
-    virtual ~KPropertyUrlEditor();
+    explicit KPropertyGenericSelectionEditor(QWidget *parent = 0);
 
-    virtual QVariant value() const;
+    ~KPropertyGenericSelectionEditor();
 
-    virtual void setProperty(KProperty *property);
-
-Q_SIGNALS:
-    void commitData( QWidget * editor );
-
-public Q_SLOTS:
-    virtual void setValue(const QVariant &value);
-
-protected Q_SLOTS:
-    void slotValueChanged(const QString &url);
+    //! Sets the visibility of the "..." select button
+    void setSelectionButtonVisible(bool set);
 
 protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+    void setMainWidget(QWidget *widget);
+
+protected Q_SLOTS:
+    //! Reimplement to react on clicking the "..." select button
+    virtual void selectButtonClicked();
 
 private:
-    KUrlRequester *m_edit;
+    Q_DISABLE_COPY(KPropertyGenericSelectionEditor)
+    class Private;
+    QScopedPointer<Private> const d;
 };
 
 #endif

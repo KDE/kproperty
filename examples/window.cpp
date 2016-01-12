@@ -37,6 +37,8 @@
 #include <QDebug>
 #include <QDate>
 #include <QCheckBox>
+#include <QUrl>
+#include <QDir>
 
 Window::Window()
         : QWidget()
@@ -192,6 +194,22 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="Invisible") {
         m_set.addProperty(p = new KProperty("Invisible", "I am invisible", "Invisible"), group);
         p->setVisible(false);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="Url") {
+        m_set.addProperty(p = new KProperty("Url", QUrl("https://community.kde.org/KProperty"), "Url"), group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="ExistingFile") {
+        m_set.addProperty(p = new KProperty("ExistingFile", QUrl::fromLocalFile(QDir::homePath()), "Existing File"), group);
+        p->setOption("fileMode", "existingFile");
+    }
+    if (singleProperty.isEmpty() || singleProperty=="OverwriteFile") {
+        m_set.addProperty(p = new KProperty("OverwriteFile", QUrl::fromLocalFile(QDir::homePath()), "Overwrite File"), group);
+        p->setOption("fileMode", "existingFile");
+        p->setOption("confirmOverwrites", true);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="Dir") {
+        m_set.addProperty(p = new KProperty("Dir", QUrl::fromLocalFile(QDir::homePath()), "Dir"), group);
+        p->setOption("fileMode", "dirsOnly");
     }
 
 // qDebug() << m_set.groupNames();

@@ -53,7 +53,18 @@ class KPropertySet;
          and only if the property accepts two states (i.e. when "3State" option is not true).
          If this option is not present, null values are displayed as false.</li>
     <li> extraValueAllowed: Allow the user to manually enter a value into a combobox
-         that is not in the list. The entered text will be returned as opposed to a matching key.
+         that is not in the list. The entered text will be returned as opposed to a matching key.</li>
+    <li> fileMode: indicates what the user may select in the file dialog for the url type's editor:
+         <ul>
+         <li>"dirsOnly": only support and display directories
+             See QFileDialog::ShowDirsOnly and QFileDialog::Directory.</li>
+         <li>"existingFile": only allow to select one existing file. See QFileDialog::ExistingFile.</li>
+         <li>For any other value, supports any file, whether it exists or not. See QFileDialog::AnyFile.</li>
+         </ul>
+         @note The line edit does not validate the content.
+         </li>
+    <li>confirmOverwrites: if true, user will be asked for file overwriting by url editor; false by default.
+         @note The line edit does not validate the content.
     </li>
     </ul>
  */

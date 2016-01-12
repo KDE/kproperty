@@ -20,7 +20,8 @@ set(KPROPERTY_EDITORS_HEADERS
         #StringListEdit
         #SymbolCombo
         TimeEdit
-        #TODO UrlEdit
+        #TODO KPropertyUrlEditor
+        #TODO KPropertyGenericSelectionEditor
 )
 
 ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
@@ -33,7 +34,9 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
     REQUIRED_HEADERS kproperty_editors_HEADERS
     ORIGINAL CAMELCASE
     HEADER_NAMES
+        KPropertyGenericSelectionEditor
         KPropertyStringEditor
+        KPropertyUrlEditor
 )
 
 install(

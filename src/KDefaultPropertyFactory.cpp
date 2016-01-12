@@ -43,6 +43,7 @@
 #include "editors/KPropertyStringEditor.h"
 // #include "symbolcombo.h"
 #include "editors/timeedit.h"
+#include "editors/KPropertyUrlEditor.h"
 // #include "urledit.h"
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
@@ -71,6 +72,7 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
     addEditor( KProperty::Time, new KPropertyTimeDelegate );
     addEditor( KProperty::UInt, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
     addEditor( KProperty::ULongLong, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
+    addEditor( KProperty::Url, new KPropertyUrlDelegate );
     addEditor( KProperty::ValueFromList, new KPropertyComboBoxDelegate );
 }
 
