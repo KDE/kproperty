@@ -22,6 +22,7 @@
 #include "KProperty.h"
 #include "KPropertySet.h"
 #include "KPropertyWidgetsFactory.h"
+#include "KPropertyWidgetsPluginManager.h"
 #include "kproperty_debug.h"
 #include "KPropertyUtils_p.h"
 
@@ -147,7 +148,7 @@ void ItemDelegate::paint(QPainter *painter,
     KProperty *property = editorModel->propertyForItem(index);
     const int t = typeForProperty( property );
     bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
-    if (index.column() == 1 && KPropertyWidgetsFactoryManager::self()->paint(t, painter, alteredOption, index)) {
+    if (index.column() == 1 && KPropertyWidgetsPluginManager::self()->paint(t, painter, alteredOption, index)) {
         useQItemDelegatePaint = false;
     }
     if (useQItemDelegatePaint) {
@@ -208,10 +209,10 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     KProperty *property = editorModel->propertyForItem(index);
     const int t = typeForProperty(property);
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
-    QWidget *w = KPropertyWidgetsFactoryManager::self()->createEditor(t, parent, alteredOption, index);
+    QWidget *w = KPropertyWidgetsPluginManager::self()->createEditor(t, parent, alteredOption, index);
     if (!w) {
         // fall back to String type
-        w = KPropertyWidgetsFactoryManager::self()->createEditor(KProperty::String, parent, alteredOption, index);
+        w = KPropertyWidgetsPluginManager::self()->createEditor(KProperty::String, parent, alteredOption, index);
     }
     if (w) {
         if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)").constData())

@@ -154,37 +154,4 @@ protected:
     Private * const d;
 };
 
-class KProperty;
-class KCustomProperty;
-
-class KPROPERTYWIDGETS_EXPORT KPropertyWidgetsFactoryManager
-{
-public:
-    bool isEditorForTypeAvailable( int type ) const;
-
-    QWidget * createEditor(
-        int type,
-        QWidget *parent,
-        const QStyleOptionViewItem & option,
-        const QModelIndex & index ) const;
-
-    bool paint( int type,
-        QPainter * painter,
-        const QStyleOptionViewItem & option,
-        const QModelIndex & index ) const;
-
-    //! Registers factory @a factory. It becomes owned by the manager.
-    void registerFactory(KPropertyWidgetsFactory *factory);
-
-    /*! \return a pointer to a factory manager instance.*/
-    static KPropertyWidgetsFactoryManager* self();
-
-    KPropertyWidgetsFactoryManager();
-    ~KPropertyWidgetsFactoryManager();
-private:
-
-    class Private;
-    Private * const d;
-};
-
 #endif

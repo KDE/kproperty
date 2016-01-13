@@ -43,6 +43,7 @@ if(KPROPERTY_WIDGETS)
 
         kproperty_debug.cpp # needed here too
         KPropertyWidgetsFactory.cpp
+        KPropertyWidgetsPluginManager.cpp
         KDefaultPropertyFactory.cpp
         KPropertyEditorView.cpp
         KPropertyEditorDataModel.cpp
@@ -235,6 +236,7 @@ if(KPROPERTY_WIDGETS)
         ORIGINAL CAMELCASE
         HEADER_NAMES
             KPropertyWidgetsFactory
+            KPropertyWidgetsPluginManager
             KPropertyUtils
             KPropertyEditorView
             KPropertyEditorDataModel
