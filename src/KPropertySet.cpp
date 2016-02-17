@@ -146,8 +146,10 @@ public:
         // do not copy too deeply
         list.clear();
         hash.clear();
+        propertiesOfGroup.clear();
         groupForProperties.clear();
         m_visiblePropertiesCount = 0;
+        informAboutClearing = 0;
     }
 
     // Copy all properties from the other set
