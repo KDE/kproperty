@@ -53,7 +53,7 @@ public:
         return nonConstNull;
     }
 
-    void addProperty(KProperty *property, QByteArray group/*, bool updateSortingKey*/)
+    void addProperty(KProperty *property, const QByteArray &group/*, bool updateSortingKey*/)
     {
         if (!property) {
             kprWarning() << "property == 0";
@@ -63,9 +63,7 @@ public:
             kprWarning() << "COULD NOT ADD NULL PROPERTY";
             return;
         }
-        if (group.isEmpty())
-            group = "common";
-
+        const QByteArray realGroup(group.isEmpty() ? "common" : group);
         KProperty *p = this->property(property->name());
         if (p) {
             q->addRelatedProperty(p, property);
@@ -76,7 +74,7 @@ public:
             if (property->isVisible()) {
                 m_visiblePropertiesCount++;
             }
-            q->addToGroup(group, property);
+            q->addToGroup(realGroup, property);
         }
 
         property->addSet(q);
@@ -365,7 +363,7 @@ KPropertySet::~KPropertySet()
 /////////////////////////////////////////////////////
 
 void
-KPropertySet::addProperty(KProperty *property, QByteArray group)
+KPropertySet::addProperty(KProperty *property, const QByteArray &group)
 {
     d->addProperty(property, group);
 }

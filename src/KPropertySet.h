@@ -125,7 +125,7 @@ public:
 
     /*! Adds the property to the set, in the group. You can use any group name, except "common"
       (which is already used for basic group). */
-    void addProperty(KProperty *property, QByteArray group = "common");
+    void addProperty(KProperty *property, const QByteArray &group = "common");
 
     /*! Removes property from the set. Emits aboutToDeleteProperty before removing.*/
     void removeProperty(KProperty *property);
