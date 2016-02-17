@@ -550,7 +550,7 @@ KPropertySet::operator[](const QByteArray &name) const
     return d->propertyOrNull(name);
 }
 
-const KPropertySet&
+KPropertySet&
 KPropertySet::operator= (const KPropertySet & set)
 {
     if (&set == this)

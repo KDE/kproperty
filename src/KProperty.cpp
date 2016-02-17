@@ -540,14 +540,14 @@ KProperty::hasOptions() const
 
 /////////////////////////////////////////////////////////////////
 
-const KProperty&
+KProperty&
 KProperty::operator= (const QVariant & val)
 {
     setValue(val);
     return *this;
 }
 
-const KProperty&
+KProperty&
 KProperty::operator= (const KProperty & property)
 {
     if (&property == this)

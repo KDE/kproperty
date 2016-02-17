@@ -387,10 +387,10 @@ public:
     bool hasOptions() const;
 
     /*! Equivalent to setValue(const QVariant &) */
-    const KProperty& operator= (const QVariant& val);
+    KProperty& operator= (const QVariant& val);
 
     /*! Assigns a deep copy of all attributes of \a property to this property. */
-    const KProperty& operator= (const KProperty &property);
+    KProperty& operator= (const KProperty &property);
 
     /*! Compares two properties.*/
     bool operator ==(const KProperty &prop) const;

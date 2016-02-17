@@ -198,7 +198,7 @@ public:
     QVariant propertyValue(const QByteArray &name, const QVariant& defaultValue = QVariant()) const;
 
     /*! Creates a deep copy of \a set and assigns it to this property set. */
-    const KPropertySet& operator= (const KPropertySet &set);
+    KPropertySet& operator= (const KPropertySet &set);
 
     /*! Change the value of property whose key is \a property to \a value.
     @see void changePropertyIfExists(const QByteArray &, const QVariant &) */
