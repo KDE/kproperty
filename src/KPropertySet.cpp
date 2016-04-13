@@ -436,14 +436,14 @@ KPropertySet::removeFromGroup(KProperty *property)
     QList<QByteArray>* propertiesOfGroup = d->propertiesOfGroup[ group ];
     if (propertiesOfGroup) {
         propertiesOfGroup->removeAt(propertiesOfGroup->indexOf(property->name()));
-    }
-    if (propertiesOfGroup->isEmpty()) {
-        //remove group as well
-        d->propertiesOfGroup.take(group);
-        delete propertiesOfGroup;
-        const int i = d->groupNames.indexOf(group);
-        if (i != -1)
-            d->groupNames.removeAt(i);
+        if (propertiesOfGroup->isEmpty()) {
+            //remove group as well
+            d->propertiesOfGroup.take(group);
+            delete propertiesOfGroup;
+            const int i = d->groupNames.indexOf(group);
+            if (i != -1)
+                d->groupNames.removeAt(i);
+        }
     }
     d->removePropertyFromGroup(property);
 }
