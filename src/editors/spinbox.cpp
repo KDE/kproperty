@@ -33,6 +33,7 @@
 #include <QLocale>
 
 #include <climits>
+#include <cfloat>
 
 //! @return font size expressed in points (pt)
 //! or if points are not available - in pixels (px) for @a font
@@ -158,7 +159,7 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
     if (minVal.canConvert(QMetaType::Double)) {
         setMinimum(minVal.toDouble());
     }
-    QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
+    QVariant maxVal(prop->option("max", DBL_MAX / 100.0));
     if (maxVal.canConvert(QMetaType::Double)) {
         setMaximum(maxVal.toDouble());
     }
