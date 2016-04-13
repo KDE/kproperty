@@ -92,7 +92,9 @@ QWidget* KPropertyDateDelegate::createEditor(int type, QWidget* parent,
 
     const KPropertyEditorDataModel *editorModel
         = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel->propertyForItem(index);
-
+    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    if (!prop) {
+        return 0;
+    }
     return new KPropertyDateEditor(prop, parent);
 }

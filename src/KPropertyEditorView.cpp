@@ -122,6 +122,9 @@ void ItemDelegate::paint(QPainter *painter,
     painter->save();
     QRect r(option.rect);
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    if (!editorModel) {
+        return;
+    }
     bool modified = false;
     if (index.column()==0) {
         r.setWidth(r.width() - 1);
@@ -206,7 +209,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
         return 0;
     QStyleOptionViewItem alteredOption(option);
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *property = editorModel->propertyForItem(index);
+    KProperty *property = editorModel ? editorModel->propertyForItem(index) : 0;
     const int t = property ? typeForProperty(property) : KProperty::String;
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = KPropertyWidgetsPluginManager::self()->createEditor(t, parent, alteredOption, index);
@@ -530,7 +533,7 @@ void KPropertyEditorView::setGridLineColor(const QColor& color)
 static QModelIndex findChildItem(const KProperty& property, const QModelIndex &parent)
 {
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(parent.model());
-    if (editorModel->propertyForItem(parent) == &property) {
+    if (editorModel && editorModel->propertyForItem(parent) == &property) {
         return parent;
     }
     int row = 0;

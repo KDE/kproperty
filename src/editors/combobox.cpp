@@ -298,7 +298,10 @@ QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,
     Q_UNUSED(option);
     const KPropertyEditorDataModel *editorModel
         = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *property = editorModel->propertyForItem(index);
+    KProperty *property = editorModel ? editorModel->propertyForItem(index) : 0;
+    if (!property) {
+        return 0;
+    }
     KPropertyComboBoxEditor::Options options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
     KPropertyComboBoxEditor *cb = new KPropertyComboBoxEditor(*property->listData(), options, parent);

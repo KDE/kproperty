@@ -226,7 +226,10 @@ QWidget* KPropertyPixmapDelegate::createEditor( int type, QWidget *parent,
     Q_UNUSED(option);
     const KPropertyEditorDataModel *editorModel
         = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *property = editorModel->propertyForItem(index);
+    KProperty *property = editorModel ? editorModel->propertyForItem(index) : 0;
+    if (!property) {
+        return 0;
+    }
     KPropertyPixmapEditor *pe = new KPropertyPixmapEditor(property, parent);
     return pe;
 }

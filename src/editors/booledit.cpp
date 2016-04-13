@@ -303,7 +303,7 @@ QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,
     Q_UNUSED(option);
     const KPropertyEditorDataModel *editorModel
         = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel->propertyForItem(index);
+    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
 
     // boolean editors can optionally accept 3rd state:
     if (prop->option("3State", false).toBool()) {
@@ -322,7 +322,10 @@ void KPropertyBoolDelegate::paint( QPainter * painter,
     painter->save();
     const KPropertyEditorDataModel *editorModel
         = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel->propertyForItem(index);
+    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    if (!prop) {
+        return;
+    }
     const QVariant value( index.data(Qt::EditRole) );
     QRect rect(option.rect);
     const bool threeState = prop->option("3State", false).toBool();

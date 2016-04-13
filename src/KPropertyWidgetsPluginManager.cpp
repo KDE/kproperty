@@ -112,9 +112,9 @@ QWidget * KPropertyWidgetsPluginManager::createEditor(
     if (!creator)
         return 0;
     QWidget *w = creator->createEditor(type, parent, option, index);
-    if (w) {
-       const KPropertyEditorDataModel *editorModel
-           = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    const KPropertyEditorDataModel *editorModel
+        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    if (w && editorModel) {
        KProperty *property = editorModel->propertyForItem(index);
        w->setObjectName(QLatin1String(property->name()));
        if (creator->options.removeBorders) {

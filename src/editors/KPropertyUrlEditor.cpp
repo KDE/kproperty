@@ -95,7 +95,7 @@ QWidget* KPropertyUrlDelegate::createEditor(int type, QWidget *parent,
     Q_UNUSED(type)
     Q_UNUSED(option)
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    const KProperty *prop = editorModel->propertyForItem(index);
+    const KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
     return new KPropertyUrlEditor(prop ? *prop : KProperty(), parent);
 }
 
