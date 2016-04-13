@@ -207,7 +207,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     QStyleOptionViewItem alteredOption(option);
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
     KProperty *property = editorModel->propertyForItem(index);
-    const int t = typeForProperty(property);
+    const int t = property ? typeForProperty(property) : KProperty::String;
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = KPropertyWidgetsPluginManager::self()->createEditor(t, parent, alteredOption, index);
     if (!w) {
@@ -225,7 +225,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     }
     QObject::disconnect(w, SIGNAL(commitData(QWidget*)),
         this, SIGNAL(commitData(QWidget*)));
-    if (computeAutoSync( property, static_cast<KPropertyEditorView*>(this->parent())->isAutoSync() )) {
+    if (property && computeAutoSync( property, static_cast<KPropertyEditorView*>(this->parent())->isAutoSync() )) {
         QObject::connect(w, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
     }
