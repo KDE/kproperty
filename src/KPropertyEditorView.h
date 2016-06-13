@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,6 +92,9 @@ public:
 
     //! @return default grid line color - Qt::gray
     static QColor defaultGridLineColor() { return Qt::gray; }
+
+    //! Reimplemented to suggest widget size that is based on number of property items.
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     /*! Populates the editor view with items for each property from the @ set set.
