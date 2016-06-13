@@ -19,7 +19,7 @@
 */
 
 #include "booledit.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyUtils.h"
 #include "kproperty_debug.h"
 
 #include <QIcon>
@@ -301,9 +301,7 @@ QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    KProperty *prop = KPropertyUtils::propertyForIndex(index);
 
     // boolean editors can optionally accept 3rd state:
     if (prop->option("3State", false).toBool()) {
@@ -320,9 +318,7 @@ void KPropertyBoolDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
         return;
     }

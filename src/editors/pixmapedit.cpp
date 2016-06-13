@@ -22,7 +22,7 @@
 #include "pixmapedit.h"
 #include "utils.h"
 #include "KProperty.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyUtils.h"
 
 #include <QPainter>
 #include <QLabel>
@@ -224,9 +224,8 @@ QWidget* KPropertyPixmapDelegate::createEditor( int type, QWidget *parent,
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *property = editorModel ? editorModel->propertyForItem(index) : 0;
+
+    KProperty *property = KPropertyUtils::propertyForIndex(index);
     if (!property) {
         return 0;
     }

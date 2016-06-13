@@ -21,8 +21,8 @@
 */
 
 #include "timeedit.h"
+#include "KPropertyUtils.h"
 
-#include <KPropertyEditorDataModel.h>
 #include <QLocale>
 
 KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)
@@ -95,9 +95,9 @@ QWidget* KPropertyTimeDelegate::createEditor(int type, QWidget* parent,
     Q_UNUSED(type);
     Q_UNUSED(option);
 
-    const KPropertyEditorDataModel* editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty* prop = editorModel->propertyForItem(index);
-
+    KProperty* prop = KPropertyUtils::propertyForIndex(index);
+    if (!prop) {
+        return 0;
+    }
     return new KPropertyTimeEditor(prop, parent);
 }

@@ -30,13 +30,15 @@ class KProperty;
 
 /*! @short A data model for using Set objects within the Qt's model/view API.
  @see KPropertyEditorView
+ @internal
 */
-class KPROPERTYWIDGETS_EXPORT KPropertyEditorDataModel : public QAbstractItemModel
+class KPropertyEditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit KPropertyEditorDataModel(KPropertySet &propertySet, QObject *parent = 0,
+    //! Creates a new model. @a propertySet is required.
+    explicit KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent = 0,
                                       KPropertySetIterator::Order order = KPropertySetIterator::InsertionOrder);
     ~KPropertyEditorDataModel();
 
@@ -62,12 +64,12 @@ public:
 
     QModelIndex buddy(const QModelIndex & index) const;
 
-    //! @return property set object for this model.
-    KPropertySet& propertySet() const;
+    //! @return property set object for this model. It is never @c nullptr.
+    KPropertySet* propertySet() const;
 
     //! @return property object for model index @a index
-    //! or 0 for invalid index or index without property assigned.
-    KProperty *propertyForItem(const QModelIndex& index) const;
+    //! or @c nullptr for invalid index or index without a property assigned.
+    KProperty *propertyForIndex(const QModelIndex& index) const;
 
     //! @return model index for property named @a propertyName
     //! or invalid index if such property could not be found.

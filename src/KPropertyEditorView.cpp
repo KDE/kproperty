@@ -24,6 +24,7 @@
 #include "KPropertyWidgetsFactory.h"
 #include "KPropertyWidgetsPluginManager.h"
 #include "kproperty_debug.h"
+#include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
 
 #include <QIcon>
@@ -148,7 +149,7 @@ void ItemDelegate::paint(QPainter *painter,
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
     }
 
-    KProperty *property = editorModel->propertyForItem(index);
+    KProperty *property = editorModel->propertyForIndex(index);
     const int t = typeForProperty( property );
     bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
     if (index.column() == 1 && KPropertyWidgetsPluginManager::self()->paint(t, painter, alteredOption, index)) {
@@ -208,8 +209,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     if (!index.isValid())
         return 0;
     QStyleOptionViewItem alteredOption(option);
-    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *property = editorModel ? editorModel->propertyForItem(index) : 0;
+    KProperty *property = KPropertyUtils::propertyForIndex(index);
     const int t = property ? typeForProperty(property) : KProperty::String;
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = KPropertyWidgetsPluginManager::self()->createEditor(t, parent, alteredOption, index);
@@ -331,7 +331,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
         if (index.isValid()) {
 //! @todo This crashes when changing the interpreter type in the script plugin
 #if 0
-            Property *property = d->model->propertyForItem(index);
+            Property *property = d->model->propertyForIndex(index);
             //if (property->isNull())
             //    kprDebug() << "WTF? a NULL property?";
             //else
@@ -374,7 +374,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
     KPropertyEditorDataModel *oldModel = d->model;
     const KPropertySetIterator::Order setOrder
         = (options & AlphabeticalOrder) ? KPropertySetIterator::AlphabeticalOrder : KPropertySetIterator::InsertionOrder;
-    d->model = d->set ? new KPropertyEditorDataModel(*d->set, this, setOrder) : 0;
+    d->model = d->set ? new KPropertyEditorDataModel(d->set, this, setOrder) : 0;
     setModel( d->model );
     delete oldModel;
 
@@ -486,7 +486,7 @@ void KPropertyEditorView::undo()
     if (!d->set || d->set->isReadOnly())
         return;
 
-    KProperty *property = d->model->propertyForItem(currentIndex());
+    KProperty *property = d->model->propertyForIndex(currentIndex());
     if (computeAutoSync( property, d->autoSync ))
         property->resetValue();
 }
@@ -532,8 +532,7 @@ void KPropertyEditorView::setGridLineColor(const QColor& color)
 
 static QModelIndex findChildItem(const KProperty& property, const QModelIndex &parent)
 {
-    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(parent.model());
-    if (editorModel && editorModel->propertyForItem(parent) == &property) {
+    if (parent.model() && KPropertyUtils::propertyForIndex(parent) == &property) {
         return parent;
     }
     int row = 0;

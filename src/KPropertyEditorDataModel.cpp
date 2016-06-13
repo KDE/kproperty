@@ -27,8 +27,13 @@
 class KPropertyEditorDataModel::Private
 {
 public:
-    explicit Private(KPropertySet *_set, KPropertySetIterator::Order _order = KPropertySetIterator::InsertionOrder) : set(_set), order(_order)
+    explicit Private(KPropertySet *_set, KPropertySetIterator::Order _order = KPropertySetIterator::InsertionOrder)
+        : set(_set), order(_order)
     {
+        Q_ASSERT(set);
+        if (!set) {
+            qFatal("KPropertyEditorDataModel requires a KPropertySet object");
+        }
     }
     KPropertySet *set;
     KProperty rootItem;
@@ -52,10 +57,10 @@ public:
 
 // -------------------
 
-KPropertyEditorDataModel::KPropertyEditorDataModel(KPropertySet &propertySet, QObject *parent,
+KPropertyEditorDataModel::KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent,
                                                    KPropertySetIterator::Order order)
         : QAbstractItemModel(parent)
-        , d(new Private(&propertySet, order))
+        , d(new Private(propertySet, order))
 {
     collectIndices();
 }
@@ -96,7 +101,7 @@ QModelIndex KPropertyEditorDataModel::indexForColumn(const QModelIndex& index, i
 {
     if (column == 0)
         return index;
-    return createIndex(index.row(), column, propertyForItem(index));
+    return createIndex(index.row(), column, propertyForIndex(index));
 }
 
 int KPropertyEditorDataModel::columnCount(const QModelIndex &parent) const
@@ -112,7 +117,7 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
 
     const int col = index.column();
     if (col == 0) {
-        KProperty *prop = propertyForItem(index);
+        KProperty *prop = propertyForIndex(index);
         if (role == Qt::DisplayRole) {
             if (!prop->caption().isEmpty())
                 return prop->caption();
@@ -123,7 +128,7 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
         }
     }
     else if (col == 1) {
-        KProperty *prop = propertyForItem(index);
+        KProperty *prop = propertyForIndex(index);
         if (role == Qt::EditRole) {
             return prop->value();
         }
@@ -141,7 +146,7 @@ Qt::ItemFlags KPropertyEditorDataModel::flags(const QModelIndex &index) const
 
     const int col = index.column();
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    KProperty *prop = propertyForItem(index);
+    KProperty *prop = propertyForIndex(index);
     if (prop) {
         if (col == 1) {
             f |= Qt::ItemIsEditable;
@@ -150,7 +155,7 @@ Qt::ItemFlags KPropertyEditorDataModel::flags(const QModelIndex &index) const
     return f;
 }
 
-KProperty *KPropertyEditorDataModel::propertyForItem(const QModelIndex &index) const
+KProperty *KPropertyEditorDataModel::propertyForIndex(const QModelIndex &index) const
 {
     if (index.isValid()) {
         KProperty *item = static_cast<KProperty*>(index.internalPointer());
@@ -178,7 +183,7 @@ QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelInd
     if (parent.isValid() && parent.column() != 0)
         return QModelIndex();
 
-    KProperty *parentItem = propertyForItem(parent);
+    KProperty *parentItem = propertyForIndex(parent);
     KProperty *childItem;
     if (parentItem == &d->rootItem) { // special case: top level
         int visibleRows = 0;
@@ -206,7 +211,7 @@ QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    KProperty *childItem = propertyForItem(index);
+    KProperty *childItem = propertyForIndex(index);
     KProperty *parentItem = childItem->parent();
 
     if (!parentItem)
@@ -222,7 +227,7 @@ QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
 
 int KPropertyEditorDataModel::rowCount(const QModelIndex &parent) const
 {
-    KProperty *parentItem = propertyForItem(parent);
+    KProperty *parentItem = propertyForIndex(parent);
     if (!parentItem || parentItem == &d->rootItem) { // top level
         return d->set->count(VisiblePropertySelector());
     }
@@ -236,7 +241,7 @@ bool KPropertyEditorDataModel::setData(const QModelIndex &index, const QVariant 
     if (role != Qt::EditRole)
         return false;
 
-    KProperty *item = propertyForItem(index);
+    KProperty *item = propertyForIndex(index);
     if (item == &d->rootItem)
         return false;
     item->setValue(value);
@@ -260,9 +265,9 @@ QModelIndex KPropertyEditorDataModel::buddy(const QModelIndex & idx) const
     return idx;
 }
 
-KPropertySet& KPropertyEditorDataModel::propertySet() const
+KPropertySet* KPropertyEditorDataModel::propertySet() const
 {
-    return *d->set;
+    return d->set;
 }
 
 void KPropertyEditorDataModel::setOrder(KPropertySetIterator::Order order)
@@ -280,7 +285,7 @@ KPropertySetIterator::Order KPropertyEditorDataModel::order() const
 
 bool KPropertyEditorDataModel::hasChildren(const QModelIndex & parent) const
 {
-    KProperty *parentItem = propertyForItem(parent);
+    KProperty *parentItem = propertyForIndex(parent);
     if (!parentItem || parentItem == &d->rootItem) { // top level
         return d->set->hasVisibleProperties();
     }

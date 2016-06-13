@@ -20,8 +20,7 @@
 */
 
 #include "KPropertyUrlEditor.h"
-#include "KProperty.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyUtils.h"
 
 #include <QLineEdit>
 #include <QFileDialog>
@@ -94,8 +93,7 @@ QWidget* KPropertyUrlDelegate::createEditor(int type, QWidget *parent,
 {
     Q_UNUSED(type)
     Q_UNUSED(option)
-    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    const KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    const KProperty *prop = KPropertyUtils::propertyForIndex(index);
     return new KPropertyUrlEditor(prop ? *prop : KProperty(), parent);
 }
 

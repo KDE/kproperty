@@ -20,10 +20,10 @@
 */
 
 #include "combobox.h"
-#include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
 #include "kproperty_debug.h"
 #include "KPropertyWidgetsFactory.h"
+#include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
 
 #include <QCompleter>
@@ -296,9 +296,8 @@ QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *property = editorModel ? editorModel->propertyForItem(index) : 0;
+
+    KProperty *property = KPropertyUtils::propertyForIndex(index);
     if (!property) {
         return 0;
     }

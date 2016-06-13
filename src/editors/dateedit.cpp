@@ -22,7 +22,7 @@
 
 #include "dateedit.h"
 
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyUtils.h"
 
 #include <QLocale>
 
@@ -90,9 +90,7 @@ QWidget* KPropertyDateDelegate::createEditor(int type, QWidget* parent,
     Q_UNUSED(type);
     Q_UNUSED(option);
 
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
         return 0;
     }

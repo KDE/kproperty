@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@
 
 #include <QWidget>
 
+class KProperty;
+
 //! @short A container widget that can be used to split information into hideable sections
 //! for a property editor-like panes.
 class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
@@ -40,5 +42,13 @@ protected:
     class Private;
     Private * const d;
 };
+
+namespace KPropertyUtils {
+
+//! @return property object for model index @a index or @c nullptr if there is no property
+//! referenced by the index.
+KPROPERTYWIDGETS_EXPORT KProperty* propertyForIndex(const QModelIndex &index);
+
+} // KPropertyUtils
 
 #endif

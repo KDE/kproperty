@@ -22,9 +22,9 @@
 #include "spinbox.h"
 #include "KProperty.h"
 #include "KProperty_p.h"
-#include "KPropertyEditorDataModel.h"
 #include "KPropertyEditorView.h"
 #include "KPropertyUnit_p.h"
+#include "KPropertyUtils.h"
 #include "KPropertyWidgetsFactory.h"
 #include "kproperty_debug.h"
 
@@ -264,9 +264,7 @@ QWidget* KPropertyIntSpinBoxDelegate::createEditor( int type, QWidget *parent,
 {
     Q_UNUSED(type);
 
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+    KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
         return 0;
     }
@@ -325,9 +323,8 @@ QWidget* KPropertyDoubleSpinBoxDelegate::createEditor( int type, QWidget *parent
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_UNUSED(type);
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    KProperty *prop = editorModel ? editorModel->propertyForItem(index) : 0;
+
+    KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
         return 0;
     }

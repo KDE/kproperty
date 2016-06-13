@@ -239,7 +239,6 @@ if(KPROPERTY_WIDGETS)
             KPropertyWidgetsPluginManager
             KPropertyUtils
             KPropertyEditorView
-            KPropertyEditorDataModel
     )
 
     install(

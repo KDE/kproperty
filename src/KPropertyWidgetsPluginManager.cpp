@@ -21,7 +21,7 @@
 #include "KPropertyWidgetsPluginManager.h"
 #include "KDefaultPropertyFactory.h"
 #include "KPropertyEditorView.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyUtils.h"
 
 //! Class for access to KPropertyWidgetsPluginManager constructor
 class KPropertyWidgetsPluginManagerSingleton
@@ -112,10 +112,8 @@ QWidget * KPropertyWidgetsPluginManager::createEditor(
     if (!creator)
         return 0;
     QWidget *w = creator->createEditor(type, parent, option, index);
-    const KPropertyEditorDataModel *editorModel
-        = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
-    if (w && editorModel) {
-       KProperty *property = editorModel->propertyForItem(index);
+    KProperty *property = KPropertyUtils::propertyForIndex(index);
+    if (w && property) {
        w->setObjectName(QLatin1String(property->name()));
        if (creator->options.removeBorders) {
 //! @todo get real border color from the palette
