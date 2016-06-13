@@ -31,7 +31,7 @@ class KProperty;
 class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
 {
 public:
-    KPropertyGroupWidget(const QString& title, QWidget* parent);
+    explicit KPropertyGroupWidget(const QString& title, QWidget* parent = 0);
     ~KPropertyGroupWidget();
 
     void setContents(QWidget* contents);
