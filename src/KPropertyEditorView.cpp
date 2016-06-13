@@ -524,6 +524,11 @@ QSize KPropertyEditorView::sizeHint() const
     return viewportSizeHint();
 }
 
+KPropertySet* KPropertyEditorView::propertySet() const
+{
+    return d->model ? d->model->propertySet() : nullptr;
+}
+
 QColor KPropertyEditorView::gridLineColor() const
 {
     return d->gridLineColor;

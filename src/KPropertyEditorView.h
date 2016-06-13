@@ -96,6 +96,10 @@ public:
     //! Reimplemented to suggest widget size that is based on number of property items.
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
+    //! @return the property set object that is assigned to this view or nullptr is no set
+    //! is currently assigned.
+    KPropertySet* propertySet() const;
+
 public Q_SLOTS:
     /*! Populates the editor view with items for each property from the @ set set.
      Child items for composed properties are also created.
