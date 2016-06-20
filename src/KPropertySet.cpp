@@ -190,7 +190,6 @@ public:
     bool ownProperty;
     bool readOnly;
     QByteArray prevSelection;
-    QString typeName;
 
     //! Used in Set::informAboutClearing(Property*) to declare that the property wants
     //! to be informed that the set has been cleared (all properties are deleted)
@@ -326,15 +325,12 @@ KPropertySetIterator::operator ++()
 
 //////////////////////////////////////////////
 
-KPropertySet::KPropertySet(QObject *parent, const QString &typeName)
+KPropertySet::KPropertySet(QObject *parent)
         : QObject(parent)
         , d(new KPropertySet::Private(this))
 {
-    setObjectName(typeName.toLower());
-
     d->ownProperty = true;
     d->groupDescriptions.insert("common", tr("General", "General properties"));
-    d->typeName = typeName.toLower();
 }
 
 
@@ -584,13 +580,6 @@ void KPropertySet::debug() const
 KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
 {
     dbg.nospace() << "KPropertySet(";
-    if (!set.typeName().isEmpty()) {
-        dbg.nospace() << "TYPENAME=" << set.typeName();
-        if (set.isEmpty()) {
-            dbg.space() << "<EMPTY>)";
-            return dbg.space();
-        }
-    }
     if (set.isEmpty()) {
         dbg.space() << "<EMPTY>)";
         return dbg.space();
@@ -623,12 +612,6 @@ void
 KPropertySet::setPreviousSelection(const QByteArray &prevSelection)
 {
     d->prevSelection = prevSelection;
-}
-
-QString
-KPropertySet::typeName() const
-{
-    return d->typeName;
 }
 
 void KPropertySet::addRelatedProperty(KProperty *p1, KProperty *p2) const

@@ -114,8 +114,7 @@ class KPROPERTYCORE_EXPORT KPropertySet : public QObject
 
 public:
     //! Constructs a new Set object.
-    //! @see typeName()
-    explicit KPropertySet(QObject *parent = 0, const QString &typeName = QString());
+    explicit KPropertySet(QObject *parent = 0);
 
     /*! Constructs a deep copy of \a set.
      The new object will not have a QObject parent even if \a set has such parent. */
@@ -239,13 +238,6 @@ public:
     QByteArray previousSelection() const;
 
     void setPreviousSelection(const QByteArray& prevSelection);
-
-    /*! An optional name of this property set's type, that is usable when
-     we want to know if two property set objects have the same type.
-     This avoids e.g. reloading of all Editor's contents.
-     Also, informs whether two property set objects are compatible.
-     For comparing purposes, type names are lowercase for case insensitive comparisons.*/
-    QString typeName() const;
 
     /*! Prints debug output for this set. */
     void debug() const;

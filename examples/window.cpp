@@ -42,7 +42,7 @@
 
 Window::Window()
         : QWidget()
-        , m_set(this, "example")
+        , m_set(this)
         , m_flatOption("flat", QCoreApplication::translate("main",
                        "Flat display: do not display groups\n(useful for testing)"))
         , m_fontSizeOption("font-size", QCoreApplication::translate("main",
