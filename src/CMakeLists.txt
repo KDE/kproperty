@@ -51,6 +51,10 @@ if(KPROPERTY_WIDGETS)
         KPropertyLineStyleSelector_p.cpp
         KPropertyLineStyleModel_p.cpp
         KPropertyLineStyleItemDelegate_p.cpp
+
+        # non-source:
+        Mainpage.dox
+        Messages.sh
     )
 
     ecm_create_qm_loader(kpropertywidgets_LIB_SRCS kpropertywidgets_qt)
