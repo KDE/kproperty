@@ -44,13 +44,14 @@ set(KPROPERTY_VERSION "2.99.0") # Update this
 
 # Dependencies
 set(REQUIRED_QT_VERSION "5.2.0")
+set(REQUIRED_KF5_VERSION 5.7.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
 if(KPROPERTY_WIDGETS)
     find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Widgets)
     if(KPROPERTY_KF)
-        find_package(KF5 5.7.0 REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
+        find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
         #TODO KIO
     endif()
     get_git_revision_and_branch()
@@ -65,6 +66,7 @@ add_pc_file(KPropertyWidgets)
 add_subdirectory(src)
 
 if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+    find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED I18n)
     ki18n_install(po)
 endif()
 
