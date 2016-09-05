@@ -122,7 +122,7 @@ set(CMAKECONFIG_CORE_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KPropertyCore")
 # A place for KProperty plugins
 set(KPROPERTY_PLUGIN_INSTALL_DIR ${PLUGIN_INSTALL_DIR}/kproperty)
 
-ecm_setup_version(${KPROPERTY_VERSION}
+ecm_setup_version(${PROJECT_VERSION}
     VARIABLE_PREFIX KPROPERTYCORE
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPropertyCoreConfigVersion.cmake"
@@ -155,7 +155,7 @@ install(EXPORT KPropertyCoreTargets
 if(KPROPERTY_WIDGETS)
     set(CMAKECONFIG_WIDGETS_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KPropertyWidgets")
 
-    ecm_setup_version(${KPROPERTY_VERSION}
+    ecm_setup_version(${PROJECT_VERSION}
         VARIABLE_PREFIX KPROPERTYWIDGETS
         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPropertyWidgetsConfigVersion.cmake"

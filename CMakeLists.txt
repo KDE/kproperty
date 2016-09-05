@@ -3,15 +3,16 @@ if(EXISTS "/usr/include/sailfishapp/sailfishapp.h") #SailfishOS
     cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 else()
     set(GENERATE_PRI TRUE)
-    cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+    cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+include(SetKPropertyCMakePolicies NO_POLICY_SCOPE)
 
-
-project(KProperty)
+project(KProperty VERSION 2.99.1) # Update this
 
 # ECM setup
 find_package(ECM 1.8.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+list(APPEND CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 if(POLICY CMP0063) # Honor visibility properties for all target types (since cmake 3.3)
     cmake_policy(SET CMP0063 OLD)
@@ -39,8 +40,6 @@ include(KPropertyMacros)
 
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
-
-set(KPROPERTY_VERSION "2.99.0") # Update this
 
 # Dependencies
 set(REQUIRED_QT_VERSION "5.2.0")

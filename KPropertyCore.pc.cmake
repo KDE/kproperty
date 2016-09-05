@@ -5,7 +5,7 @@ includedir=${prefix}/include
 
 Name: KPropertyCore
 Description: A property editing framework (core library)
-Version: @KPROPERTY_VERSION@
+Version: @PROJECT_VERSION@
 URL: https://community.kde.org/KProperty
 Requires: Qt5Core
 Libs: -L${libdir}
