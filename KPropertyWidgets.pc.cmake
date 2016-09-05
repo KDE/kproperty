@@ -3,7 +3,7 @@ exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
-Name: KPropertyWidgets
+Name: KPropertyWidgets@PROJECT_STABLE_VERSION_MAJOR@
 Description: A property editing framework with editor (Qt Widgets library)
 Version: @PROJECT_VERSION@
 URL: https://community.kde.org/KProperty

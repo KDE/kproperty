@@ -1,12 +1,22 @@
 # Additional CMake macros
 #
-# Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
+# Copyright (C) 2015-2016 Jarosław Staniek <staniek@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include(FeatureSummary)
 include(GetGitRevisionDescription)
+
+string(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CMAKE_COMPILER_IS_CLANG)
+
+# x.80.y or larger means test release, so the stable major version is x+1
+if(PROJECT_VERSION_MINOR GREATER 80)
+    set(PROJECT_UNSTABLE ON)
+    math(EXPR PROJECT_STABLE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR} + 1")
+else()
+    set(PROJECT_STABLE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+endif()
 
 # Adds a feature info using add_feature_info() with _NAME and _DESCRIPTION.
 # If _NAME is equal to _DEFAULT, shows this fact.
@@ -90,12 +100,38 @@ macro(add_unfinished_features_option)
                 "Include unfinished features (useful for testing but may confuse end-user)" OFF)
 endmacro()
 
-# Adds commands that generate ${PKGCONFIG_FILE_NAME}.pc file out of ${PKGCONFIG_FILE_NAME}.pc.cmake file
-# and install the .pc file to ${LIB_INSTALL_DIR}/pkgconfig. These commands are not executed for WIN32.
-# ${CMAKE_SOURCE_DIR}/${PKGCONFIG_FILE_NAME}.pc.cmake should exist.
-macro(add_pc_file PKGCONFIG_FILE_NAME)
+# Adds commands that generate ${_filename}${PROJECT_STABLE_VERSION_MAJOR}.pc file
+# out of ${_filename}.pc.cmake file and installs the .pc file to ${LIB_INSTALL_DIR}/pkgconfig.
+# These commands are not executed for WIN32.
+# ${CMAKE_SOURCE_DIR}/${_filename}.pc.cmake should exist.
+macro(add_pc_file _filename)
   if (NOT WIN32)
-    configure_file(${CMAKE_SOURCE_DIR}/${PKGCONFIG_FILE_NAME}.pc.cmake ${CMAKE_BINARY_DIR}/${PKGCONFIG_FILE_NAME}.pc @ONLY)
-    install(FILES ${CMAKE_BINARY_DIR}/${PKGCONFIG_FILE_NAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    set(_name ${_filename}${PROJECT_STABLE_VERSION_MAJOR})
+    configure_file(${CMAKE_SOURCE_DIR}/${_filename}.pc.cmake ${CMAKE_BINARY_DIR}/${_name}.pc @ONLY)
+    install(FILES ${CMAKE_BINARY_DIR}/${_name}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
   endif()
+endmacro()
+
+# Sets detailed version information for library co-installability.
+# - adds PROJECT_VERSION_MAJOR to the lib name
+# - sets VERSION and SOVERSION to PROJECT_VERSION_MAJOR.PROJECT_VERSION_MINOR
+# - sets ${_target_upper}_BASE_NAME variable to the final lib name
+# - sets ${_target_upper}_BASE_NAME_LOWER variable to the final lib name, lowercase
+# - sets ${_target_upper}_INCLUDE_INSTALL_DIR to include dir for library headers
+# - (where _target_upper is uppercase ${_target}
+macro(set_coinstallable_lib_version _target)
+    set(_name ${_target}${PROJECT_STABLE_VERSION_MAJOR})
+    set_target_properties(${_target}
+        PROPERTIES VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+                   SOVERSION ${PROJECT_VERSION_MAJOR}
+                   EXPORT_NAME ${_target}
+                   OUTPUT_NAME ${_name}
+    )
+    string(TOUPPER ${_target} _target_upper)
+    string(TOUPPER ${_target_upper}_BASE_NAME _var)
+    set(${_var} ${_name})
+    string(TOLOWER ${_name} ${_var}_LOWER)
+    set(${_target_upper}_INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/${_name})
+    unset(_target_upper)
+    unset(_var)
 endmacro()

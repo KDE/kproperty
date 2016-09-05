@@ -5,26 +5,16 @@ else()
     set(KPROPERTY_GENERATE_PRI TRUE)
     cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 endif()
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+find_package(ECM 1.8.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(SetKPropertyCMakePolicies NO_POLICY_SCOPE)
 
 project(KProperty VERSION 2.99.1) # Update this
 
-# ECM setup
-find_package(ECM 1.8.0 REQUIRED NO_MODULE)
-list(APPEND CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-
-if(POLICY CMP0063) # Honor visibility properties for all target types (since cmake 3.3)
-    cmake_policy(SET CMP0063 OLD)
-endif()
-
-include(ECMGenerateHeaders)
-
 if(KPROPERTY_GENERATE_PRI)
     include(ECMGeneratePriFile)
 endif()
-
-include(ECMPackageConfigHelpers)
+include(ECMGenerateHeaders)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
 include(ECMOptionalAddSubdirectory)

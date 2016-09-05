@@ -3,7 +3,7 @@ exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
-Name: KPropertyCore
+Name: KPropertyCore@PROJECT_STABLE_VERSION_MAJOR@
 Description: A property editing framework (core library)
 Version: @PROJECT_VERSION@
 URL: https://community.kde.org/KProperty

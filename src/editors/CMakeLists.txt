@@ -39,16 +39,5 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
         KPropertyUrlEditor
 )
 
-install(
-    FILES
-        ${kproperty_editors_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KPropertyWidgets
-    COMPONENT Devel
-)
-
-install(
-    FILES
-        ${kproperty_editors_FORWARDING_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KPropertyWidgets
-    COMPONENT Devel
-)
+set(kproperty_editors_HEADERS ${kproperty_editors_HEADERS} PARENT_SCOPE)
+set(kproperty_editors_FORWARDING_HEADERS ${kproperty_editors_FORWARDING_HEADERS} PARENT_SCOPE)

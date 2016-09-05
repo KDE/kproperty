@@ -35,6 +35,24 @@
 //! @brief Defined if QtWidgets components of KProperty are enabled
 #cmakedefine KPROPERTY_WIDGETS
 
+//! @def KPROPERTYCORE_BASE_NAME
+//! @brief Base name for the KPropertyCore library, based on major stable version.
+//!        Useful for co-installability.
+#define KPROPERTYCORE_BASE_NAME "@KPROPERTYCORE_BASE_NAME@"
+
+//! @def KPROPERTYCORE_BASE_NAME_LOWER
+//! @brief Like KPROPERTYCORE_BASE_NAME but lowercase.
+#define KPROPERTYCORE_BASE_NAME_LOWER "@KPROPERTYCORE_BASE_NAME_LOWER@"
+
+//! @def KPROPERTYWIDGETS_BASE_NAME
+//! @brief Base name for the KPropertyCore library, based on major stable version.
+//!        Useful for co-installability.
+#define KPROPERTYWIDGETS_BASE_NAME "@KPROPERTYWIDGETS_BASE_NAME@"
+
+//! @def KPROPERTYWIDGETS_BASE_NAME_LOWER
+//! @brief Like KPROPERTYWIDGETS_BASE_NAME but lowercase.
+#define KPROPERTYWIDGETS_BASE_NAME_LOWER "@KPROPERTYWIDGETS_BASE_NAME_LOWER@"
+
 //! @def KPROPERTY_KF
 //! @brief Defined if components depending on KDE Frameworks are enabled
 #cmakedefine KPROPERTY_KF
