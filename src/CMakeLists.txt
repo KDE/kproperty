@@ -184,7 +184,7 @@ endif()
 install(FILES ${PRI_FILENAME}
         DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
-if (GENERATE_PRI)
+if(KPROPERTY_GENERATE_PRI)
     ecm_generate_pri_file(
         BASE_NAME KPropertyCore
         LIB_NAME KPropertyCore

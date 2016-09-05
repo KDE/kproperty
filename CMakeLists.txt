@@ -2,7 +2,7 @@ if(EXISTS "/usr/include/sailfishapp/sailfishapp.h") #SailfishOS
     set(SAILFISH TRUE)
     cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 else()
-    set(GENERATE_PRI TRUE)
+    set(KPROPERTY_GENERATE_PRI TRUE)
     cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -20,7 +20,7 @@ endif()
 
 include(ECMGenerateHeaders)
 
-if (GENERATE_PRI)
+if(KPROPERTY_GENERATE_PRI)
     include(ECMGeneratePriFile)
 endif()
 
