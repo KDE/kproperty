@@ -64,5 +64,9 @@ add_pc_file(KPropertyWidgets)
 
 add_subdirectory(src)
 
+if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+    ki18n_install(po)
+endif()
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 macro_display_feature_log()
