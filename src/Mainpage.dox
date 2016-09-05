@@ -19,13 +19,13 @@
  Project's home page: https://community.kde.org/KProperty
 
  @authors
- - Alexander Dymo <cloudtemple@mskat.net>
- - Cédric Pasteur <cedric.pasteur@free.fr>
- - Adam Pigg <adam@piggz.co.uk>
- - Jarosław Staniek <staniek@kde.org>
+ - Jarosław Staniek <staniek@kde.org> - Maintainer, main author
+ - Cédric Pasteur <cedric.pasteur@free.fr> - improvements and fixes
 
- Maintainers
- - Jarosław Staniek <staniek@kde.org>
+ Contributors:
+ - Adam Pigg <adam@piggz.co.uk> - fixes
+ - Friedrich W. H. Kossebau <kossebau@kde.org> - cleanups
+ - Laurent Montel <montel@kde.org> - cleanups
 
  @licenses
  @lgpl
