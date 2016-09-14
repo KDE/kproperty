@@ -1,6 +1,7 @@
 /**
-    @mainpage
-    %KProperty is a property editing framework with editor widget similar to what is known from Qt Designer.
+ @mainpage KProperty
+
+ %KProperty is a property editing framework with editor widget similar to what is known from Qt Designer.
 
  Main classes of this framework are:
   - KProperty, representing model for a single property with its own type and value.
@@ -9,12 +10,12 @@
     a KPropertySet object. Each property has its own row displayed within view widget.
     The view widget provides inline editing for properties objects.
 
- The %KProperty framework also supports adding custom property types and custom property editor
- types using KPropertyFactory and KPropertyFactoryManager.
- Properties that cannot be values types of QVariant can be defined as composed
- properties.
+ The %KProperty framework also supports adding new property types and property editors
+ using KPropertyFactory and KPropertyFactoryManager classes. Complex value types can
+ be defined as composed properties.
 
- To see how to use %KProperty take a look at the test application available in examples/ directory.
+ To see how to use %KProperty take a look at the KPropertyExample application available
+ in examples/ directory.
 
  Project's home page: https://community.kde.org/KProperty
 
