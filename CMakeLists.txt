@@ -37,13 +37,14 @@ set(REQUIRED_KF5_VERSION 5.7.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
+get_git_revision_and_branch()
+
 if(KPROPERTY_WIDGETS)
     find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Widgets)
     if(KPROPERTY_KF)
         find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED Config CoreAddons WidgetsAddons GuiAddons)
         #TODO KIO
     endif()
-    get_git_revision_and_branch()
     add_tests()    #TODO add tests for KPropertyCore, also working when KPROPERTY_WIDGETS is OFF
     add_examples() #TODO add example for KPropertyCore, also working when KPROPERTY_WIDGETS is OFF
 endif()
