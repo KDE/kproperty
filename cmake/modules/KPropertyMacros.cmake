@@ -8,6 +8,8 @@
 include(FeatureSummary)
 include(GetGitRevisionDescription)
 
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
+string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 string(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CMAKE_COMPILER_IS_CLANG)
 
 # x.80.y or larger means test release, so the stable major version is x+1
