@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2006-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,22 +77,38 @@ class BoolEditGlobal
 {
 public:
     BoolEditGlobal()
-        : yesIcon(QIcon::fromTheme(QLatin1String("dialog-ok")).pixmap(QSize(22,22)))
-        , noIcon(QIcon::fromTheme(QLatin1String("button_no")).pixmap(QSize(22,22)))
+        : yesIcon(QIcon::fromTheme(QLatin1String("dialog-ok")))
+        , noIcon(QIcon::fromTheme(QLatin1String("kproperty-value-false")))
     {
-        noneIcon.fill(Qt::transparent);
+        QPixmap none(16, 16);
+        none.fill(Qt::transparent);
+        noneIcon.addPixmap(none);
+        none = QPixmap(22, 22);
+        none.fill(Qt::transparent);
+        noneIcon.addPixmap(none);
     }
-    QPixmap yesIcon;
-    QPixmap noIcon;
-    QPixmap noneIcon;
+    QIcon yesIcon;
+    QIcon noIcon;
+    QIcon noneIcon;
 };
 
 Q_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
+class KPropertyBoolEditor::Private
+{
+public:
+    Private(const KProperty *prop)
+     : yesText( stateName(0, QLocale(), prop) )
+     , noText( stateName(1, QLocale(), prop) )
+    {
+    }
+    QVariant value;
+    QString yesText;
+    QString noText;
+};
+
 KPropertyBoolEditor::KPropertyBoolEditor(const KProperty *prop, QWidget *parent)
-    : QToolButton(parent)
-    , m_yesText( stateName(0, QLocale(), prop) )
-    , m_noText( stateName(1, QLocale(), prop) )
+    : QToolButton(parent), d(new Private(prop))
 {
     setFocusPolicy(Qt::WheelFocus);
     setCheckable(true);
@@ -122,17 +138,21 @@ KPropertyBoolEditor::KPropertyBoolEditor(const KProperty *prop, QWidget *parent)
 
 KPropertyBoolEditor::~KPropertyBoolEditor()
 {
+    delete d;
 }
 
-bool KPropertyBoolEditor::value() const
+QVariant KPropertyBoolEditor::value() const
 {
-    return isChecked();
+    return d->value;
 }
 
-void KPropertyBoolEditor::setValue(bool value)
+void KPropertyBoolEditor::setValue(const QVariant &value)
 {
 //    m_toggle->blockSignals(true);
-    setChecked(value);
+    d->value = value;
+    if (value.type() == QVariant::Bool) {
+        setChecked(value.toBool());
+    }
 //    setState(value);
 //    m_toggle->blockSignals(false);
 //    if (emitChange)
@@ -142,7 +162,7 @@ void KPropertyBoolEditor::setValue(bool value)
 void
 KPropertyBoolEditor::slotValueChanged(bool state)
 {
-    Q_UNUSED(state);
+    d->value = state;
     emit commitData(this);
 //    setState(state);
 ////    emit valueChanged(this);
@@ -151,40 +171,31 @@ KPropertyBoolEditor::slotValueChanged(bool state)
 void KPropertyBoolEditor::draw(QPainter *p, const QRect &r, const QVariant &value,
                     const QString& text, bool threeState)
 {
-//    p->eraseRect(r);
+    QIcon icon;
+    QSize actualIconSize;
+    QPoint textOffset;
+    if (valueToIndex(value) == 2) {
+        // draw icon for the 3rd state for Three-State editor
+        icon = g_boolEdit->noneIcon;
+        actualIconSize = g_boolEdit->yesIcon.actualSize(r.size());
+        textOffset = QPoint(actualIconSize.width() + 6, 0);
+    } else {
+        // draw true or false icon regardless of the 2 or 3 state version
+        icon = value.toBool() ? g_boolEdit->yesIcon : g_boolEdit->noIcon;
+        actualIconSize = icon.actualSize(r.size());
+        textOffset = QPoint(actualIconSize.width() + 6, 0);
+    }
     QRect r2(r);
-    r2.setLeft(r2.left() + 16 + 6); //16 = SmallSize
-//    r2.setTop(r2.top() + 1);
+    r2.moveTop(r2.top() + 2);
+    r2.setLeft(r2.left() + 3);
+    //r2.setTop(r2.top() + (r.height() - actualIconSize.height()) / 2);
 
     if (!threeState && value.isNull()) {
         // 2 states but null value
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, text);
+        p->drawText(r2.translated(textOffset), Qt::AlignVCenter | Qt::AlignLeft, text);
     } else {
-        QPixmap icon;
-//        QString text;
-
-        if (threeState && valueToIndex(value) == 2) {
-            // draw icon for the 3rd state for Three-State editor
-            icon = g_boolEdit->noneIcon;
-        }
-        else {
-            // draw true or false icon regardless of the 2 or 3 state version
-            icon = value.toBool() ? g_boolEdit->yesIcon : g_boolEdit->noIcon;
-        }
-/*
-        if (threeState
-            if (value.isNull() || !value.isValid())
-            //draw text state for Three-State editor
-            if (value.isNull() || !value.isValid())
-                text = overrideText;*/
-//        kprDebug() << r2;
-        p->drawPixmap(
-            r.left() + 3,
-            r2.top() + (r2.height() - 16) / 2,icon); //16 = SmallSize
-        p->drawText(
-            r2,
-            Qt::AlignVCenter | Qt::AlignLeft,
-            text);
+        icon.paint(p, r2, Qt::AlignVCenter | Qt::AlignLeft);
+        p->drawText(r2.translated(textOffset), Qt::AlignVCenter | Qt::AlignLeft, text);
     }
 }
 
@@ -194,7 +205,7 @@ void KPropertyBoolEditor::paintEvent( QPaintEvent * event )
     QPainter p(this);
     const QVariant v( value() );
     KPropertyBoolEditor::draw(&p, rect(), v,
-        v.toBool() ? m_yesText : m_noText, false /*2state*/);
+        v.toBool() ? d->yesText : d->noText, false /*2state*/);
 }
 
 bool KPropertyBoolEditor::eventFilter(QObject* watched, QEvent* e)
@@ -325,7 +336,7 @@ void KPropertyBoolDelegate::paint( QPainter * painter,
     const QVariant value( index.data(Qt::EditRole) );
     QRect rect(option.rect);
     const bool threeState = prop->option("3State", false).toBool();
-    KPropertyBoolEditor::draw(painter, rect, value, propertyValueToString(prop, QLocale()), threeState);
+    KPropertyBoolEditor::draw(painter, rect.translated(0, -2), value, propertyValueToString(prop, QLocale()), threeState);
     painter->restore();
 }
 

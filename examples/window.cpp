@@ -100,6 +100,9 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="Bool") {
         m_set.addProperty(new KProperty("Bool", QVariant(true), "Bool"), group);
     }
+    if (singleProperty.isEmpty() || singleProperty=="NullBool") {
+        m_set.addProperty(new KProperty("NullBool", QVariant(), "Null Bool", QString(), KProperty::Bool), group);
+    }
     if (singleProperty.isEmpty() || singleProperty=="3-State") {
         m_set.addProperty(p = new KProperty("3-State", QVariant(), "3 States", QString(),
                                             KProperty::Bool), group);

@@ -35,14 +35,14 @@
 class KPROPERTYWIDGETS_EXPORT KPropertyBoolEditor : public QToolButton
 {
     Q_OBJECT
-    Q_PROPERTY(bool value READ value WRITE setValue USER true)
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
     explicit KPropertyBoolEditor(const KProperty *prop, QWidget *parent = 0);
 
     ~KPropertyBoolEditor();
 
-    bool value() const;
+    QVariant value() const;
 
     static void draw(QPainter *p, const QRect &r, const QVariant &value,
                      const QString& text, bool threeState);
@@ -50,7 +50,7 @@ Q_SIGNALS:
     void commitData(QWidget* editor);
 
 public Q_SLOTS:
-    void setValue(bool value);
+    void setValue(const QVariant &value);
 
 protected Q_SLOTS:
     void  slotValueChanged(bool state);
@@ -63,8 +63,8 @@ protected:
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
 private:
-    QString m_yesText;
-    QString m_noText;
+    class Private;
+    Private * const d;
 };
 
 //! A bool editor supporting three states: true, false and null.
