@@ -20,6 +20,22 @@ else()
     set(PROJECT_STABLE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 endif()
 
+if(WIN32)
+    set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
+                        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+                        LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
+                        ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
+    set(DATA_INSTALL_DIR "$ENV{APPDATA}")
+    STRING(REGEX REPLACE "\\\\" "/" DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
+    # Install own icons to CMAKE_INSTALL_FULL_ICONDIR (relative to bin/data/ on Windows) on Windows.
+    # We're consistent because icons from breeze-icons.git are installed there as well.
+    set(ICONS_INSTALL_DIR ${CMAKE_INSTALL_FULL_ICONDIR})
+else()
+    # On other OSes install own icons in app's data dir
+    set(ICONS_INSTALL_DIR
+        "${DATA_INSTALL_DIR}/kpropertywidgets${PROJECT_STABLE_VERSION_MAJOR}/icons")
+endif()
+
 # Adds a feature info using add_feature_info() with _NAME and _DESCRIPTION.
 # If _NAME is equal to _DEFAULT, shows this fact.
 macro(add_simple_feature_info _NAME _DESCRIPTION _DEFAULT)
@@ -147,3 +163,22 @@ macro(set_coinstallable_lib_version _target)
     unset(_target_upper)
     unset(_var)
 endmacro()
+
+# Adds custom target ${_target} that updates file ${_file} in the current working dir
+# using command ${_command} and add sources ${_sources} to the project files.
+# The command is run as a part of the project.
+function(add_update_file_target)
+    set(options)
+    set(oneValueArgs TARGET FILE)
+    set(multiValueArgs COMMAND SOURCES)
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    message(STATUS "ARG_TARGET ${ARG_TARGET}")
+    add_custom_target(${ARG_TARGET}
+        COMMAND ${ARG_COMMAND}
+        SOURCES ${ARG_SOURCES}
+        DEPENDS ${ARG_SOURCES}
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "Updating ${ARG_FILE}"
+        VERBATIM
+    )
+endfunction()

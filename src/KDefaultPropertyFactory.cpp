@@ -18,6 +18,7 @@
 */
 
 #include "KDefaultPropertyFactory.h"
+#include "KPropertyUtils_p.h"
 #include "config-kproperty.h"
 /*
 #include "customproperty.h"*/
@@ -49,6 +50,10 @@
 KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyWidgetsFactory()
 {
+    KPropertyUtils::setupPrivateIconsResourceWithMessage(
+        QLatin1String(KPROPERTYWIDGETS_BASE_NAME_LOWER),
+        QString::fromLatin1("icons/kproperty_%1.rcc").arg(KPropertyUtils::supportedIconTheme), QtFatalMsg);
+
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
 //! @todo    addEditor( KProperty::ByteArray, new KPropertyByteArrayDelegate );
     addEditor( KProperty::Color, new KPropertyColorComboDelegate );

@@ -27,6 +27,7 @@ include(FeatureSummary)
 include(GenerateExportHeader)
 include(MacroLogFeature)
 include(KPropertyMacros)
+include(KPropertyAddIconsRccFile)
 
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)

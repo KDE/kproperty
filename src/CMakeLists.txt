@@ -93,8 +93,11 @@ if(KPROPERTY_WIDGETS)
     if(KPROPERTY_KF)
         target_link_libraries(KPropertyWidgets
             PUBLIC
+                Qt5::Widgets
                 KF5::WidgetsAddons
-                KF5::GuiAddons
+            PRIVATE
+                KF5::ConfigGui #KConfigGroup
+                KF5::GuiAddons #KColorCollection
         )
     else()
         target_link_libraries(KPropertyWidgets
@@ -221,6 +224,8 @@ install(
 )
 
 if(KPROPERTY_WIDGETS)
+    add_subdirectory(pics)
+
     ecm_generate_headers(kpropertywidgets_FORWARDING_HEADERS
         REQUIRED_HEADERS kpropertywidgets_HEADERS
         ORIGINAL CAMELCASE
