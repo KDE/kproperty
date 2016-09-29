@@ -172,7 +172,6 @@ function(add_update_file_target)
     set(oneValueArgs TARGET FILE)
     set(multiValueArgs COMMAND SOURCES)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-    message(STATUS "ARG_TARGET ${ARG_TARGET}")
     add_custom_target(${ARG_TARGET}
         COMMAND ${ARG_COMMAND}
         SOURCES ${ARG_SOURCES}
