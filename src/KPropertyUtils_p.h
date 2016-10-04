@@ -68,7 +68,7 @@ inline QStringList correctStandardLocations(const QString &privateName,
                                      QStandardPaths::StandardLocation location,
                                      const QString &extraLocation)
 {
-    QStringList result;
+    QSet<QString> result;
     if (!privateName.isEmpty()) {
         QRegularExpression re(QLatin1Char('/') + QCoreApplication::applicationName() + QLatin1Char('$'));
         QStringList standardLocations(QStandardPaths::standardLocations(location));
@@ -79,11 +79,11 @@ inline QStringList correctStandardLocations(const QString &privateName,
             if (dir.indexOf(re) != -1) {
                 QString realDir(dir);
                 realDir.replace(re, QLatin1Char('/') + privateName);
-                result.append(realDir);
+                result.insert(realDir);
             }
         }
     }
-    return result;
+    return result.toList();
 }
 
 /*! @brief Locates a file path for specified parameters
