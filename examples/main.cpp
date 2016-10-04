@@ -20,6 +20,7 @@
 #include <QFont>
 #include <QApplication>
 
+#include "KPropertyUtils_p.h"
 #include "window.h"
 
 static const char version[] = "0.2";
@@ -30,6 +31,7 @@ int main(int argc, char **argv)
 
     QCoreApplication::setApplicationName("KPropertyExample");
     QCoreApplication::setApplicationVersion(version);
+    (void)KPropertyUtils::setupGlobalIconTheme();
 
     Window window;
 
