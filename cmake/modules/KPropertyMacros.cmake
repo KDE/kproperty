@@ -12,6 +12,10 @@ string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 string(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CMAKE_COMPILER_IS_CLANG)
 
+# Keep apps in the same bin dir so resources that are kept relative to this dir can be found
+# without installing.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 # x.80.y or larger means test release, so the stable major version is x+1
 if(PROJECT_VERSION_MINOR GREATER 80)
     set(PROJECT_UNSTABLE ON)
