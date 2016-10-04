@@ -17,21 +17,23 @@ add_custom_target(update_all_rcc
 # - update_${_target} target is added for requesting update of icons/${_theme}/files.cmake
 # - adds a update_all_rcc target that executes commands for all targets created with kproperty_add_icons_rcc_file()
 macro(kproperty_add_icons_rcc_file _target _parent_target _theme _prefix)
-    set(_RESOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/resource)
-    set(_QRC_FILE "${_RESOURCE_DIR}/${_target}.qrc")
-    set(_RCC_FILE "${CMAKE_CURRENT_BINARY_DIR}/${_target}.rcc")
+    set(_BASE_DIR ${CMAKE_CURRENT_BINARY_DIR}/resource)
+    set(_QRC_FILE "${_BASE_DIR}/${_target}.qrc")
+    set(_RCC_DIR "${CMAKE_BINARY_DIR}/bin/data/icons")
+    set(_RCC_FILE "${_RCC_DIR}/${_target}.rcc")
     include(icons/${_theme}/files.cmake)
 
     add_custom_target(${_target}_copy_icons
-        COMMAND ${CMAKE_COMMAND} -E remove_directory ${_RESOURCE_DIR}
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${_RESOURCE_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy_directory icons/${_theme} ${_RESOURCE_DIR}/icons/${_prefix}/${_theme}
-        COMMAND ${CMAKE_COMMAND} -E remove -f ${_RESOURCE_DIR}/CMakeLists.txt
-        COMMAND ${CMAKE_COMMAND} -E remove -f ${_RESOURCE_DIR}/icons/${_prefix}/${_theme}/files.cmake
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${_BASE_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${_BASE_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${_RCC_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory icons/${_theme} ${_BASE_DIR}/icons/${_prefix}/${_theme}
+        COMMAND ${CMAKE_COMMAND} -E remove -f ${_BASE_DIR}/CMakeLists.txt
+        COMMAND ${CMAKE_COMMAND} -E remove -f ${_BASE_DIR}/icons/${_prefix}/${_theme}/files.cmake
         DEPENDS "${_FILES}"
         SOURCES "${_FILES}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-        COMMENT "Copying icon files to ${_RESOURCE_DIR}"
+        COMMENT "Copying icon files to ${_BASE_DIR}"
         VERBATIM
     )
 
@@ -41,7 +43,7 @@ macro(kproperty_add_icons_rcc_file _target _parent_target _theme _prefix)
         COMMAND ${CMAKE_COMMAND} -E rename "${CMAKE_CURRENT_BINARY_DIR}/${_target}.qrc" "${_QRC_FILE}"
         DEPENDS "${_FILES}"
         SOURCES "${_FILES}"
-        WORKING_DIRECTORY "${_RESOURCE_DIR}"
+        WORKING_DIRECTORY "${_BASE_DIR}"
         COMMENT "Building Qt resource file ${_QRC_FILE}"
         VERBATIM
     )
@@ -52,7 +54,7 @@ macro(kproperty_add_icons_rcc_file _target _parent_target _theme _prefix)
                 --output "${_RCC_FILE}" "${_QRC_FILE}"
         #COMMAND ${CMAKE_COMMAND} -E remove -f ${_QRC_FILE}
         DEPENDS "${_QRC_FILE}" "${_FILES}"
-        WORKING_DIRECTORY "${_RESOURCE_DIR}"
+        WORKING_DIRECTORY "${_BASE_DIR}"
         COMMENT "Building external Qt resource ${_RCC_FILE}"
         VERBATIM
     )
@@ -74,7 +76,7 @@ macro(kproperty_add_icons_rcc_file _target _parent_target _theme _prefix)
     )
     add_dependencies(update_all_rcc update_${_target})
 
-    unset(_RESOURCE_DIR)
+    unset(_BASE_DIR)
     unset(_QRC_FILE)
     unset(_RCC_FILE)
 endmacro()
