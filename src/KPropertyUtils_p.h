@@ -234,6 +234,7 @@ inline bool setupPrivateIconsResource(const QString &privateName, const QString&
 {
     // Register application's resource first to have priority over the theme.
     // Some icons may exists in both resources.
+    QString extraLocation = QCoreApplication::applicationDirPath() + QStringLiteral("/data");
     if (!registerIconsResource(privateName, path,
                           QStandardPaths::AppDataLocation,
                           QString(), QString(), errorMessage, detailedErrorMessage))
