@@ -52,6 +52,9 @@ if(KPROPERTY_WIDGETS)
         KPropertyLineStyleModel_p.cpp
         KPropertyLineStyleItemDelegate_p.cpp
 
+        # private:
+        KPropertyUtils_p.h
+
         # non-source:
         Mainpage.dox
         Messages.sh
