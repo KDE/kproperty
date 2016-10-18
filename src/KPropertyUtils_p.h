@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +23,10 @@
 #include <config-kproperty.h>
 
 #include <QApplication>
-#include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QPainter>
 #include <QRegularExpression>
 #include <QResource>
 #include <QStandardPaths>
@@ -368,6 +368,33 @@ inline bool setupGlobalIconTheme()
     }
     return true;
 }
+
+//! @short Manages the QPainter::save()/QPainter::restore() block using RAII
+/*! The PainterSaver class makes sure that restore() is called when exiting from the block of code.
+
+   Instead of:
+   @code
+   painter.save();
+   // (code)
+   painter.restore();
+   @endcode
+
+   Use this:
+   @code
+   const PainterSaver saver(&painter);
+   // (code)
+   @endcode
+*/
+class PainterSaver
+{
+public:
+    explicit PainterSaver(QPainter *p) : m_painter(p) { if (m_painter) { m_painter->save(); } }
+
+    ~PainterSaver() { if (m_painter) { m_painter->restore(); } }
+
+private:
+    QPainter* const m_painter;
+};
 
 }
 

@@ -23,8 +23,6 @@
 #include "KPropertyLineStyleItemDelegate_p.h"
 #include "KPropertyUtils_p.h"
 
-#include <QApplication>
-#include <QPainter>
 #include <QPen>
 
 KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
@@ -92,7 +90,7 @@ QWidget * KPropertyLineStyleComboDelegate::createEditor( int type, QWidget *pare
 void KPropertyLineStyleComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     Qt::PenStyle penStyle = Qt::NoPen;
     if (hasVisibleStyle(index.data(Qt::EditRole))) {
         penStyle = static_cast<Qt::PenStyle>(index.data(Qt::EditRole).toInt());
@@ -104,7 +102,6 @@ void KPropertyLineStyleComboDelegate::paint( QPainter * painter,
     QRect r = style->subControlRect(QStyle::CC_ComboBox, &cbOption, QStyle::SC_ComboBoxEditField, 0);
     r.setRight(option.rect.right() - (r.left() - option.rect.left()));
     KPropertyLineStyleItemDelegate::paintItem(painter, QPen(penStyle), r, option);
-    painter->restore();
 }
 
 QString KPropertyLineStyleComboDelegate::valueToString(const QVariant& value, const QLocale &locale) const

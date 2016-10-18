@@ -20,11 +20,10 @@
 
 #include "booledit.h"
 #include "KPropertyUtils.h"
+#include "KPropertyUtils_p.h"
 #include "kproperty_debug.h"
 
 #include <QIcon>
-#include <QApplication>
-#include <QPainter>
 #include <QVariant>
 
 /*! @return name for state with index @a index,
@@ -328,7 +327,7 @@ QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,
 void KPropertyBoolDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
         return;
@@ -337,7 +336,6 @@ void KPropertyBoolDelegate::paint( QPainter * painter,
     QRect rect(option.rect);
     const bool threeState = prop->option("3State", false).toBool();
     KPropertyBoolEditor::draw(painter, rect.translated(0, -2), value, propertyValueToString(prop, QLocale()), threeState);
-    painter->restore();
 }
 
 QString KPropertyBoolDelegate::propertyValueToString(const KProperty* prop, const QLocale &locale) const

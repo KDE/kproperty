@@ -21,7 +21,6 @@
 #include "KPropertyUtils_p.h"
 
 #include <QColor>
-#include <QPainter>
 
 #ifdef KPROPERTY_KF
 #include <KColorCollection>
@@ -96,7 +95,7 @@ static QString colorToName(const QColor &color, const QLocale &locale)
 void KPropertyColorComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     const QBrush b(index.data(Qt::EditRole).value<QColor>());
     painter->setBrush(b);
     painter->setPen(QPen(Qt::NoPen));
@@ -107,7 +106,6 @@ void KPropertyColorComboDelegate::paint( QPainter * painter,
     f.setFamily(QLatin1String("courier"));
     painter->setFont(f);
     painter->drawText(option.rect, Qt::AlignCenter, colorToName(b.color(), QLocale()));
-    painter->restore();
 }
 
 QString KPropertyColorComboDelegate::valueToString(const QVariant& value, const QLocale &locale) const

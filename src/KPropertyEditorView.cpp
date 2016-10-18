@@ -120,7 +120,7 @@ void ItemDelegate::paint(QPainter *painter,
     if (gridLineColor.isValid()) {
         alteredOption.rect.setTop(alteredOption.rect.top() + 1);
     }
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     QRect r(option.rect);
     const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
     if (!editorModel) {
@@ -194,7 +194,6 @@ void ItemDelegate::paint(QPainter *painter,
         painter->drawLine(r.topLeft(), r.topRight());
     }
     //kprDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
-    painter->restore();
 }
 
 QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,

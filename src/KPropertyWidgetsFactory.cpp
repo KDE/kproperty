@@ -23,6 +23,7 @@
 #include "KDefaultPropertyFactory.h"
 #include "KPropertyEditorView.h"
 #include "KPropertyStringEditor.h"
+#include "KPropertyUtils_p.h"
 
 KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface)
     : QLabel(parent)
@@ -63,12 +64,11 @@ void KPropertyLabel::paintEvent( QPaintEvent * event )
 void paintInternal(const KPropertyValueDisplayInterface *iface,
                    QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     QRect r(option.rect);
     r.setLeft(r.left()+1);
     painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
         iface->valueToString(index.data(Qt::EditRole), QLocale()));
-    painter->restore();
 }
 
 //---------------
