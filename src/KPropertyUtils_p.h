@@ -35,6 +35,12 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KMessageBox>
+#else
+#include <QMessageBox>
+#endif
+
+#ifdef QT_GUI_LIB
+#include <QIcon>
 #endif
 
 class QColor;
@@ -49,6 +55,23 @@ QColor contrastColor(const QColor& c);
 //! @return grid line color defined by a KPropertyEditorView widget contains @a widget
 //! Invalid  color is returned if no grid is defined or KPropertyEditorView was not found.
 QColor gridLineColor(const QWidget *widget);
+
+inline void showMessageBox(QWidget *parent, const QString &errorMessage, const QString &detailedErrorMessage)
+{
+    if (detailedErrorMessage.isEmpty()) {
+#ifdef KPROPERTY_KF
+        KMessageBox::error(parent, errorMessage);
+#else
+        QMessageBox::warning(parent, QString(), errorMessage);
+#endif
+    } else {
+#ifdef KPROPERTY_KF
+        KMessageBox::detailedError(parent, errorMessage, detailedErrorMessage);
+#else
+        QMessageBox::warning(parent, QString(), errorMessage + QLatin1Char('\n') + detailedErrorMessage);
+#endif
+    }
+}
 
 // -- icon support
 
@@ -212,11 +235,7 @@ inline bool registerGlobalIconsResource(const QString &themeName)
     QString errorMessage;
     QString detailedErrorMessage;
     if (!registerGlobalIconsResource(themeName, &errorMessage, &detailedErrorMessage)) {
-        if (detailedErrorMessage.isEmpty()) {
-            KMessageBox::error(nullptr, errorMessage);
-        } else {
-            KMessageBox::detailedError(nullptr, errorMessage, detailedErrorMessage);
-        }
+        showMessageBox(nullptr, errorMessage, detailedErrorMessage);
         qWarning() << qPrintable(errorMessage);
         return false;
     }
@@ -264,6 +283,7 @@ inline bool setupPrivateIconsResource(const QString &privateName, const QString&
     }
 #endif
 
+#ifdef KPROPERTY_KF
     KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
     changeTheme = changeTheme || 0 != cg.readEntry("Theme", QString()).compare(themeName, Qt::CaseInsensitive);
     // tell KIconLoader an co. about the theme
@@ -271,6 +291,7 @@ inline bool setupPrivateIconsResource(const QString &privateName, const QString&
         cg.writeEntry("Theme", themeName);
         cg.sync();
     }
+#endif
     return true;
 }
 
@@ -293,11 +314,7 @@ inline bool setupPrivateIconsResourceWithMessage(const QString &privateName, con
     if (!setupPrivateIconsResource(privateName, path, themeName,
                                    errorMessage, detailedErrorMessage, prefix))
     {
-        if (detailedErrorMessage->isEmpty()) {
-            KMessageBox::error(nullptr, *errorMessage);
-        } else {
-            KMessageBox::detailedError(nullptr, *errorMessage, *detailedErrorMessage);
-        }
+        showMessageBox(nullptr, *errorMessage, *detailedErrorMessage);
         return false;
     }
     return true;

@@ -8,5 +8,9 @@ set(kpropertyexample_SRCS main.cpp window.cpp)
 add_executable(kpropertyexample ${kpropertyexample_SRCS})
 target_link_libraries(kpropertyexample
     KPropertyWidgets
-    KF5::ConfigGui #KConfigGroup
 )
+if(KPROPERTY_KF)
+    target_link_libraries(kpropertyexample
+        KF5::ConfigGui #KConfigGroup
+    )
+endif()
