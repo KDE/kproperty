@@ -33,6 +33,7 @@ if(KPROPERTY_WIDGETS)
         editors/sizepolicyedit.cpp
         editors/spinbox.cpp
         editors/KPropertyGenericSelectionEditor.cpp
+        editors/KPropertyMultiLineStringEditor.cpp
         editors/KPropertyStringEditor.cpp
         editors/KPropertyUrlEditor.cpp
         editors/linestyleedit.cpp

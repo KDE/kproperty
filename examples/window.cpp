@@ -78,9 +78,14 @@ Window::Window()
         group = "SimpleGroup";
         m_set.setGroupDescription(group, "Simple Group");
     }
-    if (singleProperty.isEmpty() || singleProperty=="Name") {
-        m_set.addProperty(new KProperty("Name", "Name"), group);
-        m_set["Name"].setAutoSync(1);
+    if (singleProperty.isEmpty() || singleProperty=="String") {
+        m_set.addProperty(p = new KProperty("String", "String"), group);
+        p->setAutoSync(1);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="MultiLine") {
+        m_set.addProperty(p = new KProperty("MultiLine", "Multi\nLine\nContent"), group);
+        p->setAutoSync(1);
+        p->setOption("multiLine", true);
     }
 
     if (singleProperty.isEmpty() || singleProperty=="Int") {

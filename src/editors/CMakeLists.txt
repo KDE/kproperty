@@ -35,6 +35,7 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
     ORIGINAL CAMELCASE
     HEADER_NAMES
         KPropertyGenericSelectionEditor
+        KPropertyMultiLineStringEditor
         KPropertyStringEditor
         KPropertyUrlEditor
 )

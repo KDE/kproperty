@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,6 +51,7 @@ private:
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyStringDelegate : public KPropertyEditorCreatorInterface,
+                                                        public KPropertyValuePainterInterface,
                                                         public KPropertyValueDisplayInterface
 {
 public:
@@ -58,6 +59,9 @@ public:
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    void paint(QPainter *painter,
+               const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };

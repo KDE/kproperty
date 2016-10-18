@@ -415,6 +415,9 @@ public:
     <li> confirmOverwrites: boolean value, if @c true, user will be asked for confirmation
          of file overwriting in the url editor. @c false by default.
          @note The line edit does not validate the content.</li>
+    <li> multiLine: boolean value used for string type. If @c true, a multi-line
+         QPlainTextEdit-based widget is used for editor; otherwise a single-line QLineEdit
+         widget is used. @c false by default. Added in version 3.1.</li>
     </ul>*/
     void setOption(const char* name, const QVariant& val);
 

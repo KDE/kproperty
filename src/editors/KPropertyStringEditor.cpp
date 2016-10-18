@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,15 @@
 */
 
 #include "KPropertyStringEditor.h"
+#include "KPropertyMultiLineStringEditor.h"
+#include "KPropertyUtils.h"
+#include "KPropertyUtils_p.h"
+
+namespace {
+    bool isMultiLine(const KProperty *property) {
+        return property->option("multiLine", false).toBool();
+    }
+}
 
 KPropertyStringEditor::KPropertyStringEditor(QWidget *parent)
  : QLineEdit(parent)
@@ -66,8 +75,49 @@ QWidget* KPropertyStringDelegate::createEditor( int type, QWidget *parent,
 {
     Q_UNUSED(type);
     Q_UNUSED(option);
-    Q_UNUSED(index);
-    return new KPropertyStringEditor(parent);
+    KProperty *property = KPropertyUtils::propertyForIndex(index);
+    if (!property) {
+        return nullptr;
+    }
+    if (isMultiLine(property)) {
+        return new KPropertyMultiLineStringEditor(parent);
+    } else {
+        return new KPropertyStringEditor(parent);
+    }
+}
+
+void KPropertyStringDelegate::paint(QPainter *painter,
+    const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    KProperty *property = KPropertyUtils::propertyForIndex(index);
+    if (!property) {
+        return;
+    }
+    QString string(index.data(Qt::EditRole).toString());
+    if (string.isEmpty()) {
+        return;
+    }
+    Qt::Alignment align = Qt::AlignLeft;
+    QRect r(option.rect);
+    r.setLeft(r.left() + 2);
+    r.setTop(r.top() + 1);
+    if (isMultiLine(property)) {
+        align |= Qt::AlignTop;
+        r.setLeft(r.left() + 1);
+        //r.setTop(r.top() + 1);
+        painter->fillRect(option.rect, option.palette.base());
+    } else {
+        const int newLineIndex = string.indexOf(QLatin1Char('\n'));
+        if (newLineIndex >= 0) {
+            string.truncate(newLineIndex);
+            if (string.isEmpty()) {
+                return;
+            }
+        }
+        align |= Qt::AlignVCenter;
+    }
+    const KPropertyUtils::PainterSaver saver(painter);
+    painter->drawText(r, align, string);
 }
 
 QString KPropertyStringDelegate::valueToString(const QVariant& value, const QLocale &locale) const
