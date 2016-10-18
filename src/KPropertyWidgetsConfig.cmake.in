@@ -18,5 +18,12 @@ find_dependency(KPropertyCore @PROJECT_VERSION@ EXACT)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KPropertyWidgetsTargets.cmake")
 
-# "public" variables:
-# TODO
+# Features
+set(KPROPERTY_KF @KPROPERTY_KF@)
+
+# Match COMPONENTS to features (KPROPERTY_ prefixes)
+foreach (_COMP ${KPropertyWidgets_FIND_COMPONENTS})
+    if(NOT DEFINED KPROPERTY_${_COMP} OR NOT ${KPROPERTY_${_COMP}})
+        message(FATAL_ERROR "KPropertyWidgets does not contain required component ${_COMP}. Update KPropertyWidgets or remove this requirement.")
+    endif()
+endforeach()
