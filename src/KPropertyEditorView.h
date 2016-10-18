@@ -28,46 +28,6 @@ class KProperty;
 class KPropertySet;
 
 //! @brief A widget for editing properties
-//! @todo review this .............
-/*! Editor widgets use property options using Property::option(const char *)
-    to override default behaviour of editor items.
-    Currently supported options are:
-    <ul><li> min: integer setting for minimum value for integer and double types.
-             The default is 0.
-             Set it to -1, if you want this special value to be allowed.</li>
-    <li> minValueText: user-visible translated string used for integer type to set "specialValueText"
-         widget's property</li>
-    <li> max: integer setting for minimum value the property of integer type. Default is 0xffff.</li>
-    <li> precision:  The number of decimals after the decimal point (for double types).</li>
-    <li> step: the size of the step that is taken when the user hits the up
-    or down buttons (for double types).</li>
-    <li> 3State: boolean value used for boolean types; if true, the editor becomes a combobox
-         (instead of checkable button) and accepta the third "null" state.</li>
-    <li> yesName: user-visible translated string used for boolean types (both 2- and 3-state)
-         to display the "true" value. If not present, tr("Yes") is used.</li>
-    <li> noName: user-visible translated string used for boolean types (both 2- and 3-state)
-         to display the "false" value. If not present, tr("No") is used.</li>
-    <li> 3rdStateName: user-visible translated string used for boolean types (both 2- and 3-state)
-         to display the 3rd state "null" value. If not present, tr("None") is used.</li>
-    <li> nullName: user-visible translated string used for boolean types to display the "null" value if
-         and only if the property accepts two states (i.e. when "3State" option is not true).
-         If this option is not present, null values are displayed as false.</li>
-    <li> extraValueAllowed: Allow the user to manually enter a value into a combobox
-         that is not in the list. The entered text will be returned as opposed to a matching key.</li>
-    <li> fileMode: indicates what the user may select in the file dialog for the url type's editor:
-         <ul>
-         <li>"dirsOnly": only support and display directories
-             See QFileDialog::ShowDirsOnly and QFileDialog::Directory.</li>
-         <li>"existingFile": only allow to select one existing file. See QFileDialog::ExistingFile.</li>
-         <li>For any other value, supports any file, whether it exists or not. See QFileDialog::AnyFile.</li>
-         </ul>
-         @note The line edit does not validate the content.
-         </li>
-    <li>confirmOverwrites: if true, user will be asked for file overwriting by url editor; false by default.
-         @note The line edit does not validate the content.
-    </li>
-    </ul>
- */
 class KPROPERTYWIDGETS_EXPORT KPropertyEditorView : public QTreeView
 {
     Q_OBJECT

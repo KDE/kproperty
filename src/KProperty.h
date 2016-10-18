@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -373,14 +373,54 @@ public:
     void setAutoSync(int sync);
 
     /*! Sets value \a val for option \a name.
-     Options are used to describe additional details for property behaviour,
-     e.g. within Editor. See Editor ctor documentation for
-     the list of supported options.
-    */
+     Options are used to override default settings of individual properties.
+     This is most visible in property editor widget.
+
+    Currently supported options are:
+    <ul><li> min: integer value describing minimum value for properties of integer and
+             double types. The default is 0.</li>
+    <li> minValueText: user-visible translated string to be displayed in editor for integer
+         type when minimum is set for the property.
+         @see QAbstractSpinBox::specialValueText</li>
+    <li> max: integer describing minimum value for properties of integer type. Default is 0xffff.</li>
+    <li> precision: integer value describing the number of decimals after the decimal point
+         for double type.</li>
+    <li> step: integer describing the size of the step that is taken when the user hits
+         the up or down button of editor for double type.</li>
+    <li> 3State: boolean value used for boolean type; if @c true, the editor becomes a combobox
+         (instead of checkable button) and accepts the third "null" state.</li>
+    <li> yesName: user-visible translated string used for boolean type (both 2- and 3-state)
+         to visually represent the "true" value. If not present, tr("Yes") is used.</li>
+    <li> noName: user-visible translated string used for boolean type (both 2- and 3-state)
+         to visually represent the "false" value. If not present, tr("No") is used.</li>
+    <li> 3rdStateName: user-visible translated string used for boolean type (both 2- and 3-state)
+         to visually represent the third "null" value. If not present, tr("None") is used.</li>
+    <li> nullName: user-visible translated string used for boolean type to display the "null"
+         value, if and only if the property accepts two states (i.e. when "3State" option
+         is @c false). If the "nullName" option is not set, null values are displayed as
+         @c false.</li>
+    <li> extraValueAllowed: boolean value, if @c true the user is able to manually add extra
+         values to a combobox.</li>
+    <li> fileMode: string value that describes what objects may select in the file dialog
+         of the url editor:
+         <ul>
+         <li>"dirsOnly": only support and display directories;
+             @see QFileDialog::ShowDirsOnly QFileDialog::Directory</li>
+         <li>"existingFile": only allow to select one existing file;
+             @see QFileDialog::ExistingFile</li>
+         <li>Any other value: any file is supported, whether it exists or not
+             @see QFileDialog::AnyFile</li>
+         </ul>
+         </li>
+    <li> confirmOverwrites: boolean value, if @c true, user will be asked for confirmation
+         of file overwriting in the url editor. @c false by default.
+         @note The line edit does not validate the content.</li>
+    </ul>*/
     void setOption(const char* name, const QVariant& val);
 
     /*! \return a value for option \a name or null value if there is no such option set.
-     If there is no such value, @a defaultValue is returned. */
+     If there is no such value, @a defaultValue is returned.
+     @see setOption */
     QVariant option(const char* name, const QVariant& defaultValue = QVariant()) const;
 
     /*! \return true if at least one option is defined for this property. */
