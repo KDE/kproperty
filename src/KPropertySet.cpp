@@ -93,14 +93,16 @@ public:
             kprDebug() << "Set does not contain property" << property;
             return;
         }
-        KProperty *p = hash.take(property->name());
-        q->removeFromGroup(p);
-        if (p->isVisible()) {
-            m_visiblePropertiesCount--;
-        }
-        if (ownProperty) {
-            emit q->aboutToDeleteProperty(*q, *p);
-            delete p;
+        KProperty *p = hash.take(property->name().toLower());
+        if (p) {
+            q->removeFromGroup(p);
+            if (p->isVisible()) {
+                m_visiblePropertiesCount--;
+            }
+            if (ownProperty) {
+                emit q->aboutToDeleteProperty(*q, *p);
+                delete p;
+            }
         }
     }
 
