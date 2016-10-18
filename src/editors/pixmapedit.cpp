@@ -23,12 +23,11 @@
 #include "utils.h"
 #include "KProperty.h"
 #include "KPropertyUtils.h"
+#include "KPropertyUtils_p.h"
 
-#include <QPainter>
 #include <QLabel>
 #include <QCursor>
 #include <QImage>
-#include <QApplication>
 #include <QDesktopWidget>
 #include <QPixmap>
 #include <QEvent>
@@ -236,8 +235,8 @@ QWidget* KPropertyPixmapDelegate::createEditor( int type, QWidget *parent,
 void KPropertyPixmapDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    const KPropertyUtils::PainterSaver saver(painter);
     QPixmap pm( index.data(Qt::EditRole).value<QPixmap>() );
-    painter->save();
     if (!pm.isNull()) {
         if (pm.height() > option.rect.height() || pm.width() > option.rect.width()) { //scale down
             QImage img(pm.toImage());
@@ -260,7 +259,6 @@ void KPropertyPixmapDelegate::paint( QPainter * painter,
     QRect r(option.rect);
     r.setLeft(r.left() + pm.width() + 2);
     painter->drawText(r, valueToString(index.data(Qt::EditRole), QLocale()));
-    painter->restore();
 }
 
 QString KPropertyPixmapDelegate::valueToString(const QVariant& value, const QLocale &locale) const

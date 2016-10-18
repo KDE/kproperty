@@ -242,7 +242,7 @@ QWidget * KPropertyCursorDelegate::createEditor( int type, QWidget *parent,
 void KPropertyCursorDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     int comboIndex = s_cursorListData->shapeToIndex( index.data(Qt::EditRole).value<QCursor>().shape() );
     int pmSize = (option.rect.height() >= 32) ? 32 : 16;
     const QPixmap pm( s_cursorListData->pixmapForIndex(comboIndex, option.palette)
@@ -252,7 +252,6 @@ void KPropertyCursorDelegate::paint( QPainter * painter,
     QRect r(option.rect);
     r.setLeft(7 + r.left() + 1 + pm.width());
     painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, valueToString(index.data(Qt::EditRole), QLocale()));
-    painter->restore();
 }
 
 QString KPropertyCursorDelegate::valueToString(const QVariant& value, const QLocale &locale) const

@@ -20,9 +20,9 @@
 
 #include "KPropertyLineStyleItemDelegate_p.h"
 #include "KPropertyCoreUtils_p.h"
+#include "KPropertyUtils_p.h"
 
 #include <QPen>
-#include <QPainter>
 
 KPropertyLineStyleItemDelegate::KPropertyLineStyleItemDelegate(QObject * parent)
     : QAbstractItemDelegate(parent)
@@ -62,7 +62,7 @@ QString KPropertyLineStyleItemDelegate::styleName(Qt::PenStyle style, const QLoc
 void KPropertyLineStyleItemDelegate::paintItem(QPainter *painter, const QPen &pen_,
                                                const QRect &rect, const QStyleOption &option)
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     QPen pen(pen_);
     pen.setBrush(option.state & QStyle::State_Selected ? option.palette.highlightedText() : option.palette.text());
     if (pen.style() == Qt::NoPen) {
@@ -75,21 +75,19 @@ void KPropertyLineStyleItemDelegate::paintItem(QPainter *painter, const QPen &pe
         painter->setPen(pen);
         painter->drawLine(rect.left(), rect.center().y(), rect.right(), rect.center().y());
     }
-    painter->restore();
 }
 
 void KPropertyLineStyleItemDelegate::paint(QPainter *painter,
                                            const QStyleOptionViewItem &option,
                                            const QModelIndex &index) const
 {
-    painter->save();
-
-    if (option.state & QStyle::State_Selected)
+    const KPropertyUtils::PainterSaver saver(painter);
+    if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
+    }
 
     QPen pen = index.data(Qt::DecorationRole).value<QPen>();
     paintItem(painter, pen, option.rect, option);
-    painter->restore();
 }
 
 QSize KPropertyLineStyleItemDelegate::sizeHint(const QStyleOptionViewItem &option,

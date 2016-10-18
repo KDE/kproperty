@@ -23,16 +23,13 @@
 #include "fontedit_p.h"
 #include "utils.h"
 #include "kproperty_debug.h"
+#include "KPropertyUtils_p.h"
 
-#include <QObject>
 #include <QPushButton>
-#include <QPainter>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QFontDatabase>
-#include <QEvent>
 #include <QHBoxLayout>
-#include <QApplication>
 #include <QPushButton>
 #include <QFontDialog>
 
@@ -101,7 +98,7 @@ QWidget * KPropertyFontDelegate::createEditor( int type, QWidget *parent,
 void KPropertyFontDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    painter->save();
+    const KPropertyUtils::PainterSaver saver(painter);
     const QFont origFont( painter->font() );
     QFont f( index.data(Qt::EditRole).value<QFont>() );
     if (option.font.pointSize() > 0)
@@ -118,7 +115,7 @@ void KPropertyFontDelegate::paint( QPainter * painter,
     rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
     painter->setFont(origFont);
     painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, valueToString(index.data(Qt::EditRole), QLocale()));
-    painter->restore();
+
 }
 
 QString KPropertyFontDelegate::valueToString(const QVariant& value, const QLocale &locale) const
