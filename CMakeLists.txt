@@ -14,6 +14,7 @@ project(KProperty VERSION 3.0.0) # Update this
 if(KPROPERTY_GENERATE_PRI)
     include(ECMGeneratePriFile)
 endif()
+include(ECMPackageConfigHelpers)
 include(ECMGenerateHeaders)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
