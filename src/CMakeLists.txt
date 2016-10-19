@@ -131,7 +131,7 @@ ecm_setup_version(${PROJECT_VERSION}
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPropertyCoreConfigVersion.cmake"
 )
 
-configure_package_config_file(
+ecm_configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPropertyCoreConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KPropertyCoreConfig.cmake"
     INSTALL_DESTINATION "${CMAKECONFIG_CORE_INSTALL_DIR}"
@@ -163,7 +163,7 @@ if(KPROPERTY_WIDGETS)
         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kproperty_version.h"
         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPropertyWidgetsConfigVersion.cmake"
     )
-    configure_package_config_file(
+    ecm_configure_package_config_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/KPropertyWidgetsConfig.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/KPropertyWidgetsConfig.cmake"
         INSTALL_DESTINATION "${CMAKECONFIG_WIDGETS_INSTALL_DIR}"
