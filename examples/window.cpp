@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,7 +70,7 @@ Window::Window()
         setFont(f);
     }
 
-    /*  First, create the Set which will hold the properties.  */
+    /*  First, create a KPropertySet which will hold the properties.  */
     KProperty *p = 0;
     m_set.setReadOnly(m_parser.isSet(m_roOption));
     QByteArray group;
@@ -81,6 +81,9 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="String") {
         m_set.addProperty(p = new KProperty("String", "String"), group);
         p->setAutoSync(1);
+        p->setReadOnly(false); // this should not work:
+                               // - not needed if the property set is read-write
+                               // - ignored if the property set is read-only
     }
     if (singleProperty.isEmpty() || singleProperty=="MultiLine") {
         m_set.addProperty(p = new KProperty("MultiLine", "Multi\nLine\nContent"), group);
@@ -219,22 +222,36 @@ Window::Window()
         m_set.addProperty(p = new KProperty("Dir", QUrl::fromLocalFile(QDir::homePath()), "Dir"), group);
         p->setOption("fileMode", "dirsOnly");
     }
+    if (singleProperty.isEmpty() || singleProperty=="ReadOnly") {
+        m_set.addProperty(p = new KProperty("Read-Only", "Read-only string"), group);
+        p->setReadOnly(true);
+    }
 
 // qDebug() << m_set.groupNames();
     QVBoxLayout *lyr = new QVBoxLayout(this);
     m_editorView = new KPropertyEditorView(this);
     lyr->addWidget(m_editorView);
     m_editorView->changeSet(&m_set, KPropertyEditorView::ExpandChildItems);
+    lyr->addSpacing(lyr->spacing());
+
+    QHBoxLayout *hlyr = new QHBoxLayout;
+    lyr->addLayout(hlyr);
+
     m_showGrid = new QCheckBox("Show grid");
     m_showGrid->setChecked(true);
     connect(m_showGrid, &QCheckBox::stateChanged, this, &Window::showGrid);
-    QHBoxLayout *hlyr = new QHBoxLayout;
-    lyr->addLayout(hlyr);
     hlyr->addWidget(m_showGrid);
+
     m_showFrame = new QCheckBox("Show frame");
     m_showFrame->setChecked(true);
     connect(m_showFrame, &QCheckBox::stateChanged, this, &Window::showFrame);
     hlyr->addWidget(m_showFrame);
+
+    QCheckBox *readOnly = new QCheckBox("Read-only");
+    connect(readOnly, &QCheckBox::toggled, &m_set, &KPropertySet::setReadOnly);
+    readOnly->setChecked(m_set.isReadOnly());
+    hlyr->addWidget(readOnly);
+
     hlyr->addStretch(1);
     resize(400, qApp->desktop()->height() - 200);
     m_editorView->setFocus();

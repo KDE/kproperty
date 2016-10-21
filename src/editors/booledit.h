@@ -57,9 +57,6 @@ protected Q_SLOTS:
 
 protected:
     virtual void paintEvent( QPaintEvent * event );
-//    virtual void setReadOnlyInternal(bool readOnly);
-//    void setState(bool state);
-//    virtual void resizeEvent(QResizeEvent *ev);
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
 private:
@@ -73,7 +70,6 @@ private:
 class KPROPERTYWIDGETS_EXPORT KPropertyThreeStateBoolEditor : public KPropertyComboBoxEditor
 {
     Q_OBJECT
-//    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
     explicit KPropertyThreeStateBoolEditor(const KPropertyListData& listData, QWidget *parent = 0);

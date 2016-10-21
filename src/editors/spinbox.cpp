@@ -62,15 +62,12 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
         : QSpinBox(parent)
         , m_unsigned(prop->type() == KProperty::UInt)
 {
-//    kprDebug() << "itemHeight:" << itemHeight;
     QLineEdit* le = findChild<QLineEdit*>();
     setContentsMargins(0,0,0,0);
     if (le) {
-//        le->setFixedHeight(itemHeight);
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
     }
-//    kprDebug() << parent->font().pointSize();
     setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
     KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, css);

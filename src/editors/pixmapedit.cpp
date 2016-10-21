@@ -53,7 +53,6 @@ KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
     m_edit->setContentsMargins(0, 1, 0, 0);
     m_edit->setToolTip(tr("Click to show image preview"));
     m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-//    m_edit->setMinimumHeight(5);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_edit->setBackgroundRole(QPalette::Base);
     m_edit->setMouseTracking(true);
@@ -89,7 +88,6 @@ void KPropertyPixmapEditor::setValue(const QVariant &value)
 {
     m_pixmap = value.value<QPixmap>();
     if (m_pixmap.isNull() || (m_pixmap.height() <= height())) {
-//        m_edit->setPixmap(m_pixmap);
         m_previewPixmap = m_pixmap;
     } else {
         QImage img(m_pixmap.toImage());
@@ -99,14 +97,8 @@ void KPropertyPixmapEditor::setValue(const QVariant &value)
             m_previewPixmap = QPixmap::fromImage(img);//preview pixmap is a bit larger
         } else {
             m_previewPixmap = m_pixmap;
-//            img = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-//        const QPixmap pm( QPixmap::fromImage(img) );
-//        m_edit->setPixmap(pm);
     }
-//    if (emitChange)
-//        emit valueChanged(this);
-
     emit commitData(this);
 }
 
@@ -159,17 +151,6 @@ void KPropertyPixmapEditor::selectPixmap()
     */
 }
 
-/*
-void
-PixmapEdit::resizeEvent(QResizeEvent *e)
-{
-    Widget::resizeEvent(e);
-    m_edit->move(0, 0);
-    m_edit->resize(e->size() - QSize(m_button->width(), -1));
-    m_button->move(m_edit->width(), 0);
-    m_button->setFixedSize(m_button->width(), height());
-}*/
-
 bool
 KPropertyPixmapEditor::eventFilter(QObject *o, QEvent *ev)
 {
@@ -215,7 +196,6 @@ PixmapEdit::setReadOnlyInternal(bool readOnly)
 
 KPropertyPixmapDelegate::KPropertyPixmapDelegate()
 {
-//    options.removeBorders = false;
 }
 
 QWidget* KPropertyPixmapDelegate::createEditor( int type, QWidget *parent,

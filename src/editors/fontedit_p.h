@@ -27,7 +27,7 @@
 class QPushButton;
 
 //! @internal
-//! reimplemented to better button and label's positioning
+//! Reimplemented to better button and label's positioning
 class KPropertyFontEditRequester : public QWidget
 {
     Q_OBJECT

@@ -111,27 +111,7 @@ KPropertyBoolEditor::KPropertyBoolEditor(const KProperty *prop, QWidget *parent)
 {
     setFocusPolicy(Qt::WheelFocus);
     setCheckable(true);
-//    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setAutoFillBackground(true);
-//    setFlat(false);
-//    setStyle(qApp->style());
-//    setPalette(qApp->palette());
-//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    //we're not using layout to because of problems with button size
-//    m_toggle->move(0, 0);
-//    m_toggle->resize(width(), height());
-/*    KColorScheme cs(QPalette::Active);
-    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-    setStyleSheet(
-        QString::fromLatin1("QToolButton { "
-        "border: 1px solid %1; "
-        "border-radius: 0px; "
-        "padding: 0 0px; }").arg(focus.name())); */
-
-//    setFocusWidget(m_toggle);
-//    setStyleSheet(
-//        QLatin1String(" QPushButton { border: none; padding:0;background-color: red; }") );
-
     connect(this, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
 }
 
@@ -147,15 +127,10 @@ QVariant KPropertyBoolEditor::value() const
 
 void KPropertyBoolEditor::setValue(const QVariant &value)
 {
-//    m_toggle->blockSignals(true);
     d->value = value;
     if (value.type() == QVariant::Bool) {
         setChecked(value.toBool());
     }
-//    setState(value);
-//    m_toggle->blockSignals(false);
-//    if (emitChange)
-//        emit valueChanged(this);
 }
 
 void
@@ -163,8 +138,6 @@ KPropertyBoolEditor::slotValueChanged(bool state)
 {
     d->value = state;
     emit commitData(this);
-//    setState(state);
-////    emit valueChanged(this);
 }
 
 void KPropertyBoolEditor::draw(QPainter *p, const QRect &r, const QVariant &value,
@@ -213,19 +186,12 @@ bool KPropertyBoolEditor::eventFilter(QObject* watched, QEvent* e)
         QKeyEvent* ev = static_cast<QKeyEvent*>(e);
         const int k = ev->key();
         if (k == Qt::Key_Space || k == Qt::Key_Enter || k == Qt::Key_Return) {
-//            if (m_toggle)
-                toggle();
+            toggle();
             return true;
         }
     }
     return QToolButton::eventFilter(watched, e);
 }
-
-/*void
-BoolEdit::setReadOnlyInternal(bool readOnly)
-{
-    setVisibleFlag(!readOnly);
-}*/
 
 //--------------------------------------------------
 
@@ -290,13 +256,7 @@ QVariant KPropertyThreeStateBoolEditor::value() const
 
 void KPropertyThreeStateBoolEditor::setValue(const QVariant &value)
 {
-//    if (!m_setValueEnabled)
-//        return;
-
     setCurrentIndex( valueToIndex(value) );
-
-//    if (emitChange)
-//        emit valueChanged(this);
 }
 
 //---------------

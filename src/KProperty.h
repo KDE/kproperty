@@ -32,17 +32,15 @@
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
  Main classes of this framework are:
-  - Property, representing a single property with its own type and value
-  - Set, a set of properties
-  - Editor, a widget for displaying and editing properties provided by a Set object.
-    Every property has its own row displayed using EditorItem object, within Editor widget.
-    Widget class provides editing feature for EditorItem objects if a user selects a given item.
+  - KProperty, representing a single property with its own type and value
+  - KPropertySet, a set of properties
+  - KPropertyEditorView, a widget for displaying and editing properties provided by a KPropertySet object.
+    Every property has its own row displayed within the editor view.
+    The editor view enables editing of property values.
 
- KProperty framework also supports adding composed and property types
- and custom property editor types.
+ The KProperty framework also supports adding composed and property types and custom property editor types.
 
- Take a look at the test application, available in the test/ directory
- to see example uses of the framework.
+ Take a look at the example application, available in the examples/ directory.
 
  @author Cedric Pasteur <cedric.pasteur@free.fr>
  @author Alexander Dymo <cloudtemple@mskat.net>
@@ -85,44 +83,43 @@ public:
 
 /*! \brief The base class representing a single property
 
-  It can hold a property of any type supported by QVariant. You can also create you own property
-  types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
-  use \ref KComposedPropertyInterface instead. \n
-  Each property stores old value to allow undo. It has a name (a QByteArray), a caption
-  (user-visible translated name shown in Editor) and a description (also translated). \n
-  It also supports setting arbitrary number of options (of type option=value).
-  See Editor for a list of options, and their meaning.
+  KProperty object can hold a property of given type supported by QVariant. Properties of custom types
+  can be also created, see using KPropertyFactory. Composed or custome properties
+  are not created using subclassing of KProperty but using @ref KComposedPropertyInterface.
 
-  \code
-  // To create a property
-  property = Property(name, value, caption, description); // name is a QByteArray,
-  // value is whatever type QVariant supports
+  Each property stores old value to allows undoing that reverts the value to the old one.
+  Property has a non-empty name (a QByteArray), a caption that is user-visible translated string
+  displayed in property editor. Description is a translatable string that can be specified too
+  in order to further explain meaning of the property.
 
-  // To create a valueFromList property (matching strings with strings)
-  QStringList keys, strings;
+  Propery also supports setting arbitrary number of options using KProperty::setOption() that allow
+  to customize look or behavior of of the property in the editor.
+
+  @code
+  // Creating a simple property:
+  KProperty *property = new KProperty(name, value, caption, description);
+  // name is a QByteArray, value is whatever type QVariant supports
+
+  // Creating a valueFromList property matching keys with names:
+  QStringList keys, names;
   keys << "one" << "two" << "three"; // possible values of the property
-  // Strings (possibly translated) shown in the editor instead of the values
-  strings << tr("One") << tr("Two") << tr("Three");
-  property = Property(name, keys, strings, "two", caption);
+  // Names (possibly translated) shown in the editor instead of the keys
+  names << tr("One") << tr("Two") << tr("Three");
+  property = new KProperty(name, keys, names, "two", caption);
 
-  // To create a valueFromList property (matching strings with QVariant)
-  QValueList<QVariant> keys2;
-  keys2.append(1);
-  keys2.append(2);
-  keys2.append(3);
-  Property::ListData listData(keys2, strings);
-  m_set->addProperty(new Property("List2", listData, "otheritem", "List2"), group);
-  \endcode
+  // Creating a valueFromList property matching QVariant keys with names:
+  QValueList<QVariant> variantKeys;
+  variantKeys << 1 << 2 << 3;
+  KPropertyListData *listData = new KPropertyListData(variantKeys, names);
+  propertySet->addProperty(new KProperty("List", listData, "otheritem", "List"));
+  @endcode
 
-  Note that you need to use QVariant(bool, int) to create a boolean property value.
-  See QVariant docs for more details.
-
-  Sometimes, for longer property captions or these with more words, e.g. "Allow Zero Size",
-  its usable to provide newline characters, e.g. "Allow Zero\nSize".
-  If caption argument of the constructors contains newline characters,
-  caption() will return this text with substituted these characters with spaces.
-  In such cases, captionForDisplaying() is used to get the original caption text usable
-  (with newline, if any) for displaying within a property editor.
+  @note Sometimes it makes sense to split property captions that have with more words to multiple lines
+  using a newline character, e.g. "Allow Zero Size" to "Allow Zero\nSize".
+  This is suitable especially for the needs of property editor which can offer only limited area.
+  The text of property caption containing newline characters is available in its original form using
+  KProperty::captionForDisplaying(). KProperty::caption() returns modified caption text in which
+  the newline characters are substituted with spaces and any trailing and leading whitespace is removed.
 
   \author Cedric Pasteur <cedric.pasteur@free.fr>
   \author Alexander Dymo <cloudtemple@mskat.net>
@@ -192,20 +189,6 @@ public:
         DirectoryURL                  /**<url of a directory*/,
         LineStyle                     /**<line style*/,
 
-        // Child property types
-    /*    Size_Height = 3001,
-        Size_Width,
-        Point_X,
-        Point_Y,
-        Rect_X,
-        Rect_Y,
-        Rect_Width,
-        Rect_Height,
-        SizePolicy_HorizontalPolicy,
-        SizePolicy_VerticalPolicy,
-        SizePolicy_HorizontalStretch,
-        SizePolicy_VerticalStretch,*/
-
         UserDefined = 4000            /**<plugin defined properties should start here*/
     };
 
@@ -216,8 +199,7 @@ public:
      If \a caption contains newline characters, caption() will return \a caption with substituted
      these with spaces. captionForDisplaying() is used to get original caption text usable
      (with newline, if any) for displaying within a property editor. */
-    explicit
-    KProperty(const QByteArray &name, const QVariant &value = QVariant(),
+    explicit KProperty(const QByteArray &name, const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, KProperty* parent = 0);
 
@@ -254,8 +236,8 @@ public:
     QString captionForDisplaying() const;
 
     /*! Sets the name of the property. If the caption contains newline characters,
-     these are replaced by spaces. You can use captionForDisplaying()
-     to access the original caption text you passed here.*/
+     these are replaced by spaces. captionForDisplaying() can be used to access the original caption
+     text passed here.*/
     void setCaption(const QString &caption);
 
     /*! \return the description of the property.*/
@@ -331,21 +313,22 @@ public:
     //! Clears "modified" flag, so isModified() will return false.
     void clearModifiedFlag();
 
-    /*! \return true if the property is read-only.
-     The property can be read-write but still not editable because the property
-     set containing it may be set to read-only.
-     By default the property is read-write.
-     See Set::isReadOnly() for more details. */
+    /*! \return true if the property is read-only when used in a property editor.
+     @c false by default.
+     The property can be read-write but still not editable for the user if the parent property set's
+     read-only flag is set.
+     @see KPropertySet::isReadOnly() */
     bool isReadOnly() const;
 
     /*! Sets this property to be read-only.
      @see isReadOnly() */
     void setReadOnly(bool readOnly);
 
-    /*! \return true if the property is visible.*/
+    /*! \return true if the property is visible.
+     Only visible properties are displayed by the property editor view. */
     bool isVisible() const;
 
-    /*! Set the visibility.*/
+    /*! Sets the visibility flag.*/
     void setVisible(bool visible);
 
     /*! \return true if the property can be saved to a stream, xml, etc.
@@ -356,19 +339,19 @@ public:
     /*! Sets "storable" flag for this property. @see isStorable() */
     void setStorable(bool storable);
 
-    /*! \return 1 if the property should be synced automatically in Property Editor
+    /*! \return 1 if the property should be synced automatically in the property editor
     as soon as editor contents change (e.g. when the user types text).
     If autoSync() == 0, property value will be updated when the user presses Enter
     or when another editor gets the focus.
-    Property follows Property Editor's global rule if autoSync() !=0 and !=1 (the default).
+    Property follows property editor's global rule if autoSync() !=0 and !=1 (the default).
     */
     int autoSync() const;
 
-    /*! if \a sync is 1, the property will be synced automatically in the Property Editor
+    /*! If \a sync is 1, the property will be synced automatically in the property editor
     as soon as editor's contents change (e.g. when the user types text).
     If \a sync is 0, property value will be updated when the user presses
     Enter or when another editor gets the focus.
-    Property follows Property Editor's global rule if sync !=0 and !=1 (the default).
+    Property follows property editor's global rule if sync !=0 and !=1 (the default).
     */
     void setAutoSync(int sync);
 
@@ -440,7 +423,7 @@ public:
 
 #if 0
     /*! \return a key used for sorting.
-     Usually its set by Set::addProperty() and Property::addChild() to a unique value,
+     Usually its set by KPropertySet::addProperty() and KProperty::addChild() to a unique value,
      so that this property can be sorted in a property editor in original order.
      \see EditorItem::compare() */
     int sortingKey() const;
@@ -465,15 +448,14 @@ protected:
     /*! Adds related property for this property. */
     void addRelatedProperty(KProperty *property);
 
-    /*! This method emits the \a Set::propertyChanged() signal for all
-    sets this property is registered in. The \a value() method above
-    calls this method of the value changed. */
+    /*! This method emits the \a KPropertySet::propertyChanged() signal.
+    KProperty::setValue() calls this method if the value has been changed. */
     void emitPropertyChanged();
 
-    /*! Outputs debug string for this property. */
+    /*! Outputs debug string for this property to the standard debug output. */
     void debug() const;
 
-    /*! For operator <<. */
+    /*! Used by debug operator <<. */
     QMap<QByteArray, QVariant> options() const;
 
     //! @internal

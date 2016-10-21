@@ -79,7 +79,6 @@ int KPropertyLineStyleModel::setLineStyle(Qt::PenStyle style, const QVector<qrea
     if (style < Qt::CustomDashLine) {
         // a standard style
         m_hasTempStyle = false;
-        //reset();
         return style;
     } else if (style == Qt::CustomDashLine) {
         // a custom style -> check if already added

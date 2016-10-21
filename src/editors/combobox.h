@@ -49,7 +49,6 @@ public:
         bool extraValueAllowed;
     };
 
-//    explicit ComboBox(const Property* property, QWidget *parent = 0);
     KPropertyComboBoxEditor(const KPropertyListData& listData, const Options& options,
              QWidget *parent = 0);
 
@@ -57,7 +56,6 @@ public:
 
     virtual QVariant value() const;
 
-//    virtual void setProperty(const Property *property);
     void setListData(const KPropertyListData & listData);
 
     static QString borderSheet(const QWidget *widget);
@@ -73,7 +71,6 @@ protected Q_SLOTS:
 
 protected:
     virtual void paintEvent( QPaintEvent * event );
-//    virtual void setReadOnlyInternal(bool readOnly);
 
     QString keyForValue(const QVariant &value);
 
@@ -81,10 +78,7 @@ protected:
 
     bool listDataKeysAvailable() const;
 
-//    KComboBox *m_edit;
-//    const Property *m_property;
     KPropertyListData m_listData;
-//    QList<QVariant> keys;
     bool m_setValueEnabled;
     Options m_options;
 };
@@ -101,9 +95,6 @@ public:
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-
-//    virtual void paint( QPainter * painter,
-//        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 #endif

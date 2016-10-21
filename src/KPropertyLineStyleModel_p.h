@@ -24,7 +24,7 @@
 
 #include <QVector>
 
-/// The line style model managing the style data
+//! Line style model managing the style data
 class KPropertyLineStyleModel : public QAbstractListModel
 {
 public:
@@ -33,9 +33,9 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    /// adds the given style to the model
+    //! Adds the given style to the model
     bool addCustomStyle(const QVector<qreal> &style);
-    /// selects the given style
+    //! Selects the given style
     int setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes);
 private:
     QList<QVector<qreal> > m_styles; ///< the added styles

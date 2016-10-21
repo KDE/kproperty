@@ -110,6 +110,10 @@ protected Q_SLOTS:
     /*! Called when current property set is about to be destroyed. */
     void slotSetWillBeDeleted();
 
+    /*! Called when property set's read-only flag has changed.
+     Refreshes selection so editor is displayed again if needed. */
+    void slotReadOnlyFlagChanged();
+
     /*! Updates editor widget in the editor.*/
     void slotPropertyChanged(KPropertySet& set, KProperty& property);
 

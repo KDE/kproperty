@@ -27,9 +27,9 @@
 #include <QHash>
 
 //! An interface for for composed property handlers
-/*! You have to subclass KComposedPropertyInterface to override the behaviour of a property type.\n
-  In the constructor, you should create the child properties (if needed).
-  Then, you need to implement the functions concerning values.\n
+/*! KComposedPropertyInterface should be subclassed to override the behaviour of a property type.
+  In the constructor child property objects should be created if there are any.
+  Then functions handling values should be implemented.
 
   Example implementation of composed properties can be found in editors/ directory.
 */
@@ -40,11 +40,11 @@ public:
     virtual ~KComposedPropertyInterface();
 
     /*! This function modifies the child properties for parent value @a value.
-     It is called by @ref Property::setValue() when
+     It is called by @ref KProperty::setValue() when
      the property is composed.
-    You don't have to modify the property value, it is done by Property class.
-    Note that when calling Property::setValue, you <b>need</b> to set
-    useComposedProperty (the third parameter) to false, or there will be infinite recursion. */
+    It is not necessary to modify the property value, it is done by KProperty.
+    @note When calling KProperty::setValue, useComposedProperty (the third parameter)
+          should be set to @c false or else there will be infinite recursion. */
     virtual void setValue(KProperty *property, const QVariant &value, bool rememberOldValue) = 0;
 
     void childValueChangedInternal(KProperty *child, const QVariant &value, bool rememberOldValue) {
@@ -62,7 +62,7 @@ public:
 protected:
     virtual void childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue) = 0;
 
-    /*! This method emits the \a Set::propertyChanged() signal for all
+    /*! This method emits the \a KPropertySet::propertyChanged() signal for all
     sets our parent-property is registered in. */
     void emitPropertyChanged();
     bool m_childValueChangedEnabled : 1;
