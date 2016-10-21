@@ -67,7 +67,7 @@ public:
 };
 #endif
 
-static bool computeAutoSync(KProperty *property, bool defaultAutoSync)
+static bool computeAutoSync(const KProperty *property, bool defaultAutoSync)
 {
     return (property->autoSync() != 0 && property->autoSync() != 1) ?
                 defaultAutoSync : (property->autoSync() != 0);
@@ -103,7 +103,7 @@ static int getIconSize(int fontPixelSize)
     return fontPixelSize * 0.85;
 }
 
-static int typeForProperty( KProperty* prop )
+static int typeForProperty(const KProperty* prop)
 {
     if (prop->listData())
         return KProperty::ValueFromList;
@@ -207,9 +207,12 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
 {
     if (!index.isValid())
         return 0;
-    QStyleOptionViewItem alteredOption(option);
-    KProperty *property = KPropertyUtils::propertyForIndex(index);
+    const KProperty *property = KPropertyUtils::propertyForIndex(index);
+    if (property && property->isReadOnly()) {
+        return nullptr;
+    }
     const int t = property ? typeForProperty(property) : KProperty::String;
+    QStyleOptionViewItem alteredOption(option);
     alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = KPropertyWidgetsPluginManager::self()->createEditor(t, parent, alteredOption, index);
     if (!w) {
@@ -368,6 +371,8 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
                 this, SLOT(slotPropertyReset(KPropertySet&,KProperty&)));
         connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
+        connect(d->set, &KPropertySet::readOnlyFlagChanged,
+                this, &KPropertyEditorView::slotReadOnlyFlagChanged);
     }
 
     KPropertyEditorDataModel *oldModel = d->model;
@@ -411,6 +416,16 @@ void KPropertyEditorView::slotSetWillBeDeleted()
     changeSet(0, QByteArray());
 }
 
+void KPropertyEditorView::slotReadOnlyFlagChanged()
+{
+    const QModelIndex index = currentIndex();
+    setCurrentIndex(QModelIndex());
+    if (index.isValid()) {
+        selectionModel()->select(index, QItemSelectionModel::Select);
+        setCurrentIndex(index);
+    }
+}
+
 void KPropertyEditorView::setAutoSync(bool enable)
 {
     d->autoSync = enable;
@@ -428,7 +443,12 @@ void KPropertyEditorView::currentChanged( const QModelIndex & current, const QMo
 
 bool KPropertyEditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
 {
-    bool result = QTreeView::edit( index, trigger, event );
+    bool result;
+    if (!d->set || d->set->isReadOnly()) {
+        result = false;
+    } else {
+        result = QTreeView::edit(index, trigger, event);
+    }
     if (result) {
       QLineEdit *lineEditEditor = dynamic_cast<QLineEdit*>( (QObject*)d->itemDelegate->m_currentEditor );
       if (lineEditEditor) {

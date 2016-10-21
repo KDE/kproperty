@@ -148,7 +148,7 @@ Qt::ItemFlags KPropertyEditorDataModel::flags(const QModelIndex &index) const
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     KProperty *prop = propertyForIndex(index);
     if (prop) {
-        if (col == 1) {
+        if (col == 1 && !prop->isReadOnly() && !d->set->isReadOnly()) {
             f |= Qt::ItemIsEditable;
         }
     }

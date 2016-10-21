@@ -293,6 +293,9 @@ Q_SIGNALS:
     /*! Emitted when property set object is about to be deleted.*/
     void aboutToBeDeleted();
 
+    /*! Emitted when property set object's read-only flag has changed.*/
+    void readOnlyFlagChanged();
+
 protected:
     class Private;
     friend class Private;

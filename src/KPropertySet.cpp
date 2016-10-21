@@ -527,7 +527,10 @@ KPropertySet::isReadOnly() const
 void
 KPropertySet::setReadOnly(bool readOnly)
 {
-    d->readOnly = readOnly;
+    if (d->readOnly != readOnly) {
+        d->readOnly = readOnly;
+        emit readOnlyFlagChanged();
+    }
 }
 
 bool
