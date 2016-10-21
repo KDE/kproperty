@@ -57,7 +57,9 @@ struct KPropertyWidgetsPluginManagerInitializer {
     }
     static void initMe() { KPropertyWidgetsPluginManager::self(); }
 };
+namespace {
 KPropertyWidgetsPluginManagerInitializer init;
+}
 
 //------------
 
