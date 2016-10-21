@@ -44,13 +44,13 @@ public:
     virtual KPropertySelector* clone() const = 0;
 };
 
-//! A class to iterate over a Set.
+//! A class to iterate over a KPropertySet.
 /*! It behaves like a QList::ConstIterator.
  Usage:
- @code  for (Set::Iterator it(set); it.current(); ++it) { .... }
+ @code  for (KPropertySetIterator it(set); it.current(); ++it) { .... }
  @endcode
  Usage with selector:
- @code  for (Set::Iterator it(set, MySelector()); it.current(); ++it) { .... }
+ @code  for (KPropertySetIterator it(set, MySelector()); it.current(); ++it) { .... }
  @endcode */
 class KPROPERTYCORE_EXPORT KPropertySetIterator
 {
@@ -113,7 +113,7 @@ class KPROPERTYCORE_EXPORT KPropertySet : public QObject
     Q_OBJECT
 
 public:
-    //! Constructs a new Set object.
+    //! Constructs a new property set object.
     explicit KPropertySet(QObject *parent = 0);
 
     /*! Constructs a deep copy of \a set.
@@ -122,18 +122,20 @@ public:
 
     virtual ~KPropertySet();
 
-    /*! Adds the property to the set, in the group. You can use any group name, except "common"
-      (which is already used for basic group). */
+    /*! Adds the property to the set, in the group.
+     The property becomes owned by the set.
+     Any name can be used for the @a group. "common" is the default for a basic top-level group. */
     void addProperty(KProperty *property, const QByteArray &group = "common");
 
-    /*! Removes property from the set. Emits aboutToDeleteProperty before removing.*/
+    /*! Removes property from the set and deletes the object.
+     Emits aboutToDeleteProperty before removing. */
     void removeProperty(KProperty *property);
 
-    /*! Removes property with the given name from the set.
+    /*! Removes property with the given name from the set and deletes the object.
     Emits aboutToDeleteProperty() before removing.*/
     void removeProperty(const QByteArray &name);
 
-    /*! Removes all properties from the property set and destroys them. */
+    /*! Removes all property objects from the property set and deletes them. */
     void clear();
 
     /*! @return the number of top-level properties in the set. */
@@ -153,13 +155,14 @@ public:
                 matching criteria defined by @a selector. */
     bool hasProperties(const KPropertySelector& selector) const;
 
-    /*! \return true if the set is read-only.
-     In read-only property set,
-     no property can be modified regardless of read-only flag of any
-     property (see Property::isReadOnly()). On the other hand, if Property::isReadOnly()
-     is true of a property and Set::isReadOnly() is false, the property is still read-only.
-     Read-only property set prevents editing in the property editor.
-     By default the set is read-write. */
+    /*! \return true if the set is read-only when used in a property editor.
+     @c false by default.
+     In a read-only property set no property can be modified by the user regardless of read-only flag
+     of any property (KProperty::isReadOnly()). On the other hand if KProperty::isReadOnly() is @c true
+     and KPropertySet::isReadOnly() is @c false, the property is still read-only.
+     Read-only property set prevents editing in the property editor but it is still possible to change
+     value or other parameters of property programatically using KProperty::setValue(),
+     KProperty::resetValue(), etc. */
     bool isReadOnly() const;
 
     /*! Sets this set to be read-only.
@@ -170,22 +173,22 @@ public:
     bool contains(const QByteArray &name) const;
 
     /*! \return property named with \a name. If no such property is found,
-     null property (Property::null) is returned. */
+     null property (KProperty()) is returned. */
     KProperty& property(const QByteArray &name) const;
 
-    /*! Accesses a property by it's name.
-    Property reference is returned, so all property modifications are allowed.
-    If there is no such property, null property is returned,
-    so it's good practice to use contains() is you're unsure if the property exists.
-    For example, to set a value of a property, use:
-    /code
-    Set set;
+    /*! Accesses a property by name.
+    A property reference is returned, so all property modifications are allowed.
+    If there is no such property, null property (KProperty()) is returned,
+    so it's good practice to use contains() if it's not known if the property exists.
+    For example to set a value of a property, use:
+    @code
+    KPropertySet set;
     ...
     if (!set.contains("myProperty")) {
       dosomething;
     }
     set["myProperty"].setValue("My Value");
-    /endcode
+    @endcode
     @return \ref Property with given name.
     @see changeProperty(const QByteArray &, const QVariant &)
     @see changePropertyIfExists(const QByteArray &, const QVariant &)
@@ -258,8 +261,7 @@ protected:
     /*! Removes property from a group.*/
     void removeFromGroup(KProperty *property);
 
-    /*! Adds the property to the set, in the group. You can use any group name, except "common"
-      (which is already used for basic group).
+    /*! Adds the property to the property set, in the group. Group name can be supplied.
       @internal */
     void addPropertyInternal(KProperty *property, QByteArray group);
 
@@ -318,7 +320,7 @@ public:
     KPropertyBuffer();
     explicit KPropertyBuffer(const KPropertySet &set);
 
-    /*! Intersects with other Set.*/
+    /*! Intersects with other KPropertySet.*/
     virtual void intersect(const KPropertySet& set);
 
 protected Q_SLOTS:

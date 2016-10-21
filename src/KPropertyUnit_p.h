@@ -70,17 +70,17 @@ public:
     /** Length units supported by %KProperty. */
     enum Type {
         Millimeter = 0,
-        Point,  ///< Postscript point, 1/72th of an Inco
+        Point,  //!< Postscript point, 1/72th of an Inco
         Inch,
         Centimeter,
         Decimeter,
         Pica,
         Cicero,
         Pixel,
-        TypeCount ///< @internal
+        TypeCount //!< @internal
     };
 
-    /// Used to control the scope of the unit types listed in the UI
+    //! Used to control the scope of the unit types listed in the UI
     enum ListOption {
         ListAll = 0,
         HidePixel = 1,
@@ -91,9 +91,9 @@ public:
     /** Returns a KPropertyUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
     static KPropertyUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
 
-    /// Convert a unit symbol string into a KPropertyUnit
-    /// @param symbol symbol to convert
-    /// @param ok if set, it will be true if the unit was known, false if unknown
+    //! Convert a unit symbol string into a KPropertyUnit
+    //! @param symbol symbol to convert
+    //! @param ok if set, it will be true if the unit was known, false if unknown
     static KPropertyUnit fromSymbol(const QString &symbol, bool *ok = 0);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
@@ -202,32 +202,32 @@ public:
      */
     static qreal ptToUnit(qreal ptValue, const KPropertyUnit &unit);
 
-    /// This method is the one to use to display a value in a dialog
-    /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
+    //! This method is the one to use to display a value in a dialog
+    //! @return the value @p ptValue converted the unit and rounded, ready to be displayed
     QString toUserStringValue(qreal ptValue) const;
 
-    /// This method is the one to use to read a value from a dialog
-    /// @return the value converted to points for internal use
+    //! This method is the one to use to read a value from a dialog
+    //! @return the value converted to points for internal use
     qreal fromUserValue(qreal value) const;
 
-    /// This method is the one to use to read a value from a dialog
-    /// @param value value entered by the user
-    /// @param ok if set, the pointed bool is set to true if the value could be
-    /// converted to a qreal, and to false otherwise.
-    /// @return the value converted to points for internal use
+    //! This method is the one to use to read a value from a dialog
+    //! @param value value entered by the user
+    //! @param ok if set, the pointed bool is set to true if the value could be
+    //! converted to a qreal, and to false otherwise.
+    //! @return the value converted to points for internal use
     qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
-    /// Get the description string of the given unit
+    //! Get the description string of the given unit
     static QString unitDescription(KPropertyUnit::Type type);
 
-    /// Get the symbol string of the unit
+    //! Get the symbol string of the unit
     QString symbol() const;
 
-    /// Returns the list of unit types for the UI, controlled with the given @p listOptions.
+    //! Returns the list of unit types for the UI, controlled with the given @p listOptions.
     static QStringList listOfUnitNameForUi(ListOptions listOptions = ListAll);
 
-    /// Get the index of this unit in the list of unit types for the UI,
-    /// if it is controlled with the given @p listOptions.
+    //! Get the index of this unit in the list of unit types for the UI,
+    //! if it is controlled with the given @p listOptions.
     int indexInListForUi(ListOptions listOptions = ListAll) const;
 
     /**
@@ -236,10 +236,10 @@ public:
      */
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
-    /// parse an angle to its value in degrees
+    //! Parse an angle to its value in degrees
     static qreal parseAngle(const QString &value, qreal defaultVal = 0.0);
 
-    /// Equal to symbol(): returns the symbol string of the unit.
+    //! Equal to symbol(): returns the symbol string of the unit.
     inline QString toString() const {
         return symbol();
     }

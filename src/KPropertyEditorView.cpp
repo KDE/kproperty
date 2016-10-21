@@ -330,7 +330,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
         if (index.isValid()) {
 //! @todo This crashes when changing the interpreter type in the script plugin
 #if 0
-            Property *property = d->model->propertyForIndex(index);
+            KProperty *property = d->model->propertyForIndex(index);
             //if (property->isNull())
             //    kprDebug() << "WTF? a NULL property?";
             //else

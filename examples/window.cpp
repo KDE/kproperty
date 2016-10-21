@@ -70,7 +70,7 @@ Window::Window()
         setFont(f);
     }
 
-    /*  First, create the Set which will hold the properties.  */
+    /*  First, create a KPropertySet which will hold the properties.  */
     KProperty *p = 0;
     m_set.setReadOnly(m_parser.isSet(m_roOption));
     QByteArray group;

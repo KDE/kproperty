@@ -97,7 +97,7 @@ public:
 
     KProperty  *parent;
     QList<KProperty*>  *children;
-    //! list of properties with the same name (when intersecting buffers)
+    //! List of properties with the same name (when intersecting buffers)
     QList<KProperty*>  *relatedProperties;
 };
 
@@ -744,8 +744,8 @@ void KProperty::emitPropertyChanged()
         }
         if (!set.isNull()) {
             //if the slot connect with that signal may call set->clear() - that's
-            //the case e.g. at kexi/plugins/{macros|scripting}/* -  this Property
-            //may got destroyed ( see Set::removeProperty(Property*) ) while we are
+            //the case e.g. at kexi/plugins/{macros|scripting}/* -  this KProperty
+            //may got destroyed ( see KPropertySet::removeProperty(KProperty*) ) while we are
             //still on it. So, if we try to access ourself/this once the signal
             //got emitted we may end in a very hard to reproduce crash. So, the
             //emit should happen as last step in this method!

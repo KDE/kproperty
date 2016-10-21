@@ -28,7 +28,7 @@
 
 class KProperty;
 
-/*! @short A data model for using Set objects within the Qt's model/view API.
+/*! @short A data model that integrates a KPropertySet object with the Qt's model/view API.
  @see KPropertyEditorView
  @internal
 */

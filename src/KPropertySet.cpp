@@ -90,7 +90,7 @@ public:
             return;
 
         if (!list.removeOne(property)) {
-            kprDebug() << "Set does not contain property" << property;
+            kprDebug() << "The property set does not contain property" << property;
             return;
         }
         KProperty *p = hash.take(property->name().toLower());
@@ -139,7 +139,7 @@ public:
         groupForProperties.remove(property);
     }
 
-    // Copy all attributes except complex ones
+    //! Copy all attributes except complex ones
     void copyAttributesFrom(const Private &other)
     {
         KPropertySet *origSet = q;
@@ -154,7 +154,7 @@ public:
         informAboutClearing = 0;
     }
 
-    // Copy all properties from the other set
+    //! Copy all properties from the other set
     void copyPropertiesFrom(
         const QList<KProperty*>::ConstIterator& constBegin,
         const QList<KProperty*>::ConstIterator& constEnd, const KPropertySet & set)
@@ -165,7 +165,7 @@ public:
 #if 0
                         ,
                         false /* don't updateSortingKey, because the key is already
-                                 set in Property copy ctor.*/
+                                 set in KProperty copy ctor.*/
 #endif
                        );
         }
@@ -193,20 +193,20 @@ public:
     bool readOnly;
     QByteArray prevSelection;
 
-    //! Used in Set::informAboutClearing(Property*) to declare that the property wants
+    //! Used in KPropertySet::informAboutClearing(bool&) to declare that the property wants
     //! to be informed that the set has been cleared (all properties are deleted)
     bool* informAboutClearing;
 
     mutable KProperty nonConstNull;
 
 private:
-    //! a list of properties, preserving their order, owner of Property objects
+    //! A list of properties, preserving their order, owner of KProperty objects
     QList<KProperty*> list;
-    //! a hash of properties in form name -> property
+    //! A hash of properties in form name -> property
     QHash<QByteArray, KProperty*> hash;
     QHash<KProperty*, QByteArray> groupForProperties;
-    uint m_visiblePropertiesCount; //! cache for optimization,
-                                   //! used by @ref bool Set::hasVisibleProperties()
+    uint m_visiblePropertiesCount; //!< Cache for optimization,
+                                   //!< used by @ref bool KPropertySet::hasVisibleProperties()
 };
 
 //////////////////////////////////////////////

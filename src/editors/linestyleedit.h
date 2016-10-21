@@ -23,7 +23,7 @@
 #include "KPropertyWidgetsFactory.h"
 #include "KPropertyLineStyleSelector_p.h"
 
-//! Line style combo box (Property::LineStyle, equivalent of Qt::PenStyle)
+//! Line style combo box (KProperty::LineStyle, equivalent of Qt::PenStyle)
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells

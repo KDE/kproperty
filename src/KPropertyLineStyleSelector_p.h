@@ -56,9 +56,10 @@ public:
      */
     void setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes = QVector<qreal>());
 
-    /// Returns the current line style
+    //! @return the current line style
     Qt::PenStyle lineStyle() const;
-    /// Returns the dashes of the current line style
+
+    //! @return the dashes of the current line style
     QVector<qreal> lineDashes() const;
 
 protected:

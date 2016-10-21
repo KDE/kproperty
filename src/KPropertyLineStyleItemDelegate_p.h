@@ -22,7 +22,7 @@
 
 #include <QAbstractItemDelegate>
 
-/// The line style item delegate for rendering the styles
+//! Line style item delegate for rendering the styles
 class KPropertyLineStyleItemDelegate : public QAbstractItemDelegate
 {
 public:
