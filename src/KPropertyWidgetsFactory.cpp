@@ -61,18 +61,6 @@ void KPropertyLabel::paintEvent( QPaintEvent * event )
 
 //---------------
 
-void paintInternal(const KPropertyValueDisplayInterface *iface,
-                   QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
-{
-    const KPropertyUtils::PainterSaver saver(painter);
-    QRect r(option.rect);
-    r.setLeft(r.left()+1);
-    painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
-        iface->valueToString(index.data(Qt::EditRole), QLocale()));
-}
-
-//---------------
-
 //! @internal
 class KPropertyWidgetsFactory::Private
 {
@@ -226,4 +214,16 @@ KPropertyValuePainterInterface::KPropertyValuePainterInterface()
 
 KPropertyValuePainterInterface::~KPropertyValuePainterInterface()
 {
+}
+
+//static
+void KPropertyValuePainterInterface::paint(const KPropertyValueDisplayInterface *iface,
+                                           QPainter *painter, const QStyleOptionViewItem &option,
+                                           const QModelIndex &index)
+{
+    const KPropertyUtils::PainterSaver saver(painter);
+    QRect r(option.rect);
+    r.setLeft(r.left()+1);
+    painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
+        iface->valueToString(index.data(Qt::EditRole), QLocale()));
 }

@@ -67,6 +67,12 @@ public:
     virtual ~KPropertyValuePainterInterface();
     virtual void paint( QPainter * painter,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const = 0;
+
+    //! A helper that draws text obtained from index (EditRole data) on painter @a painter.
+    //! iface->valueToString() is used to convert value to string.
+    //! @since 3.1
+    static void paint(const KPropertyValueDisplayInterface *iface, QPainter *painter,
+                      const QStyleOptionViewItem &option, const QModelIndex &index);
 };
 
 //! Label widget that can be used for displaying text-based read-only items
@@ -91,9 +97,6 @@ private:
     QVariant m_value;
 };
 
-KPROPERTYWIDGETS_EXPORT void paintInternal(const KPropertyValueDisplayInterface *iface, QPainter *painter,
-                                           const QStyleOptionViewItem & option, const QModelIndex & index);
-
 //! Creator returning editor
 template<class Widget>
 class KPROPERTYWIDGETS_EXPORT KPropertyEditorCreator : public KPropertyEditorCreatorInterface,
@@ -117,7 +120,7 @@ public:
     virtual void paint(QPainter *painter,
         const QStyleOptionViewItem & option, const QModelIndex & index) const
     {
-        paintInternal(this, painter, option, index);
+        KPropertyValuePainterInterface::paint(this, painter, option, index);
     }
 };
 
