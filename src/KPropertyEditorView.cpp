@@ -455,10 +455,8 @@ QRect KPropertyEditorView::revertButtonArea( const QModelIndex& index ) const
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
-//    kprDebug() << r;
     r.setLeft(x1);
     r.setRight(x2);
-//    kprDebug() << r;
     return r;
 }
 

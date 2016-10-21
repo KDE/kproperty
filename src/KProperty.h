@@ -192,20 +192,6 @@ public:
         DirectoryURL                  /**<url of a directory*/,
         LineStyle                     /**<line style*/,
 
-        // Child property types
-    /*    Size_Height = 3001,
-        Size_Width,
-        Point_X,
-        Point_Y,
-        Rect_X,
-        Rect_Y,
-        Rect_Width,
-        Rect_Height,
-        SizePolicy_HorizontalPolicy,
-        SizePolicy_VerticalPolicy,
-        SizePolicy_HorizontalStretch,
-        SizePolicy_VerticalStretch,*/
-
         UserDefined = 4000            /**<plugin defined properties should start here*/
     };
 

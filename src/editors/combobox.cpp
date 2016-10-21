@@ -52,30 +52,11 @@ KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listDa
         , m_setValueEnabled(true)
         , m_options(options)
 {
-//    QHBoxLayout *l = new QHBoxLayout(this);
-//    l->setMargin(0);
-//    l->setSpacing(0);
-//    m_edit = new KComboBox(this);
-//    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//    m_edit->setMinimumHeight(5);
-    //setPlainWidgetStyle(m_edit);
-
-//    l->addWidget(m_edit);
-
     setEditable( m_options.extraValueAllowed );
     setInsertPolicy(QComboBox::NoInsert);
-//    m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
     setAutoCompletion(true);
     setContextMenuPolicy(Qt::NoContextMenu);
-
-//    if (listData)
     setListData(listData);
-//    if (property->listData()) {
-  //      fillValues(property);
-    //}
-//not needed for combo setLeavesTheSpaceForRevertButton(true);
-
-//    setFocusWidget(m_edit);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 
     int paddingTop = 2;
@@ -170,22 +151,14 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
 
     if (value.isNull())
         return;
-
-//??    if (emitChange)
-//??        emit valueChanged(this);
 }
 
 void KPropertyComboBoxEditor::fillValues()
 {
     clear();
-    //m_edit->clearContents();
-
-//    if (!m_property)
-//        return;
     if (!listDataKeysAvailable())
         return;
 
-//    m_keys = m_property->listData()->keys;
     int index = 0;
     foreach( const QString& itemName, m_listData.names ) {
         addItem(itemName);
@@ -199,21 +172,6 @@ void KPropertyComboBoxEditor::fillValues()
     comp->setWidget(this);
 }
 
-/*
-void ComboBox::setProperty( const Property *property )
-{
-//    const bool b = (property() == prop);
-//    m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
-//    Widget::setProperty(prop);
-//    m_setValueEnabled = true;
-//    if (!b)
-//    m_property = property;
-    m_listData = *property->listData();
-    fillValues();
-//    if (prop)
-//        setValue(prop->value(), false); //now the value can be set
-}*/
-
 void KPropertyComboBoxEditor::setListData(const KPropertyListData & listData)
 {
     m_listData = listData;
@@ -222,7 +180,6 @@ void KPropertyComboBoxEditor::setListData(const KPropertyListData & listData)
 
 void KPropertyComboBoxEditor::slotValueChanged(int)
 {
-//    emit valueChanged(this);
     emit commitData( this );
 }
 
@@ -231,32 +188,6 @@ void KPropertyComboBoxEditor::paintEvent( QPaintEvent * event )
     QComboBox::paintEvent(event);
     KPropertyWidgetsFactory::paintTopGridLine(this);
 }
-
-/*
-void ComboBox::setReadOnlyInternal(bool readOnly)
-{
-    setVisibleFlag(!readOnly);
-}*/
-
-
-/*QString
-ComboBox::keyForValue(const QVariant &value)
-{
-  const QMap<QString, QVariant> *list = property()->valueList();
-  Property::ListData *list = property()->listData();
-
-  if (!list)
-    return QString();
-  int idx = listData->keys.findIndex( value );
-
-
-  QMap<QString, QVariant>::ConstIterator endIt = list->constEnd();
-  for(QMap<QString, QVariant>::ConstIterator it = list->constBegin(); it != endIt; ++it) {
-    if(it.data() == value)
-      return it.key();
-  }
-  return QString();
-}*/
 
 //-----------------------
 
@@ -306,8 +237,3 @@ QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,
     KPropertyComboBoxEditor *cb = new KPropertyComboBoxEditor(*property->listData(), options, parent);
     return cb;
 }
-
-/*void ComboBoxDelegate::paint( QPainter * painter,
-    const QStyleOptionViewItem & option, const QModelIndex & index ) const
-{
-}*/

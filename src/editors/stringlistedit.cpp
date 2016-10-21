@@ -38,7 +38,6 @@ KPropertyStringListEditor::KPropertyStringListEditor(KProperty *property, QWidge
     l->setSpacing(0);
 
     m_edit = new QLineEdit(this);
-// m_edit->setLineWidth(0);
     m_edit->setReadOnly(true);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_edit->setMinimumHeight(5);
@@ -76,8 +75,6 @@ KPropertyStringListEditor::setValue(const QVariant &value, bool emitChange)
 void
 KPropertyStringListEditor::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-// p->eraseRect(r);
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toStringList().join(", "));
     Widget::drawViewer(p, cg, r, value.toStringList().join(", "));
 }
 

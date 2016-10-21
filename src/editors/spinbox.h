@@ -42,8 +42,6 @@ public:
 
     QVariant value() const;
 
-//    virtual void setProperty(const Property *prop);
-
 Q_SIGNALS:
     void commitData(QWidget* editor);
 

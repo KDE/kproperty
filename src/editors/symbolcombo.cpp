@@ -33,7 +33,6 @@ KPropertySymbolComboEditor::KPropertySymbolComboEditor(KProperty *property, QWid
     QHBoxLayout *l = new QHBoxLayout(this);
 
     m_edit = new QLineEdit(this);
-// m_edit->setLineWidth(0);
     m_edit->setReadOnly(true);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_edit->setMinimumHeight(5);
@@ -78,8 +77,6 @@ KPropertySymbolComboEditor::setValue(const QVariant &value, bool emitChange)
 void
 KPropertySymbolComboEditor::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-// p->eraseRect(r);
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, QChar(value.toInt()));
     Widget::drawViewer(p, cg, r, QString(QChar(value.toInt())));
 }
 
