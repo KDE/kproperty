@@ -16,12 +16,21 @@ string(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CMAKE_COMPILER_IS_CLANG)
 # without installing.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-# x.80.y or larger means test release, so the stable major version is x+1
+# x.81.z or larger means test release, so the stable major version is x+1
 if(PROJECT_VERSION_MINOR GREATER 80)
     set(PROJECT_UNSTABLE ON)
     math(EXPR PROJECT_STABLE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR} + 1")
+    set(PROJECT_STABLE_VERSION_MINOR 0)
+    set(PROJECT_STABLE_VERSION_PATCH 0)
+# x.y.81 or larger means test release, so the stable minor version is y+1
+elseif(PROJECT_VERSION_PATCH GREATER 80)
+    set(PROJECT_STABLE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+    math(EXPR PROJECT_STABLE_VERSION_MINOR "${PROJECT_VERSION_MINOR} + 1")
+    set(PROJECT_STABLE_VERSION_PATCH 0)
 else()
     set(PROJECT_STABLE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+    set(PROJECT_STABLE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+    set(PROJECT_STABLE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 endif()
 
 if(WIN32)
