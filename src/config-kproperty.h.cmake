@@ -53,6 +53,18 @@
 //! @brief Like KPROPERTYWIDGETS_BASE_NAME but lowercase.
 #define KPROPERTYWIDGETS_BASE_NAME_LOWER "@KPROPERTYWIDGETS_BASE_NAME_LOWER@"
 
+//! @def KPROPERTY_STABLE_VERSION_MAJOR
+//! @brief Extra version info, stable major, e.g. 3 for 3.1.0 Alpha (3.0.90)
+#define KPROPERTY_STABLE_VERSION_MAJOR @PROJECT_STABLE_VERSION_MAJOR@
+
+//! @def KPROPERTY_STABLE_VERSION_MINOR
+//! @brief Extra version info, stable minor, e.g. 1 for 3.1.0 Alpha (3.0.90)
+#define KPROPERTY_STABLE_VERSION_MINOR @PROJECT_STABLE_VERSION_MINOR@
+
+//! @def KPROPERTY_STABLE_VERSION_PATCH
+//! @brief Extra version info, stable patch, e.g. 0 for 3.1.0 Alpha (3.0.90)
+#define KPROPERTY_STABLE_VERSION_PATCH @PROJECT_STABLE_VERSION_PATCH@
+
 //! @def KPROPERTY_KF
 //! @brief Defined if components depending on KDE Frameworks are enabled
 #cmakedefine KPROPERTY_KF
