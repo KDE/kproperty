@@ -23,6 +23,7 @@
 #include "KPropertyMultiLineStringEditor.h"
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
+#include "KPropertyEditorDataModel.h"
 
 namespace {
     bool isMultiLine(const KProperty *property) {
@@ -104,7 +105,16 @@ void KPropertyStringDelegate::paint(QPainter *painter,
     if (isMultiLine(property)) {
         align |= Qt::AlignTop;
         r.setLeft(r.left() + 1);
-        painter->fillRect(option.rect, option.palette.base());
+        const KPropertyEditorDataModel *editorModel
+                = qobject_cast<const KPropertyEditorDataModel*>(index.model());
+        KPropertySet *propertySet = nullptr;
+        if (editorModel) {
+            propertySet = editorModel->propertySet();
+        }
+        const bool readOnly = property->isReadOnly() || (propertySet && propertySet->isReadOnly());
+        painter->fillRect(option.rect,
+                          ((option.state & QStyle::State_Selected) && readOnly) ?
+                          option.palette.highlight() : option.palette.window());
     } else {
         const int newLineIndex = string.indexOf(QLatin1Char('\n'));
         if (newLineIndex >= 0) {
