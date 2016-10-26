@@ -104,7 +104,6 @@ void KPropertyStringDelegate::paint(QPainter *painter,
     if (isMultiLine(property)) {
         align |= Qt::AlignTop;
         r.setLeft(r.left() + 1);
-        //r.setTop(r.top() + 1);
         painter->fillRect(option.rect, option.palette.base());
     } else {
         const int newLineIndex = string.indexOf(QLatin1Char('\n'));
