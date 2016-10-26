@@ -27,12 +27,33 @@
 
 #include <QPointer>
 
+//! @return true if @a currentValue and @a value are compatible
+static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
+{
+    if (currentValue.isNull() || value.isNull())
+        return true;
+    const QVariant::Type t = currentValue.type();
+    const QVariant::Type newt = value.type();
+    if (t == newt)
+        return true;
+    if (   (t == QVariant::Int && newt == QVariant::UInt)
+        || (t == QVariant::UInt && newt == QVariant::Int)
+        || (t == QVariant::ByteArray && newt == QVariant::String)
+        || (t == QVariant::String && newt == QVariant::ByteArray)
+        || (t == QVariant::ULongLong && newt == QVariant::LongLong)
+        || (t == QVariant::LongLong && newt == QVariant::ULongLong))
+    {
+        return true;
+    }
+    return false;
+}
+
 //! @internal
 class KProperty::Private
 {
 public:
-    Private()
-            : type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
+    Private(KProperty *prop)
+            : q(prop), type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
             sets(0), parent(0), children(0), relatedProperties(0)
@@ -68,6 +89,101 @@ public:
         delete sets;
     }
 
+    //! @return a value for option @a name or null value if there is no such option set.
+    inline QVariant option(const char* name, const QVariant& defaultValue) const
+    {
+        if (options.contains(name))
+            return options[name];
+        return defaultValue;
+    }
+
+    //! @return true if value of this property differs from @a otherValue
+    bool valueDiffersInternal(const QVariant &otherValue, KProperty::ValueOptions options)
+    {
+        if (!compatibleTypes(value, otherValue)) {
+            kprWarning() << "INCOMPATIBLE TYPES! old=" << value << "new=" << otherValue;
+        }
+
+        const QVariant::Type t = value.type();
+        const QVariant::Type newt = otherValue.type();
+        if (   t == QVariant::DateTime
+            || t == QVariant::Time)
+        {
+            //for date and datetime types: compare with strings, because there
+            //can be miliseconds difference
+            return value.toString() != otherValue.toString();
+        }
+        else if (t == QVariant::String || t == QVariant::ByteArray) {
+            //property is changed for string type,
+            //if one of value is empty and other isn't..
+            return (value.toString().isEmpty() != otherValue.toString().isEmpty())
+                  //..or both are not empty and values differ
+                  || (!value.toString().isEmpty() && !otherValue.toString().isEmpty() && value != otherValue);
+        }
+        else if (t == QVariant::Double) {
+            const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
+            //kprDebug()
+            //    << "double compared:" << value.toDouble() << otherValue.toDouble()
+            //    << ":" << static_cast<qlonglong>(value.toDouble() * factor) << static_cast<qlonglong>(otherValue.toDouble() * factor);
+            return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
+        } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
+            return false;
+        } else if (composed && (options & UseComposedProperty)) {
+            return !composed->valuesEqual(value, otherValue);
+        }
+        else {
+            return value != otherValue;
+        }
+    }
+
+    //! Sets value of the property to @a newValue
+    bool setValueInternal(const QVariant &newValue, KProperty::ValueOptions valueOptions)
+    {
+        if (name.isEmpty()) {
+            kprWarning() << "COULD NOT SET value to a null property";
+            return false;
+        }
+
+        //1. Check if the value should be changed
+        if (!valueDiffersInternal(newValue, valueOptions)) {
+            return false;
+        }
+
+        //2. Then change it, and store old value if necessary
+        if (valueOptions & KProperty::RememberOldValue) {
+            if (!changed) {
+                oldValue = value;
+            }
+            changed = true;
+        }
+        else {
+            oldValue = QVariant(); // clear old value
+            changed = false;
+        }
+        if (parent) {
+            parent->childValueChanged(q, newValue, valueOptions & KProperty::RememberOldValue);
+        }
+
+        QVariant prevValue;
+        if (composed && useComposedProperty) {
+            prevValue = value; //???
+            composed->setChildValueChangedEnabled(false);
+            composed->setValue(q, newValue, valueOptions & KProperty::RememberOldValue);
+            composed->setChildValueChangedEnabled(true);
+        }
+        else {
+            prevValue = value;
+        }
+
+        value = newValue;
+
+        if (!parent) { // emit only if parent has not done it
+            q->emitPropertyChanged(); // called as last step in this method!
+        }
+        return true;
+    }
+
+    KProperty * const q;
     int type;
     QByteArray name;
     QString captionForDisplaying;
@@ -144,7 +260,7 @@ QStringList KPropertyListData::keysAsStringList() const
 KProperty::KProperty(const QByteArray &name, const QVariant &value,
                    const QString &caption, const QString &description,
                    int type, KProperty* parent)
-        : d(new KProperty::Private())
+        : d(new KProperty::Private(this))
 {
     d->name = name;
     d->setCaptionForDisplaying(caption);
@@ -163,7 +279,7 @@ KProperty::KProperty(const QByteArray &name, const QVariant &value,
 KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStringList &strings,
                    const QVariant &value, const QString &caption, const QString &description,
                    int type, KProperty* parent)
-        : d(new KProperty::Private())
+        : d(new KProperty::Private(this))
 {
     d->name = name;
     d->setCaptionForDisplaying(caption);
@@ -182,7 +298,7 @@ KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStr
 KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
                    const QVariant &value, const QString &caption, const QString &description,
                    int type, KProperty* parent)
-        : d(new KProperty::Private())
+        : d(new KProperty::Private(this))
 {
     d->name = name;
     d->setCaptionForDisplaying(caption);
@@ -199,12 +315,12 @@ KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
 }
 
 KProperty::KProperty()
-        : d(new KProperty::Private())
+        : d(new KProperty::Private(this))
 {
 }
 
 KProperty::KProperty(const KProperty &prop)
-        : d(new KProperty::Private())
+        : d(new KProperty::Private(this))
 {
     *this = prop;
 }
@@ -304,104 +420,24 @@ KProperty::childValueChanged(KProperty *child, const QVariant &value, bool remem
     d->composed->childValueChangedInternal(child, value, rememberOldValue);
 }
 
-//! @return true if @a currentValue and @a value are compatible
-static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
-{
-    if (currentValue.isNull() || value.isNull())
-        return true;
-    const QVariant::Type t = currentValue.type();
-    const QVariant::Type newt = value.type();
-    if (t == newt)
-        return true;
-    if (   (t == QVariant::Int && newt == QVariant::UInt)
-        || (t == QVariant::UInt && newt == QVariant::Int)
-        || (t == QVariant::ByteArray && newt == QVariant::String)
-        || (t == QVariant::String && newt == QVariant::ByteArray)
-        || (t == QVariant::ULongLong && newt == QVariant::LongLong)
-        || (t == QVariant::LongLong && newt == QVariant::ULongLong))
-    {
-        return true;
-    }
-    return false;
-}
-
 void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
-    if (d->name.isEmpty()) {
-        kprWarning() << "COULD NOT SET value to a null property";
-        return;
-    }
-    const QVariant currentValue = this->value();
-    if (!compatibleTypes(currentValue, value)) {
-        kprWarning() << "INCOMPATIBLE TYPES! old=" << currentValue << "new=" << value;
-    }
+    (void)d->setValueInternal(value,
+                              (rememberOldValue ? KProperty::RememberOldValue : KProperty::ValueOptions())
+                              | (useComposedProperty ? KProperty::UseComposedProperty : KProperty::ValueOptions()));
+}
 
-    //1. Check if the value should be changed
-    bool ch;
-    const QVariant::Type t = currentValue.type();
-    const QVariant::Type newt = value.type();
-    if (   t == QVariant::DateTime
-        || t == QVariant::Time)
-    {
-        //for date and datetime types: compare with strings, because there
-        //can be miliseconds difference
-        ch = (currentValue.toString() != value.toString());
+void KProperty::setValue(const QVariant &value, bool *changed, ValueOptions options)
+{
+    const bool ch = d->setValueInternal(value, options);
+    if (changed) {
+        *changed = ch;
     }
-    else if (t == QVariant::String || t == QVariant::ByteArray) {
-        //property is changed for string type,
-        //if one of value is empty and other isn't..
-        ch = ((currentValue.toString().isEmpty() != value.toString().isEmpty())
-              //..or both are not empty and values differ
-              || (!currentValue.toString().isEmpty() && !value.toString().isEmpty() && currentValue != value));
-    }
-    else if (t == QVariant::Double) {
-        const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-        //kprDebug()
-        //    << "double compared:" << currentValue.toDouble() << value.toDouble()
-        //    << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
-        ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
-    } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
-        ch = false;
-    } else if (d->composed && useComposedProperty) {
-        ch = !d->composed->valuesEqual(currentValue, value);
-    }
-    else {
-        ch = (currentValue != value);
-    }
+}
 
-    if (!ch)
-        return;
-
-    //2. Then change it, and store old value if necessary
-    if (rememberOldValue) {
-        if (!d->changed)
-            d->oldValue = currentValue;
-        d->changed = true;
-    }
-    else {
-        d->oldValue = QVariant(); // clear old value
-        d->changed = false;
-    }
-    if (d->parent) {
-        d->parent->childValueChanged(this, value, rememberOldValue);
-    }
-
-    QVariant prevValue;
-    if (d->composed && useComposedProperty) {
-        prevValue = currentValue; //???
-        d->composed->setChildValueChangedEnabled(false);
-        d->composed->setValue(this, value, rememberOldValue);
-        d->composed->setChildValueChangedEnabled(true);
-    }
-    else {
-        prevValue = currentValue;
-    }
-
-    d->value = value;
-
-    if (!d->parent) { // emit only if parent has not done it
-        emitPropertyChanged(); // called as last step in this method!
-    }
+bool KProperty::valueEqualsTo(const QVariant &value, ValueOptions valueOptions) const
+{
+    return !d->valueDiffersInternal(value, valueOptions);
 }
 
 void
@@ -524,12 +560,9 @@ KProperty::setOption(const char* name, const QVariant& val)
     d->options[name] = val;
 }
 
-QVariant
-KProperty::option(const char* name, const QVariant& defaultValue) const
+QVariant KProperty::option(const char* name, const QVariant& defaultValue) const
 {
-    if (d->options.contains(name))
-        return d->options[name];
-    return defaultValue;
+    return d->option(name, defaultValue);
 }
 
 bool
