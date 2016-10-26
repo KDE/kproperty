@@ -19,26 +19,35 @@
 
 #include "KPropertyMultiLineStringEditor.h"
 #include "KPropertyEditorView.h"
+
+#include <QHBoxLayout>
 #include <QScrollBar>
+#include <QPlainTextEdit>
 
 class Q_DECL_HIDDEN KPropertyMultiLineStringEditor::Private
 {
 public:
     Private() {}
+    QPlainTextEdit *editor;
     bool slotTextChangedEnabled = true;
 };
 
 KPropertyMultiLineStringEditor::KPropertyMultiLineStringEditor(QWidget *parent)
- : QPlainTextEdit(parent)
+ : QWidget(parent)
  , d(new Private)
 {
-    setFrameStyle(0);
-    setTabChangesFocus(true);
-    setContentsMargins(0,0,0,0);
-    document()->setDocumentMargin(1);
-    connect(this, &QPlainTextEdit::textChanged, this, &KPropertyMultiLineStringEditor::slotTextChanged);
-    setViewportMargins(2, 1, 0, 0);
-    verticalScrollBar()->installEventFilter(this);
+    setAutoFillBackground(true);
+    QHBoxLayout *lyr = new QHBoxLayout(this);
+    lyr->setContentsMargins(0, 1, 0, 0);
+    lyr->addSpacing(2);
+    d->editor = new QPlainTextEdit;
+    lyr->addWidget(d->editor);
+    d->editor->setFrameStyle(0);
+    d->editor->setTabChangesFocus(true);
+    d->editor->setContentsMargins(0,0,0,0);
+    d->editor->document()->setDocumentMargin(1);
+    connect(d->editor, &QPlainTextEdit::textChanged, this, &KPropertyMultiLineStringEditor::slotTextChanged);
+    d->editor->verticalScrollBar()->installEventFilter(this);
 }
 
 KPropertyMultiLineStringEditor::~KPropertyMultiLineStringEditor()
@@ -48,13 +57,13 @@ KPropertyMultiLineStringEditor::~KPropertyMultiLineStringEditor()
 
 QString KPropertyMultiLineStringEditor::value() const
 {
-    return toPlainText();
+    return d->editor->toPlainText();
 }
 
 void KPropertyMultiLineStringEditor::setValue(const QString& value)
 {
     d->slotTextChangedEnabled = false;
-    setPlainText(value);
+    d->editor->setPlainText(value);
     d->slotTextChangedEnabled = true;
 }
 
@@ -68,9 +77,15 @@ void KPropertyMultiLineStringEditor::slotTextChanged()
 
 bool KPropertyMultiLineStringEditor::eventFilter(QObject *o, QEvent *ev)
 {
-    const bool result = QPlainTextEdit::eventFilter(o, ev);
-    if (o == verticalScrollBar() && ev->type() == QEvent::Paint) {
+    const bool result = QWidget::eventFilter(o, ev);
+    if (o == d->editor->verticalScrollBar() && ev->type() == QEvent::Paint) {
         KPropertyWidgetsFactory::paintTopGridLine(qobject_cast<QWidget*>(o));
     }
     return result;
+}
+
+void KPropertyMultiLineStringEditor::paintEvent(QPaintEvent * event)
+{
+    QWidget::paintEvent(event);
+    KPropertyWidgetsFactory::paintTopGridLine(this);
 }

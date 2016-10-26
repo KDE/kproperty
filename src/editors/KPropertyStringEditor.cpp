@@ -112,9 +112,15 @@ void KPropertyStringDelegate::paint(QPainter *painter,
             propertySet = editorModel->propertySet();
         }
         const bool readOnly = property->isReadOnly() || (propertySet && propertySet->isReadOnly());
-        painter->fillRect(option.rect,
-                          ((option.state & QStyle::State_Selected) && readOnly) ?
-                          option.palette.highlight() : option.palette.window());
+        QBrush fillBrush;
+        if ((!(option.state & QStyle::State_Editing) && (option.state & QStyle::State_Selected))
+            || ((option.state & QStyle::State_Selected) && readOnly))
+        {
+            fillBrush = option.palette.highlight();
+        } else {
+            fillBrush = option.palette.window();
+        }
+        painter->fillRect(option.rect, fillBrush);
     } else {
         const int newLineIndex = string.indexOf(QLatin1Char('\n'));
         if (newLineIndex >= 0) {

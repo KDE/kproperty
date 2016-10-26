@@ -22,11 +22,9 @@
 
 #include "KPropertyWidgetsFactory.h"
 
-#include <QPlainTextEdit>
-
 //! Editor for string type supporting multiple lines of plain text
 //! @since 3.1
-class KPROPERTYWIDGETS_EXPORT KPropertyMultiLineStringEditor : public QPlainTextEdit
+class KPROPERTYWIDGETS_EXPORT KPropertyMultiLineStringEditor : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
@@ -48,6 +46,7 @@ private Q_SLOTS:
 
 protected:
     bool eventFilter(QObject *o, QEvent *ev) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent * event) Q_DECL_OVERRIDE;
 
 private:
     class Private;
