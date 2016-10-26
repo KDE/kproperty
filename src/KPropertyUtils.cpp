@@ -250,6 +250,6 @@ QColor KPropertyUtils::gridLineColor(const QWidget *widget)
 KPROPERTYWIDGETS_EXPORT KProperty* KPropertyUtils::propertyForIndex(const QModelIndex &index)
 {
     const KPropertyEditorDataModel *editorModel
-            = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+            = qobject_cast<const KPropertyEditorDataModel*>(index.model());
     return editorModel ? editorModel->propertyForIndex(index) : nullptr;
 }
