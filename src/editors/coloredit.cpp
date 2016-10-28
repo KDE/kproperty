@@ -20,55 +20,69 @@
 #include "coloredit.h"
 #include "KPropertyUtils_p.h"
 
-#include <QColor>
+#include <QHBoxLayout>
 
-#ifdef KPROPERTY_KF
+#include <KColorCombo>
 #include <KColorCollection>
 
 Q_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, (QLatin1String("Oxygen.colors")))
 
-KPropertyColorComboEditor::KPropertyColorComboEditor(QWidget *parent)
-        : KColorCombo(parent)
+class Q_DECL_HIDDEN KPropertyColorComboEditor::Private
 {
-    connect(this, SIGNAL(activated(QColor)), this, SLOT(slotValueChanged(QColor)));
+public:
+    Private() {}
+    KColorCombo *combo;
+};
 
+KPropertyColorComboEditor::KPropertyColorComboEditor(QWidget *parent)
+        : QWidget(parent)
+        , d(new Private)
+{
+    QHBoxLayout *lyr = new QHBoxLayout(this);
+    lyr->setMargin(0);
+    d->combo = new KColorCombo;
+    connect(d->combo, SIGNAL(activated(QColor)), this, SLOT(slotValueChanged(QColor)));
     QList< QColor > colors;
     const int oxygenColorsCount = g_oxygenColors->count();
     for (int i = 0; i < oxygenColorsCount; i++) {
         colors += g_oxygenColors->color(i);
     }
-    setColors(colors);
+    d->combo->setColors(colors);
+    lyr->addWidget(d->combo);
+    setFocusProxy(d->combo);
 
     int paddingTop = 1;
     if (!KPropertyUtils::gridLineColor(this).isValid()) {
-        setFrame(false);
+        d->combo->setFrame(false);
         paddingTop = 0;
     }
     QString styleSheet = QString::fromLatin1("QComboBox { \
         border: 1px; \
         padding-top: %1px; padding-left: 1px; }").arg(paddingTop);
-    setStyleSheet(styleSheet);
+    d->combo->setStyleSheet(styleSheet);
 }
 
 KPropertyColorComboEditor::~KPropertyColorComboEditor()
 {
+    delete d;
 }
 
 QVariant KPropertyColorComboEditor::value() const
 {
-    return color();
+    return d->combo->color();
 }
 
 void KPropertyColorComboEditor::setValue(const QVariant &value)
 {
-    setColor(value.value<QColor>());
+    d->combo->setColor(value.value<QColor>());
 }
 
 void KPropertyColorComboEditor::slotValueChanged(const QColor&)
 {
     emit commitData(this);
 }
-#endif // KPROPERTY_KF
+
+// -------------------
 
 QWidget * KPropertyColorComboDelegate::createEditor(int type, QWidget *parent,
     const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -76,11 +90,7 @@ QWidget * KPropertyColorComboDelegate::createEditor(int type, QWidget *parent,
     Q_UNUSED(type)
     Q_UNUSED(option)
     Q_UNUSED(index)
-#ifdef KPROPERTY_KF
     return new KPropertyColorComboEditor(parent);
-#else
-    return KPropertyEditorCreatorInterface::createEditor(type, parent, option, index);
-#endif
 }
 
 static QString colorToName(const QColor &color, const QLocale &locale)

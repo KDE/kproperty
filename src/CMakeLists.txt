@@ -10,6 +10,26 @@ set(kpropertycore_LIB_SRCS
    kproperty_debug.cpp
 )
 
+set(kpropertycore_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# TODO: see T3992, Split kproperty_qt into kpropertycore_qt & kpropertywidgets_qt
+ecm_create_qm_loader(kpropertycore_LIB_SRCS kproperty_qt)
+
+add_library(KPropertyCore SHARED ${kpropertycore_LIB_SRCS})
+set_coinstallable_lib_version(KPropertyCore)
+target_link_libraries(KPropertyCore
+    PUBLIC
+        Qt5::Core
+)
+generate_export_header(KPropertyCore)
+
+target_include_directories(KPropertyCore
+    PUBLIC "$<BUILD_INTERFACE:${kpropertycore_INCLUDE_DIRS}>"
+    INTERFACE "$<INSTALL_INTERFACE:${KPROPERTYCORE_INCLUDE_INSTALL_DIR}>"
+)
+
 if(KPROPERTY_WIDGETS)
     add_subdirectory(editors)
 
@@ -67,29 +87,16 @@ if(KPROPERTY_WIDGETS)
     set(kpropertywidgets_INCLUDE_DIRS
         ${CMAKE_CURRENT_BINARY_DIR}/editors
     )
-endif()
+    if(NOT KPROPERTY_KF)
+        list(APPEND kpropertywidgets_LIB_SRCS
+            editors/3rdparty/KColorCombo.cpp
+            editors/3rdparty/KColorCollection.cpp
+        )
+        list(APPEND kpropertywidgets_INCLUDE_DIRS
+            ${CMAKE_CURRENT_SOURCE_DIR}/editors/3rdparty
+        )
+    endif()
 
-set(kpropertycore_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-# TODO: see T3992, Split kproperty_qt into kpropertycore_qt & kpropertywidgets_qt
-ecm_create_qm_loader(kpropertycore_LIB_SRCS kproperty_qt)
-
-add_library(KPropertyCore SHARED ${kpropertycore_LIB_SRCS})
-set_coinstallable_lib_version(KPropertyCore)
-target_link_libraries(KPropertyCore
-    PUBLIC
-        Qt5::Core
-)
-generate_export_header(KPropertyCore)
-
-target_include_directories(KPropertyCore
-    PUBLIC "$<BUILD_INTERFACE:${kpropertycore_INCLUDE_DIRS}>"
-    INTERFACE "$<INSTALL_INTERFACE:${KPROPERTYCORE_INCLUDE_INSTALL_DIR}>"
-)
-
-if(KPROPERTY_WIDGETS)
     add_library(KPropertyWidgets SHARED ${kpropertywidgets_LIB_SRCS})
     set_coinstallable_lib_version(KPropertyWidgets)
     target_link_libraries(KPropertyWidgets

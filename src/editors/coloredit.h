@@ -21,16 +21,12 @@
 #define KPROPERTY_COLOREDIT_H
 
 #include "KPropertyWidgetsFactory.h"
-#include "config-kproperty.h"
-
-#ifdef KPROPERTY_KF
-#include <KColorCombo>
 
 //! Color combo box
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KPROPERTYWIDGETS_EXPORT KPropertyColorComboEditor : public KColorCombo
+class KPROPERTYWIDGETS_EXPORT KPropertyColorComboEditor : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -50,8 +46,11 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void slotValueChanged(const QColor&);
+
+private:
+    class Private;
+    Private * const d;
 };
-#endif // KPROPERTY_KF
 
 class KPROPERTYWIDGETS_EXPORT KPropertyColorComboDelegate : public KPropertyEditorCreatorInterface,
                                                             public KPropertyValuePainterInterface,
