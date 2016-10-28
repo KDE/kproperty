@@ -274,7 +274,7 @@ QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,
     KProperty *prop = KPropertyUtils::propertyForIndex(index);
 
     // boolean editors can optionally accept 3rd state:
-    if (prop->option("3State", false).toBool()) {
+    if (prop && prop->option("3State", false).toBool()) {
         KPropertyListData threeStateListData;
         setupThreeStateListData(threeStateListData, prop);
         return new KPropertyThreeStateBoolEditor(threeStateListData, parent);
