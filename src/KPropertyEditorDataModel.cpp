@@ -245,6 +245,8 @@ bool KPropertyEditorDataModel::setData(const QModelIndex &index, const QVariant 
     if (item == &d->rootItem)
         return false;
     item->setValue(value);
+    //don't do that or cursor position and editor state will be reset:
+    //emit dataChanged(index, index, {Qt::EditRole});
     return true;
 }
 

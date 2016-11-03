@@ -122,7 +122,7 @@ void ItemDelegate::paint(QPainter *painter,
     }
     const KPropertyUtils::PainterSaver saver(painter);
     QRect r(option.rect);
-    const KPropertyEditorDataModel *editorModel = dynamic_cast<const KPropertyEditorDataModel*>(index.model());
+    const KPropertyEditorDataModel *editorModel = qobject_cast<const KPropertyEditorDataModel*>(index.model());
     if (!editorModel) {
         return;
     }
@@ -450,7 +450,7 @@ bool KPropertyEditorView::edit( const QModelIndex & index, EditTrigger trigger, 
         result = QTreeView::edit(index, trigger, event);
     }
     if (result) {
-      QLineEdit *lineEditEditor = dynamic_cast<QLineEdit*>( (QObject*)d->itemDelegate->m_currentEditor );
+      QLineEdit *lineEditEditor = qobject_cast<QLineEdit*>(d->itemDelegate->m_currentEditor.data());
       if (lineEditEditor) {
         lineEditEditor->deselect();
         lineEditEditor->end(false);
