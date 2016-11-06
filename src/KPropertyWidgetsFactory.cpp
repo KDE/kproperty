@@ -62,7 +62,7 @@ void KPropertyLabel::paintEvent( QPaintEvent * event )
 //---------------
 
 //! @internal
-class KPropertyWidgetsFactory::Private
+class Q_DECL_HIDDEN KPropertyWidgetsFactory::Private
 {
 public:
     Private()

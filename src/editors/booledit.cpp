@@ -93,7 +93,7 @@ public:
 
 Q_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
-class KPropertyBoolEditor::Private
+class Q_DECL_HIDDEN KPropertyBoolEditor::Private
 {
 public:
     Private(const KProperty *prop)

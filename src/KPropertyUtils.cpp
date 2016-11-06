@@ -162,7 +162,7 @@ protected:
         EditorGroupItem *m_parentItem;
     };*/
 
-class KPropertyGroupWidget::Private
+class Q_DECL_HIDDEN KPropertyGroupWidget::Private
 {
 public:
     Private() {}

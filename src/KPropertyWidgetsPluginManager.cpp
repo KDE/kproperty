@@ -31,7 +31,7 @@ public:
 };
 
 //! @internal
-class KPropertyWidgetsPluginManager::Private
+class Q_DECL_HIDDEN KPropertyWidgetsPluginManager::Private
 {
 public:
     Private()

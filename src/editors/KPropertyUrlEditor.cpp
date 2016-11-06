@@ -25,7 +25,7 @@
 #include <QLineEdit>
 #include <QFileDialog>
 
-class KPropertyUrlEditor::Private
+class Q_DECL_HIDDEN KPropertyUrlEditor::Private
 {
 public:
     Private(const KProperty &property)

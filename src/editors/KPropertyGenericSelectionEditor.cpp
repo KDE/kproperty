@@ -22,7 +22,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
-class KPropertyGenericSelectionEditor::Private
+class Q_DECL_HIDDEN KPropertyGenericSelectionEditor::Private
 {
 public:
     Private() {

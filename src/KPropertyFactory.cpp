@@ -23,7 +23,7 @@
 //---------------
 
 //! @internal
-class KPropertyFactoryManager::Private
+class Q_DECL_HIDDEN KPropertyFactoryManager::Private
 {
 public:
     Private()
@@ -42,7 +42,7 @@ public:
 Q_GLOBAL_STATIC(KPropertyFactoryManager, _self)
 
 //! @internal
-class KPropertyFactory::Private
+class Q_DECL_HIDDEN KPropertyFactory::Private
 {
 public:
     Private()

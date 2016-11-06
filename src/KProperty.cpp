@@ -49,7 +49,7 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 }
 
 //! @internal
-class KProperty::Private
+class Q_DECL_HIDDEN KProperty::Private
 {
 public:
     Private(KProperty *prop)

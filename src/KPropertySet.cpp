@@ -25,7 +25,7 @@
 #include <QByteArray>
 
 //! @internal
-class KPropertySet::Private
+class Q_DECL_HIDDEN KPropertySet::Private
 {
 public:
     explicit Private(KPropertySet *set) :

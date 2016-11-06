@@ -24,7 +24,7 @@
 
 #include <QHash>
 
-class KPropertyEditorDataModel::Private
+class Q_DECL_HIDDEN KPropertyEditorDataModel::Private
 {
 public:
     explicit Private(KPropertySet *_set, KPropertySetIterator::Order _order = KPropertySetIterator::InsertionOrder)

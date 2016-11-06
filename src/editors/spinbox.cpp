@@ -112,7 +112,7 @@ void KPropertyIntSpinBox::slotValueChanged(int value)
 
 //-----------------------
 
-class KPropertyDoubleSpinBox::Private
+class Q_DECL_HIDDEN KPropertyDoubleSpinBox::Private
 {
 public:
     KPropertyUnit unit;

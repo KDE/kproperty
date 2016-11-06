@@ -240,7 +240,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
 
 //----------
 
-class KPropertyEditorView::Private
+class Q_DECL_HIDDEN KPropertyEditorView::Private
 {
 public:
     Private()

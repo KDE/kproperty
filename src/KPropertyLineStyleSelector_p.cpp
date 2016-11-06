@@ -26,7 +26,7 @@
 #include <QPen>
 #include <QPainter>
 
-class KPropertyLineStyleSelector::Private
+class Q_DECL_HIDDEN KPropertyLineStyleSelector::Private
 {
 public:
     Private(QWidget *parent)
