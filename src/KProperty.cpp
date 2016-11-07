@@ -94,7 +94,7 @@ public:
     {
         if (options.contains(name))
             return options[name];
-        return defaultValue;
+        return parent ? parent->option(name, defaultValue) : defaultValue;
     }
 
     //! @return true if value of this property differs from @a otherValue
