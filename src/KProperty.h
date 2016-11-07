@@ -436,8 +436,14 @@ public:
     </ul>*/
     void setOption(const char* name, const QVariant& val);
 
-    /*! \return a value for option \a name or @a defaultValue value if there is no such option set.
-     @see setOption */
+    /*! @brief Returns value of given option
+     * If the option @a name is missing and parent property is present (see parent()),
+     * parent property is checked. If the parent property offers the option, the value
+     * is returned. If it is not present there, @a defaultValue value is returned.
+     * Looking at parent property is available since 3.1.
+     * @note The lookup is performed recursively, first in parent, then grand parent, etc.
+     * @see setOption
+     */
     QVariant option(const char* name, const QVariant& defaultValue = QVariant()) const;
 
     /*! \return true if at least one option is defined for this property. */
