@@ -446,7 +446,12 @@ public:
      */
     QVariant option(const char* name, const QVariant& defaultValue = QVariant()) const;
 
-    /*! \return true if at least one option is defined for this property. */
+    /*! @brief Returns @c true if at least one option is specified for this property
+     * If there are no options defined @c true can be still returned if parent property
+     * is present and it has at least one option specified.
+     * Looking at parent property is available since 3.1.
+     * @note The lookup is performed recursively, first in parent, then grand parent, etc.
+     */
     bool hasOptions() const;
 
     /*! Equivalent to setValue(const QVariant &) */

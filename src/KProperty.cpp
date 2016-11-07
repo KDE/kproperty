@@ -568,7 +568,7 @@ QVariant KProperty::option(const char* name, const QVariant& defaultValue) const
 bool
 KProperty::hasOptions() const
 {
-    return !d->options.isEmpty();
+    return !d->options.isEmpty() || (d->parent && d->parent->hasOptions());
 }
 
 /////////////////////////////////////////////////////////////////
