@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +47,9 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void slotValueChanged(const QColor&);
 
+protected:
+    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+
 private:
     class Private;
     Private * const d;
@@ -57,7 +60,8 @@ class KPROPERTYWIDGETS_EXPORT KPropertyColorComboDelegate : public KPropertyEdit
                                                             public KPropertyValueDisplayInterface
 {
 public:
-    KPropertyColorComboDelegate() {}
+    KPropertyColorComboDelegate();
+    ~KPropertyColorComboDelegate();
 
     virtual QWidget * createEditor( int type, QWidget *parent,
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -66,6 +70,9 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
     virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif
