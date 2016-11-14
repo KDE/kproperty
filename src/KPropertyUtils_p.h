@@ -21,6 +21,13 @@
 #define KPROPERTY_UTILS_P_H
 
 #include <config-kproperty.h>
+#if defined KPropertyCore_EXPORTS || defined KPropertyWidgets_EXPORTS
+#include "kproperty_debug.h"
+#else
+# define kprDebug qDebug
+# define kprWarning qWarning
+# define kprCritical qCritical
+#endif
 
 #include <QApplication>
 #include <QDebug>
@@ -236,7 +243,7 @@ inline bool registerGlobalIconsResource(const QString &themeName)
     QString detailedErrorMessage;
     if (!registerGlobalIconsResource(themeName, &errorMessage, &detailedErrorMessage)) {
         showMessageBox(nullptr, errorMessage, detailedErrorMessage);
-        qWarning() << qPrintable(errorMessage);
+        kprWarning() << qPrintable(errorMessage);
         return false;
     }
     return true;
@@ -352,9 +359,9 @@ inline bool setupPrivateIconsResourceWithMessage(const QString &privateName, con
     if (!setupPrivateIconsResourceWithMessage(privateName, path,
                                               &errorMessage, &detailedErrorMessage, prefix)) {
         if (messageType == QtFatalMsg) {
-            qFatal("%s %s", qPrintable(errorMessage), qPrintable(detailedErrorMessage));
+            kprCritical() << qPrintable(errorMessage) << qPrintable(detailedErrorMessage);
         } else {
-            qWarning() << qPrintable(errorMessage) << qPrintable(detailedErrorMessage);
+            kprWarning() << qPrintable(errorMessage) << qPrintable(detailedErrorMessage);
         }
         return false;
     }
@@ -372,14 +379,14 @@ inline bool setupGlobalIconTheme()
             "Please consider adding support for other themes to %4.")
             .arg(QLatin1String(KPROPERTYWIDGETS_BASE_NAME)).arg(supportedIconTheme).arg(QIcon::themeName())
             .arg(QCoreApplication::applicationName());
-        qDebug() << qPrintable(message);
+        kprDebug() << qPrintable(message);
         if (!registerGlobalIconsResource()) {
             // don't fail, just warn
             const QString message = QString::fromLatin1(
                 "Failed to set icon theme to \"%1\". Icons in the application will be inconsistent. "
                 "Please install .rcc file(s) for the system theme.")
                 .arg(supportedIconTheme);
-            qDebug() << qPrintable(message);
+            kprDebug() << qPrintable(message);
             return false;
         }
     }

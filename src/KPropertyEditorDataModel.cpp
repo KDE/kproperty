@@ -32,7 +32,7 @@ public:
     {
         Q_ASSERT(set);
         if (!set) {
-            qFatal("KPropertyEditorDataModel requires a KPropertySet object");
+            kprCritical() << "KPropertyEditorDataModel requires a KPropertySet object";
         }
     }
     KPropertySet *set;
