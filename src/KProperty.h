@@ -49,6 +49,7 @@
 
 class KComposedPropertyInterface;
 class KPropertySet;
+class KPropertySetPrivate;
 
 /*! Data container for properties of list type. */
 class KPROPERTYCORE_EXPORT KPropertyListData
@@ -471,43 +472,13 @@ public:
     int sortingKey() const;
 #endif
 
-protected:
-    /*! Adds \a prop as a child of this property.
-     The children will be owned by this property. */
-    void addChild(KProperty *prop);
-
-    /*! Adds \a set to this property. */
-    void addSet(KPropertySet *set);
-
-#if 0
-    /*! Sets a key used for sorting. */
-    void setSortingKey(int key);
-#endif
-
-    /*! \return a list of related properties for this property. */
-    const QList<KProperty*>* related() const;
-
-    /*! Adds related property for this property. */
-    void addRelatedProperty(KProperty *property);
-
-    /*! This method emits the \a KPropertySet::propertyChanged() signal.
-    KProperty::setValue() calls this method if the value has been changed. */
-    void emitPropertyChanged();
-
-    /*! Outputs debug string for this property to the standard debug output. */
-    void debug() const;
-
-    /*! Used by debug operator <<. */
-    QMap<QByteArray, QVariant> options() const;
-
-    //! @internal
+private:
     class Private;
-    friend class Private;
     Private * const d;
 
     friend class KPropertySet;
+    friend class KPropertySetPrivate;
     friend class KPropertyBuffer;
-    friend class KComposedPropertyInterface;
     friend KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
 };
 

@@ -21,11 +21,8 @@
 
 #include "KProperty.h"
 #include "KProperty_p.h"
-#include "KPropertySet.h"
 #include "KPropertyFactory.h"
 #include "kproperty_debug.h"
-
-#include <QPointer>
 
 //! @return true if @a currentValue and @a value are compatible
 static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
@@ -48,174 +45,216 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
     return false;
 }
 
-//! @internal
-class Q_DECL_HIDDEN KProperty::Private
-{
-public:
-    Private(KProperty *prop)
-            : q(prop), type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
-            readOnly(false), visible(true),
-            autosync(-1), composed(0), useComposedProperty(true),
-            sets(0), parent(0), children(0), relatedProperties(0)
-    {
-    }
+// ----
 
-    inline void setCaptionForDisplaying(const QString& captionForDisplaying) {
-        delete caption;
-        if (captionForDisplaying.simplified() != captionForDisplaying) {
-            if (captionForDisplaying.isEmpty()) {
-                caption = 0;
-            }
-            else {
-               caption = new QString(captionForDisplaying.simplified());
-            }
-        }
-        else {
+KProperty::Private::Private(KProperty *prop)
+        : q(prop), type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
+        readOnly(false), visible(true),
+        autosync(-1), composed(0), useComposedProperty(true),
+        sets(0), parent(0), children(0), relatedProperties(0)
+{
+}
+
+void KProperty::Private::setCaptionForDisplaying(const QString& captionForDisplaying)
+{
+    delete caption;
+    if (captionForDisplaying.simplified() != captionForDisplaying) {
+        if (captionForDisplaying.isEmpty()) {
             caption = 0;
         }
-        this->captionForDisplaying = captionForDisplaying;
+        else {
+           caption = new QString(captionForDisplaying.simplified());
+        }
     }
-
-    ~Private() {
-        delete caption;
+    else {
         caption = 0;
-        delete listData;
-        if (children) {
-            qDeleteAll(*children);
-            delete children;
-        }
-        delete relatedProperties;
-        delete composed;
-        delete sets;
+    }
+    this->captionForDisplaying = captionForDisplaying;
+}
+
+KProperty::Private::~Private()
+{
+    delete caption;
+    caption = 0;
+    delete listData;
+    if (children) {
+        qDeleteAll(*children);
+        delete children;
+    }
+    delete relatedProperties;
+    delete composed;
+    delete sets;
+}
+
+bool KProperty::Private::valueDiffersInternal(const QVariant &otherValue, KProperty::ValueOptions options)
+{
+    if (!compatibleTypes(value, otherValue)) {
+        kprWarning() << "INCOMPATIBLE TYPES! old=" << value << "new=" << otherValue;
     }
 
-    //! @return a value for option @a name or null value if there is no such option set.
-    inline QVariant option(const char* name, const QVariant& defaultValue) const
+    const QVariant::Type t = value.type();
+    const QVariant::Type newt = otherValue.type();
+    if (   t == QVariant::DateTime
+        || t == QVariant::Time)
     {
-        if (options.contains(name))
-            return options[name];
-        return parent ? parent->option(name, defaultValue) : defaultValue;
+        //for date and datetime types: compare with strings, because there
+        //can be miliseconds difference
+        return value.toString() != otherValue.toString();
+    }
+    else if (t == QVariant::String || t == QVariant::ByteArray) {
+        //property is changed for string type,
+        //if one of value is empty and other isn't..
+        return (value.toString().isEmpty() != otherValue.toString().isEmpty())
+              //..or both are not empty and values differ
+              || (!value.toString().isEmpty() && !otherValue.toString().isEmpty() && value != otherValue);
+    }
+    else if (t == QVariant::Double) {
+        const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
+        //kprDebug()
+        //    << "double compared:" << value.toDouble() << otherValue.toDouble()
+        //    << ":" << static_cast<qlonglong>(value.toDouble() * factor) << static_cast<qlonglong>(otherValue.toDouble() * factor);
+        return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
+    } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
+        return false;
+    } else if (composed && (options & UseComposedProperty)) {
+        return !composed->valuesEqual(value, otherValue);
+    }
+    else {
+        return value != otherValue;
+    }
+}
+
+bool KProperty::Private::setValueInternal(const QVariant &newValue, KProperty::ValueOptions valueOptions)
+{
+    if (name.isEmpty()) {
+        kprWarning() << "COULD NOT SET value to a null property";
+        return false;
     }
 
-    //! @return true if value of this property differs from @a otherValue
-    bool valueDiffersInternal(const QVariant &otherValue, KProperty::ValueOptions options)
-    {
-        if (!compatibleTypes(value, otherValue)) {
-            kprWarning() << "INCOMPATIBLE TYPES! old=" << value << "new=" << otherValue;
-        }
-
-        const QVariant::Type t = value.type();
-        const QVariant::Type newt = otherValue.type();
-        if (   t == QVariant::DateTime
-            || t == QVariant::Time)
-        {
-            //for date and datetime types: compare with strings, because there
-            //can be miliseconds difference
-            return value.toString() != otherValue.toString();
-        }
-        else if (t == QVariant::String || t == QVariant::ByteArray) {
-            //property is changed for string type,
-            //if one of value is empty and other isn't..
-            return (value.toString().isEmpty() != otherValue.toString().isEmpty())
-                  //..or both are not empty and values differ
-                  || (!value.toString().isEmpty() && !otherValue.toString().isEmpty() && value != otherValue);
-        }
-        else if (t == QVariant::Double) {
-            const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-            //kprDebug()
-            //    << "double compared:" << value.toDouble() << otherValue.toDouble()
-            //    << ":" << static_cast<qlonglong>(value.toDouble() * factor) << static_cast<qlonglong>(otherValue.toDouble() * factor);
-            return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
-        } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
-            return false;
-        } else if (composed && (options & UseComposedProperty)) {
-            return !composed->valuesEqual(value, otherValue);
-        }
-        else {
-            return value != otherValue;
-        }
+    //1. Check if the value should be changed
+    if (!valueDiffersInternal(newValue, valueOptions)) {
+        return false;
     }
 
-    //! Sets value of the property to @a newValue
-    bool setValueInternal(const QVariant &newValue, KProperty::ValueOptions valueOptions)
-    {
-        if (name.isEmpty()) {
-            kprWarning() << "COULD NOT SET value to a null property";
-            return false;
+    //2. Then change it, and store old value if necessary
+    if (valueOptions & KProperty::RememberOldValue) {
+        if (!changed) {
+            oldValue = value;
         }
+        changed = true;
+    }
+    else {
+        oldValue = QVariant(); // clear old value
+        changed = false;
+    }
+    if (parent) {
+        parent->childValueChanged(q, newValue, valueOptions & KProperty::RememberOldValue);
+    }
 
-        //1. Check if the value should be changed
-        if (!valueDiffersInternal(newValue, valueOptions)) {
-            return false;
+    QVariant prevValue;
+    if (composed && useComposedProperty) {
+        prevValue = value; //???
+        composed->setChildValueChangedEnabled(false);
+        composed->setValue(q, newValue, valueOptions & KProperty::RememberOldValue);
+        composed->setChildValueChangedEnabled(true);
+    }
+    else {
+        prevValue = value;
+    }
+
+    value = newValue;
+
+    if (!parent) { // emit only if parent has not done it
+        emitPropertyChanged(); // called as last step in this method!
+    }
+    return true;
+}
+
+void KProperty::Private::addChild(KProperty *prop)
+{
+    if (!prop) {
+        return;
+    }
+
+    if (!children || qFind(children->begin(), children->end(), prop) == children->end()) { // not in our list
+        if (!children) {
+            children = new QList<KProperty*>();
         }
+        children->append(prop);
+        prop->d->parent = q;
+    } else {
+        kprWarning() << "property" << name
+                   << ": child property" << prop->name() << "already added";
+        return;
+    }
+}
 
-        //2. Then change it, and store old value if necessary
-        if (valueOptions & KProperty::RememberOldValue) {
-            if (!changed) {
-                oldValue = value;
+void KProperty::Private::addSet(KPropertySet *newSet)
+{
+    if (!newSet) {
+        return;
+    }
+
+    if (!set) {//simple case
+        set = newSet;
+        return;
+    }
+    if (set == newSet || sets->contains(newSet)) {
+        return;
+    }
+    if (!sets) {
+        sets = new QList< QPointer<KPropertySet> >;
+    }
+    sets->append(QPointer<KPropertySet>(newSet));
+}
+
+void KProperty::Private::addRelatedProperty(KProperty *property)
+{
+    if (!relatedProperties)
+        relatedProperties = new QList<KProperty*>();
+
+    if (!relatedProperties->contains(property)) {
+        relatedProperties->append(property);
+    }
+}
+
+void KProperty::Private::emitPropertyChanged()
+{
+    QList< QPointer<KPropertySet> > *realSets = nullptr;
+    if (sets) {
+        realSets = sets;
+    }
+    else if (parent) {
+        realSets = parent->d->sets;
+    }
+    if (realSets) {
+        foreach (QPointer<KPropertySet> s, *realSets) {
+            if (!s.isNull()) { //may be destroyed in the meantime
+                emit s->propertyChangedInternal(*s, *q);
+                emit s->propertyChanged(*s, *q);
             }
-            changed = true;
         }
-        else {
-            oldValue = QVariant(); // clear old value
-            changed = false;
-        }
-        if (parent) {
-            parent->childValueChanged(q, newValue, valueOptions & KProperty::RememberOldValue);
-        }
-
-        QVariant prevValue;
-        if (composed && useComposedProperty) {
-            prevValue = value; //???
-            composed->setChildValueChangedEnabled(false);
-            composed->setValue(q, newValue, valueOptions & KProperty::RememberOldValue);
-            composed->setChildValueChangedEnabled(true);
-        }
-        else {
-            prevValue = value;
-        }
-
-        value = newValue;
-
-        if (!parent) { // emit only if parent has not done it
-            q->emitPropertyChanged(); // called as last step in this method!
-        }
-        return true;
     }
-
-    KProperty * const q;
-    int type;
-    QByteArray name;
-    QString captionForDisplaying;
-    QString* caption;
-    QString description;
-    QVariant value;
-    QVariant oldValue;
-    /*! The string-to-value correspondence list of the property.*/
-    KPropertyListData* listData;
-    QString icon;
-
-    bool changed;
-    bool storable;
-    bool readOnly;
-    bool visible;
-    int autosync;
-    QMap<QByteArray, QVariant> options;
-
-    KComposedPropertyInterface *composed;
-    //! Flag used to allow composed property to use setValue() without causing recursion
-    bool useComposedProperty;
-
-    //! Used when a single set is assigned for the property
-    QPointer<KPropertySet> set;
-    //! Used when multiple sets are assigned for the property
-    QList< QPointer<KPropertySet> > *sets;
-
-    KProperty  *parent;
-    QList<KProperty*>  *children;
-    //! List of properties with the same name (when intersecting buffers)
-    QList<KProperty*>  *relatedProperties;
-};
+    else {
+        QPointer<KPropertySet> realSet;
+        if (set) {
+            realSet = set;
+        }
+        else if (parent) {
+            realSet = parent->d->set;
+        }
+        if (!realSet.isNull()) {
+            //if the slot connect with that signal may call set->clear() - that's
+            //the case e.g. at kexi/plugins/{macros|scripting}/* -  this KProperty
+            //may got destroyed ( see KPropertySet::removeProperty(KProperty*) ) while we are
+            //still on it. So, if we try to access ourself/this once the signal
+            //got emitted we may end in a very hard to reproduce crash. So, the
+            //emit should happen as last step in this method!
+            emit realSet->propertyChangedInternal(*realSet, *q);
+            emit realSet->propertyChanged(*realSet, *q);
+        }
+    }
+}
 
 /////////////////////////////////////////////////////////////////
 
@@ -272,7 +311,7 @@ KProperty::KProperty(const QByteArray &name, const QVariant &value,
     setType(type);
 
     if (parent)
-        parent->addChild(this);
+        parent->d->addChild(this);
     setValue(value, false);
 }
 
@@ -291,7 +330,7 @@ KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStr
     setType(type);
 
     if (parent)
-        parent->addChild(this);
+        parent->d->addChild(this);
     setValue(value, false);
 }
 
@@ -310,7 +349,7 @@ KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
     setType(type);
 
     if (parent)
-        parent->addChild(this);
+        parent->d->addChild(this);
     setValue(value, false);
 }
 
@@ -623,7 +662,7 @@ KProperty::operator= (const KProperty & property)
             QList<KProperty*>::ConstIterator endIt = property.d->children->constEnd();
             for (QList<KProperty*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
                 KProperty *child = new KProperty(*(*it));
-                addChild(child);
+                d->addChild(child);
             }
         }
     }
@@ -669,60 +708,6 @@ KProperty::parent() const
     return d->parent;
 }
 
-void
-KProperty::addChild(KProperty *prop)
-{
-    if (!prop)
-        return;
-
-    if (!d->children || qFind(d->children->begin(), d->children->end(), prop) == d->children->end()) { // not in our list
-        if (!d->children)
-            d->children = new QList<KProperty*>();
-        d->children->append(prop);
-        prop->d->parent = this;
-    } else {
-        kprWarning() << "property" << name()
-                   << ": child property" << prop->name() << "already added";
-        return;
-    }
-}
-
-void
-KProperty::addSet(KPropertySet *set)
-{
-    if (!set)
-        return;
-
-    if (!d->set) {//simple case
-        d->set = set;
-        return;
-    }
-    if (d->set == set || d->sets->contains(set))
-        return;
-    if (!d->sets) {
-        d->sets = new QList< QPointer<KPropertySet> >;
-    }
-
-    d->sets->append(QPointer<KPropertySet>(set));
-}
-
-const QList<KProperty*>*
-KProperty::related() const
-{
-    return d->relatedProperties;
-}
-
-void
-KProperty::addRelatedProperty(KProperty *property)
-{
-    if (!d->relatedProperties)
-        d->relatedProperties = new QList<KProperty*>();
-
-    QList<KProperty*>::iterator it = qFind(d->relatedProperties->begin(), d->relatedProperties->end(), property);
-    if (it == d->relatedProperties->end()) // not in our list
-        d->relatedProperties->append(property);
-}
-
 KComposedPropertyInterface* KProperty::composedProperty() const
 {
     return d->composed;
@@ -749,56 +734,7 @@ void Property::setSortingKey(int key)
 }
 #endif
 
-void KProperty::emitPropertyChanged()
-{
-    QList< QPointer<KPropertySet> > *sets = 0;
-    if (d->sets) {
-        sets = d->sets;
-    }
-    else if (d->parent) {
-        sets = d->parent->d->sets;
-    }
-    if (sets) {
-        foreach (QPointer<KPropertySet> s, *sets) {
-            if (!s.isNull()) { //may be destroyed in the meantime
-                emit s->propertyChangedInternal(*s, *this);
-                emit s->propertyChanged(*s, *this);
-            }
-        }
-    }
-    else {
-        QPointer<KPropertySet> set;
-        set = d->set;
-        if (d->set) {
-            set = d->set;
-        }
-        else if (d->parent) {
-            set = d->parent->d->set;
-        }
-        if (!set.isNull()) {
-            //if the slot connect with that signal may call set->clear() - that's
-            //the case e.g. at kexi/plugins/{macros|scripting}/* -  this KProperty
-            //may got destroyed ( see KPropertySet::removeProperty(KProperty*) ) while we are
-            //still on it. So, if we try to access ourself/this once the signal
-            //got emitted we may end in a very hard to reproduce crash. So, the
-            //emit should happen as last step in this method!
-            emit set->propertyChangedInternal(*set, *this);
-            emit set->propertyChanged(*set, *this);
-        }
-    }
-}
-
-QMap<QByteArray, QVariant> KProperty::options() const
-{
-    return d->options;
-}
-
 /////////////////////////////////////////////////////////////////
-
-void KProperty::debug() const
-{
-    kprDebug() << *this;
-}
 
 KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
 {
@@ -830,8 +766,8 @@ KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
 //! @todo children...
 
     if (p.hasOptions()) {
-        dbg.nospace() << " OPTIONS(" << p.options().count() << "): [";
-        QList<QByteArray> optionKeys( p.options().keys() );
+        dbg.nospace() << " OPTIONS(" << p.d->options.count() << "): [";
+        QList<QByteArray> optionKeys( p.d->options.keys() );
         qSort(optionKeys);
         bool first = true;
         foreach (const QByteArray& key, optionKeys) {

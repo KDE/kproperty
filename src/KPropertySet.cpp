@@ -20,22 +20,23 @@
 */
 
 #include "KPropertySet.h"
+#include "KProperty_p.h"
 #include "kproperty_debug.h"
 
 #include <QByteArray>
 
 //! @internal
-class Q_DECL_HIDDEN KPropertySet::Private
+class KPropertySetPrivate
 {
 public:
-    explicit Private(KPropertySet *set) :
+    explicit KPropertySetPrivate(KPropertySet *set) :
             q(set),
             readOnly(false),
             informAboutClearing(0),
             m_visiblePropertiesCount(0)
     {}
 
-    ~Private() {}
+    ~KPropertySetPrivate() {}
 
     inline uint visiblePropertiesCount() const { return m_visiblePropertiesCount; }
 
@@ -77,7 +78,7 @@ public:
             q->addToGroup(realGroup, property);
         }
 
-        property->addSet(q);
+        property->d->addSet(q);
 #if 0
         if (updateSortingKey)
             property->setSortingKey(count());
@@ -140,7 +141,7 @@ public:
     }
 
     //! Copy all attributes except complex ones
-    void copyAttributesFrom(const Private &other)
+    void copyAttributesFrom(const KPropertySetPrivate &other)
     {
         KPropertySet *origSet = q;
         *this = other;
@@ -329,7 +330,7 @@ KPropertySetIterator::operator ++()
 
 KPropertySet::KPropertySet(QObject *parent)
         : QObject(parent)
-        , d(new KPropertySet::Private(this))
+        , d(new KPropertySetPrivate(this))
 {
     d->ownProperty = true;
     d->groupDescriptions.insert("common", tr("General", "General properties"));
@@ -338,7 +339,7 @@ KPropertySet::KPropertySet(QObject *parent)
 
 KPropertySet::KPropertySet(const KPropertySet &set)
         : QObject(0 /* implicit sharing the parent is dangerous */)
-        , d(new KPropertySet::Private(this))
+        , d(new KPropertySetPrivate(this))
 {
     setObjectName(set.objectName());
     *this = set;
@@ -346,7 +347,7 @@ KPropertySet::KPropertySet(const KPropertySet &set)
 
 KPropertySet::KPropertySet(bool propertyOwner)
         : QObject(0)
-        , d(new KPropertySet::Private(this))
+        , d(new KPropertySetPrivate(this))
 {
     d->ownProperty = propertyOwner;
     d->groupDescriptions.insert("common", tr("General", "General properties"));
@@ -621,7 +622,7 @@ KPropertySet::setPreviousSelection(const QByteArray &prevSelection)
 
 void KPropertySet::addRelatedProperty(KProperty *p1, KProperty *p2) const
 {
-    p1->addRelatedProperty(p2);
+    p1->d->addRelatedProperty(p2);
 }
 
 QMap<QByteArray, QVariant> KPropertySet::propertyValues() const
@@ -669,7 +670,7 @@ void KPropertyBuffer::init(const KPropertySet& set)
         QString groupDesc = set.groupDescription( group );
         setGroupDescription(group, groupDesc);
         addProperty(prop, group);
-        prop->addRelatedProperty(*it);
+        prop->d->addRelatedProperty(*it);
     }
 }
 
@@ -689,7 +690,7 @@ void KPropertyBuffer::intersect(const KPropertySet& set)
         if (property) {
             blockSignals(true);
             (*it)->resetValue();
-            (*it)->addRelatedProperty(property);
+            (*it)->d->addRelatedProperty(property);
             blockSignals(false);
         } else {
             removeProperty(key);
@@ -703,7 +704,7 @@ void KPropertyBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
     if (!contains(prop.name()))
         return;
 
-    const QList<KProperty*> *props = prop.related();
+    const QList<KProperty*> *props = prop.d->relatedProperties;
     for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it) {
         (*it)->setValue(prop.value(), false);
     }
@@ -715,7 +716,7 @@ void KPropertyBuffer::intersectedReset(KPropertySet& set, KProperty& prop)
     if (!contains(prop.name()))
         return;
 
-    const QList<KProperty*> *props = prop.related();
+    const QList<KProperty*> *props = prop.d->relatedProperties;
     for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it)  {
         (*it)->setValue(prop.value(), false);
     }

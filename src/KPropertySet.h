@@ -28,6 +28,8 @@
 
 #include "KProperty.h"
 
+class KPropertySetPrivate;
+
 //! An interface for functor selecting properties.
 /*! Used in Iterator. */
 class KPROPERTYCORE_EXPORT KPropertySelector
@@ -296,10 +298,9 @@ Q_SIGNALS:
     /*! Emitted when property set object's read-only flag has changed.*/
     void readOnlyFlagChanged();
 
-protected:
-    class Private;
-    friend class Private;
-    Private * const d;
+private:
+    friend class KPropertySetPrivate;
+    KPropertySetPrivate * const d;
 
     friend class KPropertySetIterator;
     friend class KProperty;
