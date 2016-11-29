@@ -29,7 +29,9 @@ include(GenerateExportHeader)
 include(MacroLogFeature)
 include(KPropertyMacros)
 include(KPropertyAddIconsRccFile)
+include(KPropertyAddQCH)
 
+simple_option(BUILD_QCH "Build API documentation in QCH format" OFF)
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
 

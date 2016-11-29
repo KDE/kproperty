@@ -261,6 +261,69 @@ if(KPROPERTY_WIDGETS)
     )
 endif()
 
+if(BUILD_QCH)
+    kproperty_add_qch(
+        KPropertyCore_QCH
+        OUTPUT_BASENAME ${KPROPERTYCORE_BASE_NAME}
+        VERSION ${PROJECT_VERSION}
+        ORG_DOMAIN org.kde
+        SOURCES
+            Mainpage.dox
+            ${kpropertycore_HEADERS}
+        LINK_QCHS
+            Qt5Core_QCH
+        BLANK_MACROS
+            KPROPERTYCORE_EXPORT
+            KPROPERTYCORE_DEPRECATED
+        TAGFILE_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
+        QCH_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
+    )
+    set(kpropertycore_qch_targets KPropertyCore_QCH)
+endif()
+
+kproperty_install_qch_export(
+    TARGETS ${kpropertycore_qch_targets}
+    FILE KPropertyCoreQCHTargets.cmake
+    DESTINATION "${CMAKECONFIG_CORE_INSTALL_DIR}"
+    COMPONENT Devel
+)
+
+if(KPROPERTY_WIDGETS)
+    if(BUILD_QCH)
+        if(KPROPERTY_KF)
+            set(_KF5WidgetsAddons_QCH KF5WidgetsAddons_QCH)
+        endif()
+        kproperty_add_qch(
+            KPropertyWidgets_QCH
+            OUTPUT_BASENAME ${KPROPERTYWIDGETS_BASE_NAME}
+            VERSION ${PROJECT_VERSION}
+            ORG_DOMAIN org.kde
+            SOURCES
+                ${kpropertywidgets_HEADERS}
+                ${kproperty_editors_HEADERS}
+            LINK_QCHS
+                Qt5Core_QCH
+                Qt5Gui_QCH
+                Qt5Widgets_QCH
+                KPropertyCore_QCH
+                ${_KF5WidgetsAddons_QCH}
+            BLANK_MACROS
+                KPROPERTYWIDGETS_EXPORT
+                KPROPERTYWIDGETS_DEPRECATED
+            TAGFILE_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
+            QCH_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
+        )
+        set(kpropertywidgets_qch_targets KPropertyWidgets_QCH)
+    endif()
+
+    kproperty_install_qch_export(
+        TARGETS ${kpropertywidgets_qch_targets}
+        FILE KPropertyWidgetsQCHTargets.cmake
+        DESTINATION "${CMAKECONFIG_WIDGETS_INSTALL_DIR}"
+        COMPONENT Devel
+    )
+endif()
+
 enable_testing()
 
 configure_file(config-kproperty.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kproperty.h)
