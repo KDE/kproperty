@@ -264,9 +264,10 @@ endif()
 if(BUILD_QCH)
     kproperty_add_qch(
         KPropertyCore_QCH
-        OUTPUT_BASENAME ${KPROPERTYCORE_BASE_NAME}
+        NAME KPropertyCore
+        BASE_NAME ${KPROPERTYCORE_BASE_NAME}
         VERSION ${PROJECT_VERSION}
-        ORG_DOMAIN org.kde
+        NAMESPACE org.kde.${KPROPERTYCORE_BASE_NAME}
         SOURCES
             Mainpage.dox
             ${kpropertycore_HEADERS}
@@ -295,9 +296,10 @@ if(KPROPERTY_WIDGETS)
         endif()
         kproperty_add_qch(
             KPropertyWidgets_QCH
-            OUTPUT_BASENAME ${KPROPERTYWIDGETS_BASE_NAME}
+            NAME KPropertyWidgets
+            BASE_NAME ${KPROPERTYWIDGETS_BASE_NAME}
             VERSION ${PROJECT_VERSION}
-            ORG_DOMAIN org.kde
+            NAMESPACE org.kde.${KPROPERTYWIDGETS_BASE_NAME}
             SOURCES
                 ${kpropertywidgets_HEADERS}
                 ${kproperty_editors_HEADERS}
