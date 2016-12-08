@@ -89,7 +89,7 @@ KProperty::Private::~Private()
 bool KProperty::Private::valueDiffersInternal(const QVariant &otherValue, KProperty::ValueOptions options)
 {
     if (!compatibleTypes(value, otherValue)) {
-        kprWarning() << "INCOMPATIBLE TYPES! old=" << value << "new=" << otherValue;
+        kprWarning() << "INCOMPATIBLE TYPES! old=" << value << "new=" << otherValue << "in property" << q->name();
     }
 
     const QVariant::Type t = value.type();
