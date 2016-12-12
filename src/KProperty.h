@@ -93,7 +93,7 @@ public:
   in order to further explain meaning of the property.
 
   Propery also supports setting arbitrary number of options using KProperty::setOption() that allow
-  to customize look or behavior of of the property in the editor.
+  to customize look or behavior of the property in the editor.
 
   @code
   // Creating a simple property:
