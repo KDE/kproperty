@@ -194,3 +194,9 @@ function(add_update_file_target)
         VERBATIM
     )
 endfunction()
+
+# By default the QMessageLogContext class provides additional log information (file, line, function)
+# only in Debug builds (this includes RelWithDebInfo). For Release builds these values appear as "unknown".
+# To override this QT_MESSAGELOGCONTEXT should be explicitly defined.
+# See http://doc.qt.io/qt-5/qmessagelogcontext.html
+add_definitions(-DQT_MESSAGELOGCONTEXT)
