@@ -199,7 +199,7 @@ void KProperty::Private::addSet(KPropertySet *newSet)
         set = newSet;
         return;
     }
-    if (set == newSet || sets->contains(newSet)) {
+    if (set == newSet || (sets && sets->contains(newSet))) {
         return;
     }
     if (!sets) {
