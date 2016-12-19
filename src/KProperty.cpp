@@ -697,8 +697,9 @@ KProperty::addSet(KPropertySet *set)
         d->set = set;
         return;
     }
-    if (d->set == set || d->sets->contains(set))
+    if (d->set == set || (d->sets && d->sets->contains(set))) {
         return;
+    }
     if (!d->sets) {
         d->sets = new QList< QPointer<KPropertySet> >;
     }
