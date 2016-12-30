@@ -428,15 +428,15 @@ KProperty::setType(int type)
 }
 
 QString
-KProperty::icon() const
+KProperty::iconName() const
 {
-    return d->icon;
+    return d->iconName;
 }
 
 void
-KProperty::setIcon(const QString &icon)
+KProperty::setIconName(const QString &name)
 {
-    d->icon = icon;
+    d->iconName = name;
 }
 
 QVariant
@@ -639,7 +639,7 @@ KProperty::operator= (const KProperty & property)
     d->description = property.d->description;
     d->type = property.d->type;
 
-    d->icon = property.d->icon;
+    d->iconName = property.d->iconName;
     d->autosync = property.d->autosync;
     d->visible = property.d->visible;
     d->storable = property.d->storable;

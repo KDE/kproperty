@@ -76,7 +76,7 @@ Window::Window()
     QByteArray group;
     if (!m_parser.isSet(m_flatOption)) {
         group = "SimpleGroup";
-        m_set.setGroupDescription(group, "Simple Group");
+        m_set.setGroupCaption(group, "Simple Group");
     }
     if (singleProperty.isEmpty() || singleProperty=="String") {
         m_set.addProperty(p = new KProperty("String", "String"), group);
@@ -118,7 +118,7 @@ Window::Window()
     }
     if (singleProperty.isEmpty() || singleProperty=="Date") {
         m_set.addProperty(p = new KProperty("Date", QDate::currentDate(), "Date"), group);
-        p->setIcon("date");
+        p->setIconName("date");
     }
     if (singleProperty.isEmpty() || singleProperty=="Time") {
         m_set.addProperty(new KProperty("Time", QTime::currentTime(), "Time"), group);
@@ -148,7 +148,7 @@ Window::Window()
 //  Complex
     if (!m_parser.isSet(m_flatOption)) {
         group = "ComplexGroup";
-        m_set.setGroupDescription(group, "Complex Group");
+        m_set.setGroupCaption(group, "Complex Group");
     }
     if (singleProperty.isEmpty() || singleProperty=="Rect") {
         m_set.addProperty(new KProperty("Rect", QRect(5,11,100,200), "Rect"), group);
@@ -172,7 +172,7 @@ Window::Window()
 //  Appearance
     if (!m_parser.isSet(m_flatOption)) {
         group = "Appearance Group";
-        m_set.setGroupDescription(group, "Appearance Group");
+        m_set.setGroupCaption(group, "Appearance Group");
         m_set.setGroupIcon(group, "appearance");
     }
     if (singleProperty.isEmpty() || singleProperty=="Color") {
@@ -181,13 +181,13 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="Pixmap") {
         QPixmap pm(QIcon::fromTheme("network-wired").pixmap(QSize(16,16)));
         m_set.addProperty(p = new KProperty("Pixmap", pm, "Pixmap"), group);
-        p->setIcon("kpaint");
+        p->setIconName("kpaint");
     }
     if (singleProperty.isEmpty() || singleProperty=="Font") {
         QFont myFont("Times New Roman", 12);
         myFont.setUnderline(true);
         m_set.addProperty(p = new KProperty("Font", myFont, "Font"), group);
-        p->setIcon("fonts");
+        p->setIconName("fonts");
     }
     if (singleProperty.isEmpty() || singleProperty=="Cursor") {
         m_set.addProperty(new KProperty("Cursor", QCursor(Qt::WaitCursor), "Cursor"), group);

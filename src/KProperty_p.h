@@ -74,7 +74,7 @@ public:
     QVariant oldValue;
     /*! The string-to-value correspondence list of the property.*/
     KPropertyListData* listData;
-    QString icon;
+    QString iconName;
 
     bool changed;
     bool storable;

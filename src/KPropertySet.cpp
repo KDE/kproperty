@@ -459,13 +459,13 @@ QList<QByteArray> KPropertySet::propertyNamesForGroup(const QByteArray &group) c
 }
 
 void
-KPropertySet::setGroupDescription(const QByteArray &group, const QString &description)
+KPropertySet::setGroupCaption(const QByteArray &group, const QString &caption)
 {
-    d->groupDescriptions.insert(group.toLower(), description);
+    d->groupDescriptions.insert(group.toLower(), caption);
 }
 
 QString
-KPropertySet::groupDescription(const QByteArray &group) const
+KPropertySet::groupCaption(const QByteArray &group) const
 {
     const QString result( d->groupDescriptions.value(group.toLower()) );
     if (!result.isEmpty())
@@ -667,8 +667,8 @@ void KPropertyBuffer::init(const KPropertySet& set)
     {
         KProperty *prop = new KProperty(*(*it));
         QByteArray group = set.groupForProperty(*it);
-        QString groupDesc = set.groupDescription( group );
-        setGroupDescription(group, groupDesc);
+        const QString groupCaption = set.groupCaption(group);
+        setGroupCaption(group, groupCaption);
         addProperty(prop, group);
         prop->d->addRelatedProperty(*it);
     }

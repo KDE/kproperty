@@ -216,14 +216,14 @@ public:
             changeProperty(property, value);
     }
 
-    /*! Sets the user-visible translated string that will be shown in editor to represent
+    /*! Sets @a caption as a user-visible translated string that will be shown in editor to represent
      \a group. */
-    void setGroupDescription(const QByteArray &group, const QString &description);
+    void setGroupCaption(const QByteArray &group, const QString &caption);
 
-    /*! \return the user-visible translated description string for \a group that will
-     be shown in Editor to represent \a group. If there is no special
-     description set for the group, \a group is just returned. */
-    QString groupDescription(const QByteArray &group) const;
+    /*! \return the user-visible translated caption string for \a group that will
+     be shown in property editor to represent \a group. If there is no special
+     caption set for the group, \a group is just returned. */
+    QString groupCaption(const QByteArray &group) const;
 
     /*! Sets the icon name \a icon to be displayed for \a group. */
     void setGroupIcon(const QByteArray &group, const QString& icon);

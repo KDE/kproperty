@@ -313,12 +313,12 @@ public:
      This is overload of the above ctor added for convenience. */
     void setListData(const QStringList &keys, const QStringList &names);
 
-    /*! Sets icon by \a name for this property. Icons are optional and are used e.g.
+    /*! Sets icon name to \a name for this property. Icons are optional and are used e.g.
      in property editor - displayed at the left hand. */
-    void setIcon(const QString &icon);
+    void setIconName(const QString &name);
 
-    /*! \return property icon's string. Can be empty. */
-    QString icon() const;
+    /*! \return property icon's name. Can be empty. */
+    QString iconName() const;
 
     /*! \return a list of all children for this property, or NULL of there
      is no children for this property */
