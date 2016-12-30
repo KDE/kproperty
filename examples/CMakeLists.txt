@@ -8,6 +8,7 @@ set(kpropertyexample_SRCS main.cpp window.cpp)
 add_executable(kpropertyexample ${kpropertyexample_SRCS})
 target_link_libraries(kpropertyexample
     KPropertyWidgets
+    KPropertyUtilsPrivate
 )
 if(KPROPERTY_KF)
     target_link_libraries(kpropertyexample

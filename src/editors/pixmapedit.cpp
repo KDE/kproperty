@@ -25,6 +25,7 @@
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
 
+#include <QApplication>
 #include <QLabel>
 #include <QCursor>
 #include <QImage>
@@ -215,7 +216,7 @@ QWidget* KPropertyPixmapDelegate::createEditor( int type, QWidget *parent,
 void KPropertyPixmapDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     QPixmap pm( index.data(Qt::EditRole).value<QPixmap>() );
     if (!pm.isNull()) {
         if (pm.height() > option.rect.height() || pm.width() > option.rect.width()) { //scale down

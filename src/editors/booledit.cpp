@@ -287,7 +287,7 @@ QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,
 void KPropertyBoolDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
         return;

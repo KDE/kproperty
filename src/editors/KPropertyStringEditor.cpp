@@ -131,7 +131,7 @@ void KPropertyStringDelegate::paint(QPainter *painter,
         }
         align |= Qt::AlignVCenter;
     }
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     painter->drawText(r, align, string);
 }
 

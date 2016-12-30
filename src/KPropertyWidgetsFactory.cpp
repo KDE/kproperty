@@ -221,7 +221,7 @@ void KPropertyValuePainterInterface::paint(const KPropertyValueDisplayInterface 
                                            QPainter *painter, const QStyleOptionViewItem &option,
                                            const QModelIndex &index)
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     QRect r(option.rect);
     r.setLeft(r.left()+1);
     painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,

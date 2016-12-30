@@ -62,7 +62,7 @@ QString KPropertyLineStyleItemDelegate::styleName(Qt::PenStyle style, const QLoc
 void KPropertyLineStyleItemDelegate::paintItem(QPainter *painter, const QPen &pen_,
                                                const QRect &rect, const QStyleOption &option)
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     QPen pen(pen_);
     pen.setBrush(option.state & QStyle::State_Selected ? option.palette.highlightedText() : option.palette.text());
     if (pen.style() == Qt::NoPen) {
@@ -81,7 +81,7 @@ void KPropertyLineStyleItemDelegate::paint(QPainter *painter,
                                            const QStyleOptionViewItem &option,
                                            const QModelIndex &index) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
     }

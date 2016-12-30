@@ -62,7 +62,7 @@ KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listDa
     int paddingTop = 2;
     int paddingLeft = 3;
     const QString style(parent->style()->objectName());
-    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+    if (!KPropertyUtilsPrivate::gridLineColor(this).isValid()) {
         setFrame(false);
         paddingTop = 0;
     }

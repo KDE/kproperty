@@ -25,6 +25,7 @@
 #include "kproperty_debug.h"
 #include "KPropertyUtils_p.h"
 
+#include <QApplication>
 #include <QPushButton>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
@@ -98,7 +99,7 @@ QWidget * KPropertyFontDelegate::createEditor( int type, QWidget *parent,
 void KPropertyFontDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     const QFont origFont( painter->font() );
     QFont f( index.data(Qt::EditRole).value<QFont>() );
     if (option.font.pointSize() > 0)

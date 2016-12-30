@@ -120,7 +120,7 @@ void ItemDelegate::paint(QPainter *painter,
     if (gridLineColor.isValid()) {
         alteredOption.rect.setTop(alteredOption.rect.top() + 1);
     }
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     QRect r(option.rect);
     const KPropertyEditorDataModel *editorModel = qobject_cast<const KPropertyEditorDataModel*>(index.model());
     if (!editorModel) {

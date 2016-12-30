@@ -31,6 +31,14 @@ target_include_directories(KPropertyCore
 )
 
 if(KPROPERTY_WIDGETS)
+    add_library(KPropertyUtilsPrivate STATIC
+        KPropertyUtils_p.cpp
+    )
+    target_link_libraries(KPropertyUtilsPrivate
+        PUBLIC
+            Qt5::Widgets
+    )
+
     add_subdirectory(editors)
 
     set(kpropertywidgets_LIB_SRCS
@@ -73,9 +81,6 @@ if(KPROPERTY_WIDGETS)
         KPropertyLineStyleModel_p.cpp
         KPropertyLineStyleItemDelegate_p.cpp
 
-        # private:
-        KPropertyUtils_p.h
-
         # non-source:
         Mainpage.dox
         Messages.sh
@@ -102,20 +107,15 @@ if(KPROPERTY_WIDGETS)
     target_link_libraries(KPropertyWidgets
         PUBLIC
             KPropertyCore
+        PRIVATE
+            KPropertyUtilsPrivate
     )
     if(KPROPERTY_KF)
-        target_link_libraries(KPropertyWidgets
+        target_link_libraries(KPropertyUtilsPrivate
             PUBLIC
-                Qt5::Widgets
-                KF5::WidgetsAddons
-            PRIVATE
                 KF5::ConfigGui #KConfigGroup
                 KF5::GuiAddons #KColorCollection
-        )
-    else()
-        target_link_libraries(KPropertyWidgets
-            PUBLIC
-                Qt5::Widgets
+                KF5::WidgetsAddons #KMessageBox
         )
     endif()
     generate_export_header(KPropertyWidgets)

@@ -50,9 +50,9 @@
 KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyWidgetsFactory()
 {
-    KPropertyUtils::setupPrivateIconsResourceWithMessage(
+    KPropertyUtilsPrivate::setupPrivateIconsResourceWithMessage(
         QLatin1String(KPROPERTYWIDGETS_BASE_NAME_LOWER),
-        QString::fromLatin1("icons/kproperty_%1.rcc").arg(KPropertyUtils::supportedIconTheme), QtFatalMsg);
+        QString::fromLatin1("icons/kproperty_%1.rcc").arg(KPropertyUtilsPrivate::supportedIconTheme()), QtFatalMsg);
 
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
 //! @todo    addEditor( KProperty::ByteArray, new KPropertyByteArrayDelegate );

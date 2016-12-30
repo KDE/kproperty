@@ -21,6 +21,7 @@
 #include "combobox.h"
 #include "KPropertyUtils_p.h"
 
+#include <QEvent>
 #include <QHBoxLayout>
 
 #include <KColorCombo>
@@ -49,7 +50,7 @@ public:
         m_font.setFamily(QLatin1String("courier"));
     }
     void paint(QPainter *painter, const QRect &rect, const QColor &color) {
-        painter->setPen(KPropertyUtils::contrastColor(color));
+        painter->setPen(KPropertyUtilsPrivate::contrastColor(color));
         painter->setFont(m_font);
         painter->drawText(rect, Qt::AlignCenter, colorToName(color, QLocale()));
     }
@@ -90,7 +91,7 @@ KPropertyColorComboEditor::KPropertyColorComboEditor(QWidget *parent)
     setFocusProxy(d->combo);
 
     int paddingTop = 1;
-    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+    if (!KPropertyUtilsPrivate::gridLineColor(this).isValid()) {
         d->combo->setFrame(false);
         paddingTop = 0;
     }
@@ -173,7 +174,7 @@ QWidget * KPropertyColorComboDelegate::createEditor(int type, QWidget *parent,
 void KPropertyColorComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     const QBrush b(index.data(Qt::EditRole).value<QColor>());
     painter->setBrush(b);
     painter->setPen(QPen(Qt::NoPen));

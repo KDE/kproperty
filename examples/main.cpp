@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
     QCoreApplication::setApplicationName("KPropertyExample");
     QCoreApplication::setApplicationVersion(version);
-    (void)KPropertyUtils::setupGlobalIconTheme();
+    (void)KPropertyUtilsPrivate::setupGlobalIconTheme();
 
     Window window;
 

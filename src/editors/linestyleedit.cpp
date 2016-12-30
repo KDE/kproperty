@@ -23,6 +23,7 @@
 #include "KPropertyLineStyleItemDelegate_p.h"
 #include "KPropertyUtils_p.h"
 
+#include <QApplication>
 #include <QPen>
 
 KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
@@ -33,7 +34,7 @@ KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
     int paddingTop = 1;
     int paddingLeft = 0;
     const QString style(parent->style()->objectName());
-    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+    if (!KPropertyUtilsPrivate::gridLineColor(this).isValid()) {
         setFrame(false);
         paddingTop = 0;
     }
@@ -90,7 +91,7 @@ QWidget * KPropertyLineStyleComboDelegate::createEditor( int type, QWidget *pare
 void KPropertyLineStyleComboDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     Qt::PenStyle penStyle = Qt::NoPen;
     if (hasVisibleStyle(index.data(Qt::EditRole))) {
         penStyle = static_cast<Qt::PenStyle>(index.data(Qt::EditRole).toInt());

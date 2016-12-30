@@ -223,7 +223,7 @@ bool KPropertyGroupWidget::event(QEvent * e)
     return QWidget::event(e);
 }
 
-QColor KPropertyUtils::contrastColor(const QColor& c)
+QColor KPropertyUtilsPrivate::contrastColor(const QColor& c)
 {
     int g = qGray(c.rgb());
     if (g > 110)
@@ -235,7 +235,7 @@ QColor KPropertyUtils::contrastColor(const QColor& c)
     return Qt::lightGray;
 }
 
-QColor KPropertyUtils::gridLineColor(const QWidget *widget)
+QColor KPropertyUtilsPrivate::gridLineColor(const QWidget *widget)
 {
     Q_ASSERT(widget);
     KPropertyEditorView *view = 0;

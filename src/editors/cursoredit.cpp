@@ -195,7 +195,7 @@ KPropertyCursorEditor::KPropertyCursorEditor(QWidget *parent)
     int paddingTop = 1;
     int paddingLeft = 2;
     const QString style(parent->style()->objectName());
-    if (!KPropertyUtils::gridLineColor(this).isValid()) {
+    if (!KPropertyUtilsPrivate::gridLineColor(this).isValid()) {
         setFrame(false);
         paddingTop = 0;
     }
@@ -242,7 +242,7 @@ QWidget * KPropertyCursorDelegate::createEditor( int type, QWidget *parent,
 void KPropertyCursorDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KPropertyUtils::PainterSaver saver(painter);
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
     int comboIndex = s_cursorListData->shapeToIndex( index.data(Qt::EditRole).value<QCursor>().shape() );
     int pmSize = (option.rect.height() >= 32) ? 32 : 16;
     const QPixmap pm( s_cursorListData->pixmapForIndex(comboIndex, option.palette)
