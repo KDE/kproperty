@@ -21,6 +21,7 @@
 
 #include "KProperty.h"
 #include "KProperty_p.h"
+#include "KPropertySet_p.h"
 #include "KPropertyFactory.h"
 #include "kproperty_debug.h"
 
@@ -484,8 +485,9 @@ KProperty::resetValue()
 {
     d->changed = false;
     bool cleared = false;
-    if (d->set)
-        d->set->informAboutClearing(cleared); //inform me about possibly clearing the property sets
+    if (d->set) {
+        KPropertySetPrivate::d(d->set)->informAboutClearing(&cleared); //inform me about possibly clearing the property sets
+    }
     setValue(oldValue(), false);
     if (cleared)
         return; //property set has been cleared: no further actions make sense as 'this' is dead

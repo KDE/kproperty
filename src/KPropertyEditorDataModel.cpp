@@ -19,8 +19,7 @@
 
 #include "KPropertyEditorDataModel.h"
 #include "KPropertyWidgetsFactory.h"
-#include "KProperty.h"
-#include "kproperty_debug.h"
+#include "KPropertySet_p.h"
 
 #include <QHash>
 

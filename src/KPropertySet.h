@@ -252,34 +252,14 @@ public:
 
 protected:
     /*! Constructs a set which owns or does not own it's properties.*/
-    KPropertySet(bool propertyOwner);
-
-    /*! @return group name for property @a property */
-    QByteArray groupForProperty(KProperty *property) const;
-
-    /*! Adds property to a group.*/
-    void addToGroup(const QByteArray &group, KProperty *property);
-
-    /*! Removes property from a group.*/
-    void removeFromGroup(KProperty *property);
-
-    /*! Adds the property to the property set, in the group. Group name can be supplied.
-      @internal */
-    void addPropertyInternal(KProperty *property, QByteArray group);
-
-    /*! @internal used to declare that \a property wants to be informed
-     that the set has been cleared (all properties are deleted) */
-    void informAboutClearing(bool& cleared);
-
-    /*! Helper for Private class. */
-    void addRelatedProperty(KProperty *p1, KProperty *p2) const;
+    explicit KPropertySet(bool propertyOwner);
 
 Q_SIGNALS:
     /*! Emitted when the value of the property is changed.*/
     void propertyChanged(KPropertySet& set, KProperty& property);
 
     /*! @internal Exists to be sure that we emitted it before propertyChanged(),
-     so Editor object can handle this. */
+     so editor object can handle this. */
     void propertyChangedInternal(KPropertySet& set, KProperty& property);
 
     /*! Emitted when the value of the property is reset.*/
@@ -299,12 +279,8 @@ Q_SIGNALS:
     void readOnlyFlagChanged();
 
 private:
-    friend class KPropertySetPrivate;
     KPropertySetPrivate * const d;
-
-    friend class KPropertySetIterator;
-    friend class KProperty;
-    friend class KPropertyBuffer;
+    friend class KPropertySetPrivate;
 };
 
 //! qDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
