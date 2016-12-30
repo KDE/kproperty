@@ -216,9 +216,9 @@ public:
             changeProperty(property, value);
     }
 
-    /*! Sets the user-visible translated string that will be shown in Editor to represent
+    /*! Sets the user-visible translated string that will be shown in editor to represent
      \a group. */
-    void setGroupDescription(const QByteArray &group, const QString desc);
+    void setGroupDescription(const QByteArray &group, const QString &description);
 
     /*! \return the user-visible translated description string for \a group that will
      be shown in Editor to represent \a group. If there is no special

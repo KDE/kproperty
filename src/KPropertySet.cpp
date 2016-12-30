@@ -459,9 +459,9 @@ QList<QByteArray> KPropertySet::propertyNamesForGroup(const QByteArray &group) c
 }
 
 void
-KPropertySet::setGroupDescription(const QByteArray &group, const QString desc)
+KPropertySet::setGroupDescription(const QByteArray &group, const QString &description)
 {
-    d->groupDescriptions.insert(group.toLower(), desc);
+    d->groupDescriptions.insert(group.toLower(), description);
 }
 
 QString
