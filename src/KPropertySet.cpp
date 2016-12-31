@@ -28,6 +28,7 @@
 KPropertySetPrivate::KPropertySetPrivate(KPropertySet *set)
     : q(set)
 {
+    groupCaptions.insert("common", QObject::tr("General", "General properties"));
 }
 
 KPropertySetPrivate::~KPropertySetPrivate()
@@ -99,8 +100,8 @@ void KPropertySetPrivate::clear()
     propertiesOfGroup.clear();
     groupNames.clear();
     groupForProperties.clear();
-    groupDescriptions.clear();
-    groupIcons.clear();
+    groupCaptions.clear();
+    groupIconNames.clear();
     qDeleteAll(list);
     list.clear();
     hash.clear();
@@ -317,7 +318,6 @@ KPropertySet::KPropertySet(QObject *parent)
         , d(new KPropertySetPrivate(this))
 {
     d->ownProperty = true;
-    d->groupDescriptions.insert("common", tr("General", "General properties"));
 }
 
 
@@ -334,7 +334,6 @@ KPropertySet::KPropertySet(bool propertyOwner)
         , d(new KPropertySetPrivate(this))
 {
     d->ownProperty = propertyOwner;
-    d->groupDescriptions.insert("common", tr("General", "General properties"));
 }
 
 KPropertySet::~KPropertySet()
@@ -388,28 +387,28 @@ QList<QByteArray> KPropertySet::propertyNamesForGroup(const QByteArray &group) c
 void
 KPropertySet::setGroupCaption(const QByteArray &group, const QString &caption)
 {
-    d->groupDescriptions.insert(group.toLower(), caption);
+    d->groupCaptions.insert(group.toLower(), caption);
 }
 
 QString
 KPropertySet::groupCaption(const QByteArray &group) const
 {
-    const QString result( d->groupDescriptions.value(group.toLower()) );
+    const QString result(d->groupCaptions.value(group.toLower()));
     if (!result.isEmpty())
         return result;
     return QLatin1String(group);
 }
 
 void
-KPropertySet::setGroupIcon(const QByteArray &group, const QString& icon)
+KPropertySet::setGroupIconName(const QByteArray &group, const QString& iconName)
 {
-    d->groupIcons.insert(group.toLower(), icon);
+    d->groupIconNames.insert(group.toLower(), iconName);
 }
 
 QString
-KPropertySet::groupIcon(const QByteArray &group) const
+KPropertySet::groupIconName(const QByteArray &group) const
 {
-    return d->groupIcons.value(group);
+    return d->groupIconNames.value(group);
 }
 
 

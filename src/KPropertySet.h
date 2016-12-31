@@ -226,10 +226,10 @@ public:
     QString groupCaption(const QByteArray &group) const;
 
     /*! Sets the icon name \a icon to be displayed for \a group. */
-    void setGroupIcon(const QByteArray &group, const QString& icon);
+    void setGroupIconName(const QByteArray &group, const QString& iconName);
 
     /*! \return the icons name for \a group. */
-    QString groupIcon(const QByteArray &group) const;
+    QString groupIconName(const QByteArray &group) const;
 
     /*! \return a list of all group names. The order of items is undefined. */
     QList<QByteArray> groupNames() const;
@@ -309,6 +309,7 @@ protected Q_SLOTS:
 
 private:
     void init(const KPropertySet& set);
+    Q_DISABLE_COPY(KPropertyBuffer)
 };
 
 #endif

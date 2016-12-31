@@ -173,7 +173,7 @@ Window::Window()
     if (!m_parser.isSet(m_flatOption)) {
         group = "Appearance Group";
         m_set.setGroupCaption(group, "Appearance Group");
-        m_set.setGroupIcon(group, "appearance");
+        m_set.setGroupIconName(group, "appearance");
     }
     if (singleProperty.isEmpty() || singleProperty=="Color") {
         m_set.addProperty(new KProperty("Color", palette().color(QPalette::Active, QPalette::Background), "Color"), group);
