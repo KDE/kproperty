@@ -107,6 +107,7 @@ if(KPROPERTY_WIDGETS)
     target_link_libraries(KPropertyWidgets
         PUBLIC
             KPropertyCore
+            Qt5::Widgets
         PRIVATE
             KPropertyUtilsPrivate
     )

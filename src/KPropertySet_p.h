@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,6 +61,13 @@ public:
     inline int count() const { return list.count(); }
 
     inline bool isEmpty() const { return list.isEmpty(); }
+
+    /*! @return @c true if there are groups explicitly defined.
+     In this case groups are displayed by the property editor.
+     If there is only one "common" group, it means that all properties belong to this group,
+     and no groups are displayed.
+     @since 3.1 */
+    bool hasGroups() const;
 
     inline QByteArray groupForProperty(const KProperty *property) const {
         return groupForProperties.value(const_cast<KProperty*>(property));

@@ -372,21 +372,25 @@ public:
     /*! Sets "storable" flag for this property. @see isStorable() */
     void setStorable(bool storable);
 
-    /*! \return 1 if the property should be synced automatically in the property editor
-    as soon as editor contents change (e.g. when the user types text).
-    If autoSync() == 0, property value will be updated when the user presses Enter
-    or when another editor gets the focus.
-    Property follows property editor's global rule if autoSync() !=0 and !=1 (the default).
-    */
-    int autoSync() const;
+    //! Synchronization policy for property values
+    //! @since 3.1
+    enum class ValueSyncPolicy {
+        Editor,   //!< Allow to synchronize by the property editor using its valueSync setting (default)
+        FocusOut, //!< Synchronize the value when focus is out of the editor widget for this property
+                  //!< or when the user presses the Enter key
+        Auto      //!< Synchronize automatically as soon as the editor widget for this property signals
+                  //! (using commitData) that the value has been changed, e.g. when the user types
+                  //! another letter in a text box
+    };
 
-    /*! If \a sync is 1, the property will be synced automatically in the property editor
-    as soon as editor's contents change (e.g. when the user types text).
-    If \a sync is 0, property value will be updated when the user presses
-    Enter or when another editor gets the focus.
-    Property follows property editor's global rule if sync !=0 and !=1 (the default).
-    */
-    void setAutoSync(int sync);
+    //! @return synchronization policy for property values of this property
+    //! @since 3.1
+    ValueSyncPolicy valueSyncPolicy() const;
+
+    //! Sets synchronization policy for property values of this property
+    //! See ValueSyncPolicy for details.
+    //! @since 3.1
+    void setValueSyncPolicy(ValueSyncPolicy policy);
 
     /*! Sets value \a val for option \a name.
      Options are used to override default settings of individual properties.

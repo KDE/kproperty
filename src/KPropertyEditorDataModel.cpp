@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,10 +34,13 @@ public:
             kprCritical() << "KPropertyEditorDataModel requires a KPropertySet object";
         }
     }
+    inline KPropertySetPrivate* set_d() { return KPropertySetPrivate::d(set); }
     KPropertySet *set;
     KProperty rootItem;
+    KProperty groupItem; //!< Pseudo group item used for all group items
     QHash<QByteArray, QPersistentModelIndex> indicesForNames;
     KPropertySetIterator::Order order; //!< order of properties
+    bool groupsVisible = true;
 };
 
 // -------------------
@@ -80,14 +83,29 @@ static inline bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAn
 
 void KPropertyEditorDataModel::collectIndices() const
 {
-    KPropertySetIterator it(*d->set, VisiblePropertySelector());
-    if (d->order == KPropertySetIterator::AlphabeticalOrder) {
-        it.setOrder(KPropertySetIterator::AlphabeticalOrder);
-    }
     d->indicesForNames.clear();
-    for (int row = 0; it.current(); row++, ++it) {
-        // kprDebug() << it.current()->name() << "->" << row;
-        d->indicesForNames.insert( it.current()->name(), QPersistentModelIndex( createIndex(row, 0, it.current()) ) );
+    if (d->groupsVisible) {
+        for (const QByteArray &groupName : d->set_d()->groupNames) {
+            const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+            if (!propertyNames) {
+                continue;
+            }
+            int row = 0; // row within the group
+            //! @todo Care about sorting
+            for (const QByteArray &propertyName : *propertyNames) {
+                d->indicesForNames.insert(propertyName,
+                                          QPersistentModelIndex(createIndex(row, 0, d->set_d()->property(propertyName))));
+            }
+        }
+    } else {
+        KPropertySetIterator it(*d->set, VisiblePropertySelector());
+        if (d->order == KPropertySetIterator::AlphabeticalOrder) {
+            it.setOrder(KPropertySetIterator::AlphabeticalOrder);
+        }
+        for (int row = 0; it.current(); row++, ++it) { // flat list
+            d->indicesForNames.insert(it.current()->name(),
+                                      QPersistentModelIndex( createIndex(row, 0, it.current())));
+        }
     }
 }
 
@@ -115,9 +133,22 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
         return QVariant();
 
     const int col = index.column();
+    const KProperty *prop = propertyForIndex(index);
+    if (role == PropertyGroupRole) {
+        return prop == &d->groupItem;
+    }
     if (col == 0) {
-        KProperty *prop = propertyForIndex(index);
-        if (role == Qt::DisplayRole) {
+        if (prop == &d->groupItem) {
+            const QByteArray groupName(d->set_d()->groupNames.value(index.row()));
+            Q_ASSERT(!groupName.isEmpty());
+            switch(role) {
+            case Qt::DisplayRole:
+                return d->set->groupCaption(groupName);
+            case Qt::DecorationRole:
+                return QIcon::fromTheme(d->set->groupIconName(groupName));
+            default:;
+            }
+        } else if (role == Qt::DisplayRole) {
             if (!prop->caption().isEmpty())
                 return prop->caption();
             return prop->name();
@@ -127,7 +158,6 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
         }
     }
     else if (col == 1) {
-        KProperty *prop = propertyForIndex(index);
         if (role == Qt::EditRole) {
             return prop->value();
         }
@@ -144,10 +174,11 @@ Qt::ItemFlags KPropertyEditorDataModel::flags(const QModelIndex &index) const
         return Qt::ItemIsEnabled;
 
     const int col = index.column();
-    Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    KProperty *prop = propertyForIndex(index);
-    if (prop) {
-        if (col == 1 && !prop->isReadOnly() && !d->set->isReadOnly()) {
+    Qt::ItemFlags f = Qt::ItemIsEnabled;
+    const KProperty *prop = propertyForIndex(index);
+    if (prop != &d->groupItem) {
+        f |= Qt::ItemIsSelectable;
+        if (col == 1 && prop != &d->rootItem && !prop->isReadOnly() && !d->set->isReadOnly()) {
             f |= Qt::ItemIsEditable;
         }
     }
@@ -179,57 +210,105 @@ QVariant KPropertyEditorDataModel::headerData(int section, Qt::Orientation orien
 
 QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (parent.isValid() && parent.column() != 0)
+    if (row < 0 || column < 0 || /*!parent.isValid() ||*/ (parent.isValid() && parent.column() != 0)) {
         return QModelIndex();
+    }
 
     KProperty *parentItem = propertyForIndex(parent);
-    KProperty *childItem;
-    if (parentItem == &d->rootItem) { // special case: top level
-        int visibleRows = 0;
-        KPropertySetIterator it(*d->set, VisiblePropertySelector());
-        if (d->order == KPropertySetIterator::AlphabeticalOrder) {
-            it.setOrder(KPropertySetIterator::AlphabeticalOrder);
+    KProperty *childItem = nullptr;
+    if (parentItem == &d->rootItem && d->groupsVisible && d->set_d()->hasGroups()) {
+        // top level with groups: return group item
+        return createIndex(row, column, &d->groupItem);
+    } else if (parentItem == &d->rootItem || parentItem == &d->groupItem) {
+        // top level without groups or group level: return top-level visible property item
+        if (d->groupsVisible && d->set_d()->hasGroups()) {
+            const QByteArray groupName(d->set_d()->groupNames.value(parent.row()));
+            const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+            if (propertyNames) {
+                int visiblePropertiesForGroup = -1;
+                //! @todo sort?
+                for (const QByteArray &propertyName : *propertyNames) {
+                    KProperty *property = d->set_d()->property(propertyName);
+                    if (property->isVisible()) {
+                        ++visiblePropertiesForGroup;
+                    }
+                    if (visiblePropertiesForGroup == row) {
+                        childItem = property;
+                        break;
+                    }
+                }
+            }
+        } else { // all properties, flat
+            KPropertySetIterator it(*d->set, VisiblePropertySelector());
+            if (d->order == KPropertySetIterator::AlphabeticalOrder) {
+                it.setOrder(KPropertySetIterator::AlphabeticalOrder);
+            }
+            //! @todo use qBinaryFind()?
+            for (int visibleRows = 0; visibleRows < row && it.current(); ++it) {
+                ++visibleRows;
+            }
+            childItem = it.current();
         }
-//! @todo use qBinaryFind()?
-        for (; visibleRows < row && it.current(); visibleRows++, ++it)
-            ;
-        childItem = it.current();
-    } else {
+    } else { // child properties of composed properties
         const QList<KProperty*>* children = parentItem->children();
-        if (!children)
-            return QModelIndex();
-        childItem = children->value(row);
+        if (children) {
+            childItem = children->value(row);
+        }
     }
-    if (!childItem)
+    if (!childItem) {
         return QModelIndex();
+    }
     return createIndex(row, column, childItem);
 }
 
 QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QModelIndex();
-
-    KProperty *childItem = propertyForIndex(index);
+    }
+    const KProperty *childItem = propertyForIndex(index);
+    if (childItem == &d->rootItem || childItem == &d->groupItem) {
+        // parent for the root or a group item: null
+        // (parent for a group item is root since group item is top level)
+        return QModelIndex();
+    }
     KProperty *parentItem = childItem->parent();
-
-    if (!parentItem)
-        return QModelIndex();
-
-    const QList<KProperty*>* children = parentItem->children();
-    Q_ASSERT(children);
-    const int indexOfItem = children->indexOf(childItem);
-    Q_ASSERT(indexOfItem != -1);
-
-    return createIndex(indexOfItem, 0, parentItem);
+    if (parentItem) { // child property: parent property is the parent
+        // find index of parent within the grandparent
+        const int indexOfParentItem = d->set_d()->indexOfProperty(parentItem);
+        return createIndex(indexOfParentItem, 0, parentItem);
+    }
+    if (d->groupsVisible && d->set_d()->hasGroups()) {
+        // top-level property within a group: group item is the parent
+        const QByteArray group(d->set_d()->groupForProperty(childItem));
+        const int indexOfGroup = d->set_d()->groupNames.indexOf(group);
+        return createIndex(indexOfGroup, 0, &d->groupItem);
+    }
+    return QModelIndex();
 }
 
 int KPropertyEditorDataModel::rowCount(const QModelIndex &parent) const
 {
     KProperty *parentItem = propertyForIndex(parent);
-    if (!parentItem || parentItem == &d->rootItem) { // top level
-        return d->set->count(VisiblePropertySelector());
+    if (parentItem == &d->rootItem) { // top level: return group count or top-level properties count
+        if (d->groupsVisible && d->set_d()->hasGroups()) {
+            return d->set_d()->groupNames.count();
+        }
+        return d->set->count(VisiblePropertySelector()); // number of visible properties
+    } else if (parentItem == &d->groupItem) { // group level: return property count within the group
+        const QByteArray groupName = d->set_d()->groupNames.value(parent.row());
+        Q_ASSERT(!groupName.isEmpty());
+        const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+        Q_ASSERT(propertyNames);
+        int visiblePropertiesForGroup = 0;
+        for(const QByteArray &propertyName : *propertyNames) {
+            if (d->set_d()->property(propertyName)->isVisible()) {
+                ++visiblePropertiesForGroup;
+            }
+        }
+        return visiblePropertiesForGroup;
     }
+    // property level: return child properties count
     const QList<KProperty*>* children = parentItem->children();
     return children ? children->count() : 0;
 }
@@ -241,7 +320,7 @@ bool KPropertyEditorDataModel::setData(const QModelIndex &index, const QVariant 
         return false;
 
     KProperty *item = propertyForIndex(index);
-    if (item == &d->rootItem)
+    if (item == &d->rootItem || item == &d->groupItem)
         return false;
     item->setValue(value);
     //don't do that or cursor position and editor state will be reset:
@@ -287,9 +366,37 @@ KPropertySetIterator::Order KPropertyEditorDataModel::order() const
 bool KPropertyEditorDataModel::hasChildren(const QModelIndex & parent) const
 {
     KProperty *parentItem = propertyForIndex(parent);
-    if (!parentItem || parentItem == &d->rootItem) { // top level
+    if (parentItem == &d->rootItem) { // top level
         return d->set->hasVisibleProperties();
+    } else if (parentItem == &d->groupItem) { // group level
+        const QByteArray groupName(d->set_d()->groupNames.value(parent.row()));
+        Q_ASSERT(!groupName.isEmpty());
+        const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+        Q_ASSERT(propertyNames);
+        for (const QByteArray &propertyName : *propertyNames) {
+            if (d->set_d()->property(propertyName)->isVisible()) {
+                return true; // at least one visible property in this group
+            }
+        }
+        return false; // no visible properties in this group
     }
+    // property level
     const QList<KProperty*>* children = parentItem->children();
     return children && !children->isEmpty();
+}
+
+bool KPropertyEditorDataModel::groupsVisible() const
+{
+    return d->groupsVisible;
+}
+
+void KPropertyEditorDataModel::setGroupsVisible(bool set)
+{
+    if (d->groupsVisible == set) {
+        return;
+    }
+    beginResetModel();
+    d->groupsVisible = set;
+    collectIndices();
+    endResetModel();
 }

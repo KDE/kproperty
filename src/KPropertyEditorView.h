@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,8 +42,7 @@ public:
         NoOptions = 0,
         PreservePreviousSelection = 1, //!< If used, previously selected editor item
                                        //!< will be kept selected.
-        AlphabeticalOrder = 2,         //!< Alphabetical order of properties (the default is insert-order)
-        ExpandChildItems = 4           //!< Child property items are expanded (the default is "collapsed")
+        AlphabeticalOrder = 2          //!< Alphabetical order of properties (the default is insert-order)
     };
     Q_DECLARE_FLAGS(SetOptions, SetOption)
 
@@ -60,31 +59,69 @@ public:
     //! is currently assigned.
     KPropertySet* propertySet() const;
 
+    /*! @return @c true if items for parent composed properties are expanded so items for child
+     properties are displayed.
+     @since 3.1 */
+    bool childPropertyItemsExpanded() const;
+
+    /*! @return value of the valueSyncEnabled flag.
+     @since 3.1 */
+    bool isValueSyncEnabled() const;
+
+    /*! @return @c true if the property groups should be visible.
+     By default groups are visible.
+     A group is visualized as a subtree displaying group caption and group icon at its root node
+     (see KProperty::groupCaption and KProperty::groupIconName) and properties as children of this node.
+     A property is assigned to a group while KPropertySet::addProperty() is called.
+
+     @note Regardless of this flag, no groups are displayed if there is only the default group
+     "common".
+
+     When the group visibility flag is off or only the "common" group is present, all properties
+     are displayed on the same (top) level.
+     @since 3.1 */
+    bool groupsVisible() const;
+
+    /*! @return @c true if group items for newly added groups are exapanded so properties for these
+     groups are displayed.
+     @see setGroupItemsExpanded()
+     @since 3.1 */
+    bool groupItemsExpanded() const;
+
 public Q_SLOTS:
-    /*! Populates the editor view with items for each property from the @ set set.
+    /*! Populates the editor view with items for each property from the @a set set.
      Child items for composed properties are also created.
      See SetOption documentation for description of @a options options.
      If @a preservePreviousSelection is true, previously selected editor
      item will be kept selected, if present. */
     void changeSet(KPropertySet *set, SetOptions options = NoOptions);
 
-    /*! Populates the editor view with items for each property from the @ set set.
+    /*! Populates the editor view with items for each property from the @a set set.
      Child items for composed properties are also created.
      If @a propertyToSelect is provided, item for this property name
      will be selected, if present. */
     void changeSet(KPropertySet *set, const QByteArray& propertyToSelect, SetOptions options = NoOptions);
 
-    /*! If @a enable is true (the default), property values are automatically synced as
-    soon as editor contents change (e.g. every time the user types a character)
-    and the values are written back to the assigned property set.
-    If @a enable is false, property set is updated only when selection within
-    the property editor or user presses Enter/Return key.
-    Each property can overwrite this setting by changing its own autoSync flag.
-    */
-    void setAutoSync(bool enable);
+    /*! If @a set is @c true (the default), items for parent composed properties are expanded
+     so items for child properties are displayed.
+     If @a set is @c false, the items are collapsed.
+     @note Appearance of the existing child items is not altered. This method can be typically called
+           before a changeSet() call or before adding properties.
+     @note Expansion of group items is not affected by this method. Use setGroupItemsExpanded()
+           to control expansion of group items.
+     @note To expand all items use expandAll(). To collapse all items use collapseAll().
+     @since 3.1 */
+    void setChildPropertyItemsExpanded(bool set);
 
-    /*! @return value of autoSync flag. */
-    bool isAutoSync() const;
+    /*! If @a set is @c true (the default), property values are automatically synchronized as
+    soon as editor contents change (e.g. every time the user types a character)
+    and the values are saved back to the assigned property set.
+    If @a enable is false, property set is updated only when selection within the property editor
+    or user presses Enter/Return key.
+    Each property can override this policy by changing its own valueSyncPolicy flag.
+    @see KProperty::setValueSyncPolicy()
+     @since 3.1 */
+    void setValueSyncEnabled(bool set);
 
     /*! Accepts the changes made to the current editor item (if any)
      (as if the user had pressed Enter key). */
@@ -92,6 +129,22 @@ public Q_SLOTS:
 
     //! Sets color of grid lines. Use invalid color QColor() to hide grid lines.
     void setGridLineColor(const QColor& color);
+
+    /*! Shows the property groups if @a set is @c true.
+     @see groupsVisible()
+     @since 3.1 */
+    void setGroupsVisible(bool set);
+
+    /*! If @a set is @c true (the default), group items for newly added groups are exapanded
+     so properties for these groups are displayed.
+     If @a set is @c false, the items are collapsed.
+     @note Appearance of the existing group items is not altered. This method can be typically called
+           before a changeSet() call or before adding properties.
+     @note Expansion of child items for composed properties is not affected by this method.
+           Use setChildPropertyItemsExpanded() to control expansion child items for composed properties.
+     @note To expand all items use expandAll(). To collapse all items use collapseAll().
+     @since 3.1 */
+    void setGroupItemsExpanded(bool set);
 
 Q_SIGNALS:
     /*! Emitted when current property set has been changed. May be 0. */
@@ -124,6 +177,10 @@ private:
     void changeSetInternal(KPropertySet *set, SetOptions options, const QByteArray& propertyToSelect);
     virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
     virtual void drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
+
+    //! Reimplemented to draw group header text by hand.
+    void drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
     virtual void mousePressEvent( QMouseEvent * event );
 
     //! @return true if @a x is within the area of the revert button for @a index index.

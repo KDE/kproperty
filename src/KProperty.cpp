@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 KProperty::Private::Private(KProperty *prop)
         : q(prop), type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
         readOnly(false), visible(true),
-        autosync(-1), composed(0), useComposedProperty(true),
+        composed(0), useComposedProperty(true),
         sets(0), parent(0), children(0), relatedProperties(0)
 {
 }
@@ -571,16 +571,15 @@ KProperty::setVisible(bool visible)
     d->visible = visible;
 }
 
-int
-KProperty::autoSync() const
+KProperty::ValueSyncPolicy KProperty::valueSyncPolicy() const
 {
-    return d->autosync;
+    return d->valueSyncPolicy;
 }
 
 void
-KProperty::setAutoSync(int sync)
+KProperty::setValueSyncPolicy(KProperty::ValueSyncPolicy policy)
 {
-    d->autosync = sync;
+    d->valueSyncPolicy = policy;
 }
 
 bool
@@ -642,7 +641,7 @@ KProperty::operator= (const KProperty & property)
     d->type = property.d->type;
 
     d->iconName = property.d->iconName;
-    d->autosync = property.d->autosync;
+    d->valueSyncPolicy = property.d->valueSyncPolicy;
     d->visible = property.d->visible;
     d->storable = property.d->storable;
     d->readOnly = property.d->readOnly;

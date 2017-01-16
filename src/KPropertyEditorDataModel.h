@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,6 @@ class KProperty;
 class KPropertyEditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
-
 public:
     //! Creates a new model. @a propertySet is required.
     explicit KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent = 0,
@@ -43,7 +42,8 @@ public:
     ~KPropertyEditorDataModel();
 
     enum Role {
-        PropertyModifiedRole = Qt::UserRole + 0
+        PropertyModifiedRole = Qt::UserRole + 0,
+        PropertyGroupRole = Qt::UserRole + 1
     };
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation,
@@ -78,16 +78,28 @@ public:
     //! @return a sibling for model index @a index and columnd @a column
     QModelIndex indexForColumn(const QModelIndex& index, int column) const;
 
-    //! Sets order for properties. Restarts the iterator.
-    void setOrder(KPropertySetIterator::Order order);
-
     //! @return order for properties.
     KPropertySetIterator::Order order() const;
 
     //! Reimplemented for optimization.
     bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
 
+    /*! @return @c true if the property groups should be visible.
+     @see KPropertyEditorView::groupsVisible()
+     @since 3.1 */
+    bool groupsVisible() const;
+
+public Q_SLOTS:
+    //! Sets order for properties.
+    void setOrder(KPropertySetIterator::Order order);
+
+    /*! Shows the property groups if @a set is @c true.
+     @see KPropertyEditorView::setGroupsVisible(bool)
+     @since 3.1 */
+    void setGroupsVisible(bool set);
+
 private:
+    //! Collects persistent indices for the model. They are dependent on groupping and sorting.
     void collectIndices() const;
 
     class Private;

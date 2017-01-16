@@ -35,11 +35,13 @@ public:
     virtual ~KPropertySymbolComboEditor();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-protected:
+public Q_SLOTS:
+    virtual void setValue(const QVariant &value, bool emitChange = true);
+
+protected Q_SLOTS:
     virtual void setReadOnlyInternal(bool readOnly);
 
 protected Q_SLOTS:

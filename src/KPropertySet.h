@@ -113,7 +113,6 @@ private:
 class KPROPERTYCORE_EXPORT KPropertySet : public QObject
 {
     Q_OBJECT
-
 public:
     //! Constructs a new property set object.
     explicit KPropertySet(QObject *parent = 0);
@@ -123,22 +122,6 @@ public:
     explicit KPropertySet(const KPropertySet& set);
 
     virtual ~KPropertySet();
-
-    /*! Adds the property to the set, in the group.
-     The property becomes owned by the set.
-     Any name can be used for the @a group. "common" is the default for a basic top-level group. */
-    void addProperty(KProperty *property, const QByteArray &group = "common");
-
-    /*! Removes property from the set and deletes the object.
-     Emits aboutToDeleteProperty before removing. */
-    void removeProperty(KProperty *property);
-
-    /*! Removes property with the given name from the set and deletes the object.
-    Emits aboutToDeleteProperty() before removing.*/
-    void removeProperty(const QByteArray &name);
-
-    /*! Removes all property objects from the property set and deletes them. */
-    void clear();
 
     /*! @return the number of top-level properties in the set. */
     uint count() const;
@@ -166,10 +149,6 @@ public:
      value or other parameters of property programatically using KProperty::setValue(),
      KProperty::resetValue(), etc. */
     bool isReadOnly() const;
-
-    /*! Sets this set to be read-only.
-     @see isReadOnly */
-    void setReadOnly(bool readOnly);
 
     /*! \return true if the set contains property names \a name. */
     bool contains(const QByteArray &name) const;
@@ -204,29 +183,10 @@ public:
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     KPropertySet& operator= (const KPropertySet &set);
 
-    /*! Change the value of property whose key is \a property to \a value.
-    @see void changePropertyIfExists(const QByteArray &, const QVariant &) */
-    void changeProperty(const QByteArray &property, const QVariant &value);
-
-    /*! Change the value of property whose key is \a property to \a value
-     only if it exists in the set.
-     @see void changeProperty(const QByteArray &, const QVariant &) */
-    void changePropertyIfExists(const QByteArray &property, const QVariant &value) {
-        if (contains(property))
-            changeProperty(property, value);
-    }
-
-    /*! Sets @a caption as a user-visible translated string that will be shown in editor to represent
-     \a group. */
-    void setGroupCaption(const QByteArray &group, const QString &caption);
-
     /*! \return the user-visible translated caption string for \a group that will
      be shown in property editor to represent \a group. If there is no special
      caption set for the group, \a group is just returned. */
     QString groupCaption(const QByteArray &group) const;
-
-    /*! Sets the icon name \a icon to be displayed for \a group. */
-    void setGroupIconName(const QByteArray &group, const QString& iconName);
 
     /*! \return the icons name for \a group. */
     QString groupIconName(const QByteArray &group) const;
@@ -234,7 +194,7 @@ public:
     /*! \return a list of all group names. The order of items is undefined. */
     QList<QByteArray> groupNames() const;
 
-    /*! \return a list of all property names for group @ group.
+    /*! \return a list of all property names for group @a group.
      The order of items is undefined. */
     QList<QByteArray> propertyNamesForGroup(const QByteArray &group) const;
 
@@ -242,17 +202,52 @@ public:
      is assigned again. */
     QByteArray previousSelection() const;
 
-    void setPreviousSelection(const QByteArray& prevSelection);
-
     /*! Prints debug output for this set. */
     void debug() const;
 
     //! @return property values for this set
     QMap<QByteArray, QVariant> propertyValues() const;
 
-protected:
-    /*! Constructs a set which owns or does not own it's properties.*/
-    explicit KPropertySet(bool propertyOwner);
+public Q_SLOTS:
+    /*! Adds the property to the set, in the group.
+     The property becomes owned by the set.
+     Any name can be used for the @a group. "common" is the default for a basic top-level group. */
+    void addProperty(KProperty *property, const QByteArray &group = "common");
+
+    /*! Removes property from the set and deletes the object.
+     Emits aboutToDeleteProperty before removing. */
+    void removeProperty(KProperty *property);
+
+    /*! Removes property with the given name from the set and deletes the object.
+    Emits aboutToDeleteProperty() before removing.*/
+    void removeProperty(const QByteArray &name);
+
+    /*! Removes all property objects from the property set and deletes them. */
+    void clear();
+
+    /*! Change the value of property whose key is \a property to \a value.
+    @see void changePropertyIfExists(const QByteArray &, const QVariant &) */
+    void changeProperty(const QByteArray &property, const QVariant &value);
+
+    /*! Change the value of property whose key is \a property to \a value
+     only if it exists in the set.
+     @see void changeProperty(const QByteArray &, const QVariant &) */
+    void changePropertyIfExists(const QByteArray &property, const QVariant &value);
+
+    /*! Sets @a caption as a user-visible translated string that will be shown in editor to represent
+     \a group. */
+    void setGroupCaption(const QByteArray &group, const QString &caption);
+
+    /*! Sets the icon name \a icon to be displayed for \a group. */
+    void setGroupIconName(const QByteArray &group, const QString& iconName);
+
+    //! Sets previous section.
+    //! @see previousSelection()
+    void setPreviousSelection(const QByteArray &prevSelection);
+
+    /*! Sets this set to be read-only.
+     @see isReadOnly */
+    void setReadOnly(bool readOnly);
 
 Q_SIGNALS:
     /*! Emitted when the value of the property is changed.*/
@@ -277,6 +272,10 @@ Q_SIGNALS:
 
     /*! Emitted when property set object's read-only flag has changed.*/
     void readOnlyFlagChanged();
+
+protected:
+    /*! Constructs a set which owns or does not own it's properties.*/
+    explicit KPropertySet(bool propertyOwner);
 
 private:
     KPropertySetPrivate * const d;

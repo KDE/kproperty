@@ -56,14 +56,14 @@ public:
 
     virtual QVariant value() const;
 
-    void setListData(const KPropertyListData & listData);
-
     static QString borderSheet(const QWidget *widget);
 
 Q_SIGNALS:
     void commitData( QWidget * editor );
 
 public Q_SLOTS:
+    void setListData(const KPropertyListData & listData);
+
     virtual void setValue(const QVariant &value);
 
 protected Q_SLOTS:

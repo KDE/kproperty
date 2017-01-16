@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,6 @@
 #include <QWidget>
 #include <KPropertySet>
 
-class QCheckBox;
 class KPropertyEditorView;
 
 /*! @internal
@@ -51,8 +50,6 @@ private:
     QCommandLineOption m_propertyOption;
     QCommandLineOption m_roOption;
     KPropertyEditorView *m_editorView;
-    QCheckBox *m_showGrid;
-    QCheckBox *m_showFrame;
 };
 
 #endif

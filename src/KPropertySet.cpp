@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -183,6 +183,11 @@ void KPropertySetPrivate::removeFromGroup(KProperty *property)
     removePropertyFromGroup(property);
 }
 
+bool KPropertySetPrivate::hasGroups() const
+{
+    return groupNames.count() > 1 || (groupNames.count() == 1 && groupNames.first() != "common");
+}
+
 void KPropertySetPrivate::informAboutClearing(bool* cleared)
 {
     Q_ASSERT(cleared);
@@ -193,6 +198,29 @@ void KPropertySetPrivate::informAboutClearing(bool* cleared)
 void KPropertySetPrivate::addRelatedProperty(KProperty *p1, KProperty *p2) const
 {
     p1->d->addRelatedProperty(p2);
+}
+
+int KPropertySetPrivate::indexOfProperty(const KProperty *property) const
+{
+    KProperty *parentProperty = property->parent();
+    if (parentProperty) {
+        const QList<KProperty*>* children = parentProperty->children();
+        Q_ASSERT(children);
+        const int index = children->indexOf(parentProperty);
+        Q_ASSERT(index != -1);
+        return index;
+    }
+    return indexOfPropertyInGroup(property);
+}
+
+int KPropertySetPrivate::indexOfPropertyInGroup(const KProperty *property) const
+{
+    const QByteArray group(groupForProperties.value(const_cast<KProperty *>(property)));
+    QList<QByteArray>* propertiesOfGroup = this->propertiesOfGroup.value(group);
+    if (!propertiesOfGroup) {
+        return -1;
+    }
+    return propertiesOfGroup->indexOf(property->name());
 }
 
 //////////////////////////////////////////////
@@ -470,6 +498,13 @@ KProperty&
 KPropertySet::property(const QByteArray &name) const
 {
     return d->propertyOrNull(name);
+}
+
+void KPropertySet::changePropertyIfExists(const QByteArray &property, const QVariant &value)
+{
+    if (contains(property)) {
+        changeProperty(property, value);
+    }
 }
 
 KProperty&

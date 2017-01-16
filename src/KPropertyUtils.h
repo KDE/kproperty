@@ -30,10 +30,12 @@ class KProperty;
 //! for a property editor-like panes.
 class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
 {
+    Q_OBJECT
 public:
     explicit KPropertyGroupWidget(const QString& title, QWidget* parent = 0);
     ~KPropertyGroupWidget();
 
+public Q_SLOTS:
     void setContents(QWidget* contents);
 
 protected:

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,20 +74,21 @@ Window::Window()
     KProperty *p = 0;
     m_set.setReadOnly(m_parser.isSet(m_roOption));
     QByteArray group;
-    if (!m_parser.isSet(m_flatOption)) {
+    const bool addGroups = !m_parser.isSet(m_flatOption);
+    if (addGroups) {
         group = "SimpleGroup";
         m_set.setGroupCaption(group, "Simple Group");
     }
     if (singleProperty.isEmpty() || singleProperty=="String") {
         m_set.addProperty(p = new KProperty("String", "String"), group);
-        p->setAutoSync(1);
+        p->setValueSyncPolicy(KProperty::ValueSyncPolicy::Auto);
         p->setReadOnly(false); // this should not work:
                                // - not needed if the property set is read-write
                                // - ignored if the property set is read-only
     }
     if (singleProperty.isEmpty() || singleProperty=="MultiLine") {
         m_set.addProperty(p = new KProperty("MultiLine", "Multi\nLine\nContent"), group);
-        p->setAutoSync(1);
+        p->setValueSyncPolicy(KProperty::ValueSyncPolicy::Auto);
         p->setOption("multiLine", true);
     }
 
@@ -146,7 +147,7 @@ Window::Window()
     }
 
 //  Complex
-    if (!m_parser.isSet(m_flatOption)) {
+    if (addGroups) {
         group = "ComplexGroup";
         m_set.setGroupCaption(group, "Complex Group");
     }
@@ -170,7 +171,7 @@ Window::Window()
     }
 
 //  Appearance
-    if (!m_parser.isSet(m_flatOption)) {
+    if (addGroups) {
         group = "Appearance Group";
         m_set.setGroupCaption(group, "Appearance Group");
         m_set.setGroupIconName(group, "appearance");
@@ -227,25 +228,33 @@ Window::Window()
         p->setReadOnly(true);
     }
 
-// qDebug() << m_set.groupNames();
     QVBoxLayout *lyr = new QVBoxLayout(this);
     m_editorView = new KPropertyEditorView(this);
     lyr->addWidget(m_editorView);
-    m_editorView->changeSet(&m_set, KPropertyEditorView::ExpandChildItems);
+    m_editorView->changeSet(&m_set);
     lyr->addSpacing(lyr->spacing());
 
     QHBoxLayout *hlyr = new QHBoxLayout;
     lyr->addLayout(hlyr);
 
-    m_showGrid = new QCheckBox("Show grid");
-    m_showGrid->setChecked(true);
-    connect(m_showGrid, &QCheckBox::stateChanged, this, &Window::showGrid);
-    hlyr->addWidget(m_showGrid);
+    QCheckBox *showGrid = new QCheckBox("Show grid");
+    showGrid->setChecked(true);
+    connect(showGrid, &QCheckBox::stateChanged, this, &Window::showGrid);
+    hlyr->addWidget(showGrid);
 
-    m_showFrame = new QCheckBox("Show frame");
-    m_showFrame->setChecked(true);
-    connect(m_showFrame, &QCheckBox::stateChanged, this, &Window::showFrame);
-    hlyr->addWidget(m_showFrame);
+    QCheckBox *showFrame = new QCheckBox("Show frame");
+    showFrame->setChecked(true);
+    connect(showFrame, &QCheckBox::stateChanged, this, &Window::showFrame);
+    hlyr->addWidget(showFrame);
+
+    QCheckBox *showGroups = new QCheckBox("Show groups");
+    if (addGroups) {
+        connect(showGroups, &QCheckBox::toggled, m_editorView, &KPropertyEditorView::setGroupsVisible);
+        showGroups->setChecked(m_editorView->groupsVisible());
+    } else {
+        showGroups->setEnabled(false);
+    }
+    hlyr->addWidget(showGroups);
 
     QCheckBox *readOnly = new QCheckBox("Read-only");
     connect(readOnly, &QCheckBox::toggled, &m_set, &KPropertySet::setReadOnly);

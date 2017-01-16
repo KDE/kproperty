@@ -35,6 +35,13 @@ public:
     explicit KPropertyLineStyleSelector(QWidget *parent = 0);
     virtual ~KPropertyLineStyleSelector();
 
+    //! @return the current line style
+    Qt::PenStyle lineStyle() const;
+
+    //! @return the dashes of the current line style
+    QVector<qreal> lineDashes() const;
+
+public Q_SLOTS:
     /**
      * Adds a new line style to the combobox.
      *
@@ -55,12 +62,6 @@ public:
      * @param dashes the dashes of the style if style == Qt::CustomDashLine
      */
     void setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes = QVector<qreal>());
-
-    //! @return the current line style
-    Qt::PenStyle lineStyle() const;
-
-    //! @return the dashes of the current line style
-    QVector<qreal> lineDashes() const;
 
 protected:
     void paintEvent(QPaintEvent *pe);

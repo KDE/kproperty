@@ -34,6 +34,8 @@ public:
     virtual ~KPropertyCursorEditor();
 
     virtual QCursor cursorValue() const;
+
+public Q_SLOTS:
     virtual void setCursorValue(const QCursor &value);
 };
 

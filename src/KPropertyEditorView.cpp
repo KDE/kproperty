@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -67,10 +67,12 @@ public:
 };
 #endif
 
-static bool computeAutoSync(const KProperty *property, bool defaultAutoSync)
+static bool effectiveValueSyncPolicy(const KProperty *property, bool defaultValue)
 {
-    return (property->autoSync() != 0 && property->autoSync() != 1) ?
-                defaultAutoSync : (property->autoSync() != 0);
+    if (property->valueSyncPolicy() == KProperty::ValueSyncPolicy::Editor) {
+        return defaultValue;
+    }
+    return property->valueSyncPolicy() == KProperty::ValueSyncPolicy::Auto;
 }
 
 //----------
@@ -116,20 +118,21 @@ void ItemDelegate::paint(QPainter *painter,
                          const QModelIndex &index) const
 {
     QStyleOptionViewItem alteredOption(option);
-    const QColor gridLineColor(qobject_cast<KPropertyEditorView*>(parent())->gridLineColor());
-    if (gridLineColor.isValid()) {
-        alteredOption.rect.setTop(alteredOption.rect.top() + 1);
-    }
     const KPropertyUtilsPrivate::PainterSaver saver(painter);
-    QRect r(option.rect);
     const KPropertyEditorDataModel *editorModel = qobject_cast<const KPropertyEditorDataModel*>(index.model());
     if (!editorModel) {
         return;
     }
+
+    QRect r(option.rect);
     bool modified = false;
+    const QColor gridLineColor(qobject_cast<KPropertyEditorView*>(parent())->gridLineColor());
+    if (gridLineColor.isValid()) {
+        alteredOption.rect.setTop(alteredOption.rect.top() + 1);
+    }
     if (index.column()==0) {
         r.setWidth(r.width() - 1);
-        r.setLeft(0);
+        r.setLeft(-1); // to avoid displaying double left border
 
         QVariant modifiedVariant( editorModel->data(index, KPropertyEditorDataModel::PropertyModifiedRole) );
         if (modifiedVariant.isValid() && modifiedVariant.toBool()) {
@@ -149,44 +152,51 @@ void ItemDelegate::paint(QPainter *painter,
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
     }
 
-    KProperty *property = editorModel->propertyForIndex(index);
-    const int t = typeForProperty( property );
-    bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
-    if (index.column() == 1 && KPropertyWidgetsPluginManager::self()->paint(t, painter, alteredOption, index)) {
-        useQItemDelegatePaint = false;
-    }
-    if (useQItemDelegatePaint) {
-        QItemDelegate::paint(painter, alteredOption, index);
-    }
+    const bool isGroupHeader(editorModel->data(index, KPropertyEditorDataModel::PropertyGroupRole).toBool());
+    if (!isGroupHeader) {
+        KProperty *property = editorModel->propertyForIndex(index);
+        const int t = typeForProperty( property );
+        bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
+        if (index.column() == 1 && KPropertyWidgetsPluginManager::self()->paint(t, painter, alteredOption, index)) {
+            useQItemDelegatePaint = false;
+        }
+        if (useQItemDelegatePaint) {
+            QItemDelegate::paint(painter, alteredOption, index);
+        }
 
-    if (modified) {
-        alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 3 / 2 );
-        int y1 = alteredOption.rect.top();
-        QLinearGradient grad(x2 - iconSize * 2, y1, x2 - iconSize / 2, y1);
-        QColor color(
-            alteredOption.palette.color(
-                (alteredOption.state & QStyle::State_Selected) ? QPalette::Highlight : QPalette::Base ));
-        color.setAlpha(0);
-        grad.setColorAt(0.0, color);
-        color.setAlpha(255);
-        grad.setColorAt(0.5, color);
-        QBrush gradBrush(grad);
-        painter->fillRect(x2 - iconSize * 2, y1,
-            iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon(QIcon::fromTheme(QLatin1String("edit-undo")).pixmap(iconSize, iconSize));
+        if (modified) {
+            alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 3 / 2 );
+            int y1 = alteredOption.rect.top();
+            QLinearGradient grad(x2 - iconSize * 2, y1, x2 - iconSize / 2, y1);
+            QColor color(
+                alteredOption.palette.color(
+                    (alteredOption.state & QStyle::State_Selected) ? QPalette::Highlight : QPalette::Base ));
+            color.setAlpha(0);
+            grad.setColorAt(0.0, color);
+            color.setAlpha(255);
+            grad.setColorAt(0.5, color);
+            QBrush gradBrush(grad);
+            painter->fillRect(x2 - iconSize * 2, y1, iconSize * 2, y2 - y1 + 1, gradBrush);
 
-        //!TODO
-        //revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0,
-        //    alteredOption.palette.color(
-        //        (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
-        //painter->drawPixmap( x2 - iconSize - 2,
-        //   y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
+            //!TODO
+            //QPixmap revertIcon(QIcon::fromTheme(QLatin1String("edit-undo")).pixmap(iconSize, iconSize));
+            //revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0,
+            //    alteredOption.palette.color(
+            //        (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
+            //painter->drawPixmap( x2 - iconSize - 2,
+            //   y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
+        }
     }
 
     if (gridLineColor.isValid()) {
         QPen pen(gridLineColor);
         painter->setPen(pen);
-        painter->drawRect(r);
+        painter->drawLine(r.topLeft(), r.topRight() + QPoint(1, 0));
+        painter->drawLine(r.bottomLeft() + QPoint(0, 1), r.bottomRight() + QPoint(1, 1));
+        if (!isGroupHeader) {
+            painter->drawLine(r.topRight() + QPoint(1, 0), r.bottomRight() + QPoint(1, 1));
+            painter->drawLine(r.topLeft(), r.bottomLeft() + QPoint(0, 1));
+        }
     }
     else {
         QPen pen(alteredOption.palette.color(QPalette::AlternateBase));
@@ -230,7 +240,9 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     }
     QObject::disconnect(w, SIGNAL(commitData(QWidget*)),
         this, SIGNAL(commitData(QWidget*)));
-    if (property && computeAutoSync( property, static_cast<KPropertyEditorView*>(this->parent())->isAutoSync() )) {
+    if (property && effectiveValueSyncPolicy(property,
+            qobject_cast<KPropertyEditorView*>(this->parent())->isValueSyncEnabled()))
+    {
         QObject::connect(w, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
     }
@@ -243,25 +255,59 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
 class Q_DECL_HIDDEN KPropertyEditorView::Private
 {
 public:
-    Private()
+    explicit Private(KPropertyEditorView *view)
      : set(0)
      , model(0)
      , gridLineColor( KPropertyEditorView::defaultGridLineColor() )
-     , autoSync(true)
+     , valueSync(true)
      , slotPropertyChangedEnabled(true)
+     , q(view)
     {
     }
+
+    //! Expands group and parent propertiey items if needed (based on settings)
+    void expandIfNeeded() {
+        const int rowCount = model->rowCount();
+        for (int row = 0; row < rowCount; row++) {
+            expandChildItemsIfNeeded(model->index(row, 0));
+        }
+    }
+
+    //! Expands property child items in a subtree recursively if needed (based on settings)
+    void expandChildItemsIfNeeded(const QModelIndex &parent) {
+        const bool isGroupHeader(model->data(parent, KPropertyEditorDataModel::PropertyGroupRole).toBool());
+        if (isGroupHeader) {
+            if (groupItemsExpanded) {
+                q->expand(parent);
+            }
+        } else {
+            if (childPropertyItemsExpanded) {
+                q->expand(parent);
+            }
+        }
+        const int rowCount = model->rowCount(parent);
+        for (int row = 0; row < rowCount; row++) {
+            const QModelIndex child(model->index(row, 0, parent));
+            expandChildItemsIfNeeded(child);
+        }
+    }
+
     KPropertySet *set;
     KPropertyEditorDataModel *model;
     ItemDelegate *itemDelegate;
     QColor gridLineColor;
-    bool autoSync;
+    bool valueSync;
     bool slotPropertyChangedEnabled;
+    bool childPropertyItemsExpanded = true;
+    bool groupItemsExpanded = true;
+
+private:
+    KPropertyEditorView * const q;
 };
 
 KPropertyEditorView::KPropertyEditorView(QWidget* parent)
         : QTreeView(parent)
-        , d( new Private )
+        , d(new Private(this))
 {
     setObjectName(QLatin1String("KPropertyEditorView"));
     setAlternatingRowColors(true);
@@ -382,11 +428,8 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
     setModel( d->model );
     delete oldModel;
 
-    if (d->model && d->set && !d->set->isEmpty() && (options & ExpandChildItems)) {
-        const int rowCount = d->model->rowCount();
-        for (int row = 0; row < rowCount; row++) {
-            expand( d->model->index(row, 0) );
-        }
+    if (d->model && d->set && !d->set->isEmpty()) {
+        d->expandIfNeeded();
     }
 
     emit propertySetChanged(d->set);
@@ -426,14 +469,49 @@ void KPropertyEditorView::slotReadOnlyFlagChanged()
     }
 }
 
-void KPropertyEditorView::setAutoSync(bool enable)
+void KPropertyEditorView::setValueSyncEnabled(bool set)
 {
-    d->autoSync = enable;
+    d->valueSync = set;
 }
 
-bool KPropertyEditorView::isAutoSync() const
+bool KPropertyEditorView::isValueSyncEnabled() const
 {
-    return d->autoSync;
+    return d->valueSync;
+}
+
+void KPropertyEditorView::setChildPropertyItemsExpanded(bool set)
+{
+    d->childPropertyItemsExpanded = set;
+}
+
+bool KPropertyEditorView::childPropertyItemsExpanded() const
+{
+    return d->childPropertyItemsExpanded;
+}
+
+void KPropertyEditorView::setGroupItemsExpanded(bool set)
+{
+    d->groupItemsExpanded = set;
+}
+
+bool KPropertyEditorView::groupItemsExpanded() const
+{
+    return d->groupItemsExpanded;
+}
+
+bool KPropertyEditorView::groupsVisible() const
+{
+    return d->model->groupsVisible();
+}
+
+void KPropertyEditorView::setGroupsVisible(bool set)
+{
+    if (d->model->groupsVisible() == set) {
+        return;
+    }
+    d->model->setGroupsVisible(set);
+    d->expandIfNeeded();
+    viewport()->update();
 }
 
 void KPropertyEditorView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
@@ -462,6 +540,26 @@ bool KPropertyEditorView::edit( const QModelIndex & index, EditTrigger trigger, 
 void KPropertyEditorView::drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
 {
     QTreeView::drawBranches( painter, rect, index );
+}
+
+void KPropertyEditorView::drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    const KPropertyUtilsPrivate::PainterSaver saver(painter);
+    const bool isGroupHeader(d->model->data(index, KPropertyEditorDataModel::PropertyGroupRole).toBool());
+    QStyleOptionViewItem alteredOption(option);
+    QTreeView::drawRow(painter, alteredOption, index);
+    if (isGroupHeader) {
+        // Special case: group header should be displayed over both columns. There's an issue with
+        // alternate background which is painted over text in the 2nd column, so draw the text here
+        // by hand.
+        QFont font(alteredOption.font);
+        font.setBold(true);
+        alteredOption.font = font;
+        painter->setFont(font);
+        painter->drawText(
+            alteredOption.rect.adjusted(style()->pixelMetric(QStyle::PM_TreeViewIndentation), 0, 0, 0),
+            index.data(Qt::DisplayRole).toString(), Qt::AlignLeft | Qt::AlignVCenter);
+    }
 }
 
 QRect KPropertyEditorView::revertButtonArea( const QModelIndex& index ) const
@@ -504,8 +602,9 @@ void KPropertyEditorView::undo()
         return;
 
     KProperty *property = d->model->propertyForIndex(currentIndex());
-    if (computeAutoSync( property, d->autoSync ))
+    if (effectiveValueSyncPolicy(property, d->valueSync)) {
         property->resetValue();
+    }
 }
 
 void KPropertyEditorView::acceptInput()
