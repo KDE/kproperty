@@ -453,15 +453,14 @@ KPropertySet::groupIconName(const QByteArray &group) const
 
 /////////////////////////////////////////////////////
 
-uint
-KPropertySet::count() const
+int KPropertySet::count() const
 {
     return d->count();
 }
 
-uint KPropertySet::count(const KPropertySelector& selector) const
+int KPropertySet::count(const KPropertySelector& selector) const
 {
-    uint result = 0;
+    int result = 0;
     for (KPropertySetIterator it(*this, selector); it.current(); ++it, result++)
         ;
     return result;

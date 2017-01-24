@@ -124,11 +124,11 @@ public:
     virtual ~KPropertySet();
 
     /*! @return the number of top-level properties in the set. */
-    uint count() const;
+    int count() const;
 
     /*! @return the number of top-level properties in the set
                 matching criteria defined by @a selector. */
-    uint count(const KPropertySelector& selector) const;
+    int count(const KPropertySelector& selector) const;
 
     /*! @return true if the set is empty, i.e. count() is 0; otherwise returns false. */
     bool isEmpty() const;

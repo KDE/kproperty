@@ -36,7 +36,7 @@ public:
     inline static KPropertySetPrivate* d(KPropertySet *set) { return set->d; }
     inline static const KPropertySetPrivate* d(const KPropertySet *set) { return set->d; }
 
-    inline uint visiblePropertiesCount() const { return m_visiblePropertiesCount; }
+    inline int visiblePropertiesCount() const { return m_visiblePropertiesCount; }
 
     inline KProperty* property(const QByteArray &name) const {
         return hash.value(name.toLower());
@@ -138,7 +138,7 @@ private:
     //! A hash of properties in form name -> property
     QHash<QByteArray, KProperty*> hash;
     QHash<KProperty*, QByteArray> groupForProperties;
-    uint m_visiblePropertiesCount = 0; //!< Cache for optimization,
+    int m_visiblePropertiesCount = 0; //!< Cache for optimization,
                                        //!< used by @ref bool KPropertySet::hasVisibleProperties()
     //! Used in KPropertySetPrivate::informAboutClearing(bool&) to declare that the property wants
     //! to be informed that the set has been cleared (all properties are deleted)
