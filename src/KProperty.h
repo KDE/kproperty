@@ -193,7 +193,10 @@ public:
         UserDefined = 4000            /**<plugin defined properties should start here*/
     };
 
-    /*! Constructs a null property. */
+    /**
+     * Constructs a null property.
+     * Null properties have empty names and captions and Invalid types.
+     */
     KProperty();
 
     /*! Constructs property of simple type.
@@ -222,10 +225,16 @@ public:
 
     ~KProperty();
 
-    /*! \return the internal name of the property (that's used in List).*/
+    /**
+     * @return name of the property
+     * @note empty name means a null property
+     */
     QByteArray name() const;
 
-    /*! Sets the internal name of the property.*/
+    /**
+     * Sets name of the property
+     * @note empty name means a null property
+     */
     void setName(const QByteArray &name);
 
     /*! \return the caption of the property.*/
@@ -341,7 +350,7 @@ public:
     /*! Sets composed property \a prop for this property. */
     void setComposedProperty(KComposedPropertyInterface *prop);
 
-    /*! \return true if this property is null. Null properties have empty names. */
+    /*! \return true if this property is null. Property is null if it has empty name. */
     bool isNull() const;
 
     //! \return true if this property value is changed.
@@ -469,8 +478,13 @@ public:
     /*! Assigns a deep copy of all attributes of \a property to this property. */
     KProperty& operator= (const KProperty &property);
 
-    /*! Compares two properties.*/
-    bool operator ==(const KProperty &prop) const;
+    /**
+     * @return @c true if the property is equal to @a prop; otherwise returns @c false.
+     * Two properties are equal if they have the same name and type.
+     * @note All null properties are equal
+     * @todo Compare properties deeper?
+     */
+    bool operator==(const KProperty &prop) const;
 
     /**
      * @return @c true if the property is different from @a prop; otherwise returns @c false.
