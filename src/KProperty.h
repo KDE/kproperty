@@ -472,6 +472,13 @@ public:
     /*! Compares two properties.*/
     bool operator ==(const KProperty &prop) const;
 
+    /**
+     * @return @c true if the property is different from @a prop; otherwise returns @c false.
+     * Two properties are different if they have different names or types.
+     * @since 3.1
+     */
+    bool operator!=(const KProperty &prop) const;
+
 #if 0
     /*! \return a key used for sorting.
      Usually its set by KPropertySet::addProperty() and KProperty::addChild() to a unique value,

@@ -682,6 +682,11 @@ KProperty::operator ==(const KProperty &prop) const
     return ((d->name == prop.d->name) && (value() == prop.value()));
 }
 
+bool KProperty::operator!=(const KProperty &prop) const
+{
+    return !operator==(prop);
+}
+
 /////////////////////////////////////////////////////////////////
 
 const QList<KProperty*>*
