@@ -186,67 +186,6 @@ KPropertyFactory::addDisplayInternal(int, KPropertyValueDisplayInterface*, bool)
 KPropertyFactory::addDisplay(int, KPropertyValueDisplayInterface*)
 KPropertyFactory::composedPropertyCreators() const
 KPropertyFactory::valueDisplays() const
-KPropertySelector::~KPropertySelector()
-KPropertySelector::KPropertySelector()
-KPropertySetIterator::~KPropertySetIterator()
-KPropertySetIterator::KPropertySetIterator(KPropertySet const&)
-KPropertySetIterator::KPropertySetIterator(KPropertySet const&, KPropertySelector const&)
-KPropertySetIterator::operator++()
-KPropertySetIterator::setOrder(KPropertySetIterator::Order)
-KPropertySetIterator::skipNotAcceptable()
-KPropertySetPrivate::~KPropertySetPrivate()
-KPropertySetPrivate::KPropertySetPrivate(KPropertySet*)
-KPropertySetPrivate::addProperty(KProperty*, QByteArray const&)
-KPropertySetPrivate::addRelatedProperty(KProperty*, KProperty*) const
-KPropertySetPrivate::addToGroup(QByteArray const&, KProperty*)
-KPropertySetPrivate::clear()
-KPropertySetPrivate::copyAttributesFrom(KPropertySetPrivate const&)
-KPropertySetPrivate::copyPropertiesFrom(QList<KProperty*>::const_iterator const&, QList<KProperty*>::const_iterator const&, KPropertySet const&)
-KPropertySetPrivate::hasGroups() const
-KPropertySetPrivate::indexOfPropertyInGroup(KProperty const*) const
-KPropertySetPrivate::indexOfProperty(KProperty const*) const
-KPropertySetPrivate::informAboutClearing(bool*)
-KPropertySetPrivate::removeFromGroup(KProperty*)
-KPropertySetPrivate::removeProperty(KProperty*)
-KPropertySet::~KPropertySet()
-KPropertySet::KPropertySet(KPropertySet const&)
-KPropertySet::KPropertySet(QObject*)
-KPropertySet::KPropertySet(bool)
-KPropertySet::aboutToBeCleared()
-KPropertySet::aboutToBeDeleted()
-KPropertySet::aboutToDeleteProperty(KPropertySet&, KProperty&)
-KPropertySet::addProperty(KProperty*, QByteArray const&)
-KPropertySet::changePropertyIfExists(QByteArray const&, QVariant const&)
-KPropertySet::changeProperty(QByteArray const&, QVariant const&)
-KPropertySet::clear()
-KPropertySet::contains(QByteArray const&) const
-KPropertySet::count(KPropertySelector const&) const
-KPropertySet::count() const
-KPropertySet::debug() const
-KPropertySet::groupCaption(QByteArray const&) const
-KPropertySet::groupIconName(QByteArray const&) const
-KPropertySet::groupNames() const
-KPropertySet::hasProperties(KPropertySelector const&) const
-KPropertySet::hasVisibleProperties() const
-KPropertySet::isEmpty() const
-KPropertySet::isReadOnly() const
-KPropertySet::operator=(KPropertySet const&)
-KPropertySet::operator[](QByteArray const&) const
-KPropertySet::previousSelection() const
-KPropertySet::propertyChangedInternal(KPropertySet&, KProperty&)
-KPropertySet::propertyChanged(KPropertySet&, KProperty&)
-KPropertySet::propertyNamesForGroup(QByteArray const&) const
-KPropertySet::propertyReset(KPropertySet&, KProperty&)
-KPropertySet::propertyValues() const
-KPropertySet::propertyValue(QByteArray const&, QVariant const&) const
-KPropertySet::property(QByteArray const&) const
-KPropertySet::readOnlyFlagChanged()
-KPropertySet::removeProperty(KProperty*)
-KPropertySet::removeProperty(QByteArray const&)
-KPropertySet::setGroupCaption(QByteArray const&, QString const&)
-KPropertySet::setGroupIconName(QByteArray const&, QString const&)
-KPropertySet::setPreviousSelection(QByteArray const&)
-KPropertySet::setReadOnly(bool)
 KPropertyUnit::convertFromUnitToUnit(double, KPropertyUnit const&, KPropertyUnit const&, double)
 KPropertyUnit::fromListForUi(int, QFlags<KPropertyUnit::ListOption>, double)
 KPropertyUnit::fromSymbol(QString const&, bool*)

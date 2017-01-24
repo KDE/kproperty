@@ -23,8 +23,9 @@ include(ECMAddTests)
 
 find_package(Qt5Test REQUIRED)
 
-ecm_add_test(
+ecm_add_tests(
     KPropertyTest.cpp
+    KPropertySetTest.cpp
     LINK_LIBRARIES
         Qt5::Test
         KPropertyWidgets
