@@ -58,17 +58,16 @@ KPointComposedProperty::KPointComposedProperty(KProperty *property)
 }
 
 void KPointComposedProperty::setValue(KProperty *property,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
     const QPoint p( value.toPoint() );
-    property->child("x")->setValue(p.x(), rememberOldValue, false);
-    property->child("y")->setValue(p.y(), rememberOldValue, false);
+    property->child("x")->setValue(p.x(), valueOptions);
+    property->child("y")->setValue(p.y(), valueOptions);
 }
 
 void KPointComposedProperty::childValueChanged(KProperty *child,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
-    Q_UNUSED(rememberOldValue);
     QPoint p( child->parent()->value().toPoint() );
 
     if (child->name() == "x")
@@ -76,5 +75,5 @@ void KPointComposedProperty::childValueChanged(KProperty *child,
     else if (child->name() == "y")
         p.setY(value.toInt());
 
-    child->parent()->setValue(p, true, false);
+    child->parent()->setValue(p, valueOptions);
 }

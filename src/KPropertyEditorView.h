@@ -37,12 +37,12 @@ public:
 
     ~KPropertyEditorView();
 
-    //! Options for changeSet().
-    enum SetOption {
-        NoOptions = 0,
+    //! Options for changeSet()
+    enum class SetOption {
+        None = 0,
         PreservePreviousSelection = 1, //!< If used, previously selected editor item
                                        //!< will be kept selected.
-        AlphabeticalOrder = 2          //!< Alphabetical order of properties (the default is insert-order)
+        AlphabeticalOrder = 2          //!< Alphabetical order of properties. The default is order of insertion.
     };
     Q_DECLARE_FLAGS(SetOptions, SetOption)
 
@@ -94,13 +94,13 @@ public Q_SLOTS:
      See SetOption documentation for description of @a options options.
      If @a preservePreviousSelection is true, previously selected editor
      item will be kept selected, if present. */
-    void changeSet(KPropertySet *set, SetOptions options = NoOptions);
+    void changeSet(KPropertySet *set, SetOptions options = SetOption::None);
 
     /*! Populates the editor view with items for each property from the @a set set.
      Child items for composed properties are also created.
      If @a propertyToSelect is provided, item for this property name
      will be selected, if present. */
-    void changeSet(KPropertySet *set, const QByteArray& propertyToSelect, SetOptions options = NoOptions);
+    void changeSet(KPropertySet *set, const QByteArray& propertyToSelect, SetOptions options = SetOption::None);
 
     /*! If @a set is @c true (the default), items for parent composed properties are expanded
      so items for child properties are displayed.

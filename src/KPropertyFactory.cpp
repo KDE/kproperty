@@ -278,6 +278,14 @@ KComposedPropertyInterface::~KComposedPropertyInterface()
 {
 }
 
+void KComposedPropertyInterface::childValueChangedInternal(KProperty *child, const QVariant &value,
+                                                           KProperty::ValueOptions valueOptions)
+{
+    if (m_childValueChangedEnabled) {
+        childValueChanged(child, value, valueOptions);
+    }
+}
+
 KComposedPropertyCreatorInterface::KComposedPropertyCreatorInterface()
 {
 }

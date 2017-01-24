@@ -396,7 +396,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
 
     QByteArray selectedPropertyName1 = propertyToSelect;
     QByteArray selectedPropertyName2 = propertyToSelect;
-    if (options & PreservePreviousSelection) {
+    if (options & SetOption::PreservePreviousSelection) {
         //try to find prev. selection:
         //1. in new list's prev. selection
         if (set)
@@ -423,7 +423,9 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
 
     KPropertyEditorDataModel *oldModel = d->model;
     const KPropertySetIterator::Order setOrder
-        = (options & AlphabeticalOrder) ? KPropertySetIterator::AlphabeticalOrder : KPropertySetIterator::InsertionOrder;
+        = (options & SetOption::AlphabeticalOrder)
+            ? KPropertySetIterator::Order::Alphabetical
+            : KPropertySetIterator::Order::Insertion;
     d->model = d->set ? new KPropertyEditorDataModel(d->set, this, setOrder) : 0;
     setModel( d->model );
     delete oldModel;

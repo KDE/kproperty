@@ -64,19 +64,18 @@ KRectFComposedProperty::KRectFComposedProperty(KProperty *property)
 }
 
 void KRectFComposedProperty::setValue(KProperty *property,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
     const QRectF r(value.toRectF());
-    property->child("x")->setValue(r.x(), rememberOldValue, false);
-    property->child("y")->setValue(r.y(), rememberOldValue, false);
-    property->child("width")->setValue(r.width(), rememberOldValue, false);
-    property->child("height")->setValue(r.height(), rememberOldValue, false);
+    property->child("x")->setValue(r.x(), valueOptions);
+    property->child("y")->setValue(r.y(), valueOptions);
+    property->child("width")->setValue(r.width(), valueOptions);
+    property->child("height")->setValue(r.height(), valueOptions);
 }
 
 void KRectFComposedProperty::childValueChanged(KProperty *child, const QVariant &value,
-                                               bool rememberOldValue)
+                                               KProperty::ValueOptions valueOptions)
 {
-    Q_UNUSED(rememberOldValue);
     QRectF r(child->parent()->value().toRectF());
 
     if (child->name() == "x")
@@ -88,5 +87,5 @@ void KRectFComposedProperty::childValueChanged(KProperty *child, const QVariant 
     else if (child->name() == "height")
         r.setHeight(value.toReal());
 
-    child->parent()->setValue(r, true, false);
+    child->parent()->setValue(r, valueOptions);
 }

@@ -250,7 +250,7 @@ KPropertySetIterator::KPropertySetIterator(const KPropertySet &set)
     , m_iterator(KPropertySetPrivate::d(&set)->listConstIterator())
     , m_end(KPropertySetPrivate::d(&set)->listConstEnd() )
     , m_selector( 0 )
-    , m_order(KPropertySetIterator::InsertionOrder)
+    , m_order(KPropertySetIterator::Order::Insertion)
 {
 }
 
@@ -259,7 +259,7 @@ KPropertySetIterator::KPropertySetIterator(const KPropertySet &set, const KPrope
     , m_iterator(KPropertySetPrivate::d(&set)->listConstIterator())
     , m_end(KPropertySetPrivate::d(&set)->listConstEnd())
     , m_selector( selector.clone() )
-    , m_order(KPropertySetIterator::InsertionOrder)
+    , m_order(KPropertySetIterator::Order::Insertion)
 {
     skipNotAcceptable();
 }
@@ -287,8 +287,8 @@ void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
         return;
     m_order = order;
     switch (m_order) {
-    case KPropertySetIterator::AlphabeticalOrder:
-    case KPropertySetIterator::AlphabeticalByName:
+    case KPropertySetIterator::Order::Alphabetical:
+    case KPropertySetIterator::Order::AlphabeticalByName:
     {
         QList<Iterator_PropertyAndString> propertiesAndStrings;
         m_iterator = KPropertySetPrivate::d(m_set)->listConstIterator();
@@ -296,7 +296,7 @@ void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
         for (; m_iterator!=m_end; ++m_iterator) {
             KProperty *prop = *m_iterator;
             QString captionOrName;
-            if (m_order == KPropertySetIterator::AlphabeticalOrder) {
+            if (m_order == KPropertySetIterator::Order::Alphabetical) {
                 captionOrName = prop->caption();
             }
             if (captionOrName.isEmpty()) {
@@ -554,7 +554,7 @@ KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
     dbg.nospace() << " PROPERTIES(" << set.count() << "):\n";
 
     KPropertySetIterator it(set);
-    it.setOrder(KPropertySetIterator::AlphabeticalByName);
+    it.setOrder(KPropertySetIterator::Order::AlphabeticalByName);
     bool first = true;
     for ( ; it.current(); ++it) {
         if (first) {
@@ -662,7 +662,7 @@ void KPropertyBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
 
     const QList<KProperty*> *props = prop.d->relatedProperties;
     for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it) {
-        (*it)->setValue(prop.value(), false);
+        (*it)->setValue(prop.value(), KProperty::DefaultValueOptions & ~KProperty::ValueOptions(KProperty::ValueOption::RememberOld));
     }
 }
 
@@ -674,6 +674,6 @@ void KPropertyBuffer::intersectedReset(KPropertySet& set, KProperty& prop)
 
     const QList<KProperty*> *props = prop.d->relatedProperties;
     for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it)  {
-        (*it)->setValue(prop.value(), false);
+        (*it)->setValue(prop.value(), KProperty::DefaultValueOptions & ~KProperty::ValueOptions(KProperty::ValueOption::RememberOld));
     }
 }

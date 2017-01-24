@@ -26,7 +26,7 @@
 class Q_DECL_HIDDEN KPropertyEditorDataModel::Private
 {
 public:
-    explicit Private(KPropertySet *_set, KPropertySetIterator::Order _order = KPropertySetIterator::InsertionOrder)
+    explicit Private(KPropertySet *_set, KPropertySetIterator::Order _order = KPropertySetIterator::Order::Insertion)
         : set(_set), order(_order)
     {
         Q_ASSERT(set);
@@ -99,8 +99,8 @@ void KPropertyEditorDataModel::collectIndices() const
         }
     } else {
         KPropertySetIterator it(*d->set, VisiblePropertySelector());
-        if (d->order == KPropertySetIterator::AlphabeticalOrder) {
-            it.setOrder(KPropertySetIterator::AlphabeticalOrder);
+        if (d->order == KPropertySetIterator::Order::Alphabetical) {
+            it.setOrder(KPropertySetIterator::Order::Alphabetical);
         }
         for (int row = 0; it.current(); row++, ++it) { // flat list
             d->indicesForNames.insert(it.current()->name(),
@@ -240,8 +240,8 @@ QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelInd
             }
         } else { // all properties, flat
             KPropertySetIterator it(*d->set, VisiblePropertySelector());
-            if (d->order == KPropertySetIterator::AlphabeticalOrder) {
-                it.setOrder(KPropertySetIterator::AlphabeticalOrder);
+            if (d->order == KPropertySetIterator::Order::Alphabetical) {
+                it.setOrder(KPropertySetIterator::Order::Alphabetical);
             }
             //! @todo use qBinaryFind()?
             for (int visibleRows = 0; visibleRows < row && it.current(); ++it) {

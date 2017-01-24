@@ -101,7 +101,7 @@ Window::Window()
     }
     if (singleProperty.isEmpty() || singleProperty=="cm") {
         const qreal cm = 1.0; // 28.3465058 points
-        const qreal points = KPropertyUnit(KPropertyUnit::Centimeter).fromUserValue(cm);
+        const qreal points = KPropertyUnit(KPropertyUnit::Type::Centimeter).fromUserValue(cm);
         m_set.addProperty(p = new KProperty("cm", points, "Double cm"), group);
         p->setOption("unit", "cm");
         // default precision == 2

@@ -43,14 +43,13 @@ public:
      It is called by @ref KProperty::setValue() when
      the property is composed.
     It is not necessary to modify the property value, it is done by KProperty.
-    @note When calling KProperty::setValue, useComposedProperty (the third parameter)
-          should be set to @c false or else there will be infinite recursion. */
-    virtual void setValue(KProperty *property, const QVariant &value, bool rememberOldValue) = 0;
+    @note When this method is called valueOptions should not have the KProperty::ValueOption::UseComposedProperty
+          flag set or else there will be infinite recursion. KProperty class makes sure this is the case
+          but custom property developers should take care about this too.
+    */
+    virtual void setValue(KProperty *property, const QVariant &value, KProperty::ValueOptions valueOptions) = 0;
 
-    void childValueChangedInternal(KProperty *child, const QVariant &value, bool rememberOldValue) {
-      if (m_childValueChangedEnabled)
-        childValueChanged(child, value, rememberOldValue);
-    }
+    void childValueChangedInternal(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions);
 
     void setChildValueChangedEnabled(bool set) { m_childValueChangedEnabled = set; }
 
@@ -60,7 +59,7 @@ public:
     inline virtual bool valuesEqual(const QVariant &first, const QVariant &second) { return first == second; }
 
 protected:
-    virtual void childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue) = 0;
+    virtual void childValueChanged(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions) = 0;
 
     /*! This method emits the \a KPropertySet::propertyChanged() signal for all
     sets our parent-property is registered in. */

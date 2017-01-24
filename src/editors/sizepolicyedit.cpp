@@ -114,19 +114,18 @@ KSizePolicyComposedProperty::KSizePolicyComposedProperty(KProperty *property)
 }
 
 void KSizePolicyComposedProperty::setValue(KProperty *property,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
     const QSizePolicy sp( value.value<QSizePolicy>() );
-    property->child("hor_policy")->setValue(sp.horizontalPolicy(), rememberOldValue, false);
-    property->child("vert_policy")->setValue(sp.verticalPolicy(), rememberOldValue, false);
-    property->child("hor_stretch")->setValue(sp.horizontalStretch(), rememberOldValue, false);
-    property->child("vert_stretch")->setValue(sp.verticalStretch(), rememberOldValue, false);
+    property->child("hor_policy")->setValue(sp.horizontalPolicy(), valueOptions);
+    property->child("vert_policy")->setValue(sp.verticalPolicy(), valueOptions);
+    property->child("hor_stretch")->setValue(sp.horizontalStretch(), valueOptions);
+    property->child("vert_stretch")->setValue(sp.verticalStretch(), valueOptions);
 }
 
 void KSizePolicyComposedProperty::childValueChanged(KProperty *child,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
-    Q_UNUSED(rememberOldValue);
     QSizePolicy sp( child->parent()->value().value<QSizePolicy>() );
     if (child->name() == "hor_policy")
         sp.setHorizontalPolicy(static_cast<QSizePolicy::Policy>(value.toInt()));
@@ -137,7 +136,7 @@ void KSizePolicyComposedProperty::childValueChanged(KProperty *child,
     else if (child->name() == "vert_stretch")
         sp.setVerticalStretch(value.toInt());
 
-    child->parent()->setValue(sp, true, false);
+    child->parent()->setValue(sp, valueOptions);
 }
 
 bool KSizePolicyComposedProperty::valuesEqual(const QVariant &first, const QVariant &second)

@@ -68,7 +68,7 @@ class KPROPERTYCORE_EXPORT KPropertyUnit
 {
 public:
     /** Length units supported by %KProperty. */
-    enum Type {
+    enum class Type {
         Millimeter = 0,
         Point,  //!< Postscript point, 1/72th of an Inco
         Inch,
@@ -81,15 +81,14 @@ public:
     };
 
     //! Used to control the scope of the unit types listed in the UI
-    enum ListOption {
-        ListAll = 0,
-        HidePixel = 1,
-        HideMask = HidePixel
+    enum class ListOption {
+        All = 0,
+        HidePixel = 1
     };
      Q_DECLARE_FLAGS(ListOptions, ListOption)
 
     /** Returns a KPropertyUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
-    static KPropertyUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
+    static KPropertyUnit fromListForUi(int index, ListOptions listOptions = ListOption::All, qreal factor = 1.0);
 
     //! Convert a unit symbol string into a KPropertyUnit
     //! @param symbol symbol to convert
@@ -97,7 +96,7 @@ public:
     static KPropertyUnit fromSymbol(const QString &symbol, bool *ok = 0);
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
-    explicit KPropertyUnit(Type unit = Point, qreal factor = 1.0) {
+    explicit KPropertyUnit(Type unit = Type::Point, qreal factor = 1.0) {
         m_type = unit;
         m_pixelConversion = factor;
     }
@@ -112,7 +111,7 @@ public:
 
     bool operator==(const KPropertyUnit &other) const {
         return m_type == other.m_type &&
-            (m_type != Pixel ||
+            (m_type != Type::Pixel ||
              qFuzzyCompare(m_pixelConversion, other.m_pixelConversion));
     }
 
@@ -224,11 +223,11 @@ public:
     QString symbol() const;
 
     //! Returns the list of unit types for the UI, controlled with the given @p listOptions.
-    static QStringList listOfUnitNameForUi(ListOptions listOptions = ListAll);
+    static QStringList listOfUnitNameForUi(ListOptions listOptions = ListOption::All);
 
     //! Get the index of this unit in the list of unit types for the UI,
     //! if it is controlled with the given @p listOptions.
-    int indexInListForUi(ListOptions listOptions = ListAll) const;
+    int indexInListForUi(ListOptions listOptions = ListOption::All) const;
 
     /**
      * Parses common %KProperty and ODF values, like "10cm", "5mm" to pt.

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -259,42 +259,46 @@ public:
     /*! Gets the previous property value.*/
     QVariant oldValue() const;
 
-    void childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue);
-
-    //! Sets value of the property to @a value
-    //! @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
-    void setValue(const QVariant &value, bool rememberOldValue = true, bool useComposedProperty = true);
-
     //! Option for handling values
     //! @since 3.1
-    enum ValueOption {
-        RememberOldValue = 1,   //!< Remeber old value before setting a new one
+    enum class ValueOption {
+        None = 0,               //!< No options
+        RememberOld = 1,        //!< Remeber old value before setting a new one
         UseComposedProperty = 2 //!< Use composed property when comparing values
     };
     Q_DECLARE_FLAGS(ValueOptions, ValueOption)
 
+    //! Default value options, equal to ValueOption::RememberOld | ValueOption::UseComposedProperty
+    //! @since 3.1
+    static const ValueOptions DefaultValueOptions;
+
+    void childValueChanged(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions);
+
+    //! Sets value of the property to @a value
+    //! @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
+    void setValue(const QVariant &value, ValueOptions options = DefaultValueOptions);
+
     /**
      * Sets value of the property
      *
-     * @overload setValue(const QVariant &, bool rememberOldValue, bool useComposedProperty)
+     * @overload setValue(const QVariant&, ValueOptions valueOptions)
      * @param value Value to set.
      * @param changed Pointer to value that will be set to true if the value has been assigned. Can be @a nullptr.
      * @param valueOptions Options to use when setting the value.
      * @since 3.1
      * @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
      */
-    void setValue(const QVariant &value, bool *changed,
-                  ValueOptions valueOptions = ValueOptions(RememberOldValue | UseComposedProperty));
+    void setValue(const QVariant &value, bool *changed, ValueOptions valueOptions = DefaultValueOptions);
 
     /**
      * @return true if value of this property is equal to specified value
      *
      * Takes type into account.
      * @param value Value to compare.
-     * @param valueOptions Options to use when comparing. The @c RememberOldValue flag is ignored.
+     * @param valueOptions Options to use when comparing. Only the @c ValueOption::UseComposedProperty flag is ignored.
      * @since 3.1
      */
-    bool valueEqualsTo(const QVariant &value, ValueOptions valueOptions = UseComposedProperty) const;
+    bool valueEqualsTo(const QVariant &value, ValueOptions valueOptions = ValueOption::UseComposedProperty) const;
 
     /*! Resets the value of the property to the old value.
      @see oldValue() */

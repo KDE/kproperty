@@ -38,7 +38,7 @@ class KPropertyEditorDataModel : public QAbstractItemModel
 public:
     //! Creates a new model. @a propertySet is required.
     explicit KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent = 0,
-                                      KPropertySetIterator::Order order = KPropertySetIterator::InsertionOrder);
+                                      KPropertySetIterator::Order order = KPropertySetIterator::Order::Insertion);
     ~KPropertyEditorDataModel();
 
     enum Role {

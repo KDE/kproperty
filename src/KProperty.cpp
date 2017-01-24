@@ -117,7 +117,7 @@ bool KProperty::Private::valueDiffersInternal(const QVariant &otherValue, KPrope
         return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         return false;
-    } else if (composed && (options & UseComposedProperty)) {
+    } else if (composed && (options & ValueOption::UseComposedProperty)) {
         return !composed->valuesEqual(value, otherValue);
     }
     else {
@@ -138,7 +138,7 @@ bool KProperty::Private::setValueInternal(const QVariant &newValue, KProperty::V
     }
 
     //2. Then change it, and store old value if necessary
-    if (valueOptions & KProperty::RememberOldValue) {
+    if (valueOptions & KProperty::ValueOption::RememberOld) {
         if (!changed) {
             oldValue = value;
         }
@@ -149,14 +149,16 @@ bool KProperty::Private::setValueInternal(const QVariant &newValue, KProperty::V
         changed = false;
     }
     if (parent) {
-        parent->childValueChanged(q, newValue, valueOptions & KProperty::RememberOldValue);
+        parent->childValueChanged(q, newValue, valueOptions & KProperty::ValueOption::RememberOld);
     }
 
     QVariant prevValue;
     if (composed && useComposedProperty) {
         prevValue = value; //???
         composed->setChildValueChangedEnabled(false);
-        composed->setValue(q, newValue, valueOptions & KProperty::RememberOldValue);
+        composed->setValue(q, newValue,
+                           valueOptions & ~ValueOptions(ValueOption::UseComposedProperty) // avoid infinite recursion
+                           );
         composed->setChildValueChangedEnabled(true);
     }
     else {
@@ -297,6 +299,10 @@ QStringList KPropertyListData::keysAsStringList() const
 
 /////////////////////////////////////////////////////////////////
 
+//static
+const KProperty::ValueOptions KProperty::DefaultValueOptions
+    = KProperty::ValueOptions(KProperty::ValueOption::RememberOld | KProperty::ValueOption::UseComposedProperty);
+
 KProperty::KProperty(const QByteArray &name, const QVariant &value,
                    const QString &caption, const QString &description,
                    int type, KProperty* parent)
@@ -313,7 +319,7 @@ KProperty::KProperty(const QByteArray &name, const QVariant &value,
 
     if (parent)
         parent->d->addChild(this);
-    setValue(value, false);
+    setValue(value, DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
 }
 
 KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStringList &strings,
@@ -332,7 +338,7 @@ KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStr
 
     if (parent)
         parent->d->addChild(this);
-    setValue(value, false);
+    setValue(value, KProperty::DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
 }
 
 KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
@@ -351,7 +357,7 @@ KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
 
     if (parent)
         parent->d->addChild(this);
-    setValue(value, false);
+    setValue(value, KProperty::DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
 }
 
 KProperty::KProperty()
@@ -453,18 +459,20 @@ KProperty::oldValue() const
 }
 
 void
-KProperty::childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue)
+KProperty::childValueChanged(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions)
 {
-    if (!d->composed)
+    if (!d->composed) {
         return;
-    d->composed->childValueChangedInternal(child, value, rememberOldValue);
+    }
+    d->composed->childValueChangedInternal(
+        child, value,
+        valueOptions & ~ValueOptions(ValueOption::UseComposedProperty) // avoid infinite recursion
+    );
 }
 
-void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
+void KProperty::setValue(const QVariant &value, ValueOptions options)
 {
-    (void)d->setValueInternal(value,
-                              (rememberOldValue ? KProperty::RememberOldValue : KProperty::ValueOptions())
-                              | (useComposedProperty ? KProperty::UseComposedProperty : KProperty::ValueOptions()));
+    (void)d->setValueInternal(value, options);
 }
 
 void KProperty::setValue(const QVariant &value, bool *changed, ValueOptions options)
@@ -488,7 +496,7 @@ KProperty::resetValue()
     if (d->set) {
         KPropertySetPrivate::d(d->set)->informAboutClearing(&cleared); //inform me about possibly clearing the property sets
     }
-    setValue(oldValue(), false);
+    setValue(oldValue(), ValueOption::UseComposedProperty);
     if (cleared)
         return; //property set has been cleared: no further actions make sense as 'this' is dead
 

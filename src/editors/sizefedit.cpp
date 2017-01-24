@@ -54,22 +54,21 @@ KSizeFComposedProperty::KSizeFComposedProperty(KProperty *property)
 }
 
 void KSizeFComposedProperty::setValue(KProperty *property,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
     const QSizeF s( value.toSizeF() );
-    property->child("width")->setValue(s.width(), rememberOldValue, false);
-    property->child("height")->setValue(s.height(), rememberOldValue, false);
+    property->child("width")->setValue(s.width(), valueOptions);
+    property->child("height")->setValue(s.height(), valueOptions);
 }
 
 void KSizeFComposedProperty::childValueChanged(KProperty *child,
-    const QVariant &value, bool rememberOldValue)
+    const QVariant &value, KProperty::ValueOptions valueOptions)
 {
-    Q_UNUSED(rememberOldValue);
     QSizeF s( child->parent()->value().toSizeF() );
     if (child->name() == "width")
         s.setWidth(value.toDouble());
     else if (child->name() == "height")
         s.setHeight(value.toDouble());
 
-    child->parent()->setValue(s, true, false);
+    child->parent()->setValue(s, valueOptions);
 }

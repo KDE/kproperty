@@ -251,7 +251,7 @@ QVariant KPropertyThreeStateBoolEditor::value() const
     Widget::setProperty(prop);
     m_setValueEnabled = true;
     if (prop)
-        setValue(prop->value(), false); //now the value can be set
+        setValue(prop->value(), KProperty::DefaultValueOptions & ~KProperty::ValueOption::RememberOld); //now the value can be set
 }*/
 
 void KPropertyThreeStateBoolEditor::setValue(const QVariant &value)

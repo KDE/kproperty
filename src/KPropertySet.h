@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -73,9 +73,9 @@ public:
 
     //! Ordering options for properties
     /*! @see setOrder() */
-    enum Order {
-        InsertionOrder,    //!< insertion order
-        AlphabeticalOrder, //!< alphabetical order (case-insensitively by captions)
+    enum class Order {
+        Insertion,    //!< insertion order
+        Alphabetical, //!< alphabetical order (case-insensitively by captions)
         AlphabeticalByName //!< alphabetical order (case-insensitively by name)
     };
 

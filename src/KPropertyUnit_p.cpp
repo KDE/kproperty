@@ -25,7 +25,7 @@
 #include <QLocale>
 
 // ensure the same order as in KPropertyUnit::Unit
-static const char* const unitNameList[KPropertyUnit::TypeCount] =
+static const char* const unitNameList[KPropertyUnit::Type::TypeCount] =
 {
     "mm",
     "pt",
@@ -40,21 +40,21 @@ static const char* const unitNameList[KPropertyUnit::TypeCount] =
 QString KPropertyUnit::unitDescription(KPropertyUnit::Type type)
 {
     switch (type) {
-    case KPropertyUnit::Millimeter:
+    case KPropertyUnit::Type::Millimeter:
         return QObject::tr("Millimeters (mm)");
-    case KPropertyUnit::Centimeter:
+    case KPropertyUnit::Type::Centimeter:
         return QObject::tr("Centimeters (cm)");
-    case KPropertyUnit::Decimeter:
+    case KPropertyUnit::Type::Decimeter:
         return QObject::tr("Decimeters (dm)");
-    case KPropertyUnit::Inch:
+    case KPropertyUnit::Type::Inch:
         return QObject::tr("Inches (in)");
-    case KPropertyUnit::Pica:
+    case KPropertyUnit::Type::Pica:
         return QObject::tr("Pica (pi)");
-    case KPropertyUnit::Cicero:
+    case KPropertyUnit::Type::Cicero:
         return QObject::tr("Cicero (cc)");
-    case KPropertyUnit::Point:
+    case KPropertyUnit::Type::Point:
         return QObject::tr("Points (pt)");
-    case KPropertyUnit::Pixel:
+    case KPropertyUnit::Type::Pixel:
         return QObject::tr("Pixels (px)");
     default:
         return QObject::tr("Unsupported unit");
@@ -62,37 +62,38 @@ QString KPropertyUnit::unitDescription(KPropertyUnit::Type type)
 }
 
 // grouped by units which are similar
-static const KPropertyUnit::Type typesInUi[KPropertyUnit::TypeCount] =
+static const KPropertyUnit::Type typesInUi[KPropertyUnit::Type::TypeCount] =
 {
-    KPropertyUnit::Millimeter,
-    KPropertyUnit::Centimeter,
-    KPropertyUnit::Decimeter,
-    KPropertyUnit::Inch,
-    KPropertyUnit::Pica,
-    KPropertyUnit::Cicero,
-    KPropertyUnit::Point,
-    KPropertyUnit::Pixel,
+    KPropertyUnit::Type::Millimeter,
+    KPropertyUnit::Type::Centimeter,
+    KPropertyUnit::Type::Decimeter,
+    KPropertyUnit::Type::Inch,
+    KPropertyUnit::Type::Pica,
+    KPropertyUnit::Type::Cicero,
+    KPropertyUnit::Type::Point,
+    KPropertyUnit::Type::Pixel,
 };
 
 QStringList KPropertyUnit::listOfUnitNameForUi(ListOptions listOptions)
 {
     QStringList lst;
-    for (int i = 0; i < KPropertyUnit::TypeCount; ++i) {
+    for (int i = 0; i < int(KPropertyUnit::Type::TypeCount); ++i) {
         const Type type = typesInUi[i];
-        if ((type != Pixel) || ((listOptions & HideMask) == ListAll))
+        if (type != Type::Pixel || !(listOptions & ListOption::HidePixel)) {
             lst.append(unitDescription(type));
+        }
     }
     return lst;
 }
 
 KPropertyUnit KPropertyUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
 {
-    KPropertyUnit::Type type = KPropertyUnit::Point;
+    KPropertyUnit::Type type = KPropertyUnit::Type::Point;
 
-    if ((0 <= index) && (index < KPropertyUnit::TypeCount)) {
+    if ((0 <= index) && (index < int(KPropertyUnit::Type::TypeCount))) {
         // iterate through all enums and skip the Pixel enum if needed
-        for (int i = 0; i < KPropertyUnit::TypeCount; ++i) {
-            if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+        for (int i = 0; i < int(KPropertyUnit::Type::TypeCount); ++i) {
+            if ((listOptions & ListOption::HidePixel) && (typesInUi[i] == Type::Pixel)) {
                 ++index;
                 continue;
             }
@@ -108,15 +109,15 @@ KPropertyUnit KPropertyUnit::fromListForUi(int index, ListOptions listOptions, q
 
 int KPropertyUnit::indexInListForUi(ListOptions listOptions) const
 {
-    if ((listOptions&HidePixel) && (m_type == Pixel)) {
+    if ((listOptions & ListOption::HidePixel) && (m_type == Type::Pixel)) {
         return -1;
     }
 
     int result = -1;
 
     int skipped = 0;
-    for (int i = 0; i < KPropertyUnit::TypeCount; ++i) {
-        if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+    for (int i = 0; i < int(KPropertyUnit::Type::TypeCount); ++i) {
+        if ((listOptions & ListOption::HidePixel) && (typesInUi[i] == Type::Pixel)) {
             ++skipped;
             continue;
         }
@@ -132,21 +133,21 @@ int KPropertyUnit::indexInListForUi(ListOptions listOptions) const
 qreal KPropertyUnit::toUserValue(qreal ptValue) const
 {
     switch (m_type) {
-    case Millimeter:
+    case Type::Millimeter:
         return toMillimeter(ptValue);
-    case Centimeter:
+    case Type::Centimeter:
         return toCentimeter(ptValue);
-    case Decimeter:
+    case Type::Decimeter:
         return toDecimeter(ptValue);
-    case Inch:
+    case Type::Inch:
         return toInch(ptValue);
-    case Pica:
+    case Type::Pica:
         return toPica(ptValue);
-    case Cicero:
+    case Type::Cicero:
         return toCicero(ptValue);
-    case Pixel:
+    case Type::Pixel:
         return ptValue * m_pixelConversion;
-    case Point:
+    case Type::Point:
     default:
         return toPoint(ptValue);
     }
@@ -155,21 +156,21 @@ qreal KPropertyUnit::toUserValue(qreal ptValue) const
 qreal KPropertyUnit::ptToUnit(qreal ptValue, const KPropertyUnit &unit)
 {
     switch (unit.m_type) {
-    case Millimeter:
+    case Type::Millimeter:
         return POINT_TO_MM(ptValue);
-    case Centimeter:
+    case Type::Centimeter:
         return POINT_TO_CM(ptValue);
-    case Decimeter:
+    case Type::Decimeter:
         return POINT_TO_DM(ptValue);
-    case Inch:
+    case Type::Inch:
         return POINT_TO_INCH(ptValue);
-    case Pica:
+    case Type::Pica:
         return POINT_TO_PI(ptValue);
-    case Cicero:
+    case Type::Cicero:
         return POINT_TO_CC(ptValue);
-    case Pixel:
+    case Type::Pixel:
         return ptValue * unit.m_pixelConversion;
-    case Point:
+    case Type::Point:
     default:
         return ptValue;
     }
@@ -183,21 +184,21 @@ QString KPropertyUnit::toUserStringValue(qreal ptValue) const
 qreal KPropertyUnit::fromUserValue(qreal value) const
 {
     switch (m_type) {
-    case Millimeter:
+    case Type::Millimeter:
         return MM_TO_POINT(value);
-    case Centimeter:
+    case Type::Centimeter:
         return CM_TO_POINT(value);
-    case Decimeter:
+    case Type::Decimeter:
         return DM_TO_POINT(value);
-    case Inch:
+    case Type::Inch:
         return INCH_TO_POINT(value);
-    case Pica:
+    case Type::Pica:
         return PI_TO_POINT(value);
-    case Cicero:
+    case Type::Cicero:
         return CC_TO_POINT(value);
-    case Pixel:
+    case Type::Pixel:
         return value / m_pixelConversion;
-    case Point:
+    case Type::Point:
     default:
         return value;
     }
@@ -257,17 +258,17 @@ qreal KPropertyUnit::parseValue(const QString& _value, qreal defaultVal)
 
 KPropertyUnit KPropertyUnit::fromSymbol(const QString &symbol, bool *ok)
 {
-    Type result = Point;
+    Type result = Type::Point;
 
     if (symbol == QLatin1String("inch") /*compat*/) {
-        result = Inch;
+        result = Type::Inch;
         if (ok)
             *ok = true;
     } else {
         if (ok)
             *ok = false;
 
-        for (int i = 0; i < TypeCount; ++i) {
+        for (int i = 0; i < int(Type::TypeCount); ++i) {
             if (symbol == QLatin1String(unitNameList[i])) {
                 result = static_cast<Type>(i);
                 if (ok)
@@ -283,48 +284,48 @@ qreal KPropertyUnit::convertFromUnitToUnit(qreal value, const KPropertyUnit &fro
 {
     qreal pt;
     switch (fromUnit.type()) {
-    case Millimeter:
+    case Type::Millimeter:
         pt = MM_TO_POINT(value);
         break;
-    case Centimeter:
+    case Type::Centimeter:
         pt = CM_TO_POINT(value);
         break;
-    case Decimeter:
+    case Type::Decimeter:
         pt = DM_TO_POINT(value);
         break;
-    case Inch:
+    case Type::Inch:
         pt = INCH_TO_POINT(value);
         break;
-    case Pica:
+    case Type::Pica:
         pt = PI_TO_POINT(value);
         break;
-    case Cicero:
+    case Type::Cicero:
         pt = CC_TO_POINT(value);
         break;
-    case Pixel:
+    case Type::Pixel:
         pt = value / factor;
         break;
-    case Point:
+    case Type::Point:
     default:
         pt = value;
     }
 
     switch (toUnit.type()) {
-    case Millimeter:
+    case Type::Millimeter:
         return POINT_TO_MM(pt);
-    case Centimeter:
+    case Type::Centimeter:
         return POINT_TO_CM(pt);
-    case Decimeter:
+    case Type::Decimeter:
         return POINT_TO_DM(pt);
-    case Inch:
+    case Type::Inch:
         return POINT_TO_INCH(pt);
-    case Pica:
+    case Type::Pica:
         return POINT_TO_PI(pt);
-    case Cicero:
+    case Type::Cicero:
         return POINT_TO_CC(pt);
-    case Pixel:
+    case Type::Pixel:
         return pt * factor;
-    case Point:
+    case Type::Point:
     default:
         return pt;
     }
@@ -333,7 +334,7 @@ qreal KPropertyUnit::convertFromUnitToUnit(qreal value, const KPropertyUnit &fro
 
 QString KPropertyUnit::symbol() const
 {
-    return QLatin1String(unitNameList[m_type]);
+    return QLatin1String(unitNameList[int(m_type)]);
 }
 
 qreal KPropertyUnit::parseAngle(const QString& _value, qreal defaultVal)

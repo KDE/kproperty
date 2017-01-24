@@ -28,10 +28,10 @@ public:
     explicit KSizePolicyComposedProperty(KProperty *parent);
 
     virtual void setValue(KProperty *property,
-        const QVariant &value, bool rememberOldValue);
+        const QVariant &value, KProperty::ValueOptions valueOptions);
 
     virtual void childValueChanged(KProperty *child,
-        const QVariant &value, bool rememberOldValue);
+        const QVariant &value, KProperty::ValueOptions valueOptions);
 
     virtual bool valuesEqual(const QVariant &first, const QVariant &second) Q_DECL_OVERRIDE;
 };
