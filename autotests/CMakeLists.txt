@@ -5,6 +5,10 @@ remove_definitions(
     -DQT_USE_QSTRINGBUILDER
 )
 
+include(ECMAddTests)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 set(FILES_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 add_definitions(
     -DFILES_OUTPUT_DIR=\"${FILES_OUTPUT_DIR}\"
@@ -18,6 +22,13 @@ include_directories(
 include(ECMAddTests)
 
 find_package(Qt5Test REQUIRED)
+
+ecm_add_test(
+    KPropertyTest.cpp
+    LINK_LIBRARIES
+        Qt5::Test
+        KPropertyWidgets
+)
 
 if(NOT WIN32) #TODO enable for Windows when headers_test.sh is ported e.g. to python
     add_subdirectory(headers)
