@@ -401,6 +401,17 @@ KPropertySet::clear()
 
 /////////////////////////////////////////////////////
 
+QByteArray KPropertySet::groupNameForProperty(const QByteArray &propertyName) const
+{
+    const KProperty *property = d->property(propertyName);
+    return property ? groupNameForProperty(*property) : QByteArray();
+}
+
+QByteArray KPropertySet::groupNameForProperty(const KProperty &property) const
+{
+    return d->groupForProperty(&property);
+}
+
 QList<QByteArray> KPropertySet::groupNames() const
 {
     return d->groupNames;

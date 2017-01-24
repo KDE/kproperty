@@ -191,6 +191,19 @@ public:
     /*! \return the icons name for \a group. */
     QString groupIconName(const QByteArray &group) const;
 
+    /**
+     * @return group name for property @a propertyName
+     * Empty value is returned if there is no such property.
+     * @since 3.1
+     */
+    QByteArray groupNameForProperty(const QByteArray &propertyName) const;
+
+    /**
+     * @overload QByteArray groupNameForProperty(const QByteArray &propertyName) const
+     * @since 3.1
+     */
+    QByteArray groupNameForProperty(const KProperty &property) const;
+
     /*! \return a list of all group names. The order of items is undefined. */
     QList<QByteArray> groupNames() const;
 
