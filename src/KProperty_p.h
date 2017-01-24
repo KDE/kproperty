@@ -68,7 +68,7 @@ public:
     int type;
     QByteArray name;
     QString captionForDisplaying;
-    QString* caption;
+    QString caption;
     QString description;
     QVariant value;
     QVariant oldValue;

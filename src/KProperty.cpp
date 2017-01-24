@@ -49,7 +49,7 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 // ----
 
 KProperty::Private::Private(KProperty *prop)
-        : q(prop), type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
+        : q(prop), type(KProperty::Auto), listData(0), changed(false), storable(true),
         readOnly(false), visible(true),
         composed(0), useComposedProperty(true),
         sets(0), parent(0), children(0), relatedProperties(0)
@@ -58,25 +58,15 @@ KProperty::Private::Private(KProperty *prop)
 
 void KProperty::Private::setCaptionForDisplaying(const QString& captionForDisplaying)
 {
-    delete caption;
-    if (captionForDisplaying.simplified() != captionForDisplaying) {
-        if (captionForDisplaying.isEmpty()) {
-            caption = 0;
-        }
-        else {
-           caption = new QString(captionForDisplaying.simplified());
-        }
-    }
-    else {
-        caption = 0;
+    caption = captionForDisplaying.simplified();
+    if (caption == captionForDisplaying) {
+        caption.clear();
     }
     this->captionForDisplaying = captionForDisplaying;
 }
 
 KProperty::Private::~Private()
 {
-    delete caption;
-    caption = 0;
     delete listData;
     if (children) {
         qDeleteAll(*children);
@@ -391,7 +381,7 @@ KProperty::setName(const QByteArray &name)
 QString
 KProperty::caption() const
 {
-    return d->caption ? *d->caption : d->captionForDisplaying;
+    return d->caption.isEmpty() ? d->captionForDisplaying : d->caption;
 }
 
 QString
