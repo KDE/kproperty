@@ -188,7 +188,7 @@ public:
      caption set for the group, \a group is just returned. */
     QString groupCaption(const QByteArray &group) const;
 
-    /*! \return the icons name for \a group. */
+    /*! \return icon name for \a group. */
     QString groupIconName(const QByteArray &group) const;
 
     /**
