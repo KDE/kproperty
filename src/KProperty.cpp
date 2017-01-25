@@ -139,7 +139,7 @@ bool KProperty::Private::setValueInternal(const QVariant &newValue, KProperty::V
         changed = false;
     }
     if (parent) {
-        parent->childValueChanged(q, newValue, valueOptions & KProperty::ValueOption::RememberOld);
+        parent->d->childValueChanged(q, newValue, valueOptions);
     }
 
     QVariant prevValue;
@@ -247,6 +247,18 @@ void KProperty::Private::emitPropertyChanged()
             emit realSet->propertyChanged(*realSet, *q);
         }
     }
+}
+
+void KProperty::Private::childValueChanged(KProperty *child, const QVariant &value,
+                                           KProperty::ValueOptions valueOptions)
+{
+    if (!composed) {
+        return;
+    }
+    composed->childValueChangedInternal(
+        child, value,
+        valueOptions & ~KProperty::ValueOptions(KProperty::ValueOption::UseComposedProperty) // avoid infinite recursion
+    );
 }
 
 /////////////////////////////////////////////////////////////////
@@ -446,18 +458,6 @@ QVariant
 KProperty::oldValue() const
 {
     return d->oldValue;
-}
-
-void
-KProperty::childValueChanged(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions)
-{
-    if (!d->composed) {
-        return;
-    }
-    d->composed->childValueChangedInternal(
-        child, value,
-        valueOptions & ~ValueOptions(ValueOption::UseComposedProperty) // avoid infinite recursion
-    );
 }
 
 void KProperty::setValue(const QVariant &value, ValueOptions options)

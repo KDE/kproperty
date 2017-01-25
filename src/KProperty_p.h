@@ -64,6 +64,8 @@ public:
     KProperty::setValue() calls this method if the value has been changed. */
     void emitPropertyChanged();
 
+    void childValueChanged(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions);
+
     KProperty * const q;
     int type;
     QByteArray name;

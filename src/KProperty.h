@@ -281,8 +281,6 @@ public:
     //! @since 3.1
     static const ValueOptions DefaultValueOptions;
 
-    void childValueChanged(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions);
-
     //! Sets value of the property to @a value
     //! @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
     void setValue(const QVariant &value, ValueOptions options = DefaultValueOptions);
