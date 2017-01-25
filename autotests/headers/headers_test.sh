@@ -56,7 +56,7 @@ find_package(ECM 1.8.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH $current_srcdir $srcdir/cmake/modules \${ECM_MODULE_PATH} \${ECM_KDE_MODULE_DIR})
 
 project(HeadersTest)
-include(HeadersTestInclude)
+include(HeadersTestInclude NO_POLICY_SCOPE)
 
 add_executable(
     HeadersTest

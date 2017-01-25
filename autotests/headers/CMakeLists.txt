@@ -6,3 +6,6 @@ add_test(
                 ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR} KPropertyWidgets kproperty .
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
+
+# Just show dependent files in the project:
+add_custom_target(HeadersTest SOURCES headers_test.sh HeadersTestInclude.cmake)
