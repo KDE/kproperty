@@ -25,7 +25,7 @@
 #include <QLocale>
 
 // ensure the same order as in KPropertyUnit::Unit
-static const char* const unitNameList[KPropertyUnit::Type::TypeCount] =
+static const char* const unitNameList[int(KPropertyUnit::Type::TypeCount)] =
 {
     "mm",
     "pt",
@@ -62,7 +62,7 @@ QString KPropertyUnit::unitDescription(KPropertyUnit::Type type)
 }
 
 // grouped by units which are similar
-static const KPropertyUnit::Type typesInUi[KPropertyUnit::Type::TypeCount] =
+static const KPropertyUnit::Type typesInUi[int(KPropertyUnit::Type::TypeCount)] =
 {
     KPropertyUnit::Type::Millimeter,
     KPropertyUnit::Type::Centimeter,
