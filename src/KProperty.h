@@ -304,7 +304,7 @@ public:
      *
      * Takes type into account.
      * @param value Value to compare.
-     * @param valueOptions Options to use when comparing. Only the @c ValueOption::UseComposedProperty flag is ignored.
+     * @param valueOptions Options to use when comparing. Only the @c ValueOption::UseComposedProperty flag is used.
      * @since 3.1
      */
     bool valueEqualsTo(const QVariant &value, ValueOptions valueOptions = ValueOption::UseComposedProperty) const;
