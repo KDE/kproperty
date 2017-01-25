@@ -21,8 +21,8 @@ include(ECMSetupVersion)
 include(ECMOptionalAddSubdirectory)
 
 include(KDEInstallDirs)
-include(KDEFrameworkCompilerSettings)
-include(KDECMakeSettings)
+include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+include(KDECMakeSettings NO_POLICY_SCOPE)
 
 include(FeatureSummary)
 include(GenerateExportHeader)
