@@ -473,6 +473,13 @@ void KProperty::setValue(const QVariant &value, bool *changed, ValueOptions opti
     }
 }
 
+void KProperty::setValue(const QVariant &value, bool doNotUseThisOverload, bool doNotUseThisOverload2)
+{
+    Q_UNUSED(value);
+    Q_UNUSED(doNotUseThisOverload);
+    Q_UNUSED(doNotUseThisOverload2);
+}
+
 bool KProperty::valueEqualsTo(const QVariant &value, ValueOptions valueOptions) const
 {
     return !d->valueDiffersInternal(value, valueOptions);

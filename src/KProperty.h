@@ -500,6 +500,9 @@ public:
 #endif
 
 private:
+    //! Added only to help porting old code. Use public setValue() methods.
+    void setValue(const QVariant &value, bool a1, bool a2 = true);
+
     class Private;
     Private * const d;
 
