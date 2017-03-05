@@ -20,7 +20,28 @@
 #ifndef KPROPERTY_PROPERTY_P_H
 #define KPROPERTY_PROPERTY_P_H
 
+#include <QFlags>
+
 //! Default value for "step" option. Used for spin boxes, etc.
 #define KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP 0.01
+
+//! @todo Used only in 3.0 to keep BC
+class KPropertyPrivate
+{
+public:
+    //! Option for handling values
+    //! @todo Move to KProperty in 3.1
+    enum ValueOption {
+        RememberOldValue = 1,   //!< Remeber old value before setting a new one
+        UseComposedProperty = 2 //!< Use composed property when comparing values
+    };
+    Q_DECLARE_FLAGS(ValueOptions, ValueOption)
+
+private:
+    KPropertyPrivate() {}
+    Q_DISABLE_COPY(KPropertyPrivate)
+};
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KPropertyPrivate::ValueOptions)
 
 #endif

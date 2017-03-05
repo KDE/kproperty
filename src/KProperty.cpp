@@ -98,7 +98,7 @@ public:
     }
 
     //! @return true if value of this property differs from @a otherValue
-    bool valueDiffersInternal(const QVariant &otherValue, KProperty::ValueOptions options)
+    bool valueDiffersInternal(const QVariant &otherValue, KPropertyPrivate::ValueOptions options)
     {
         if (!compatibleTypes(value, otherValue)) {
             kprWarning() << "INCOMPATIBLE TYPES! old=" << value << "new=" << otherValue;
@@ -128,7 +128,7 @@ public:
             return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
         } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
             return false;
-        } else if (composed && (options & UseComposedProperty)) {
+        } else if (composed && (options & KPropertyPrivate::UseComposedProperty)) {
             return !composed->valuesEqual(value, otherValue);
         }
         else {
@@ -137,7 +137,7 @@ public:
     }
 
     //! Sets value of the property to @a newValue
-    bool setValueInternal(const QVariant &newValue, KProperty::ValueOptions valueOptions)
+    bool setValueInternal(const QVariant &newValue, KPropertyPrivate::ValueOptions valueOptions)
     {
         if (name.isEmpty()) {
             kprWarning() << "COULD NOT SET value to a null property";
@@ -150,7 +150,7 @@ public:
         }
 
         //2. Then change it, and store old value if necessary
-        if (valueOptions & KProperty::RememberOldValue) {
+        if (valueOptions & KPropertyPrivate::RememberOldValue) {
             if (!changed) {
                 oldValue = value;
             }
@@ -161,14 +161,14 @@ public:
             changed = false;
         }
         if (parent) {
-            parent->childValueChanged(q, newValue, valueOptions & KProperty::RememberOldValue);
+            parent->childValueChanged(q, newValue, valueOptions & KPropertyPrivate::RememberOldValue);
         }
 
         QVariant prevValue;
         if (composed && useComposedProperty) {
             prevValue = value; //???
             composed->setChildValueChangedEnabled(false);
-            composed->setValue(q, newValue, valueOptions & KProperty::RememberOldValue);
+            composed->setValue(q, newValue, valueOptions & KPropertyPrivate::RememberOldValue);
             composed->setChildValueChangedEnabled(true);
         }
         else {
@@ -423,21 +423,8 @@ KProperty::childValueChanged(KProperty *child, const QVariant &value, bool remem
 void KProperty::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
     (void)d->setValueInternal(value,
-                              (rememberOldValue ? KProperty::RememberOldValue : KProperty::ValueOptions())
-                              | (useComposedProperty ? KProperty::UseComposedProperty : KProperty::ValueOptions()));
-}
-
-void KProperty::setValue(const QVariant &value, bool *changed, ValueOptions options)
-{
-    const bool ch = d->setValueInternal(value, options);
-    if (changed) {
-        *changed = ch;
-    }
-}
-
-bool KProperty::valueEqualsTo(const QVariant &value, ValueOptions valueOptions) const
-{
-    return !d->valueDiffersInternal(value, valueOptions);
+                              (rememberOldValue ? KPropertyPrivate::RememberOldValue : KPropertyPrivate::ValueOptions())
+                              | (useComposedProperty ? KPropertyPrivate::UseComposedProperty : KPropertyPrivate::ValueOptions()));
 }
 
 void

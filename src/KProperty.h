@@ -264,37 +264,6 @@ public:
     //! @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
     void setValue(const QVariant &value, bool rememberOldValue = true, bool useComposedProperty = true);
 
-    //! Option for handling values
-    //! @since 3.1
-    enum ValueOption {
-        RememberOldValue = 1,   //!< Remeber old value before setting a new one
-        UseComposedProperty = 2 //!< Use composed property when comparing values
-    };
-    Q_DECLARE_FLAGS(ValueOptions, ValueOption)
-
-    /**
-     * Sets value of the property
-     *
-     * @overload setValue(const QVariant &, bool rememberOldValue, bool useComposedProperty)
-     * @param value Value to set.
-     * @param changed Pointer to value that will be set to true if the value has been assigned. Can be @a nullptr.
-     * @param valueOptions Options to use when setting the value.
-     * @since 3.1
-     * @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
-     */
-    void setValue(const QVariant &value, bool *changed,
-                  ValueOptions valueOptions = ValueOptions(RememberOldValue | UseComposedProperty));
-
-    /**
-     * @return true if value of this property is equal to specified value
-     *
-     * Takes type into account.
-     * @param value Value to compare.
-     * @param valueOptions Options to use when comparing. The @c RememberOldValue flag is ignored.
-     * @since 3.1
-     */
-    bool valueEqualsTo(const QVariant &value, ValueOptions valueOptions = UseComposedProperty) const;
-
     /*! Resets the value of the property to the old value.
      @see oldValue() */
     void resetValue();
@@ -499,7 +468,5 @@ protected:
 
 //! qDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
 KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KProperty::ValueOptions)
 
 #endif
