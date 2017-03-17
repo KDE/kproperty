@@ -151,10 +151,6 @@ install(FILES
             DESTINATION "${CMAKECONFIG_CORE_INSTALL_DIR}"
             COMPONENT Devel)
 
-if(SAILFISH)
-    set(KDE_INSTALL_TARGETS_DEFAULT_ARGS LIBRARY DESTINATION lib)
-endif()
-
 install(TARGETS KPropertyCore
             EXPORT KPropertyCoreTargets
             ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
