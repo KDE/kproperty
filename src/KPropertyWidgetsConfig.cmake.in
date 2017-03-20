@@ -1,6 +1,8 @@
 # KPropertyWidgetsConfig.cmake provides information about the installed KPropertyWidgets library.
 # It can be used directly from CMake via find_package(KPropertyWidgets NO_MODULE)
 #
+# Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
+#
 # The following CMake variables are provided:
 #   KPropertyWidgets_VERSION_MAJOR - the major version number of KPropertyWidgets
 #   KPropertyWidgets_VERSION_MINOR - the minor version number of KPropertyWidgets
@@ -12,6 +14,8 @@
 #   KPropertyWidgets - the KPropertyWidgets library
 
 @PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
 
 find_dependency(Qt5Widgets @REQUIRED_QT_VERSION@ REQUIRED)
 find_dependency(KPropertyCore @PROJECT_VERSION@ EXACT)

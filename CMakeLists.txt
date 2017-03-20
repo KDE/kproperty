@@ -6,33 +6,35 @@ include(SetKPropertyCMakePolicies NO_POLICY_SCOPE)
 
 project(KProperty VERSION 3.0.90) # Update this
 
+# CMake
+include(CMakePackageConfigHelpers)
+include(GenerateExportHeader)
+
+# ECM
 if(KPROPERTY_GENERATE_PRI)
     include(ECMGeneratePriFile)
 endif()
-include(ECMPackageConfigHelpers)
 include(ECMGenerateHeaders)
+include(ECMOptionalAddSubdirectory)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
-include(ECMOptionalAddSubdirectory)
-
 include(KDEInstallDirs)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings NO_POLICY_SCOPE)
+include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 
-include(FeatureSummary)
-include(GenerateExportHeader)
-include(MacroLogFeature)
-include(KPropertyMacros)
+# Own
 include(KPropertyAddIconsRccFile)
 include(KPropertyAddQCH)
+include(KPropertyMacros)
+include(MacroLogFeature)
 
 simple_option(BUILD_QCH "Build API documentation in QCH format" OFF)
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
 
 # Dependencies
-set(REQUIRED_QT_VERSION "5.2.0")
-set(REQUIRED_KF5_VERSION 5.7.0)
+set(REQUIRED_QT_VERSION 5.4.0)
+set(REQUIRED_KF5_VERSION 5.16.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
