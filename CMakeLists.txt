@@ -31,8 +31,8 @@ simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
 
 # Dependencies
-set(REQUIRED_QT_VERSION "5.2.0")
-set(REQUIRED_KF5_VERSION 5.7.0)
+set(REQUIRED_QT_VERSION 5.4.0)
+set(REQUIRED_KF5_VERSION 5.16.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
