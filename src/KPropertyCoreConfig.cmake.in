@@ -1,6 +1,8 @@
 # KPropertyCoreConfig.cmake provides information about the installed KPropertyCore library.
 # It can be used directly from CMake via find_package(KPropertyCore NO_MODULE)
 #
+# Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
+#
 # The following CMake variables are provided:
 #   KPropertyCore_VERSION_MAJOR - the major version number of KPropertyCore
 #   KPropertyCore_VERSION_MINOR - the minor version number of KPropertyCore
@@ -12,6 +14,8 @@
 #   KPropertyCore - the KPropertyCore library
 
 @PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
 
 find_dependency(Qt5Core @REQUIRED_QT_VERSION@ REQUIRED)
 
