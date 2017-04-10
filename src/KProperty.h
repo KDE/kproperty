@@ -414,10 +414,12 @@ public:
          type when minimum is set for the property.
          @see QAbstractSpinBox::specialValueText</li>
     <li> max: integer describing minimum value for properties of integer type. Default is 0xffff.</li>
-    <li> precision: integer value describing the number of decimals after the decimal point
-         for double type.</li>
-    <li> step: integer describing the size of the step that is taken when the user hits
-         the up or down button of editor for double type.</li>
+    <li> precision: integer value >= 0 describing the number of decimals after the decimal
+         point for double type. Default value is 2.
+         @see QDoubleSpinBox::decimals</li>
+    <li> step: double value > 0.0 describing the size of the step that is taken when
+         the user hits the up or down button of editor for double type. Default value is 0.01.
+         @see QDoubleSpinBox::singleStep</li>
     <li> 3State: boolean value used for boolean type; if @c true, the editor becomes a combobox
          (instead of checkable button) and accepts the third "null" state.</li>
     <li> yesName: user-visible translated string used for boolean type (both 2- and 3-state)
