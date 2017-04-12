@@ -25,6 +25,9 @@
 //! Default value for "step" option. Used for spin boxes, etc.
 #define KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP 0.01
 
+//! Default value for "precision" option. Used for spin boxes, etc.
+#define KPROPERTY_DEFAULT_DOUBLE_VALUE_PRECISION 2
+
 //! @todo Used only in 3.0 to keep BC
 class KPropertyPrivate
 {

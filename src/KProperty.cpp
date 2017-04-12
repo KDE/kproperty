@@ -27,6 +27,8 @@
 
 #include <QPointer>
 
+#include <math.h>
+
 //! @return true if @a currentValue and @a value are compatible
 static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 {
@@ -121,8 +123,9 @@ public:
                   || (!value.toString().isEmpty() && !otherValue.toString().isEmpty() && value != otherValue);
         }
         else if (t == QVariant::Double) {
-            const double factor = 1.0 / option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
+            const double factor = pow(10.0, option("precision", KPROPERTY_DEFAULT_DOUBLE_VALUE_PRECISION).toDouble());
             //kprDebug()
+            //    << "factor:" << factor << "precision:" << option("precision", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP)
             //    << "double compared:" << value.toDouble() << otherValue.toDouble()
             //    << ":" << static_cast<qlonglong>(value.toDouble() * factor) << static_cast<qlonglong>(otherValue.toDouble() * factor);
             return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
