@@ -84,7 +84,7 @@ public:
 /*! \brief The base class representing a single property
 
   KProperty object can hold a property of given type supported by QVariant. Properties of custom types
-  can be also created, see using KPropertyFactory. Composed or custome properties
+  can be also created, see using KPropertyFactory. Composed or custom properties
   are not created using subclassing of KProperty but using @ref KComposedPropertyInterface.
 
   Each property stores old value to allows undoing that reverts the value to the old one.
