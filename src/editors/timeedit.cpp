@@ -31,13 +31,16 @@ KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)
     setFrame(false);
     setContentsMargins(0,1,0,0);
 
-    const QTime minTime = prop->option("min").toTime();
-    if (minTime.isValid()) {
-        setMinimumTime(minTime);
-    }
-    const QTime maxTime = prop->option("max").toTime();
-    if (maxTime.isValid()) {
-        setMaximumTime(maxTime);
+    if (prop->hasOptions()) {
+        const QTime minTime = prop->option("min", minimumTime()).toTime();
+        const QTime maxTime = prop->option("max", maximumTime()).toTime();
+        if (minTime.isValid() && maxTime.isValid() && minTime <= maxTime) {
+            setTimeRange(minTime, maxTime);
+        }
+        const QString minValueText(prop->option("minValueText").toString());
+        if (!minValueText.isEmpty()) {
+            setSpecialValueText(minValueText);
+        }
     }
 
     connect(this, SIGNAL(timeChanged(QTime)), this, SLOT(onTimeChanged()));
