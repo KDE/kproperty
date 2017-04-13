@@ -25,6 +25,7 @@
 #include "KPropertyEditorView.h"
 #include "KPropertyUnit_p.h"
 #include "KPropertyUtils.h"
+#include "KPropertyUtils_p.h"
 #include "KPropertyWidgetsFactory.h"
 #include "kproperty_debug.h"
 
@@ -119,7 +120,9 @@ public:
     bool hasUnit;
 };
 
-static void decodeUnit(const KProperty &property, KPropertyUnit *unit, bool *hasUnit)
+namespace {
+
+void decodeUnit(const KProperty &property, KPropertyUnit *unit, bool *hasUnit)
 {
     const QString unitString = property.option("unit").toString();
     if (unitString.isEmpty()) {
@@ -129,6 +132,36 @@ static void decodeUnit(const KProperty &property, KPropertyUnit *unit, bool *has
         *unit = KPropertyUnit::fromSymbol(unitString, hasUnit);
     }
 }
+
+//! Helper for testing property options
+struct DoubleValueOptions {
+    explicit DoubleValueOptions(const KProperty &property)
+    {
+        minVal = property.option("min", 0.0);
+        maxVal = property.option("max", DBL_MAX / 100.0);
+        if (!minVal.canConvert(QMetaType::Double) || !maxVal.canConvert(QMetaType::Double)
+            || minVal.toReal() > maxVal.toReal())
+        {
+            minVal.clear();
+            maxVal.clear();
+        }
+        step = property.option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP);
+        if (!step.canConvert(QMetaType::Double) || step.toDouble() <= 0.0) {
+            step.clear();
+        }
+        precision = property.option("precision", KPROPERTY_DEFAULT_DOUBLE_VALUE_PRECISION);
+        if (!precision.canConvert(QMetaType::Int) || precision.toInt() < 0) {
+            precision.clear();
+        }
+        minValueText = property.option("minValueText").toString();
+    }
+    QVariant minVal;
+    QVariant maxVal;
+    QVariant step;
+    QVariant precision;
+    QString minValueText;
+};
+} // namespace
 
 KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight)
         : QDoubleSpinBox(parent)
@@ -152,27 +185,21 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
     KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(this, css);
     setStyleSheet(css);
 
-    QVariant minVal(prop->option("min"));
-    if (minVal.canConvert(QMetaType::Double)) {
-        setMinimum(minVal.toDouble());
+    const DoubleValueOptions options(*prop);
+    if (options.minVal.isValid() && options.maxVal.isValid()) {
+        setRange(options.minVal.toDouble(), options.maxVal.toDouble());
     }
-    QVariant maxVal(prop->option("max", DBL_MAX / 100.0));
-    if (maxVal.canConvert(QMetaType::Double)) {
-        setMaximum(maxVal.toDouble());
-    }
-    QVariant step(prop->option("step", KPROPERTY_DEFAULT_DOUBLE_VALUE_STEP));
-    if (step.canConvert(QMetaType::Double)) {
-        setSingleStep(step.toDouble());
+    if (options.step.isValid()) {
+        setSingleStep(options.step.toDouble());
     }
     //! @todo implement slider
     // bool slider = prop->option("slider", false).toBool();
-    QVariant precision(prop->option("precision"));
-    if (precision.canConvert(QMetaType::Int)) {
-        setDecimals(precision.toInt());
+    if (options.precision.isValid()) {
+        setDecimals(options.precision.toInt());
     }
-    QString minValueText(prop->option("minValueText").toString());
-    if (!minValueText.isEmpty())
-        setSpecialValueText(minValueText);
+    if (!options.minValueText.isEmpty()) {
+        setSpecialValueText(options.minValueText);
+    }
     decodeUnit(*prop, &d->unit, &d->hasUnit);
     if (d->hasUnit) {
         setSuffix(
@@ -277,27 +304,20 @@ KPropertyDoubleSpinBoxDelegate::KPropertyDoubleSpinBoxDelegate()
 QString KPropertyDoubleSpinBoxDelegate::propertyValueToString(const KProperty* prop,
                                                               const QLocale &locale) const
 {
+    const DoubleValueOptions options(*prop);
+    //replace min value with minValueText if defined
+    if (options.minVal.isValid() && !options.minValueText.isEmpty()
+        && options.minVal.toDouble() == prop->value().toDouble())
+    {
+        return options.minValueText;
+    }
     KPropertyUnit unit;
     bool hasUnit;
     decodeUnit(*prop, &unit, &hasUnit);
-    int precision = -1;
-    if (prop->hasOptions()) {
-        //replace min value with minValueText if defined
-        QVariant minValue(prop->option("min"));
-        QString minValueText(prop->option("minValueText").toString());
-        if (!minValue.isNull() && !minValueText.isEmpty()
-            && minValue.toDouble() == prop->value().toDouble())
-        {
-            return minValueText;
-        }
-        if (prop->option("precision").canConvert(QMetaType::Int)) {
-            precision = prop->option("precision").toInt();
-        }
-    }
     const qreal realValue = hasUnit ? unit.toUserValue(prop->value().toReal()) : prop->value().toReal();
     QString valueString;
-    if (precision >= 0) {
-        valueString = locale.toString(realValue, 'f', precision);
+    if (options.precision.isValid()) {
+        valueString = locale.toString(realValue, 'f', options.precision.toInt());
     } else {
         valueString = valueToString(realValue, locale);
     }

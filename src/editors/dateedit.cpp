@@ -32,15 +32,17 @@ KPropertyDateEditor::KPropertyDateEditor(const KProperty* prop, QWidget* parent)
     setFrame(false);
     setCalendarPopup(true);
 
-    const QDate minDate = prop->option("min").toDate();
-    if (minDate.isValid()) {
-        setMinimumDate(minDate);
+    if (prop->hasOptions()) {
+        const QDate minDate = prop->option("min", minimumDate()).toDate();
+        const QDate maxDate = prop->option("max", maximumDate()).toDate();
+        if (minDate.isValid() && maxDate.isValid() && minDate <= maxDate) {
+            setDateRange(minDate, maxDate);
+        }
+        const QString minValueText(prop->option("minValueText").toString());
+        if (!minValueText.isEmpty()) {
+            setSpecialValueText(minValueText);
+        }
     }
-    const QDate maxDate = prop->option("max").toDate();
-    if (maxDate.isValid()) {
-        setMaximumDate(maxDate);
-    }
-
     connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(onDateChanged()));
 }
 

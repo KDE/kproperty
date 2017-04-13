@@ -110,7 +110,7 @@ public:
     //! @todo Make configurable?
     static int maxStringValueLength();
 
-    //! @return @a value converted to string usign QVariant::toString(), truncated if it's longer than @ref maxStringValueLength()
+    //! @return @a value converted to string using QVariant::toString(), truncated if it's longer than @ref maxStringValueLength()
     //! @see maxStringValueLength();
     static QString valueToLocalizedString(const QVariant& value);
 };
