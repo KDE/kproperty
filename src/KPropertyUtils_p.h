@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,8 @@
 
 #include <QPainter>
 #include <QString>
+
+class KProperty;
 
 namespace KPropertyUtilsPrivate
 {
@@ -53,6 +55,20 @@ bool setupPrivateIconsResourceWithMessage(const QString &privateName, const QStr
 //! Sets up a global icon theme if it is different from supported.
 //! Warns on failure and returns @c false.
 bool setupGlobalIconTheme();
+
+//! Helper for handling minValueText, prefix and suffix property options
+class ValueOptionsHandler
+{
+public:
+    explicit ValueOptionsHandler(const KProperty &property);
+
+    //! @return @a valueString value with prefix and suffix, if present
+    QString valueWithPrefixAndSuffix(const QString &valueString, const QLocale &locale) const;
+
+    QString minValueText;
+    QString prefix;
+    QString suffix;
+};
 
 //! @short Manages the QPainter::save()/QPainter::restore() block using RAII
 /*! The PainterSaver class makes sure that restore() is called when exiting from the block of code.

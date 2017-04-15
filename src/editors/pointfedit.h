@@ -43,6 +43,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyPointFDelegate : public KPropertyLabelCre
 public:
     KPropertyPointFDelegate();
 
+    QString propertyValueToString(const KProperty *property,
+                                  const QLocale &locale) const override;
+
     virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
 };
 

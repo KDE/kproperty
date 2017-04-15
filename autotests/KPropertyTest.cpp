@@ -186,20 +186,6 @@ KPropertyFactory::addDisplayInternal(int, KPropertyValueDisplayInterface*, bool)
 KPropertyFactory::addDisplay(int, KPropertyValueDisplayInterface*)
 KPropertyFactory::composedPropertyCreators() const
 KPropertyFactory::valueDisplays() const
-KPropertyUnit::convertFromUnitToUnit(double, KPropertyUnit const&, KPropertyUnit const&, double)
-KPropertyUnit::fromListForUi(int, QFlags<KPropertyUnit::ListOption>, double)
-KPropertyUnit::fromSymbol(QString const&, bool*)
-KPropertyUnit::fromUserValue(QString const&, bool*) const
-KPropertyUnit::fromUserValue(double) const
-KPropertyUnit::indexInListForUi(QFlags<KPropertyUnit::ListOption>) const
-KPropertyUnit::listOfUnitNameForUi(QFlags<KPropertyUnit::ListOption>)
-KPropertyUnit::parseAngle(QString const&, double)
-KPropertyUnit::parseValue(QString const&, double)
-KPropertyUnit::ptToUnit(double, KPropertyUnit const&)
-KPropertyUnit::symbol() const
-KPropertyUnit::toUserStringValue(double) const
-KPropertyUnit::toUserValue(double) const
-KPropertyUnit::unitDescription(KPropertyUnit::Type)
 KPropertyUtils::keyForEnumValue(char const*, int)
 KPropertyValueDisplayInterface::~KPropertyValueDisplayInterface()
 KPropertyValueDisplayInterface::KPropertyValueDisplayInterface()

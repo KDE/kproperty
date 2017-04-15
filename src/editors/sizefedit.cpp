@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,11 +18,19 @@
 */
 
 #include "sizefedit.h"
+#include "KPropertyUtils_p.h"
 
 #include <QSize>
 
 KPropertySizeFDelegate::KPropertySizeFDelegate()
 {
+}
+
+QString KPropertySizeFDelegate::propertyValueToString(const KProperty *property,
+                                                      const QLocale &locale) const
+{
+    const KPropertyUtilsPrivate::ValueOptionsHandler options(*property);
+    return options.valueWithPrefixAndSuffix(valueToString(property->value(), locale), locale);
 }
 
 QString KPropertySizeFDelegate::valueToString(const QVariant& value, const QLocale &locale) const

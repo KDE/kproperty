@@ -22,7 +22,6 @@
 
 #include <KProperty>
 #include <KPropertyEditorView>
-#include <KPropertyUnit_p.h>
 
 #include <QDate>
 #include <QDateTime>
@@ -76,8 +75,8 @@ Window::Window()
     QByteArray group;
     const bool addGroups = !m_parser.isSet(m_flatOption);
     if (addGroups) {
-        group = "SimpleGroup";
-        m_set.setGroupCaption(group, "Simple Group");
+        group = "BasicGroup";
+        m_set.setGroupCaption(group, "Basic Properties");
     }
     if (singleProperty.isEmpty() || singleProperty=="String") {
         m_set.addProperty(p = new KProperty("String", "String"), group);
@@ -98,13 +97,6 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="Double") {
         m_set.addProperty(p = new KProperty("Double", 3.14159, "Double"), group);
         p->setOption("precision", 4); // will round to 3.1416
-    }
-    if (singleProperty.isEmpty() || singleProperty=="cm") {
-        const qreal cm = 1.0; // 28.3465058 points
-        const qreal points = KPropertyUnit(KPropertyUnit::Type::Centimeter).fromUserValue(cm);
-        m_set.addProperty(p = new KProperty("cm", points, "Double cm"), group);
-        p->setOption("unit", "cm");
-        // default precision == 2
     }
     if (singleProperty.isEmpty() || singleProperty=="Bool") {
         m_set.addProperty(new KProperty("Bool", QVariant(true), "Bool"), group);
@@ -148,11 +140,8 @@ Window::Window()
 
 //  Complex
     if (addGroups) {
-        group = "ComplexGroup";
-        m_set.setGroupCaption(group, "Complex Group");
-    }
-    if (singleProperty.isEmpty() || singleProperty=="Rect") {
-        m_set.addProperty(new KProperty("Rect", QRect(5,11,100,200), "Rect"), group);
+        group = "ComposedGroup";
+        m_set.setGroupCaption(group, "Composed Properties");
     }
     if (singleProperty.isEmpty() || singleProperty=="Point") {
         m_set.addProperty(new KProperty("Point", QPoint(3, 4), "Point"), group);
@@ -160,8 +149,8 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="Size") {
         m_set.addProperty(new KProperty("Size", QSize(10, 20), "Size"), group);
     }
-    if (singleProperty.isEmpty() || singleProperty=="RectF") {
-        m_set.addProperty(new KProperty("RectF", QRectF(0.1, 0.5, 10.72, 18.21), "RectF"), group);
+    if (singleProperty.isEmpty() || singleProperty=="Rect") {
+        m_set.addProperty(new KProperty("Rect", QRect(5,11,100,200), "Rect"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="PointF") {
         m_set.addProperty(new KProperty("PointF", QPointF(3.14, 4.15), "PointF"), group);
@@ -169,10 +158,52 @@ Window::Window()
     if (singleProperty.isEmpty() || singleProperty=="SizeF") {
         m_set.addProperty(new KProperty("SizeF", QSizeF(1.1, 2.45), "SizeF"), group);
     }
+    if (singleProperty.isEmpty() || singleProperty == "RectF") {
+        m_set.addProperty(
+            new KProperty("RectF", QRectF(0.1, 0.5, 10.72, 18.21), "RectF"), group);
+    }
+
+//  With suffixes and prefixes
+    if (addGroups) {
+        group = "PrefixesSuffixesGroup";
+        m_set.setGroupCaption(group, "Prefixes & Suffixes");
+    }
+    if (singleProperty.isEmpty() || singleProperty=="dollars") {
+        m_set.addProperty(p = new KProperty("dollars", 100, "Dollars"), group);
+        p->setOption("prefix", "$");
+    }
+    if (singleProperty.isEmpty() || singleProperty == "billions") {
+        m_set.addProperty(p = new KProperty("billions", 5.0, "Billions"), group);
+        p->setOption("prefix", "£");
+        p->setOption("suffix", "bn");
+        // default precision == 2 and step == 0.01
+    }
+    if (singleProperty.isEmpty() || singleProperty == "PointF-mm") {
+        m_set.addProperty(
+            p = new KProperty("PointF-mm", QPointF(2.5, 3.5), "PointF [mm]"), group);
+        p->setOption("suffix", "mm");
+        p->setOption("step", 0.1);
+        p->setOption("precision", 2);
+    }
+    if (singleProperty.isEmpty() || singleProperty == "SizeF-dm") {
+        m_set.addProperty(
+            p = new KProperty("SizeF-dm", QSizeF(7.0, 6.5), "SizeF [dm]"), group);
+        p->setOption("suffix", "dm");
+        p->setOption("step", 0.001);
+        p->setOption("precision", 3);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="RectF-px") {
+        m_set.addProperty(
+            p = new KProperty("RectF-px", QRectF(21.2, 22.2, 9.1, 1.0), "RectF [px]"),
+            group);
+        p->setOption("suffix", "px");
+        p->setOption("step", 0.1);
+        p->setOption("precision", 1);
+    }
 
 //  Appearance
     if (addGroups) {
-        group = "Appearance Group";
+        group = "AppearanceGroup";
         m_set.setGroupCaption(group, "Appearance Group");
         m_set.setGroupIconName(group, "appearance");
     }

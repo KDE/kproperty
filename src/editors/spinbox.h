@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,13 +74,8 @@ public:
         return QDoubleSpinBox::lineEdit();
     }*/
 
-    double value() const;
-
 Q_SIGNALS:
     void commitData(QWidget* editor);
-
-public Q_SLOTS:
-    void setValue(double value);
 
 protected Q_SLOTS:
     void slotValueChanged(double value);

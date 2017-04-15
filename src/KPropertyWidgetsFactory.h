@@ -20,9 +20,9 @@
 #ifndef KPROPERTYWIDGETS_FACTORY_H
 #define KPROPERTYWIDGETS_FACTORY_H
 
-#include "kpropertywidgets_export.h"
 #include "KProperty.h"
 #include "KPropertyFactory.h"
+#include "KPropertyUtils.h"
 
 #include <QObject>
 #include <QVariant>
@@ -82,7 +82,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyLabel : public QLabel
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 public:
-    KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface);
+    KPropertyLabel(QWidget *parent, const KProperty *property, const KPropertyValueDisplayInterface *iface);
     QVariant value() const;
 Q_SIGNALS:
     void commitData( QWidget * editor );
@@ -93,6 +93,7 @@ protected:
     virtual void paintEvent( QPaintEvent * event );
 
 private:
+    const KProperty *m_property;
     const KPropertyValueDisplayInterface *m_iface;
     QVariant m_value;
 };
@@ -113,8 +114,8 @@ public:
     {
         Q_UNUSED(type);
         Q_UNUSED(option);
-        Q_UNUSED(index);
-        return new Widget(parent, this);
+        KProperty *prop = KPropertyUtils::propertyForIndex(index);
+        return new Widget(parent, prop, this);
     }
 
     virtual void paint(QPainter *painter,

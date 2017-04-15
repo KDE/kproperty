@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2015-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,11 +18,19 @@
 */
 
 #include "KPropertyRectFEditor.h"
+#include "KPropertyUtils_p.h"
 
 #include <QRectF>
 
 KPropertyRectFDelegate::KPropertyRectFDelegate()
 {
+}
+
+QString KPropertyRectFDelegate::propertyValueToString(const KProperty *property,
+                                                      const QLocale &locale) const
+{
+    const KPropertyUtilsPrivate::ValueOptionsHandler options(*property);
+    return options.valueWithPrefixAndSuffix(valueToString(property->value(), locale), locale);
 }
 
 QString KPropertyRectFDelegate::valueToString(const QVariant& value, const QLocale &locale) const

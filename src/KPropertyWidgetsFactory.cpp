@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,23 +23,25 @@
 #include "KDefaultPropertyFactory.h"
 #include "KPropertyEditorView.h"
 #include "KPropertyStringEditor.h"
+#include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
 
-KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInterface *iface)
-    : QLabel(parent)
-    , m_iface(iface)
+KPropertyLabel::KPropertyLabel(QWidget *parent, const KProperty *property,
+                               const KPropertyValueDisplayInterface *iface)
+    : QLabel(parent), m_property(property), m_iface(iface)
 {
-  setAutoFillBackground(true);
+    setAutoFillBackground(true);
 
-  KPropertyEditorView* view = 0;
-  if (parent) {
-      view = qobject_cast<KPropertyEditorView*>(parent->parentWidget());
-  }
-  const QColor gridLineColor(view ? view->gridLineColor() : KPropertyEditorView::defaultGridLineColor());
-  const int top = 1 + (gridLineColor.isValid() ? 1 : 0);
+    KPropertyEditorView *view = 0;
+    if (parent) {
+        view = qobject_cast<KPropertyEditorView *>(parent->parentWidget());
+    }
+    const QColor gridLineColor(view ? view->gridLineColor()
+                                    : KPropertyEditorView::defaultGridLineColor());
+    const int top = 1 + (gridLineColor.isValid() ? 1 : 0);
 
-  setContentsMargins(0, top, 0, 0);
-  setIndent(1);
+    setContentsMargins(0, top, 0, 0);
+    setIndent(1);
 }
 
 QVariant KPropertyLabel::value() const
@@ -49,8 +51,8 @@ QVariant KPropertyLabel::value() const
 
 void KPropertyLabel::setValue(const QVariant& value)
 {
-    setText( m_iface->valueToString(value, QLocale()) );
     m_value = value;
+    setText(m_iface->propertyValueToString(m_property, QLocale()));
 }
 
 void KPropertyLabel::paintEvent( QPaintEvent * event )
@@ -223,7 +225,8 @@ void KPropertyValuePainterInterface::paint(const KPropertyValueDisplayInterface 
 {
     const KPropertyUtilsPrivate::PainterSaver saver(painter);
     QRect r(option.rect);
-    r.setLeft(r.left()+1);
-    painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter,
-        iface->valueToString(index.data(Qt::EditRole), QLocale()));
+    r.setLeft(r.left() + 1);
+    KProperty *prop = KPropertyUtils::propertyForIndex(index);
+    painter->drawText(r, Qt::AlignLeft | Qt::AlignVCenter,
+        iface->propertyValueToString(prop, QLocale()));
 }

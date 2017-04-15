@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 
 #include "KPropertyUtils_p.h"
 #include "KPropertyEditorView.h"
+#include "KProperty.h"
 
 #include <config-kproperty.h>
 #if defined KPropertyCore_EXPORTS || defined KPropertyWidgets_EXPORTS
@@ -375,6 +376,35 @@ bool setupGlobalIconTheme()
         }
     }
     return true;
+}
+
+// ----
+
+ValueOptionsHandler::ValueOptionsHandler(const KProperty &property)
+{
+    minValueText = property.option("minValueText").toString();
+    prefix = property.option("prefix").toString().trimmed();
+    suffix = property.option("suffix").toString().trimmed();
+}
+
+QString ValueOptionsHandler::valueWithPrefixAndSuffix(const QString &valueString, const QLocale &locale) const
+{
+    QString result = valueString;
+    if (!suffix.isEmpty()) {
+        if (locale.language() == QLocale::C) {
+            result = QString::fromLatin1("%1 %2").arg(result).arg(suffix);
+        } else {
+            result = QObject::tr("%1 %2", "<value> <suffix>").arg(result).arg(suffix);
+        }
+    }
+    if (!prefix.isEmpty()) {
+        if (locale.language() == QLocale::C) {
+            result = QString::fromLatin1("%1 %2").arg(prefix).arg(result);
+        } else {
+            result = QObject::tr("%1 %2", "<prefix> <value>").arg(prefix).arg(result);
+        }
+    }
+    return result;
 }
 
 // ----

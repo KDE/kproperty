@@ -4,7 +4,6 @@
 set(kpropertycore_LIB_SRCS
    KProperty.cpp
    KPropertySet.cpp
-   KPropertyUnit_p.cpp
    KPropertyFactory.cpp
    KPropertyCoreUtils.cpp
    kproperty_debug.cpp

@@ -408,12 +408,23 @@ public:
      This is most visible in property editor widget.
 
     Currently supported options are:
-    <ul><li> min: integer value describing minimum value for properties of integer and
-             double types. The default is 0.</li>
-    <li> minValueText: user-visible translated string to be displayed in editor for integer
-         type when minimum is set for the property.
+    <ul>
+    <li> min: value describing minimum value for properties of integer, double,
+         date, date/time and time types. Default is 0 for double and unsigned integer types,
+         -INT_MAX for signed integer type. Defaults for date, date/time and time types are
+         specified in documentation of QDateEdit::minimumDate,
+         QDateTimeEdit::minimumDateTime and QTime::minimumTime, respectively.
+         The value is ignored if it is larger than the value of "max" option. </li>
+    <li> minValueText: user-visible translated string to be displayed in editor for integer,
+         double, date, date/time and time types when the value is equal to the value of
+         "min" option.
          @see QAbstractSpinBox::specialValueText</li>
-    <li> max: integer describing minimum value for properties of integer type. Default is 0xffff.</li>
+    <li> max: value describing minimum value for properties of integer type.
+         Default is pow(2, std::numeric_limits<double>::digits) for double type (2^53 on 64-bit
+         systems -- maximum precise value), and INT_MAX for integer type.
+         Defaults for date, date/time and time types are specified in documentation
+         of QDateEdit::maximumDate, QDateTimeEdit::maximumDateTime and QTime::maximumTime, respectively.
+         The value is ignored if it is smaller than the value of "min" option. </li>
     <li> precision: integer value >= 0 describing the number of decimals after the decimal
          point for double type. Default value is 2.
          @see QDoubleSpinBox::decimals</li>
@@ -451,6 +462,14 @@ public:
     <li> multiLine: boolean value used for string type. If @c true, a multi-line
          QPlainTextEdit-based widget is used for editor; otherwise a single-line QLineEdit
          widget is used. @c false by default. Added in version 3.1.</li>
+    <li>prefix: string to display before the value, e.g. '$'. Supported for double and integer
+        types and composed types based on double and integer types (Point*, Size*, Rect*).
+        @see QDoubleSpinBox::prefix QSpinBox::prefix</li>
+    <li>suffix: string to display after the value, e.g. unit such as 'mm'.
+        Supported for double and integer types and composed types based on double and
+        integer types (Point*, Size*, Rect*). Note that only display is affected, value
+        is not converted to any unit.
+        @see QDoubleSpinBox::suffix QSpinBox::suffix</li>
     </ul>*/
     void setOption(const char* name, const QVariant& val);
 
