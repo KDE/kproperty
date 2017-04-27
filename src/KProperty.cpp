@@ -51,10 +51,10 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 // ----
 
 KProperty::Private::Private(KProperty *prop)
-        : q(prop), type(KProperty::Auto), listData(0), changed(false), storable(true),
+        : q(prop), type(KProperty::Auto), listData(nullptr), changed(false), storable(true),
         readOnly(false), visible(true),
-        composed(0), useComposedProperty(true),
-        sets(0), parent(0), children(0), relatedProperties(0)
+        composed(nullptr), useComposedProperty(true),
+        sets(nullptr), parent(nullptr), children(nullptr), relatedProperties(nullptr)
 {
 }
 
@@ -635,13 +635,13 @@ KProperty::operator= (const KProperty & property)
         return *this;
 
     delete d->listData;
-    d->listData = 0;
+    d->listData = nullptr;
     delete d->children;
-    d->children = 0;
+    d->children = nullptr;
     delete d->relatedProperties;
-    d->relatedProperties = 0;
+    d->relatedProperties = nullptr;
     delete d->composed;
-    d->composed = 0;
+    d->composed = nullptr;
 
     d->name = property.d->name;
     d->setCaptionForDisplaying(property.captionForDisplaying());
@@ -713,7 +713,7 @@ KProperty::child(const QByteArray &name)
         if ((*it)->name() == name)
             return *it;
     }
-    return 0;
+    return nullptr;
 }
 
 KProperty*

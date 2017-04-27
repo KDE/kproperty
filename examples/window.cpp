@@ -70,7 +70,7 @@ Window::Window()
     }
 
     /*  First, create a KPropertySet which will hold the properties.  */
-    KProperty *p = 0;
+    KProperty *p = nullptr;
     m_set.setReadOnly(m_parser.isSet(m_roOption));
     QByteArray group;
     const bool addGroups = !m_parser.isSet(m_flatOption);

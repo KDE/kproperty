@@ -28,7 +28,7 @@
 
 /*! @return name for state with index @a index,
  where 0 means true, 1 means false and 2 means none */
-static QString stateName(int index, const QLocale &locale, const KProperty* prop = 0)
+static QString stateName(int index, const QLocale &locale, const KProperty* prop = nullptr)
 {
     QString stateNameString;
     if (index == 0) {
@@ -199,7 +199,7 @@ class ThreeStateBoolIconProvider : public KPropertyComboBoxEditor::Options::Icon
 {
 public:
     ThreeStateBoolIconProvider() {}
-    virtual QIcon icon(int index) const
+    QIcon icon(int index) const override
     {
           if (index == 0)
               return g_boolEdit->yesIcon;
@@ -207,7 +207,7 @@ public:
               return g_boolEdit->noIcon;
           return g_boolEdit->noneIcon;
     }
-    virtual IconProviderInterface* clone() const
+    IconProviderInterface* clone() const override
     {
         return new ThreeStateBoolIconProvider();
     }

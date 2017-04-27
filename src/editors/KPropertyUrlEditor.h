@@ -34,9 +34,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyUrlEditor : public KPropertyGenericSelect
     Q_OBJECT
 
 public:
-    explicit KPropertyUrlEditor(const KProperty &property, QWidget *parent = 0);
+    explicit KPropertyUrlEditor(const KProperty &property, QWidget *parent = nullptr);
 
-    ~KPropertyUrlEditor();
+    ~KPropertyUrlEditor() override;
 
     virtual QUrl value() const;
 
@@ -47,7 +47,7 @@ public Q_SLOTS:
     virtual void setValue(const QUrl &value);
 
 protected Q_SLOTS:
-    virtual void selectButtonClicked();
+    void selectButtonClicked() override;
 
 private:
     Q_DISABLE_COPY(KPropertyUrlEditor)
@@ -62,10 +62,10 @@ class KPROPERTYWIDGETS_EXPORT KPropertyUrlDelegate : public KPropertyEditorCreat
 public:
     KPropertyUrlDelegate();
 
-    virtual QWidget* createEditor(int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 };
 
 #endif

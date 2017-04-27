@@ -30,7 +30,7 @@
 #include <QGuiApplication>
 
 KPropertyComboBoxEditor::Options::Options()
- : iconProvider(0)
+ : iconProvider(nullptr)
  , extraValueAllowed(false)
 {
 }
@@ -230,7 +230,7 @@ QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,
 
     KProperty *property = KPropertyUtils::propertyForIndex(index);
     if (!property) {
-        return 0;
+        return nullptr;
     }
     KPropertyComboBoxEditor::Options options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();

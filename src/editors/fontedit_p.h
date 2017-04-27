@@ -47,7 +47,7 @@ protected Q_SLOTS:
     void slotSelectFontClicked();
 
 protected:
-    virtual bool event(QEvent *event);
+    bool event(QEvent *event) override;
 
     QPushButton *m_button;
     QFont m_font;

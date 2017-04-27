@@ -32,9 +32,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyColorComboEditor : public QWidget
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit KPropertyColorComboEditor(QWidget *parent = 0);
+    explicit KPropertyColorComboEditor(QWidget *parent = nullptr);
 
-    ~KPropertyColorComboEditor();
+    ~KPropertyColorComboEditor() override;
 
     QVariant value() const;
 
@@ -61,15 +61,16 @@ class KPROPERTYWIDGETS_EXPORT KPropertyColorComboDelegate : public KPropertyEdit
 {
 public:
     KPropertyColorComboDelegate();
-    ~KPropertyColorComboDelegate();
+    ~KPropertyColorComboDelegate() override;
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant& value, const QLocale &locale) const override;
+
 private:
     class Private;
     Private * const d;

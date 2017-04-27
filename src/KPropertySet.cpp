@@ -249,7 +249,7 @@ KPropertySetIterator::KPropertySetIterator(const KPropertySet &set)
     : m_set(&set)
     , m_iterator(KPropertySetPrivate::d(&set)->listConstIterator())
     , m_end(KPropertySetPrivate::d(&set)->listConstEnd() )
-    , m_selector( 0 )
+    , m_selector(nullptr)
     , m_order(KPropertySetIterator::Order::Insertion)
 {
 }
@@ -350,7 +350,7 @@ KPropertySet::KPropertySet(QObject *parent)
 
 
 KPropertySet::KPropertySet(const KPropertySet &set)
-        : QObject(0 /* implicit sharing the parent is dangerous */)
+        : QObject(nullptr /* implicit sharing the parent is dangerous */)
         , d(new KPropertySetPrivate(this))
 {
     setObjectName(set.objectName());
@@ -358,7 +358,7 @@ KPropertySet::KPropertySet(const KPropertySet &set)
 }
 
 KPropertySet::KPropertySet(bool propertyOwner)
-        : QObject(0)
+        : QObject(nullptr)
         , d(new KPropertySetPrivate(this))
 {
     d->ownProperty = propertyOwner;

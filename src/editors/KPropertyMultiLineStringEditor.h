@@ -31,7 +31,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyMultiLineStringEditor : public QWidget
 public:
     explicit KPropertyMultiLineStringEditor(QWidget *parent = nullptr);
 
-    ~KPropertyMultiLineStringEditor();
+    ~KPropertyMultiLineStringEditor() override;
 
     QString value() const;
 

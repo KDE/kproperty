@@ -90,7 +90,7 @@ public Q_SLOTS:
     void setValue(const QVariant& value);
 
 protected:
-    virtual void paintEvent( QPaintEvent * event );
+    void paintEvent( QPaintEvent * event ) override;
 
 private:
     const KProperty *m_property;
@@ -107,10 +107,10 @@ class KPROPERTYWIDGETS_EXPORT KPropertyEditorCreator : public KPropertyEditorCre
 public:
     KPropertyEditorCreator() : KPropertyEditorCreatorInterface() {}
 
-    virtual ~KPropertyEditorCreator() {}
+    ~KPropertyEditorCreator() override {}
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override
     {
         Q_UNUSED(type);
         Q_UNUSED(option);
@@ -118,8 +118,8 @@ public:
         return new Widget(parent, prop, this);
     }
 
-    virtual void paint(QPainter *painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index) const
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override
     {
         KPropertyValuePainterInterface::paint(this, painter, option, index);
     }
@@ -132,7 +132,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyWidgetsFactory : public KPropertyFactory
 {
 public:
     KPropertyWidgetsFactory();
-    virtual ~KPropertyWidgetsFactory();
+    ~KPropertyWidgetsFactory() override;
 
     QHash<int, KPropertyEditorCreatorInterface*> editorCreators() const;
     QHash<int, KPropertyValuePainterInterface*> valuePainters() const;

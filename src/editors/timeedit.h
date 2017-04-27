@@ -33,7 +33,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyTimeEditor : public QTimeEdit
 
 public:
     KPropertyTimeEditor(const KProperty* prop, QWidget* parent);
-    virtual ~KPropertyTimeEditor();
+    ~KPropertyTimeEditor() override;
 
     QVariant value() const;
 
@@ -44,7 +44,7 @@ public Q_SLOTS:
     void setValue(const QVariant& value);
 
 protected:
-    virtual void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent *event) override;
 
 protected Q_SLOTS:
     void onTimeChanged();
@@ -56,10 +56,10 @@ class KPROPERTYWIDGETS_EXPORT KPropertyTimeDelegate : public KPropertyEditorCrea
 public:
     KPropertyTimeDelegate();
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 
-    virtual QWidget* createEditor(int type, QWidget* parent,
-        const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 };
 
 #endif

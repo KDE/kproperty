@@ -50,9 +50,9 @@ public:
     };
 
     KPropertyComboBoxEditor(const KPropertyListData& listData, const Options& options,
-             QWidget *parent = 0);
+             QWidget *parent = nullptr);
 
-    virtual ~KPropertyComboBoxEditor();
+    ~KPropertyComboBoxEditor() override;
 
     virtual QVariant value() const;
 
@@ -70,7 +70,7 @@ protected Q_SLOTS:
     void slotValueChanged(int value);
 
 protected:
-    virtual void paintEvent( QPaintEvent * event );
+    void paintEvent(QPaintEvent *event) override;
 
     QString keyForValue(const QVariant &value);
 
@@ -89,12 +89,12 @@ class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxDelegate : public KPropertyEditor
 public:
     KPropertyComboBoxDelegate();
 
-    virtual QString propertyValueToString(const KProperty* property, const QLocale &locale) const;
+    QString propertyValueToString(const KProperty *property, const QLocale &locale) const override;
 
-    QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 };
 
 #endif

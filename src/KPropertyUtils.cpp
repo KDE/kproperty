@@ -96,14 +96,14 @@ public:
         m_isOpen = set;
     }
 
-    virtual QSize sizeHint() const {
+    QSize sizeHint() const override {
         QSize s(QWidget::sizeHint());
         s.setHeight(fontMetrics().height()*2);
         return s;
     }
 
 protected:
-    virtual void paintEvent(QPaintEvent *) {
+    void paintEvent(QPaintEvent *) override {
         QRect r(rect());
         QPainter p(this);
         QStyleOptionHeader option;
@@ -128,7 +128,7 @@ protected:
         }
     }
 
-    virtual bool event(QEvent * e) {
+    bool event(QEvent * e) override {
         if (e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonRelease) {
             QMouseEvent* me = static_cast<QMouseEvent*>(e);
             if (me->button() == Qt::LeftButton) {
@@ -238,7 +238,7 @@ QColor KPropertyUtilsPrivate::contrastColor(const QColor& c)
 QColor KPropertyUtilsPrivate::gridLineColor(const QWidget *widget)
 {
     Q_ASSERT(widget);
-    KPropertyEditorView *view = 0;
+    KPropertyEditorView *view = nullptr;
     if (widget->parentWidget()) {
         view = qobject_cast<KPropertyEditorView*>(widget->parentWidget()->parentWidget());
     }

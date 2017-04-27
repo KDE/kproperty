@@ -84,9 +84,9 @@ class KComposedPropertyCreator : public KComposedPropertyCreatorInterface
 public:
     KComposedPropertyCreator() : KComposedPropertyCreatorInterface() {}
 
-    virtual ~KComposedPropertyCreator() {}
+    ~KComposedPropertyCreator() override {}
 
-    virtual ComposedProperty* createComposedProperty(KProperty *parent) const {
+    ComposedProperty* createComposedProperty(KProperty *parent) const override {
         return new ComposedProperty(parent);
     }
 };
@@ -166,7 +166,7 @@ public:
     QString valueToLocalizedString(int type, const QVariant &value) const;
 
     KPropertyFactoryManager();
-    ~KPropertyFactoryManager();
+    ~KPropertyFactoryManager() override;
 
     //! Adds function @a initFunction that will be called after the manager is created.
     //! Useful for creation custom factories.

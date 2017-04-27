@@ -79,6 +79,11 @@ void KPropertyLineStyleComboEditor::slotValueChanged(int)
     emit commitData(this);
 }
 
+KPropertyLineStyleComboDelegate::KPropertyLineStyleComboDelegate()
+{
+    options.removeBorders = false;
+}
+
 QWidget * KPropertyLineStyleComboDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
@@ -100,7 +105,7 @@ void KPropertyLineStyleComboDelegate::paint( QPainter * painter,
     const QStyle *style = paintedWidget ? paintedWidget->style() : qApp->style();
     QStyleOptionComboBox cbOption;
     cbOption.rect = option.rect;
-    QRect r = style->subControlRect(QStyle::CC_ComboBox, &cbOption, QStyle::SC_ComboBoxEditField, 0);
+    QRect r = style->subControlRect(QStyle::CC_ComboBox, &cbOption, QStyle::SC_ComboBoxEditField, nullptr);
     r.setRight(option.rect.right() - (r.left() - option.rect.left()));
     KPropertyLineStyleItemDelegate::paintItem(painter, QPen(penStyle), r, option);
 }

@@ -36,8 +36,8 @@ class KPROPERTYWIDGETS_EXPORT KPropertyPixmapEditor : public QWidget
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit KPropertyPixmapEditor(KProperty *prop, QWidget *parent = 0);
-    ~KPropertyPixmapEditor();
+    explicit KPropertyPixmapEditor(KProperty *prop, QWidget *parent = nullptr);
+    ~KPropertyPixmapEditor() override;
 
     QVariant value() const;
 
@@ -48,7 +48,7 @@ Q_SIGNALS:
     void commitData( QWidget * editor );
 
 protected:
-    virtual bool eventFilter(QObject *o, QEvent *ev);
+    bool eventFilter(QObject *o, QEvent *ev) override;
 
 protected Q_SLOTS:
     /*! Helper used by selectPixmap(). Can be also used by subclassess.
@@ -78,13 +78,13 @@ class KPROPERTYWIDGETS_EXPORT KPropertyPixmapDelegate : public KPropertyEditorCr
 public:
     KPropertyPixmapDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 };
 
 #endif

@@ -26,10 +26,10 @@
 class KPropertyLineStyleItemDelegate : public QAbstractItemDelegate
 {
 public:
-    explicit KPropertyLineStyleItemDelegate(QObject *parent = 0);
-    virtual ~KPropertyLineStyleItemDelegate();
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    explicit KPropertyLineStyleItemDelegate(QObject *parent = nullptr);
+    ~KPropertyLineStyleItemDelegate() override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
     static void paintItem(QPainter *painter, const QPen &pen_, const QRect &rect, const QStyleOption &option);
 

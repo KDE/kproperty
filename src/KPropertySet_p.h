@@ -47,7 +47,7 @@ public:
         KProperty *p = property(name);
         if (p)
             return *p;
-        nonConstNull.setName(0); //to ensure returned property is null
+        nonConstNull.setName(nullptr); //to ensure returned property is null
         kprWarning() << "PROPERTY" << name << "NOT FOUND";
         return nonConstNull;
     }

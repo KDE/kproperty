@@ -26,7 +26,7 @@ class KDefaultPropertyFactory : public KPropertyWidgetsFactory
 {
 public:
     KDefaultPropertyFactory();
-    ~KDefaultPropertyFactory();
+    ~KDefaultPropertyFactory() override;
 };
 
 #endif

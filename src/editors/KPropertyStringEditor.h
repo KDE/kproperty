@@ -31,9 +31,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyStringEditor : public QLineEdit
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 public:
-    explicit KPropertyStringEditor(QWidget *parent = 0);
+    explicit KPropertyStringEditor(QWidget *parent = nullptr);
 
-    ~KPropertyStringEditor();
+    ~KPropertyStringEditor() override;
 
     QString value() const;
 
@@ -57,13 +57,13 @@ class KPROPERTYWIDGETS_EXPORT KPropertyStringDelegate : public KPropertyEditorCr
 public:
     KPropertyStringDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
     void paint(QPainter *painter,
-               const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
+               const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant& value, const QLocale &locale) const override;
 };
 
 #endif

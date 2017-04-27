@@ -30,11 +30,11 @@ class KPROPERTYWIDGETS_EXPORT KPointFComposedProperty : public KComposedProperty
 public:
     explicit KPointFComposedProperty(KProperty *parent);
 
-    virtual void setValue(KProperty *property,
-        const QVariant &value, KProperty::ValueOptions valueOptions);
+    void setValue(KProperty *property,
+                  const QVariant &value, KProperty::ValueOptions valueOptions) override;
 
-    virtual void childValueChanged(KProperty *child,
-        const QVariant &value, KProperty::ValueOptions valueOptions);
+    void childValueChanged(KProperty *child,
+                  const QVariant &value, KProperty::ValueOptions valueOptions) override;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyPointFDelegate : public KPropertyLabelCreator,
@@ -46,7 +46,7 @@ public:
     QString propertyValueToString(const KProperty *property,
                                   const QLocale &locale) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant& value, const QLocale &locale) const override;
 };
 
 #endif
