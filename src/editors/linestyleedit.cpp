@@ -78,6 +78,11 @@ void KPropertyLineStyleComboEditor::slotValueChanged(int)
     emit commitData(this);
 }
 
+KPropertyLineStyleComboDelegate::KPropertyLineStyleComboDelegate()
+{
+    options.removeBorders = false;
+}
+
 QWidget * KPropertyLineStyleComboDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
