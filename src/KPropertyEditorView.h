@@ -33,9 +33,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyEditorView : public QTreeView
     Q_OBJECT
 public:
     /*! Creates an empty property editor with @a parent as parent widget. */
-    explicit KPropertyEditorView(QWidget *parent = 0);
+    explicit KPropertyEditorView(QWidget *parent = nullptr);
 
-    ~KPropertyEditorView();
+    ~KPropertyEditorView() override;
 
     //! Options for changeSet().
     enum SetOption {
@@ -54,7 +54,7 @@ public:
     static QColor defaultGridLineColor() { return Qt::gray; }
 
     //! Reimplemented to suggest widget size that is based on number of property items.
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
     //! @return the property set object that is assigned to this view or nullptr is no set
     //! is currently assigned.
@@ -98,11 +98,11 @@ Q_SIGNALS:
     void propertySetChanged(KPropertySet *set);
 
 protected:
-    virtual bool viewportEvent( QEvent * event );
+    bool viewportEvent(QEvent * event) override;
 
 protected Q_SLOTS:
-    virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
-    virtual void commitData( QWidget * editor );
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+    void commitData(QWidget * editor) override;
 
     /*! Called when current propertis of this set are about to be cleared. */
     void slotSetWillBeCleared();
@@ -121,10 +121,12 @@ protected Q_SLOTS:
 
 private:
     /*! Used by changeSet(). */
-    void changeSetInternal(KPropertySet *set, SetOptions options, const QByteArray& propertyToSelect);
-    virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
-    virtual void drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
-    virtual void mousePressEvent( QMouseEvent * event );
+    void changeSetInternal(KPropertySet *set, SetOptions options,
+                           const QByteArray &propertyToSelect);
+    bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) override;
+    void drawBranches(QPainter *painter, const QRect &rect,
+                      const QModelIndex &index) const override;
+    void mousePressEvent(QMouseEvent *event) override;
 
     //! @return true if @a x is within the area of the revert button for @a index index.
     bool withinRevertButtonArea( int x, const QModelIndex& index ) const;

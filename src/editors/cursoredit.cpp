@@ -169,11 +169,11 @@ class CursorIconProvider : public KPropertyComboBoxEditor::Options::IconProvider
 {
 public:
     explicit CursorIconProvider(QWidget* parent) : m_parent(parent) {}
-    virtual QIcon icon(int index) const
+    QIcon icon(int index) const override
     {
           return s_cursorListData->pixmapForIndex(index, m_parent->palette());
     }
-    virtual IconProviderInterface* clone() const
+    IconProviderInterface *clone() const override
     {
         return new CursorIconProvider(m_parent);
     }

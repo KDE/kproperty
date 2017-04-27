@@ -71,12 +71,12 @@ void KPropertyUrlEditor::selectButtonClicked()
         options |= QFileDialog::DontConfirmOverwrite;
     }
     if (d->fileMode == "existingfile") {
-        url = QFileDialog::getSaveFileUrl(this, tr("Select File"), d->value, QString(), 0, options);
+        url = QFileDialog::getSaveFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
     } else if (d->fileMode == "dirsonly") {
         options |= QFileDialog::ShowDirsOnly;
         url = QFileDialog::getExistingDirectoryUrl(this, tr("Select Directory"), d->value, options);
     } else {
-        url = QFileDialog::getOpenFileUrl(this, tr("Select File"), d->value, QString(), 0, options);
+        url = QFileDialog::getOpenFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
     }
     //! @todo filters, more options, supportedSchemes, localFilesOnly?
     if (!url.isEmpty()) {

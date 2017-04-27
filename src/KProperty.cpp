@@ -55,10 +55,10 @@ class KProperty::Private
 {
 public:
     Private(KProperty *prop)
-            : q(prop), type(KProperty::Auto), caption(0), listData(0), changed(false), storable(true),
+            : q(prop), type(KProperty::Auto), caption(nullptr), listData(nullptr), changed(false), storable(true),
             readOnly(false), visible(true),
-            autosync(-1), composed(0), useComposedProperty(true),
-            sets(0), parent(0), children(0), relatedProperties(0)
+            autosync(-1), composed(nullptr), useComposedProperty(true),
+            sets(nullptr), parent(nullptr), children(nullptr), relatedProperties(nullptr)
     {
     }
 
@@ -66,21 +66,21 @@ public:
         delete caption;
         if (captionForDisplaying.simplified() != captionForDisplaying) {
             if (captionForDisplaying.isEmpty()) {
-                caption = 0;
+                caption = nullptr;
             }
             else {
                caption = new QString(captionForDisplaying.simplified());
             }
         }
         else {
-            caption = 0;
+            caption = nullptr;
         }
         this->captionForDisplaying = captionForDisplaying;
     }
 
     ~Private() {
         delete caption;
-        caption = 0;
+        caption = nullptr;
         delete listData;
         if (children) {
             qDeleteAll(*children);
@@ -577,13 +577,13 @@ KProperty::operator= (const KProperty & property)
         return *this;
 
     delete d->listData;
-    d->listData = 0;
+    d->listData = nullptr;
     delete d->children;
-    d->children = 0;
+    d->children = nullptr;
     delete d->relatedProperties;
-    d->relatedProperties = 0;
+    d->relatedProperties = nullptr;
     delete d->composed;
-    d->composed = 0;
+    d->composed = nullptr;
 
     d->name = property.d->name;
     d->setCaptionForDisplaying(property.captionForDisplaying());
@@ -650,7 +650,7 @@ KProperty::child(const QByteArray &name)
         if ((*it)->name() == name)
             return *it;
     }
-    return 0;
+    return nullptr;
 }
 
 KProperty*
@@ -742,7 +742,7 @@ void Property::setSortingKey(int key)
 
 void KProperty::emitPropertyChanged()
 {
-    QList< QPointer<KPropertySet> > *sets = 0;
+    QList< QPointer<KPropertySet> > *sets = nullptr;
     if (d->sets) {
         sets = d->sets;
     }

@@ -27,11 +27,11 @@ class KPROPERTYWIDGETS_EXPORT KRectComposedProperty : public KComposedPropertyIn
 public:
     explicit KRectComposedProperty(KProperty *parent);
 
-    virtual void setValue(KProperty *property,
-        const QVariant &value, bool rememberOldValue);
+    void setValue(KProperty *property,
+        const QVariant &value, bool rememberOldValue) override;
 
-    virtual void childValueChanged(KProperty *child,
-        const QVariant &value, bool rememberOldValue);
+    void childValueChanged(KProperty *child,
+        const QVariant &value, bool rememberOldValue) override;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyRectDelegate : public KPropertyLabelCreator,
@@ -40,7 +40,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyRectDelegate : public KPropertyLabelCreat
 public:
     KPropertyRectDelegate();
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 };
 
 #endif

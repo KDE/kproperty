@@ -27,13 +27,11 @@ class KPROPERTYWIDGETS_EXPORT KSizePolicyComposedProperty : public KComposedProp
 public:
     explicit KSizePolicyComposedProperty(KProperty *parent);
 
-    virtual void setValue(KProperty *property,
-        const QVariant &value, bool rememberOldValue);
+    void setValue(KProperty *property, const QVariant &value, bool rememberOldValue) override;
 
-    virtual void childValueChanged(KProperty *child,
-        const QVariant &value, bool rememberOldValue);
+    void childValueChanged(KProperty *child, const QVariant &value, bool rememberOldValue) override;
 
-    virtual bool valuesEqual(const QVariant &first, const QVariant &second) Q_DECL_OVERRIDE;
+    bool valuesEqual(const QVariant &first, const QVariant &second) override;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertySizePolicyDelegate : public KPropertyLabelCreator,
@@ -42,9 +40,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertySizePolicyDelegate : public KPropertyLabe
 public:
     KPropertySizePolicyDelegate();
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 
-    static const KPropertyListData& listData();
+    static const KPropertyListData &listData();
 };
 
 #endif

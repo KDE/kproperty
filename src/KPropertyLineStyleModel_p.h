@@ -28,10 +28,10 @@
 class KPropertyLineStyleModel : public QAbstractListModel
 {
 public:
-    explicit KPropertyLineStyleModel(QObject *parent = 0);
-    virtual ~KPropertyLineStyleModel() {}
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    explicit KPropertyLineStyleModel(QObject *parent = nullptr);
+    ~KPropertyLineStyleModel() override {}
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     //! Adds the given style to the model
     bool addCustomStyle(const QVector<qreal> &style);

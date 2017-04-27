@@ -35,7 +35,7 @@ class Window : public QWidget
     Q_OBJECT
 public:
     Window();
-    virtual ~Window();
+    ~Window() override;
 
 protected Q_SLOTS:
     void showGrid(int state);

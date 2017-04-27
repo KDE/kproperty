@@ -88,7 +88,7 @@ public:
         return current();
     }
     KProperty* current() const {
-        return m_iterator==m_end ? 0 : *m_iterator;
+        return m_iterator==m_end ? nullptr : *m_iterator;
     }
 
     friend class KPropertySet;
@@ -114,13 +114,13 @@ class KPROPERTYCORE_EXPORT KPropertySet : public QObject
 
 public:
     //! Constructs a new property set object.
-    explicit KPropertySet(QObject *parent = 0);
+    explicit KPropertySet(QObject *parent = nullptr);
 
     /*! Constructs a deep copy of \a set.
      The new object will not have a QObject parent even if \a set has such parent. */
     explicit KPropertySet(const KPropertySet& set);
 
-    virtual ~KPropertySet();
+    ~KPropertySet() override;
 
     /*! Adds the property to the set, in the group.
      The property becomes owned by the set.

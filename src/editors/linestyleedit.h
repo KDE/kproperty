@@ -33,9 +33,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyLineStyleComboEditor : public KPropertyLi
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit KPropertyLineStyleComboEditor(QWidget *parent = 0);
+    explicit KPropertyLineStyleComboEditor(QWidget *parent = nullptr);
 
-    ~KPropertyLineStyleComboEditor();
+    ~KPropertyLineStyleComboEditor() override;
 
     QVariant value() const;
 
@@ -54,15 +54,15 @@ class KPROPERTYWIDGETS_EXPORT KPropertyLineStyleComboDelegate : public KProperty
                                                                 public KPropertyValueDisplayInterface
 {
 public:
-    KPropertyLineStyleComboDelegate() {options.removeBorders = false;}
+    KPropertyLineStyleComboDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 };
 
 #endif

@@ -38,9 +38,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyBoolEditor : public QToolButton
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit KPropertyBoolEditor(const KProperty *prop, QWidget *parent = 0);
+    explicit KPropertyBoolEditor(const KProperty *prop, QWidget *parent = nullptr);
 
-    ~KPropertyBoolEditor();
+    ~KPropertyBoolEditor() override;
 
     QVariant value() const;
 
@@ -56,8 +56,8 @@ protected Q_SLOTS:
     void  slotValueChanged(bool state);
 
 protected:
-    virtual void paintEvent( QPaintEvent * event );
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+    void paintEvent( QPaintEvent * event ) override;
+    bool eventFilter(QObject* watched, QEvent* e) override;
 
 private:
     class Private;
@@ -72,11 +72,11 @@ class KPROPERTYWIDGETS_EXPORT KPropertyThreeStateBoolEditor : public KPropertyCo
     Q_OBJECT
 
 public:
-    explicit KPropertyThreeStateBoolEditor(const KPropertyListData& listData, QWidget *parent = 0);
-    ~KPropertyThreeStateBoolEditor();
+    explicit KPropertyThreeStateBoolEditor(const KPropertyListData& listData, QWidget *parent = nullptr);
+    ~KPropertyThreeStateBoolEditor() override;
 
-    QVariant value() const;
-    void setValue(const QVariant &value);
+    QVariant value() const override;
+    void setValue(const QVariant &value) override;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyBoolDelegate : public KPropertyEditorCreatorInterface,
@@ -86,15 +86,15 @@ class KPROPERTYWIDGETS_EXPORT KPropertyBoolDelegate : public KPropertyEditorCrea
 public:
     KPropertyBoolDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override;
 
-    virtual QString propertyValueToString(const KProperty* prop, const QLocale &locale) const;
+    QString propertyValueToString(const KProperty *prop, const QLocale &locale) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 };
 
 #endif

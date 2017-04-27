@@ -38,7 +38,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyIntSpinBox : public QSpinBox
 
 public:
     KPropertyIntSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
-    virtual ~KPropertyIntSpinBox();
+    ~KPropertyIntSpinBox() override;
 
     QVariant value() const;
 
@@ -67,7 +67,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
 
 public:
     KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
-    virtual ~KPropertyDoubleSpinBox();
+    ~KPropertyDoubleSpinBox() override;
 
 //    virtual bool eventFilter(QObject *o, QEvent *e);
 /*    QLineEdit * lineEdit() const {
@@ -87,7 +87,7 @@ protected Q_SLOTS:
 
 protected:
     //! Used to fix height of the internal spin box
-    virtual void resizeEvent( QResizeEvent * event );
+    void resizeEvent( QResizeEvent * event ) override;
 
     class Private;
     Private * const d;
@@ -100,12 +100,12 @@ class KPROPERTYWIDGETS_EXPORT KPropertyIntSpinBoxDelegate : public KPropertyEdit
 public:
     KPropertyIntSpinBoxDelegate();
 
-    virtual QString propertyValueToString(const KProperty* prop, const QLocale &locale) const;
+    QString propertyValueToString(const KProperty *prop, const QLocale &locale) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBoxDelegate : public KPropertyEditorCreatorInterface,
@@ -114,12 +114,12 @@ class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBoxDelegate : public KPropertyE
 public:
     KPropertyDoubleSpinBoxDelegate();
 
-    virtual QString propertyValueToString(const KProperty* prop, const QLocale &locale) const;
+    QString propertyValueToString(const KProperty *prop, const QLocale &locale) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 };
 
 #endif

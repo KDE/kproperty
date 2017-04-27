@@ -145,7 +145,7 @@ QString KPropertyValueDisplayInterface::valueToLocalizedString(const QVariant& v
 //------------
 
 KPropertyFactoryManager::KPropertyFactoryManager()
-        : QObject(0)
+        : QObject(nullptr)
         , d(new Private)
 {
     setObjectName(QLatin1String("KPropertyFactoryManager"));
@@ -191,7 +191,7 @@ void KPropertyFactoryManager::registerFactory(KPropertyFactory *factory)
 KComposedPropertyInterface* KPropertyFactoryManager::createComposedProperty(KProperty *parent)
 {
     const KComposedPropertyCreatorInterface *creator = d->composedPropertyCreators.value( parent->type() );
-    return creator ? creator->createComposedProperty(parent) : 0;
+    return creator ? creator->createComposedProperty(parent) : nullptr;
 }
 
 //static
@@ -202,7 +202,7 @@ void KPropertyFactoryManager::addInitFunction(void (*initFunction)())
 
 bool KPropertyFactoryManager::canConvertValueToText(int type) const
 {
-    return d->valueDisplays.value(type) != 0;
+    return d->valueDisplays.value(type) != nullptr;
 }
 
 bool KPropertyFactoryManager::canConvertValueToText(const KProperty* property) const

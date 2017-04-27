@@ -79,13 +79,13 @@ class ItemDelegate : public QItemDelegate
 {
 public:
     explicit ItemDelegate(KPropertyEditorView *parent);
-    virtual ~ItemDelegate();
-    virtual void paint(QPainter *painter,
-        const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option,
-        const QModelIndex &index) const;
-    virtual QWidget * createEditor(QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    ~ItemDelegate() override;
+    void paint(QPainter *painter,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option,
+        const QModelIndex &index) const override;
+    QWidget * createEditor(QWidget *parent,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     mutable QPointer<QWidget> m_currentEditor;
 };
 
@@ -206,7 +206,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     if (!index.isValid())
-        return 0;
+        return nullptr;
     const KProperty *property = KPropertyUtils::propertyForIndex(index);
     if (property && property->isReadOnly()) {
         return nullptr;
@@ -244,8 +244,8 @@ class KPropertyEditorView::Private
 {
 public:
     Private()
-     : set(0)
-     , model(0)
+     : set(nullptr)
+     , model(nullptr)
      , gridLineColor( KPropertyEditorView::defaultGridLineColor() )
      , autoSync(true)
      , slotPropertyChangedEnabled(true)
@@ -378,7 +378,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
     KPropertyEditorDataModel *oldModel = d->model;
     const KPropertySetIterator::Order setOrder
         = (options & AlphabeticalOrder) ? KPropertySetIterator::AlphabeticalOrder : KPropertySetIterator::InsertionOrder;
-    d->model = d->set ? new KPropertyEditorDataModel(d->set, this, setOrder) : 0;
+    d->model = d->set ? new KPropertyEditorDataModel(d->set, this, setOrder) : nullptr;
     setModel( d->model );
     delete oldModel;
 
@@ -408,12 +408,12 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
 
 void KPropertyEditorView::slotSetWillBeCleared()
 {
-    changeSet(0, QByteArray());
+    changeSet(nullptr, QByteArray());
 }
 
 void KPropertyEditorView::slotSetWillBeDeleted()
 {
-    changeSet(0, QByteArray());
+    changeSet(nullptr, QByteArray());
 }
 
 void KPropertyEditorView::slotReadOnlyFlagChanged()

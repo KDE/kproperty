@@ -30,8 +30,8 @@ class KPROPERTYWIDGETS_EXPORT KPropertyCursorEditor : public KPropertyComboBoxEd
     Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
 
 public:
-    explicit KPropertyCursorEditor(QWidget *parent = 0);
-    virtual ~KPropertyCursorEditor();
+    explicit KPropertyCursorEditor(QWidget *parent = nullptr);
+    ~KPropertyCursorEditor() override;
 
     virtual QCursor cursorValue() const;
     virtual void setCursorValue(const QCursor &value);
@@ -44,13 +44,13 @@ class KPROPERTYWIDGETS_EXPORT KPropertyCursorDelegate : public KPropertyEditorCr
 public:
     KPropertyCursorDelegate();
 
-    virtual QWidget * createEditor( int type, QWidget *parent,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const override;
 
-    virtual void paint( QPainter * painter,
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override;
 
-    virtual QString valueToString(const QVariant& value, const QLocale &locale) const;
+    QString valueToString(const QVariant &value, const QLocale &locale) const override;
 };
 
 #endif

@@ -100,7 +100,7 @@ QWidget* KPropertyTimeDelegate::createEditor(int type, QWidget* parent,
 
     KProperty* prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
-        return 0;
+        return nullptr;
     }
     return new KPropertyTimeEditor(prop, parent);
 }

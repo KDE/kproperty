@@ -31,13 +31,13 @@ class KProperty;
 class KPROPERTYWIDGETS_EXPORT KPropertyGroupWidget : public QWidget
 {
 public:
-    explicit KPropertyGroupWidget(const QString& title, QWidget* parent = 0);
-    ~KPropertyGroupWidget();
+    explicit KPropertyGroupWidget(const QString& title, QWidget* parent = nullptr);
+    ~KPropertyGroupWidget() override;
 
     void setContents(QWidget* contents);
 
 protected:
-    virtual bool event(QEvent * e);
+    bool event(QEvent * e) override;
 
     class Private;
     Private * const d;

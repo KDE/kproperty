@@ -290,7 +290,7 @@ QWidget* KPropertyIntSpinBoxDelegate::createEditor( int type, QWidget *parent,
 
     KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
-        return 0;
+        return nullptr;
     }
     return new KPropertyIntSpinBox(prop, parent, option.rect.height() - 2);
 }
@@ -343,7 +343,7 @@ QWidget* KPropertyDoubleSpinBoxDelegate::createEditor( int type, QWidget *parent
 
     KProperty *prop = KPropertyUtils::propertyForIndex(index);
     if (!prop) {
-        return 0;
+        return nullptr;
     }
     return new KPropertyDoubleSpinBox(prop, parent, option.rect.height() - 2 - 1);
 }

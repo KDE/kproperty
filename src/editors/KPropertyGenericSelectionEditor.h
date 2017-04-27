@@ -31,9 +31,9 @@ class KPROPERTYWIDGETS_EXPORT KPropertyGenericSelectionEditor : public QWidget
     Q_OBJECT
 
 public:
-    explicit KPropertyGenericSelectionEditor(QWidget *parent = 0);
+    explicit KPropertyGenericSelectionEditor(QWidget *parent = nullptr);
 
-    ~KPropertyGenericSelectionEditor();
+    ~KPropertyGenericSelectionEditor() override;
 
     //! Sets the visibility of the "..." select button
     void setSelectionButtonVisible(bool set);

@@ -31,7 +31,7 @@ KPropertyLabel::KPropertyLabel(QWidget *parent, const KPropertyValueDisplayInter
 {
   setAutoFillBackground(true);
 
-  KPropertyEditorView* view = 0;
+  KPropertyEditorView* view = nullptr;
   if (parent) {
       view = qobject_cast<KPropertyEditorView*>(parent->parentWidget());
   }
@@ -161,7 +161,7 @@ void KPropertyWidgetsFactory::addPainterInternal(int type, KPropertyValuePainter
 void KPropertyWidgetsFactory::paintTopGridLine(QWidget *widget)
 {
     // paint top grid line
-    KPropertyEditorView* view = 0;
+    KPropertyEditorView* view = nullptr;
     if (widget->parentWidget()) {
         view = qobject_cast<KPropertyEditorView*>(widget->parentWidget()->parentWidget());
     }
@@ -184,7 +184,7 @@ void KPropertyWidgetsFactory::paintTopGridLine(QWidget *widget)
 void KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget,
                                                                     const QString& extraStyleSheet)
 {
-    KPropertyEditorView* view = 0;
+    KPropertyEditorView* view = nullptr;
     if (widget->parentWidget()) {
         view = qobject_cast<KPropertyEditorView*>(widget->parentWidget()->parentWidget());
     }

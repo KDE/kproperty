@@ -38,31 +38,31 @@ class KPropertyEditorDataModel : public QAbstractItemModel
 
 public:
     //! Creates a new model. @a propertySet is required.
-    explicit KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent = 0,
+    explicit KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent = nullptr,
                                       KPropertySetIterator::Order order = KPropertySetIterator::InsertionOrder);
-    ~KPropertyEditorDataModel();
+    ~KPropertyEditorDataModel() override;
 
     enum Role {
         PropertyModifiedRole = Qt::UserRole + 0
     };
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
+                        int role = Qt::DisplayRole) const override;
 
     QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index) const;
+                      const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole);
+                 int role = Qt::EditRole) override;
     bool setHeaderData(int section, Qt::Orientation orientation,
-                       const QVariant &value, int role = Qt::EditRole);
+                       const QVariant &value, int role = Qt::EditRole) override;
 
-    QModelIndex buddy(const QModelIndex & index) const;
+    QModelIndex buddy(const QModelIndex &index) const override;
 
     //! @return property set object for this model. It is never @c nullptr.
     KPropertySet* propertySet() const;
@@ -85,7 +85,7 @@ public:
     KPropertySetIterator::Order order() const;
 
     //! Reimplemented for optimization.
-    bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
+    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
 private:
     void collectIndices() const;

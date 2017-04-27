@@ -49,10 +49,10 @@ class VisiblePropertySelector : public KPropertySelector
 {
 public:
     VisiblePropertySelector() {}
-    virtual bool operator()(const KProperty& prop) const {
+    bool operator()(const KProperty &prop) const override {
         return prop.isVisible();
     }
-    KPropertySelector* clone() const { return new VisiblePropertySelector(); }
+    KPropertySelector* clone() const override { return new VisiblePropertySelector(); }
 };
 
 // -------------------

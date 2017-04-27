@@ -31,7 +31,7 @@ public:
     explicit Private(KPropertySet *set) :
             q(set),
             readOnly(false),
-            informAboutClearing(0),
+            informAboutClearing(nullptr),
             m_visiblePropertiesCount(0)
     {}
 
@@ -48,7 +48,7 @@ public:
         KProperty *p = property(name);
         if (p)
             return *p;
-        nonConstNull.setName(0); //to ensure returned property is null
+        nonConstNull.setName(nullptr); //to ensure returned property is null
         kprWarning() << "PROPERTY" << name << "NOT FOUND";
         return nonConstNull;
     }
@@ -109,7 +109,7 @@ public:
     void clear() {
         if (informAboutClearing)
             *informAboutClearing = true;
-        informAboutClearing = 0;
+        informAboutClearing = nullptr;
         emit q->aboutToBeCleared();
         m_visiblePropertiesCount = 0;
         qDeleteAll(propertiesOfGroup);
@@ -151,7 +151,7 @@ public:
         propertiesOfGroup.clear();
         groupForProperties.clear();
         m_visiblePropertiesCount = 0;
-        informAboutClearing = 0;
+        informAboutClearing = nullptr;
     }
 
     //! Copy all properties from the other set
@@ -235,7 +235,7 @@ KPropertySetIterator::KPropertySetIterator(const KPropertySet &set)
     : m_set(&set)
     , m_iterator( set.d->listConstIterator() )
     , m_end( set.d->listConstEnd() )
-    , m_selector( 0 )
+    , m_selector( nullptr )
     , m_order(KPropertySetIterator::InsertionOrder)
 {
 }
@@ -337,7 +337,7 @@ KPropertySet::KPropertySet(QObject *parent)
 
 
 KPropertySet::KPropertySet(const KPropertySet &set)
-        : QObject(0 /* implicit sharing the parent is dangerous */)
+        : QObject(nullptr /* implicit sharing the parent is dangerous */)
         , d(new KPropertySet::Private(this))
 {
     setObjectName(set.objectName());
@@ -345,7 +345,7 @@ KPropertySet::KPropertySet(const KPropertySet &set)
 }
 
 KPropertySet::KPropertySet(bool propertyOwner)
-        : QObject(0)
+        : QObject(nullptr)
         , d(new KPropertySet::Private(this))
 {
     d->ownProperty = propertyOwner;

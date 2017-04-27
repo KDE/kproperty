@@ -56,7 +56,7 @@ private:
 
     KPropertyWidgetsPluginManager();
 
-    ~KPropertyWidgetsPluginManager();
+    ~KPropertyWidgetsPluginManager() override;
 
     Q_DISABLE_COPY(KPropertyWidgetsPluginManager)
     class Private;

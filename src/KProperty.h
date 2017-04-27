@@ -201,20 +201,20 @@ public:
      (with newline, if any) for displaying within a property editor. */
     explicit KProperty(const QByteArray &name, const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
-             int type = Auto, KProperty* parent = 0);
+             int type = Auto, KProperty* parent = nullptr);
 
     /*! Constructs property of \ref ValueFromList type. */
     KProperty(const QByteArray &name, const QStringList &keys, const QStringList &strings,
              const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
-             int type = ValueFromList, KProperty* parent = 0);
+             int type = ValueFromList, KProperty* parent = nullptr);
 
     /*! Constructs property of \ref ValueFromList type.
      This is overload of the above ctor added for convenience. */
     KProperty(const QByteArray &name, KPropertyListData* listData,
              const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
-             int type = ValueFromList, KProperty* parent = 0);
+             int type = ValueFromList, KProperty* parent = nullptr);
 
     /*! Constructs a deep copy of \a prop property. */
     KProperty(const KProperty &prop);

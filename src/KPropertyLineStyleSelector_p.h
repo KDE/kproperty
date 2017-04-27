@@ -32,8 +32,8 @@ class KPROPERTYWIDGETS_EXPORT KPropertyLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    explicit KPropertyLineStyleSelector(QWidget *parent = 0);
-    virtual ~KPropertyLineStyleSelector();
+    explicit KPropertyLineStyleSelector(QWidget *parent = nullptr);
+    ~KPropertyLineStyleSelector() override;
 
     /**
      * Adds a new line style to the combobox.
@@ -63,7 +63,7 @@ public:
     QVector<qreal> lineDashes() const;
 
 protected:
-    void paintEvent(QPaintEvent *pe);
+    void paintEvent(QPaintEvent *pe) override;
 
 private:
     class Private;

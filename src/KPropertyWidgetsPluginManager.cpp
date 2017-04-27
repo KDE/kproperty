@@ -110,7 +110,7 @@ QWidget * KPropertyWidgetsPluginManager::createEditor(
 {
     const KPropertyEditorCreatorInterface *creator = d->editorCreators.value(type);
     if (!creator)
-        return 0;
+        return nullptr;
     QWidget *w = creator->createEditor(type, parent, option, index);
     KProperty *property = KPropertyUtils::propertyForIndex(index);
     if (w && property) {
