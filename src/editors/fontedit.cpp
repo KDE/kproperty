@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,9 +65,12 @@ void KPropertyFontEditRequester::setValue(const QFont &value)
 
 void KPropertyFontEditRequester::slotSelectFontClicked()
 {
+    QFontDialog::FontDialogOptions dialogOptions;
+    if (!KPropertyUtils::shouldUseNativeDialogs()) { // switch to Qt's dialog outside of KDE desktops
+        dialogOptions |= QFontDialog::DontUseNativeDialog;
+    }
     bool ok;
-    QFont font;
-    font = QFontDialog::getFont(&ok, m_font, parentWidget());
+    const QFont font = QFontDialog::getFont(&ok, m_font, parentWidget(), QString(), dialogOptions);
     if (ok) {
         m_font = font;
         setValue(m_font);

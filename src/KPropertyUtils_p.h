@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -420,6 +420,21 @@ private:
     QPainter* const m_painter;
 };
 
-}
+/**
+ * @brief Returns @c true if native dialog should be used
+ *
+ * If @c false Qt's standard dialog should be used instead of the operating system native dialog.
+ * Can be used with QColorDialog, QFileDialog and QFontDialog.
+ * Depends on the curent desktop in use:
+ * - on Unix (other than macOS) returns @c true if the XDG_CURRENT_DESKTOP environment variable is
+ *   empty or equal to "KDE", @c false for other values of XDG_CURRENT_DESKTOP (i.e. @c false for
+ *   XFCE, GNOME and other desktops)
+ * - @c true for all other operating systems, i.e. for MS Windows, macOS, etc.
+ *
+ * @todo Share this code with KReport and Kexi
+ */
+bool shouldUseNativeDialogs();
+
+} // KPropertyUtils
 
 #endif
