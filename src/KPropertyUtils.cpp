@@ -254,7 +254,7 @@ KPROPERTYWIDGETS_EXPORT KProperty* KPropertyUtils::propertyForIndex(const QModel
     return editorModel ? editorModel->propertyForIndex(index) : nullptr;
 }
 
-bool KPropertyUtils::shouldUseNativeDialogs()
+bool KPropertyUtilsPrivate::shouldUseNativeDialogs()
 {
 #if defined Q_OS_UNIX && !defined Q_OS_MACOS
     const QString xdgSessionDesktop = QString::fromLatin1(qgetenv("XDG_CURRENT_DESKTOP").trimmed());

@@ -67,7 +67,7 @@ void KPropertyFontEditRequester::setValue(const QFont &value)
 void KPropertyFontEditRequester::slotSelectFontClicked()
 {
     QFontDialog::FontDialogOptions dialogOptions;
-    if (!KPropertyUtils::shouldUseNativeDialogs()) { // switch to Qt's dialog outside of KDE desktops
+    if (!KPropertyUtilsPrivate::shouldUseNativeDialogs()) { // switch to Qt's dialog outside of KDE desktops
         dialogOptions |= QFontDialog::DontUseNativeDialog;
     }
     bool ok;
