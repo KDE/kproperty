@@ -39,6 +39,8 @@
 #include <QFileDialog>
 #include <QHBoxLayout>
 
+static const int POPUP_MARGIN = 2;
+
 KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
         : QWidget(parent)
         , m_property(prop)
@@ -66,7 +68,7 @@ KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
     m_popup = new QLabel(nullptr, Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     m_popup->setBackgroundRole(QPalette::Base);
     m_popup->setFrameStyle(QFrame::Plain | QFrame::Box);
-    m_popup->setMargin(2);
+    m_popup->setMargin(POPUP_MARGIN);
     m_popup->setLineWidth(1);
     m_popup->hide();
 
@@ -151,24 +153,77 @@ void KPropertyPixmapEditor::selectPixmap()
     */
 }
 
+static QRect popupGeometry(QWidget *editor, const QSize &pixmapSize)
+{
+    const QRect screenRect = QApplication::desktop()->availableGeometry(editor);
+    const QRect globalRect = QRect(editor->mapToGlobal(QPoint(0, 0)), editor->size()) & screenRect;
+    int aboveSpace = std::min(pixmapSize.height(), globalRect.y() - screenRect.top());
+    int belowSpace = std::min(pixmapSize.height(), screenRect.bottom() - globalRect.bottom());
+    // find max area
+    // area3 | area1
+    // area2 | area0
+    const QVector<int> widths{
+        std::min(pixmapSize.width(), screenRect.right() - globalRect.left()),
+        std::min(pixmapSize.width(), screenRect.right() - globalRect.left()),
+        std::min(pixmapSize.width(), globalRect.right() - screenRect.left()),
+        std::min(pixmapSize.width(), globalRect.right() - screenRect.left())
+    };
+    const std::vector<int> areas{ widths[0] * belowSpace, widths[1] * aboveSpace,
+                                  widths[2] * belowSpace, widths[3] * aboveSpace };
+    const int areaNumber = std::distance(areas.begin(), std::max_element(areas.begin(), areas.end()));
+    QRect rect;
+    switch (areaNumber) {
+    case 0: {
+        int width = double(belowSpace) / pixmapSize.height() * pixmapSize.width();
+        if (width > widths[areaNumber]) {
+            width = widths[areaNumber];
+            belowSpace = double(width) / pixmapSize.width() * pixmapSize.height();
+        }
+        rect = QRect(globalRect.left(), globalRect.bottom(), width, belowSpace);
+        break;
+    }
+    case 1: {
+        int width = double(aboveSpace) / pixmapSize.height() * pixmapSize.width();
+        if (width > widths[areaNumber]) {
+            width = widths[areaNumber];
+            aboveSpace = double(width) / pixmapSize.width() * pixmapSize.height();
+        }
+        rect = QRect(globalRect.left(), globalRect.top() - aboveSpace, width, aboveSpace);
+        break;
+    }
+    case 2: {
+        int width = double(belowSpace) / pixmapSize.height() * pixmapSize.width();
+        if (width > widths[areaNumber]) {
+            width = widths[areaNumber];
+            belowSpace = double(width) / pixmapSize.width() * pixmapSize.height();
+        }
+        rect = QRect(globalRect.right() - width, globalRect.bottom(), width, belowSpace);
+        break;
+    }
+    case 3: {
+        int width = double(aboveSpace) / pixmapSize.height() * pixmapSize.width();
+        if (width > widths[areaNumber]) {
+            width = widths[areaNumber];
+            aboveSpace = double(width) / pixmapSize.width() * pixmapSize.height();
+        }
+        rect = QRect(globalRect.right() - width, globalRect.top() - aboveSpace, width,
+                     aboveSpace);
+        break;
+    }
+    }
+    return rect;
+}
+
 bool
 KPropertyPixmapEditor::eventFilter(QObject *o, QEvent *ev)
 {
     if (o == m_edit) {
         if (ev->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(ev)->button() == Qt::LeftButton) {
-            if (m_previewPixmap.height() <= m_edit->height()
-                    && m_previewPixmap.width() <= m_edit->width())
-                return false;
-
-            m_popup->setPixmap(m_previewPixmap.isNull() ? m_pixmap : m_previewPixmap);
-            m_popup->resize(m_previewPixmap.size() + QSize(2*3, 2*3));
-            QPoint pos = QCursor::pos() + QPoint(3, 15);
-            const QRect screenRect = QApplication::desktop()->availableGeometry(this);
-            if ((pos.x() + m_popup->width()) > screenRect.width())
-                pos.setX(screenRect.width() - m_popup->width());
-            if ((pos.y() + m_popup->height()) > screenRect.height())
-                pos.setY(mapToGlobal(QPoint(0, 0)).y() - m_popup->height());
-            m_popup->move(pos);
+            if (m_pixmap.height() <= m_edit->height() && m_pixmap.width() <= m_edit->width()) {
+                return false; // nothing to preview
+            }
+            m_popup->setGeometry(popupGeometry(this, m_pixmap.size()));
+            m_popup->setPixmap(m_pixmap);
             m_popup->show();
         } else if (ev->type() == QEvent::MouseButtonRelease || ev->type() == QEvent::Hide) {
             if (m_popup->isVisible()) {
