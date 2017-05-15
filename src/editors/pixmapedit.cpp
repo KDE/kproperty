@@ -58,7 +58,6 @@ KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_edit->setBackgroundRole(QPalette::Base);
     m_edit->setMouseTracking(true);
-    m_edit->installEventFilter(this);
 
     m_button = new QPushButton(this);
     lyr->addWidget(m_button);
@@ -74,6 +73,9 @@ KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
 
     setFocusProxy(m_edit);
     connect(m_button, SIGNAL(clicked()), this, SLOT(selectPixmap()));
+
+    m_edit->installEventFilter(this);
+    installEventFilter(this);
 }
 
 KPropertyPixmapEditor::~KPropertyPixmapEditor()
@@ -235,6 +237,10 @@ KPropertyPixmapEditor::eventFilter(QObject *o, QEvent *ev)
                 m_button->animateClick();
                 return true;
             }
+        }
+    } else if (o == this) {
+        if (ev->type() == QEvent::Resize) {
+            m_button->setMaximumWidth(height());
         }
     }
     return QWidget::eventFilter(o, ev);
