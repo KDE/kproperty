@@ -199,10 +199,7 @@ public:
      */
     KProperty();
 
-    /*! Constructs property of simple type.
-     If \a caption contains newline characters, caption() will return \a caption with substituted
-     these with spaces. captionForDisplaying() is used to get original caption text usable
-     (with newline, if any) for displaying within a property editor. */
+    /*! Constructs property of a simple type. */
     explicit KProperty(const QByteArray &name, const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, KProperty* parent = nullptr);
@@ -237,8 +234,14 @@ public:
      */
     void setName(const QByteArray &name);
 
-    /*! \return the caption of the property.*/
+    /*! \return the caption of the property. Does not contain newline characters. Can be empty. */
     QString caption() const;
+
+    /*! \return the caption of the property or name() if the caption is empty. */
+    inline QString captionOrName() const
+    {
+        return caption().isEmpty() ? QString::fromLatin1(name()) : caption();
+    }
 
     /*! \return the caption text of the property for displaying.
      It is similar to caption() but if the property caption contains newline characters,
@@ -246,8 +249,9 @@ public:
     QString captionForDisplaying() const;
 
     /*! Sets the name of the property. If the caption contains newline characters,
-     these are replaced by spaces. captionForDisplaying() can be used to access the original caption
-     text passed here.*/
+     these are substituted with spaces.
+     @see captionForDisplaying
+    */
     void setCaption(const QString &caption);
 
     /*! \return the description of the property.*/

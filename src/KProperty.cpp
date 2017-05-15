@@ -754,8 +754,11 @@ KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
 {
     dbg.nospace() << "KProperty("
         << "NAME=" << p.name();
-    if (!p.caption().isEmpty()) {
-        dbg.nospace() << " CAPTION=" << p.caption();
+    if (!p.captionForDisplaying().isEmpty()) {
+        dbg.nospace() << " CAPTION_FOR_DISPLAYING=" << p.captionForDisplaying();
+        if (p.captionForDisplaying() != p.caption()) {
+            dbg.nospace() << " CAPTION=" << p.caption();
+        }
     }
     if (!p.description().isEmpty()) {
         dbg.nospace() << " DESC=" << p.description();

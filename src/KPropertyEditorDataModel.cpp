@@ -149,8 +149,9 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
             default:;
             }
         } else if (role == Qt::DisplayRole) {
-            if (!prop->caption().isEmpty())
-                return prop->caption();
+            if (!prop->captionForDisplaying().isEmpty()) {
+                return prop->captionForDisplaying();
+            }
             return prop->name();
         }
         else if (role == PropertyModifiedRole) {

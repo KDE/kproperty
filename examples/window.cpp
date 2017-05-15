@@ -242,11 +242,11 @@ Window::Window()
         m_set.addProperty(p = new KProperty("Url", QUrl("https://community.kde.org/KProperty"), "Url"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="ExistingFile") {
-        m_set.addProperty(p = new KProperty("ExistingFile", QUrl::fromLocalFile(QDir::homePath()), "Existing File"), group);
+        m_set.addProperty(p = new KProperty("ExistingFile", QUrl::fromLocalFile(QDir::homePath()), "Existing\nFile"), group);
         p->setOption("fileMode", "existingFile");
     }
     if (singleProperty.isEmpty() || singleProperty=="OverwriteFile") {
-        m_set.addProperty(p = new KProperty("OverwriteFile", QUrl::fromLocalFile(QDir::homePath()), "Overwrite File"), group);
+        m_set.addProperty(p = new KProperty("OverwriteFile", QUrl::fromLocalFile(QDir::homePath()), "Overwrite\nFile"), group);
         p->setOption("fileMode", "existingFile");
         p->setOption("confirmOverwrites", true);
     }

@@ -87,9 +87,10 @@ KPropertyStringListEditor::showEditor()
     dialog.setButtons(QDialog::Ok | QDialog::Cancel);
     dialog.setDefaultButton(QDialog::Ok);
     dialog.setModal(false);
-    KEditListBox *edit = new KEditListBox(tr("Contents of %1").arg(property()->caption()), &dialog, "editlist");
-//PORTING: Verify that widget was added to mainLayout:     dialog.setMainWidget(edit);
-// Add mainLayout->addWidget(edit); if necessary
+    KEditListBox *edit = new KEditListBox(tr("Contents of %1").arg(property()->captionOrName()),
+                                          &dialog, "editlist");
+    // PORTING: Verify that widget was added to mainLayout:     dialog.setMainWidget(edit);
+    // Add mainLayout->addWidget(edit); if necessary
     edit->insertStringList(m_list);
 
     if (dialog.exec() == QDialog::Accepted) {

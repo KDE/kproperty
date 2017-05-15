@@ -112,7 +112,8 @@ QString KPropertyPixmapEditor::selectPixmapFileName()
         emit valueChanged(this);
       }
     #endif*/
-    const QString caption(tr("Insert Image From File (for \"%1\" property)").arg(m_property->caption()));
+    const QString caption(
+        tr("Insert Image From File (for \"%1\" property)").arg(m_property->captionOrName()));
     /*KDE4:
     #ifdef Q_OS_WIN
       QString recentDir;
