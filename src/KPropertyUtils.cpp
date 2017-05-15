@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -252,4 +252,15 @@ KPROPERTYWIDGETS_EXPORT KProperty* KPropertyUtils::propertyForIndex(const QModel
     const KPropertyEditorDataModel *editorModel
             = qobject_cast<const KPropertyEditorDataModel*>(index.model());
     return editorModel ? editorModel->propertyForIndex(index) : nullptr;
+}
+
+bool KPropertyUtils::shouldUseNativeDialogs()
+{
+#if defined Q_OS_UNIX && !defined Q_OS_MACOS
+    const QString xdgSessionDesktop = QString::fromLatin1(qgetenv("XDG_CURRENT_DESKTOP").trimmed());
+    return xdgSessionDesktop.isEmpty()
+        && 0 == xdgSessionDesktop.compare(QStringLiteral("KDE"), Qt::CaseInsensitive);
+#else
+    return true;
+#endif
 }
