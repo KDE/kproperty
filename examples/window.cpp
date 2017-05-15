@@ -211,7 +211,7 @@ Window::Window()
         m_set.addProperty(new KProperty("Color", palette().color(QPalette::Active, QPalette::Background), "Color"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Pixmap") {
-        QPixmap pm(QIcon::fromTheme("network-wired").pixmap(QSize(16,16)));
+        QPixmap pm(QIcon::fromTheme("network-wired").pixmap(QSize(64, 64)));
         m_set.addProperty(p = new KProperty("Pixmap", pm, "Pixmap"), group);
         p->setIconName("kpaint");
     }
