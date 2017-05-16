@@ -103,10 +103,6 @@ private:
 };
 
 /*! \brief Set of properties
-
-   \author Cedric Pasteur <cedric.pasteur@free.fr>
-   \author Alexander Dymo <cloudtemple@mskat.net>
-   \author Jarosław Staniek <staniek@kde.org>
  */
 class KPROPERTYCORE_EXPORT KPropertySet : public QObject
 {
@@ -309,10 +305,8 @@ protected:
 //! qDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
 KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
 
-/*! A property buffer
-   \author Cedric Pasteur <cedric.pasteur@free.fr>
-   \author Alexander Dymo <cloudtemple@mskat.net>
-   \author Adam Treat <treat@kde.org>
+/*! @brief A property buffer
+
   @todo Find a better name to show it's a set that doesn't own property
  */
 class KPROPERTYCORE_EXPORT KPropertyBuffer : public KPropertySet
