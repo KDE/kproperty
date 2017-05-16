@@ -29,24 +29,6 @@
 
 #include "kpropertycore_export.h"
 
-/*! \brief Namespace for a set of classes implementing generic properties framework.
-
- Main classes of this framework are:
-  - KProperty, representing a single property with its own type and value
-  - KPropertySet, a set of properties
-  - KPropertyEditorView, a widget for displaying and editing properties provided by a KPropertySet object.
-    Every property has its own row displayed within the editor view.
-    The editor view enables editing of property values.
-
- The KProperty framework also supports adding composed and property types and custom property editor types.
-
- Take a look at the example application, available in the examples/ directory.
-
- @author Cedric Pasteur <cedric.pasteur@free.fr>
- @author Alexander Dymo <cloudtemple@mskat.net>
- @author Jarosław Staniek <staniek@kde.org>
-*/
-
 class KComposedPropertyInterface;
 class KPropertySet;
 class KPropertySetPrivate;
@@ -70,16 +52,11 @@ public:
      so the first key element is associated with first element from
      the 'names' list, and so on. */
     QList<QVariant> keys;
-//   QStringList keys;
 
 //! @todo what about using QValueList<QVariant> here too?
     /*! The list of translated names that will be visible on the screen.
      First value is referenced by first key, and so on. */
     QStringList names;
-
-//unused for now   /*! True (the default), if the list has fixed number of possible
-//unused for now    items (keys). If this is false, user can add or enter own values. */
-//unused for now   bool fixed;
 };
 
 /*! \brief The base class representing a single property
@@ -121,10 +98,6 @@ public:
   The text of property caption containing newline characters is available in its original form using
   KProperty::captionForDisplaying(). KProperty::caption() returns modified caption text in which
   the newline characters are substituted with spaces and any trailing and leading whitespace is removed.
-
-  \author Cedric Pasteur <cedric.pasteur@free.fr>
-  \author Alexander Dymo <cloudtemple@mskat.net>
-  \author Jarosław Staniek <staniek@kde.org>
 */
 class KPROPERTYCORE_EXPORT KProperty
 {
