@@ -64,8 +64,9 @@ KPropertyPixmapEditor::KPropertyPixmapEditor(KProperty *prop, QWidget *parent)
     KPropertyUtils::setupDotDotDotButton(m_button, tr("Insert image from file"),
         tr("Inserts image from file"));
 
-    m_popup = new QLabel(nullptr, Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
-    m_popup->setBackgroundRole(QPalette::Base);
+    m_popup = new QLabel(nullptr, Qt::ToolTip);
+    m_popup->setBackgroundRole(QPalette::ToolTipBase);
+    m_popup->setForegroundRole(QPalette::ToolTipText);
     m_popup->setFrameStyle(QFrame::Plain | QFrame::Box);
     m_popup->setMargin(POPUP_MARGIN);
     m_popup->setLineWidth(1);
