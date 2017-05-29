@@ -26,7 +26,6 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(KPropertyAddIconsRccFile)
 include(KPropertyAddQCH)
 include(KPropertyMacros)
-include(MacroLogFeature)
 
 simple_option(BUILD_QCH "Build API documentation in QCH format" OFF)
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
@@ -61,4 +60,3 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
 endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-macro_display_feature_log()
