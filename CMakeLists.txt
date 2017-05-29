@@ -25,7 +25,6 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 # Own
 include(KPropertyAddIconsRccFile)
 include(KPropertyMacros)
-include(MacroLogFeature)
 
 simple_option(KPROPERTY_WIDGETS "Build the QtWidget components of KProperty" ON)
 simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
@@ -59,4 +58,3 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
 endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-macro_display_feature_log()
