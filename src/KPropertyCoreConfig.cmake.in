@@ -16,10 +16,15 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
+include(FeatureSummary)
 
 find_dependency(Qt5Core @REQUIRED_QT_VERSION@)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KPropertyCoreTargets.cmake")
+
+set_package_properties(KPropertyCore PROPERTIES
+   DESCRIPTION "A property editing framework (core)"
+   URL "https://community.kde.org/KProperty")
 
 # "public" variables:
 # TODO

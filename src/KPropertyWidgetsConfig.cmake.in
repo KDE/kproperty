@@ -16,11 +16,16 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
+include(FeatureSummary)
 
 find_dependency(Qt5Widgets @REQUIRED_QT_VERSION@)
 find_dependency(KPropertyCore @PROJECT_VERSION@ EXACT)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KPropertyWidgetsTargets.cmake")
+
+set_package_properties(KPropertyWidgets PROPERTIES
+   DESCRIPTION "A property editing framework with editor widget"
+   URL "https://community.kde.org/KProperty")
 
 # "public" variables:
 # TODO
