@@ -117,12 +117,20 @@ void KPropertyFactory::addDisplayInternal(int type, KPropertyValueDisplayInterfa
 
 //------------
 
+class Q_DECL_HIDDEN KPropertyValueDisplayInterface::Private
+{
+public:
+    Private() {}
+};
+
 KPropertyValueDisplayInterface::KPropertyValueDisplayInterface()
+    : d(new Private)
 {
 }
 
 KPropertyValueDisplayInterface::~KPropertyValueDisplayInterface()
 {
+    delete d;
 }
 
 //static
@@ -268,28 +276,56 @@ QString KPropertyFactoryManager::valueToLocalizedString(int type, const QVariant
     return 0;
 #endif
 
+class Q_DECL_HIDDEN KComposedPropertyInterface::Private
+{
+public:
+    Private() {}
+    bool childValueChangedEnabled = true;
+};
+
 KComposedPropertyInterface::KComposedPropertyInterface(KProperty *parent)
- : m_childValueChangedEnabled(true)
+ : d(new Private)
 {
     Q_UNUSED(parent)
 }
 
 KComposedPropertyInterface::~KComposedPropertyInterface()
 {
+    delete d;
 }
 
 void KComposedPropertyInterface::childValueChangedInternal(KProperty *child, const QVariant &value,
                                                            KProperty::ValueOptions valueOptions)
 {
-    if (m_childValueChangedEnabled) {
+    if (d->childValueChangedEnabled) {
         childValueChanged(child, value, valueOptions);
     }
 }
 
+void KComposedPropertyInterface::setChildValueChangedEnabled(bool set)
+{
+    d->childValueChangedEnabled = set;
+}
+
+bool KComposedPropertyInterface::childValueChangedEnabled() const
+{
+    return d->childValueChangedEnabled;
+}
+
+//---------------
+
+class Q_DECL_HIDDEN KComposedPropertyCreatorInterface::Private
+{
+public:
+    Private() {}
+};
+
 KComposedPropertyCreatorInterface::KComposedPropertyCreatorInterface()
+    : d(new Private)
 {
 }
 
 KComposedPropertyCreatorInterface::~KComposedPropertyCreatorInterface()
 {
+    delete d;
 }

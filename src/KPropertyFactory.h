@@ -22,10 +22,6 @@
 
 #include "KProperty.h"
 
-#include <QObject>
-#include <QVariant>
-#include <QHash>
-
 //! An interface for for composed property handlers
 /*! KComposedPropertyInterface should be subclassed to override the behaviour of a property type.
   In the constructor child property objects should be created if there are any.
@@ -51,7 +47,9 @@ public:
 
     void childValueChangedInternal(KProperty *child, const QVariant &value, KProperty::ValueOptions valueOptions);
 
-    void setChildValueChangedEnabled(bool set) { m_childValueChangedEnabled = set; }
+    bool childValueChangedEnabled() const;
+
+    void setChildValueChangedEnabled(bool set);
 
     /*! @return true if values @a first and @a second are equal. Used in KProperty::setValue()
      to check if value has been changed before setting value.
@@ -64,7 +62,11 @@ protected:
     /*! This method emits the \a KPropertySet::propertyChanged() signal for all
     sets our parent-property is registered in. */
     void emitPropertyChanged();
-    bool m_childValueChangedEnabled : 1;
+
+private:
+    Q_DISABLE_COPY(KComposedPropertyInterface)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYCORE_EXPORT KComposedPropertyCreatorInterface
@@ -75,6 +77,11 @@ public:
     virtual ~KComposedPropertyCreatorInterface();
 
     virtual KComposedPropertyInterface* createComposedProperty(KProperty *parent) const = 0;
+
+private:
+    Q_DISABLE_COPY(KComposedPropertyCreatorInterface)
+    class Private;
+    Private * const d;
 };
 
 //! Creator returning composed property object
@@ -89,6 +96,8 @@ public:
     ComposedProperty* createComposedProperty(KProperty *parent) const override {
         return new ComposedProperty(parent);
     }
+
+    Q_DISABLE_COPY(KComposedPropertyCreator)
 };
 
 //! Provides a specialized conversion of value to string depending on type
@@ -113,6 +122,11 @@ public:
     //! @return @a value converted to string using QVariant::toString(), truncated if it's longer than @ref maxStringValueLength()
     //! @see maxStringValueLength();
     static QString valueToLocalizedString(const QVariant& value);
+
+private:
+    Q_DISABLE_COPY(KPropertyValueDisplayInterface)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYCORE_EXPORT KPropertyFactory
@@ -137,6 +151,7 @@ protected:
     //! The converter becomes owned by the factory.
     void addDisplayInternal(int type, KPropertyValueDisplayInterface *display, bool own = true);
 
+    Q_DISABLE_COPY(KPropertyFactory)
     class Private;
     Private * const d;
 };
@@ -173,7 +188,7 @@ public:
     static void addInitFunction(void (*initFunction)());
 
 private:
-
+    Q_DISABLE_COPY(KPropertyFactoryManager)
     class Private;
     Private * const d;
 };
