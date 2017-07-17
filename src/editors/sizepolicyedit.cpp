@@ -30,11 +30,12 @@ public:
     }
 
     QString nameForPolicy(QSizePolicy::Policy p) {
-        const int index = keys.indexOf((int)p);
+        const int index = keys().indexOf(static_cast<int>(p));
         if (index == -1)
-            return names[0];
-        return names[index];
+            return names()[0].toString();
+        return names()[index].toString();
     }
+
 private:
     static QList<QVariant> keysInternal() {
         QList<QVariant> keys;

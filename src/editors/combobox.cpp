@@ -96,7 +96,7 @@ QString KPropertyComboBoxEditor::borderSheet(const QWidget *widget)
 
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
-    if (m_listData.keys.isEmpty()) {
+    if (m_listData.keys().isEmpty()) {
         kprWarning() << "property listData not available!";
         return false;
     }
@@ -109,12 +109,14 @@ QVariant KPropertyComboBoxEditor::value() const
         return QVariant();
 
     const int idx = currentIndex();
-    if (idx < 0 || idx >= (int)m_listData.keys.count() || m_listData.names[idx] != currentText().trimmed()) {
+    if (idx < 0 || idx >= (int)m_listData.keys().count()
+        || m_listData.names()[idx].toString() != currentText().trimmed())
+    {
         if (!m_options.extraValueAllowed || currentText().isEmpty())
             return QVariant();
-        return QVariant(currentText().trimmed());//trimmed 4 safety
+        return currentText().trimmed(); //trimmed 4 safety
     }
-    return QVariant(m_listData.keys[idx]);
+    return m_listData.keys()[idx];
 }
 
 void KPropertyComboBoxEditor::setValue(const QVariant &value)
@@ -124,7 +126,7 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
 
     if (!m_setValueEnabled)
         return;
-    int idx = m_listData.keys.indexOf(value/*.toString()TODO*/);
+    const int idx = m_listData.keys().indexOf(value);
 //    kprDebug() << "**********" << idx << "" << value.toString();
     if (idx >= 0 && idx < count()) {
         setCurrentIndex(idx);
@@ -160,7 +162,7 @@ void KPropertyComboBoxEditor::fillValues()
         return;
 
     int index = 0;
-    foreach( const QString& itemName, m_listData.names ) {
+    for (const QString &itemName : m_listData.namesAsStringList()) {
         addItem(itemName);
         if (m_options.iconProvider) {
             QIcon icon = m_options.iconProvider->icon(index);
@@ -168,7 +170,7 @@ void KPropertyComboBoxEditor::fillValues()
         }
         index++;
     }
-    QCompleter *comp = new QCompleter(m_listData.names);
+    QCompleter *comp = new QCompleter(m_listData.namesAsStringList());
     comp->setWidget(this);
 }
 
@@ -205,7 +207,7 @@ QString KPropertyComboBoxDelegate::propertyValueToString(const KProperty* proper
     if (property->value().isNull())
         return QString();
     //kprDebug() << "property->value()==" << property->value();
-    const int idx = listData->keys.indexOf( property->value() );
+    const int idx = listData->keys().indexOf(property->value());
     //kprDebug() << "idx==" << idx;
     if (idx == -1) {
       if (!property->option("extraValueAllowed").toBool())
@@ -213,7 +215,7 @@ QString KPropertyComboBoxDelegate::propertyValueToString(const KProperty* proper
       else
         return property->value().toString();
     }
-    return property->listData()->names[ idx ];
+    return property->listData()->names()[idx].toString();
 }
 
 QString KPropertyComboBoxDelegate::valueToString(const QVariant& value, const QLocale &locale) const

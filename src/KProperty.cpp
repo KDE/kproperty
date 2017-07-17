@@ -266,40 +266,126 @@ void KProperty::Private::childValueChanged(KProperty *child, const QVariant &val
 
 /////////////////////////////////////////////////////////////////
 
-KPropertyListData::KPropertyListData(const QStringList& keys_, const QStringList& names_)
-        : names(names_)
+class Q_DECL_HIDDEN KPropertyListData::Private
 {
-    setKeysAsStringList(keys_);
-}
-
-KPropertyListData::KPropertyListData(const QList<QVariant> keys_, const QStringList& names_)
-        : keys(keys_), names(names_)
-{
-}
+public:
+    Private() {
+    }
+    Private(const Private &other) {
+        copy(other);
+    }
+#define KPropertyListDataPrivateArgs(o) std::tie(o.keys, o.names)
+    void copy(const Private &other) {
+        KPropertyListDataPrivateArgs((*this)) = KPropertyListDataPrivateArgs(other);
+    }
+    bool operator==(const Private &other) const {
+        return KPropertyListDataPrivateArgs((*this)) == KPropertyListDataPrivateArgs(other);
+    }
+    QVariantList keys;
+    QVariantList names;
+};
 
 KPropertyListData::KPropertyListData()
+    : d(new Private)
 {
+}
+
+KPropertyListData::KPropertyListData(const KPropertyListData &other)
+    : d(new Private(*other.d))
+{
+}
+
+KPropertyListData::KPropertyListData(const QStringList &keys, const QStringList &names)
+        : d(new Private)
+{
+    setKeysAsStringList(keys);
+    setNamesAsStringList(names);
+}
+
+KPropertyListData::KPropertyListData(const QVariantList &keys, const QVariantList &names)
+    : d(new Private)
+{
+    setKeys(keys);
+    setNames(names);
+}
+
+KPropertyListData::KPropertyListData(const QVariantList &keys, const QStringList &names)
+    : d(new Private)
+{
+    setKeys(keys);
+    setNamesAsStringList(names);
 }
 
 KPropertyListData::~KPropertyListData()
 {
+    delete d;
 }
 
-void KPropertyListData::setKeysAsStringList(const QStringList& list)
+KPropertyListData& KPropertyListData::operator=(const KPropertyListData &other)
 {
-    keys.clear();
-    for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
-        keys.append(*it);
+    if (this != &other) {
+        d->copy(*other.d);
     }
+    return *this;
+}
+
+bool KPropertyListData::operator==(const KPropertyListData &other) const
+{
+    return *d == *other.d;
+}
+
+void KPropertyListData::setKeysAsStringList(const QStringList &keys)
+{
+    d->keys.clear();
+    for (const QString &key : keys) {
+        d->keys.append(key);
+    }
+}
+
+void KPropertyListData::setKeys(const QVariantList &keys)
+{
+    d->keys = keys;
+}
+
+QVariantList KPropertyListData::keys() const
+{
+    return d->keys;
 }
 
 QStringList KPropertyListData::keysAsStringList() const
 {
     QStringList result;
-    for (QList<QVariant>::ConstIterator it = keys.constBegin(); it != keys.constEnd(); ++it) {
-        result.append((*it).toString());
+    for (const QVariant &key : d->keys) {
+        result.append(key.toString());
     }
     return result;
+}
+
+QVariantList KPropertyListData::names() const
+{
+    return d->names;
+}
+
+QStringList KPropertyListData::namesAsStringList() const
+{
+    QStringList result;
+    for (const QVariant &name : d->names) {
+        result.append(name.toString());
+    }
+    return result;
+}
+
+void KPropertyListData::setNamesAsStringList(const QStringList &names)
+{
+    d->names.clear();
+    for (const QString &name : names) {
+        d->names.append(name);
+    }
+}
+
+void KPropertyListData::setNames(const QVariantList &names)
+{
+    d->names = names;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -325,25 +411,6 @@ KProperty::KProperty(const QByteArray &name, const QVariant &value,
     if (parent)
         parent->d->addChild(this);
     setValue(value, DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
-}
-
-KProperty::KProperty(const QByteArray &name, const QStringList &keys, const QStringList &strings,
-                   const QVariant &value, const QString &caption, const QString &description,
-                   int type, KProperty* parent)
-        : d(new KProperty::Private(this))
-{
-    d->name = name;
-    d->setCaptionForDisplaying(caption);
-    d->description = description;
-    setListData(keys, strings);
-    if (type == int(Auto)) {
-        type = value.type();
-    }
-    setType(type);
-
-    if (parent)
-        parent->d->addChild(this);
-    setValue(value, KProperty::DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
 }
 
 KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,

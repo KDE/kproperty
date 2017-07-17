@@ -33,30 +33,87 @@ class KComposedPropertyInterface;
 class KPropertySet;
 class KPropertySetPrivate;
 
-/*! Data container for properties of list type. */
+/*! A data container for properties of list type. */
 class KPROPERTYCORE_EXPORT KPropertyListData
 {
 public:
-    /*! Data container for list-value property.
-     We will be able to choose an item from this list. */
-    KPropertyListData(const QStringList& keys_, const QStringList& names_);
-    KPropertyListData(const QList<QVariant> keys_, const QStringList& names_);
     KPropertyListData();
+
+    KPropertyListData(const KPropertyListData &other);
+
+    KPropertyListData(const QStringList& keys, const QStringList& names);
+
+    KPropertyListData(const QVariantList &keys, const QVariantList &names);
+
+    KPropertyListData(const QVariantList &keys, const QStringList &names);
+
     ~KPropertyListData();
 
-    void setKeysAsStringList(const QStringList& list);
+    //! Assigns @a other to this KPropertyListData
+    KPropertyListData& operator=(const KPropertyListData &other);
+
+    //! @return true if this data options equals to @a other
+    bool operator==(const KPropertyListData &other) const;
+
+    //! @return true if this data options does not equal to @a other
+    bool operator!=(const KPropertyListData &other) const { return !operator==(other); }
+
+    /**
+     * @brief A list containing all possible keys for a property
+     *
+     * Items of this list are ordered, so the first key element is associated with first element
+     * from the 'names' list, and so on.
+     */
+    QVariantList keys() const;
+
+    /**
+     * @brief A list containing all possible keys for a property converted to strings
+     */
     QStringList keysAsStringList() const;
 
-    /*! The string list containing all possible keys for this property
-     or NULL if this is not a property of type 'list'. The values in this list are ordered,
-     so the first key element is associated with first element from
-     the 'names' list, and so on. */
-    QList<QVariant> keys;
+    /**
+     * Sets a list containing all possible keys for a property
+     *
+     * @note each key on the list should be unique
+     */
+    void setKeys(const QVariantList &keys);
 
-//! @todo what about using QValueList<QVariant> here too?
-    /*! The list of translated names that will be visible on the screen.
-     First value is referenced by first key, and so on. */
-    QStringList names;
+    /**
+     * Sets a list containing all possible keys for a property as strings
+     *
+     * @note each key on the list should be unique
+     */
+    void setKeysAsStringList(const QStringList &keys);
+
+    /**
+     * @brief The list of user-visible translated name elements
+     *
+     * First value is referenced by first key, and so on.
+     */
+    QVariantList names() const;
+
+    /**
+     * @brief The list of user-visible translated name elements as strings
+     */
+    QStringList namesAsStringList() const;
+
+    /**
+     * Sets a list containing all possible keys for a property
+     *
+     * @note each key on the list should be unique
+     */
+    void setNames(const QVariantList &names);
+
+    /**
+     * Sets a list containing all possible keys for a property as strings
+     *
+     * @note each key on the list should be unique
+     */
+    void setNamesAsStringList(const QStringList &names);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 /*! \brief The base class representing a single property
@@ -78,17 +135,14 @@ public:
   KProperty *property = new KProperty(name, value, caption, description);
   // name is a QByteArray, value is whatever type QVariant supports
 
-  // Creating a valueFromList property matching keys with names:
-  QStringList keys, names;
-  keys << "one" << "two" << "three"; // possible values of the property
-  // Names (possibly translated) shown in the editor instead of the keys
-  names << tr("One") << tr("Two") << tr("Three");
-  property = new KProperty(name, keys, names, "two", caption);
+  // Creating a property of type ValueFromList matching keys with names:
+  QStringList keys({"one", "two", "three"}); // possible values of the property
+  QStringList names({tr("One"), tr("Two"), tr("Three")}); // Names (possibly translated) shown in
+                                                          // the editor instead of the keys
+  property = new KProperty(name, new KPropertyListData(keys, names), "two", caption);
 
-  // Creating a valueFromList property matching QVariant keys with names:
-  QValueList<QVariant> variantKeys;
-  variantKeys << 1 << 2 << 3;
-  KPropertyListData *listData = new KPropertyListData(variantKeys, names);
+  // Creating a property of type ValueFromList matching variant keys with names:
+  KPropertyListData *listData = new KPropertyListData({1.1, tr("One")}, {2.5, tr("Two")}, {3., tr("Three")}});
   propertySet->addProperty(new KProperty("List", listData, "otheritem", "List"));
   @endcode
 
@@ -177,15 +231,12 @@ public:
              const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, KProperty* parent = nullptr);
 
-    /*! Constructs property of \ref ValueFromList type. */
-    KProperty(const QByteArray &name, const QStringList &keys, const QStringList &strings,
-             const QVariant &value = QVariant(),
-             const QString &caption = QString(), const QString &description = QString(),
-             int type = ValueFromList, KProperty* parent = nullptr);
-
-    /*! Constructs property of \ref ValueFromList type.
-     This is overload of the above ctor added for convenience. */
-    KProperty(const QByteArray &name, KPropertyListData* listData,
+    /**
+     * @brief Constructs property of ValueFromList type
+     *
+     * Ownership of @a listData is passed to the property object.
+     */
+    KProperty(const QByteArray &name, KPropertyListData *listData,
              const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
              int type = ValueFromList, KProperty* parent = nullptr);

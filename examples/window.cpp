@@ -120,21 +120,19 @@ Window::Window()
         m_set.addProperty(new KProperty("DateTime", QDateTime::currentDateTime(), "Date/Time"), group);
     }
 
-    QStringList name_list; //strings
-    name_list << "My Item" << "Other Item" << "Third Item";
+    QStringList name_list({"My Item", "Other Item", "Third Item"}); //strings
     if (singleProperty.isEmpty() || singleProperty=="List") {
-        QStringList list;//keys
-        list << "myitem" << "otheritem" << "3rditem";
-        m_set.addProperty(new KProperty("List", list, name_list, "otheritem", "List"), group);
+        const QStringList keys({"myitem", "otheritem", "3rditem"});
+        KPropertyListData *listData = new KPropertyListData(keys, name_list);
+        m_set.addProperty(new KProperty("List", listData, "otheritem", "List"), group);
     }
 
     if (singleProperty.isEmpty() || singleProperty=="List2") {
         // A valueFromList property matching strings with ints (could be any type supported by QVariant)
-        QList<QVariant> keys;
-        keys.append(1);
-        keys.append(2);
-        keys.append(3);
-        KPropertyListData *listData = new KPropertyListData(keys, name_list);
+        QVariantList keys({1, 2, 3});
+        KPropertyListData *listData = new KPropertyListData;
+        listData->setKeys(keys);
+        listData->setNamesAsStringList(name_list);
         m_set.addProperty(new KProperty("List2", listData, 3, "List 2"), group);
     }
 

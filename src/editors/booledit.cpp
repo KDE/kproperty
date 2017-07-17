@@ -58,8 +58,9 @@ static QString stateName(int index, const QLocale &locale, const KProperty* prop
 //! Sets up @a data list data with keys and names for true, false, none values, respectively
 static void setupThreeStateListData(KPropertyListData &data, const KProperty* prop)
 {
-    data.keys << true << false << QVariant();
-    data.names << stateName(0, QLocale(), prop) << stateName(1, QLocale(), prop) << stateName(2, QLocale(), prop);
+    data.setKeys({ true, false, QVariant() });
+    data.setNamesAsStringList({ stateName(0, QLocale(), prop), stateName(1, QLocale(), prop),
+                                stateName(2, QLocale(), prop) });
 }
 
 static int valueToIndex(const QVariant& value)

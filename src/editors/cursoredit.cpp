@@ -56,15 +56,14 @@ public:
 
     Qt::CursorShape indexToShape(int index) const
     {
-        if (index < 0 || index >= keys.count())
-            return Qt::ArrowCursor;
-        return (Qt::CursorShape)(keys[index].toInt());
+        return static_cast<Qt::CursorShape>(
+            keys().value(index, static_cast<int>(Qt::ArrowCursor)).toInt());
     }
 
     int shapeToIndex(Qt::CursorShape _shape) const
     {
         int index = 0;
-        foreach (const QVariant& shape, keys) {
+        for (const QVariant &shape : keys()) {
             if (shape.toInt() == _shape)
                 return index;
             index++;
@@ -261,5 +260,5 @@ QString KPropertyCursorDelegate::valueToString(const QVariant& value, const QLoc
         return KPropertyUtils::keyForEnumValue("CursorShape", shape);
     }
     const int comboIndex = s_cursorListData->shapeToIndex(shape);
-    return s_cursorListData->names[comboIndex];
+    return s_cursorListData->names().value(comboIndex).toString();
 }
