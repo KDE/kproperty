@@ -23,7 +23,7 @@
 #include "KPropertyMultiLineStringEditor.h"
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyEditorDataModel_p.h"
 
 namespace {
     bool isMultiLine(const KProperty *property) {

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyEditorDataModel_p.h"
 #include "KPropertyWidgetsFactory.h"
 #include "KPropertySet_p.h"
 

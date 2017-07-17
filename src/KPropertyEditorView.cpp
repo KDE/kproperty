@@ -18,7 +18,7 @@
 */
 
 #include "KPropertyEditorView.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyEditorDataModel_p.h"
 #include "KProperty.h"
 #include "KPropertySet.h"
 #include "KPropertyWidgetsFactory.h"

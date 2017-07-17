@@ -21,7 +21,7 @@
 
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
-#include "KPropertyEditorDataModel.h"
+#include "KPropertyEditorDataModel_p.h"
 #include "KPropertyEditorView.h"
 
 #include <QPainter>

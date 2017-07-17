@@ -74,7 +74,7 @@ if(KPROPERTY_WIDGETS)
         KPropertyWidgetsPluginManager.cpp
         KDefaultPropertyFactory.cpp
         KPropertyEditorView.cpp
-        KPropertyEditorDataModel.cpp
+        KPropertyEditorDataModel_p.cpp
         KPropertyUtils.cpp
         KPropertyLineStyleSelector_p.cpp
         KPropertyLineStyleModel_p.cpp
