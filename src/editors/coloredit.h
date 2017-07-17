@@ -51,6 +51,7 @@ protected:
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
+    Q_DISABLE_COPY(KPropertyColorComboEditor)
     class Private;
     Private * const d;
 };
@@ -72,6 +73,7 @@ public:
     QString valueToString(const QVariant& value, const QLocale &locale) const override;
 
 private:
+    Q_DISABLE_COPY(KPropertyColorComboDelegate)
     class Private;
     Private * const d;
 };

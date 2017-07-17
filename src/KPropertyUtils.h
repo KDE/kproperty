@@ -41,6 +41,7 @@ public Q_SLOTS:
 protected:
     bool event(QEvent * e) override;
 
+    Q_DISABLE_COPY(KPropertyGroupWidget)
     class Private;
     Private * const d;
 };

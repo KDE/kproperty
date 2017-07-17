@@ -196,6 +196,7 @@ private:
     /*! Undoes the last change in the property editor.*/
     void undo();
 
+    Q_DISABLE_COPY(KPropertyEditorView)
     class Private;
     Private * const d;
 };

@@ -49,6 +49,7 @@ protected:
     void paintEvent(QPaintEvent * event) Q_DECL_OVERRIDE;
 
 private:
+    Q_DISABLE_COPY(KPropertyMultiLineStringEditor)
     class Private;
     Private * const d;
 };

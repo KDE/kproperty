@@ -84,6 +84,7 @@ protected:
     //! Used to fix height of the internal spin box
     void resizeEvent( QResizeEvent * event ) override;
 
+    Q_DISABLE_COPY(KPropertyDoubleSpinBox)
     class Private;
     Private * const d;
 };

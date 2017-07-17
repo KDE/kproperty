@@ -60,6 +60,7 @@ protected:
     bool eventFilter(QObject* watched, QEvent* e) override;
 
 private:
+    Q_DISABLE_COPY(KPropertyBoolEditor)
     class Private;
     Private * const d;
 };

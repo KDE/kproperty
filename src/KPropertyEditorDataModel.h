@@ -102,6 +102,7 @@ private:
     //! Collects persistent indices for the model. They are dependent on groupping and sorting.
     void collectIndices() const;
 
+    Q_DISABLE_COPY(KPropertyEditorDataModel)
     class Private;
     Private * const d;
 

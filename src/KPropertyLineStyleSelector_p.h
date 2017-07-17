@@ -67,6 +67,7 @@ protected:
     void paintEvent(QPaintEvent *pe) override;
 
 private:
+    Q_DISABLE_COPY(KPropertyLineStyleSelector)
     class Private;
     Private * const d;
 };

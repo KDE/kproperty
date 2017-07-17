@@ -154,6 +154,7 @@ protected:
     //! The painter becomes owned by the factory.
     void addPainterInternal(int type, KPropertyValuePainterInterface *painter, bool own = true);
 
+    Q_DISABLE_COPY(KPropertyWidgetsFactory)
     class Private;
     Private * const d;
 };
