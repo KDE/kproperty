@@ -193,7 +193,7 @@ void KPropertyComboBoxEditor::paintEvent( QPaintEvent * event )
 
 KPropertyComboBoxDelegate::KPropertyComboBoxDelegate()
 {
-    options.removeBorders = false;
+    options()->setBordersVisible(true);
 }
 
 QString KPropertyComboBoxDelegate::propertyValueToString(const KProperty* property, const QLocale &locale) const

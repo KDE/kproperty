@@ -81,7 +81,7 @@ void KPropertyLineStyleComboEditor::slotValueChanged(int)
 
 KPropertyLineStyleComboDelegate::KPropertyLineStyleComboDelegate()
 {
-    options.removeBorders = false;
+    options()->setBordersVisible(true);
 }
 
 QWidget * KPropertyLineStyleComboDelegate::createEditor( int type, QWidget *parent,

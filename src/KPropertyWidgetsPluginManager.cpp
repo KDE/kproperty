@@ -117,7 +117,7 @@ QWidget * KPropertyWidgetsPluginManager::createEditor(
     KProperty *property = KPropertyUtils::propertyForIndex(index);
     if (w && property) {
        w->setObjectName(QLatin1String(property->name()));
-       if (creator->options.removeBorders) {
+       if (!creator->options()->bordersVisible()) {
 //! @todo get real border color from the palette
             QColor gridLineColor(qobject_cast<KPropertyEditorView*>(parent->parentWidget()) ?
                 qobject_cast<KPropertyEditorView*>(parent->parentWidget())->gridLineColor()

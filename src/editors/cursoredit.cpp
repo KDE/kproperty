@@ -227,7 +227,7 @@ void KPropertyCursorEditor::setCursorValue(const QCursor &value)
 
 KPropertyCursorDelegate::KPropertyCursorDelegate()
 {
-    options.removeBorders = false;
+    options()->setBordersVisible(true);
 }
 
 QWidget * KPropertyCursorDelegate::createEditor( int type, QWidget *parent,

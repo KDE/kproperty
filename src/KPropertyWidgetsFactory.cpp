@@ -187,12 +187,84 @@ void KPropertyWidgetsFactory::setTopAndBottomBordersUsingStyleSheet(QWidget *wid
 
 //------------
 
+class Q_DECL_HIDDEN KPropertyEditorCreatorOptions::Private
+{
+public:
+    Private() : bordersVisible(false)
+    {
+    }
+    Private(const Private &other) {
+        copy(other);
+    }
+#define KPropertyEditorCreatorOptionsPrivateArgs(o) std::tie(o.bordersVisible)
+    void copy(const Private &other) {
+        KPropertyEditorCreatorOptionsPrivateArgs((*this)) = KPropertyEditorCreatorOptionsPrivateArgs(other);
+    }
+    bool operator==(const Private &other) const {
+        return KPropertyEditorCreatorOptionsPrivateArgs((*this)) == KPropertyEditorCreatorOptionsPrivateArgs(other);
+    }
+    bool bordersVisible;
+};
+
+KPropertyEditorCreatorOptions::KPropertyEditorCreatorOptions()
+    : d(new Private)
+{
+}
+
+KPropertyEditorCreatorOptions::KPropertyEditorCreatorOptions(const KPropertyEditorCreatorOptions &other)
+    : d(new Private(*other.d))
+{
+}
+
+KPropertyEditorCreatorOptions::~KPropertyEditorCreatorOptions()
+{
+    delete d;
+}
+
+bool KPropertyEditorCreatorOptions::bordersVisible() const
+{
+    return d->bordersVisible;
+}
+
+void KPropertyEditorCreatorOptions::setBordersVisible(bool visible)
+{
+    d->bordersVisible = visible;
+}
+
+KPropertyEditorCreatorOptions& KPropertyEditorCreatorOptions::operator=(const KPropertyEditorCreatorOptions &other)
+{
+    if (this != &other) {
+        d->copy(*other.d);
+    }
+    return *this;
+}
+
+bool KPropertyEditorCreatorOptions::operator==(const KPropertyEditorCreatorOptions &other) const
+{
+    return *d == *other.d;
+}
+
+//------------
+
+class Q_DECL_HIDDEN KPropertyEditorCreatorInterface::Private
+{
+public:
+    Private()
+    {
+    }
+
+    //! Options for altering the editor widget creation process
+    KPropertyEditorCreatorOptions options;
+};
+
 KPropertyEditorCreatorInterface::KPropertyEditorCreatorInterface()
+    : d(new Private)
 {
 }
 
 KPropertyEditorCreatorInterface::~KPropertyEditorCreatorInterface()
 {
+    delete d;
 }
 
 QWidget* KPropertyEditorCreatorInterface::createEditor(int type, QWidget *parent,
@@ -205,10 +277,17 @@ QWidget* KPropertyEditorCreatorInterface::createEditor(int type, QWidget *parent
     return new KPropertyStringEditor(parent);
 }
 
-KPropertyEditorCreatorInterface::Options::Options()
- : removeBorders(true)
+const KPropertyEditorCreatorOptions* KPropertyEditorCreatorInterface::options() const
 {
+    return &d->options;
 }
+
+KPropertyEditorCreatorOptions* KPropertyEditorCreatorInterface::options()
+{
+    return &d->options;
+}
+
+//------------
 
 KPropertyValuePainterInterface::KPropertyValuePainterInterface()
 {

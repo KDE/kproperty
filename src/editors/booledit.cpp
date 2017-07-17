@@ -263,7 +263,7 @@ void KPropertyThreeStateBoolEditor::setValue(const QVariant &value)
 
 KPropertyBoolDelegate::KPropertyBoolDelegate()
 {
-    options.removeBorders = false;
+    options()->setBordersVisible(true);
 }
 
 QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,

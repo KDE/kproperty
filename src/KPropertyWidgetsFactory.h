@@ -31,6 +31,40 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 
+/*! @brief Options for altering the editor widget creation process
+
+  @see KPropertyEditorCreatorInterface::createEditor().
+  @since 3.1
+*/
+class KPROPERTYWIDGETS_EXPORT KPropertyEditorCreatorOptions {
+public:
+    KPropertyEditorCreatorOptions();
+
+    KPropertyEditorCreatorOptions(const KPropertyEditorCreatorOptions &other);
+
+    ~KPropertyEditorCreatorOptions();
+
+    /*! In order to have better look of the widget within the property editor view,
+        we are usually hiding borders from the widget (see FactoryManager::createEditor())
+        and adding 1 pixel 'gray border' on the top. Default value of bordersVisible is @c false. */
+    bool bordersVisible() const;
+
+    void setBordersVisible(bool visible);
+
+    //! Assigns @a other to this KPropertyEditorCreatorOptions
+    KPropertyEditorCreatorOptions& operator=(const KPropertyEditorCreatorOptions &other);
+
+    //! @return true if these options have exactly the same values options as @a other
+    bool operator==(const KPropertyEditorCreatorOptions &other) const;
+
+    //! @return true if these options differs in at least one value from @a other
+    bool operator!=(const KPropertyEditorCreatorOptions &other) const { return !operator==(other); }
+
+private:
+    class Private;
+    Private * const d;
+};
+
 //! An interface for editor widget creators.
 /*! Options can be set in the options attribute in order to customize
     widget creation process. Do this in the EditorCreatorInterface constructor.
@@ -45,19 +79,17 @@ public:
     virtual QWidget * createEditor(int type, QWidget *parent,
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    /*! Options for altering the editor widget creation process,
-        used by KPropertyFactoryManager::createEditor(). */
-    class Options {
-    public:
-        Options();
-        /*! In order to have better look of the widget within the property editor view,
-            we usually remove borders from the widget (see FactoryManager::createEditor()).
-            and adding 1 pixel 'gray border' on the top. Default value is true. */
-        bool removeBorders;
-    };
+    //! Options for editor creating
+    //! @since 3.1
+    const KPropertyEditorCreatorOptions *options() const;
 
-    //! Options for altering the editor widget creation process
-    Options options;
+    //! @overload
+    KPropertyEditorCreatorOptions *options();
+
+private:
+    Q_DISABLE_COPY(KPropertyEditorCreatorInterface)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyValuePainterInterface
