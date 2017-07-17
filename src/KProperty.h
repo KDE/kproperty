@@ -506,7 +506,7 @@ private:
 
     friend class KPropertySet;
     friend class KPropertySetPrivate;
-    friend class KPropertyBuffer;
+    friend class KPropertySetBuffer;
     friend KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p);
 };
 

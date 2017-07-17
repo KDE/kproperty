@@ -602,8 +602,17 @@ QMap<QByteArray, QVariant> KPropertySet::propertyValues() const
 
 /////////////////////////////////////////////////////
 
-KPropertyBuffer::KPropertyBuffer()
+class Q_DECL_HIDDEN KPropertySetBuffer::Private
+{
+public:
+    Private()
+    {
+    }
+};
+
+KPropertySetBuffer::KPropertySetBuffer()
         : KPropertySet(false)
+        , d(new Private)
 {
     connect(this, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
             this, SLOT(intersectedChanged(KPropertySet&,KProperty&)));
@@ -612,8 +621,9 @@ KPropertyBuffer::KPropertyBuffer()
             this, SLOT(intersectedReset(KPropertySet&,KProperty&)));
 }
 
-KPropertyBuffer::KPropertyBuffer(const KPropertySet& set)
+KPropertySetBuffer::KPropertySetBuffer(const KPropertySet& set)
         : KPropertySet(false)
+        , d(new Private)
 {
     connect(this, SIGNAL(propertyChanged(KPropertySet&,KProperty&)),
             this, SLOT(intersectedChanged(KPropertySet&,KProperty&)));
@@ -624,7 +634,12 @@ KPropertyBuffer::KPropertyBuffer(const KPropertySet& set)
     init(set);
 }
 
-void KPropertyBuffer::init(const KPropertySet& set)
+KPropertySetBuffer::~KPropertySetBuffer()
+{
+    delete d;
+}
+
+void KPropertySetBuffer::init(const KPropertySet& set)
 {
     //deep copy of set
     const QList<KProperty*>::ConstIterator itEnd(KPropertySetPrivate::d(&set)->listConstEnd());
@@ -640,7 +655,7 @@ void KPropertyBuffer::init(const KPropertySet& set)
     }
 }
 
-void KPropertyBuffer::intersect(const KPropertySet& set)
+void KPropertySetBuffer::intersect(const KPropertySet& set)
 {
     if (isEmpty()) {
         init(set);
@@ -664,7 +679,7 @@ void KPropertyBuffer::intersect(const KPropertySet& set)
     }
 }
 
-void KPropertyBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
+void KPropertySetBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
 {
     Q_UNUSED(set);
     if (!contains(prop.name()))
@@ -676,7 +691,7 @@ void KPropertyBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
     }
 }
 
-void KPropertyBuffer::intersectedReset(KPropertySet& set, KProperty& prop)
+void KPropertySetBuffer::intersectedReset(KPropertySet& set, KProperty& prop)
 {
     Q_UNUSED(set);
     if (!contains(prop.name()))
