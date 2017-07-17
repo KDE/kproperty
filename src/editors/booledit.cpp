@@ -19,6 +19,7 @@
 */
 
 #include "booledit.h"
+#include "KPropertyListData.h"
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
 #include "kproperty_debug.h"
@@ -56,11 +57,11 @@ static QString stateName(int index, const QLocale &locale, const KProperty* prop
 }
 
 //! Sets up @a data list data with keys and names for true, false, none values, respectively
-static void setupThreeStateListData(KPropertyListData &data, const KProperty* prop)
+static void setupThreeStateListData(KPropertyListData *data, const KProperty* prop)
 {
-    data.setKeys({ true, false, QVariant() });
-    data.setNamesAsStringList({ stateName(0, QLocale(), prop), stateName(1, QLocale(), prop),
-                                stateName(2, QLocale(), prop) });
+    data->setKeys({ true, false, QVariant() });
+    data->setNamesAsStringList({ stateName(0, QLocale(), prop), stateName(1, QLocale(), prop),
+                                 stateName(2, QLocale(), prop) });
 }
 
 static int valueToIndex(const QVariant& value)
@@ -277,7 +278,7 @@ QWidget * KPropertyBoolDelegate::createEditor( int type, QWidget *parent,
     // boolean editors can optionally accept 3rd state:
     if (prop && prop->option("3State", false).toBool()) {
         KPropertyListData threeStateListData;
-        setupThreeStateListData(threeStateListData, prop);
+        setupThreeStateListData(&threeStateListData, prop);
         return new KPropertyThreeStateBoolEditor(threeStateListData, parent);
     }
     else {

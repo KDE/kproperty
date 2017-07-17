@@ -3,6 +3,7 @@
 
 set(kpropertycore_LIB_SRCS
    KProperty.cpp
+   KPropertyListData.cpp
    KPropertySet.cpp
    KPropertySetBuffer.cpp
    KPropertyFactory.cpp
@@ -217,6 +218,7 @@ ecm_generate_headers(kpropertycore_FORWARDING_HEADERS
     ORIGINAL CAMELCASE
     HEADER_NAMES
         KProperty
+        KPropertyListData
         KPropertySet
         KPropertySetBuffer
         KPropertyFactory

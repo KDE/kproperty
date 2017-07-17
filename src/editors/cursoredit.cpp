@@ -22,6 +22,7 @@
 #include "cursoredit.h"
 #include "KProperty.h"
 #include "KPropertyCoreUtils_p.h"
+#include "KPropertyListData.h"
 #include "KPropertyUtils_p.h"
 
 #include "xpm/blank_cursor.xpm"

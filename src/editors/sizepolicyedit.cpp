@@ -19,6 +19,7 @@
 
 #include "sizepolicyedit.h"
 #include "KPropertyCoreUtils_p.h"
+#include "KPropertyListData.h"
 
 #include <QSizePolicy>
 

@@ -30,91 +30,9 @@
 #include "kpropertycore_export.h"
 
 class KComposedPropertyInterface;
+class KPropertyListData;
 class KPropertySet;
 class KPropertySetPrivate;
-
-/*! A data container for properties of list type. */
-class KPROPERTYCORE_EXPORT KPropertyListData
-{
-public:
-    KPropertyListData();
-
-    KPropertyListData(const KPropertyListData &other);
-
-    KPropertyListData(const QStringList& keys, const QStringList& names);
-
-    KPropertyListData(const QVariantList &keys, const QVariantList &names);
-
-    KPropertyListData(const QVariantList &keys, const QStringList &names);
-
-    ~KPropertyListData();
-
-    //! Assigns @a other to this KPropertyListData
-    KPropertyListData& operator=(const KPropertyListData &other);
-
-    //! @return true if this data options equals to @a other
-    bool operator==(const KPropertyListData &other) const;
-
-    //! @return true if this data options does not equal to @a other
-    bool operator!=(const KPropertyListData &other) const { return !operator==(other); }
-
-    /**
-     * @brief A list containing all possible keys for a property
-     *
-     * Items of this list are ordered, so the first key element is associated with first element
-     * from the 'names' list, and so on.
-     */
-    QVariantList keys() const;
-
-    /**
-     * @brief A list containing all possible keys for a property converted to strings
-     */
-    QStringList keysAsStringList() const;
-
-    /**
-     * Sets a list containing all possible keys for a property
-     *
-     * @note each key on the list should be unique
-     */
-    void setKeys(const QVariantList &keys);
-
-    /**
-     * Sets a list containing all possible keys for a property as strings
-     *
-     * @note each key on the list should be unique
-     */
-    void setKeysAsStringList(const QStringList &keys);
-
-    /**
-     * @brief The list of user-visible translated name elements
-     *
-     * First value is referenced by first key, and so on.
-     */
-    QVariantList names() const;
-
-    /**
-     * @brief The list of user-visible translated name elements as strings
-     */
-    QStringList namesAsStringList() const;
-
-    /**
-     * Sets a list containing all possible keys for a property
-     *
-     * @note each key on the list should be unique
-     */
-    void setNames(const QVariantList &names);
-
-    /**
-     * Sets a list containing all possible keys for a property as strings
-     *
-     * @note each key on the list should be unique
-     */
-    void setNamesAsStringList(const QStringList &names);
-
-private:
-    class Private;
-    Private * const d;
-};
 
 /*! \brief The base class representing a single property
 

@@ -21,12 +21,12 @@
 #include "window.h"
 
 #include <KProperty>
+#include <KPropertyListData>
 #include <KPropertyEditorView>
 
 #include <QDate>
 #include <QDateTime>
 #include <QPixmap>
-#include <QStringList>
 #include <QCursor>
 #include <QApplication>
 #include <QDesktopWidget>

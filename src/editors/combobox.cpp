@@ -21,10 +21,11 @@
 
 #include "combobox.h"
 #include "KPropertyEditorView.h"
-#include "kproperty_debug.h"
-#include "KPropertyWidgetsFactory.h"
+#include "KPropertyListData.h"
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
+#include "KPropertyWidgetsFactory.h"
+#include "kproperty_debug.h"
 
 #include <QCompleter>
 #include <QGuiApplication>
