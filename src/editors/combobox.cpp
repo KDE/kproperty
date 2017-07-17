@@ -30,30 +30,43 @@
 #include <QCompleter>
 #include <QGuiApplication>
 
-KPropertyComboBoxEditor::Options::Options()
+KPropertyComboBoxEditorOptions::KPropertyComboBoxEditorOptions()
  : iconProvider(nullptr)
  , extraValueAllowed(false)
 {
 }
 
-KPropertyComboBoxEditor::Options::Options(const KPropertyComboBoxEditor::Options& other)
+KPropertyComboBoxEditorOptions::KPropertyComboBoxEditorOptions(
+    const KPropertyComboBoxEditorOptions &other)
 {
     *this = other;
     if (other.iconProvider)
         iconProvider = other.iconProvider->clone();
 }
 
-KPropertyComboBoxEditor::Options::~Options()
+KPropertyComboBoxEditorOptions::~KPropertyComboBoxEditorOptions()
 {
     delete iconProvider;
 }
 
-KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listData, const Options& options, QWidget *parent)
-        : QComboBox(parent)
-        , m_setValueEnabled(true)
-        , m_options(options)
+class Q_DECL_HIDDEN KPropertyComboBoxEditor::Private
 {
-    setEditable( m_options.extraValueAllowed );
+public:
+    Private()
+    {
+    }
+    KPropertyListData listData;
+    bool setValueEnabled = true;
+    KPropertyComboBoxEditorOptions options;
+};
+
+KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData &listData,
+                                                 const KPropertyComboBoxEditorOptions &options,
+                                                 QWidget *parent)
+    : QComboBox(parent), d(new Private)
+{
+    d->options = options;
+    setEditable(d->options.extraValueAllowed);
     setInsertPolicy(QComboBox::NoInsert);
     setAutoCompletion(true);
     setContextMenuPolicy(Qt::NoContextMenu);
@@ -80,6 +93,7 @@ KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData& listDa
 
 KPropertyComboBoxEditor::~KPropertyComboBoxEditor()
 {
+    delete d;
 }
 
 //static
@@ -97,7 +111,7 @@ QString KPropertyComboBoxEditor::borderSheet(const QWidget *widget)
 
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
-    if (m_listData.keys().isEmpty()) {
+    if (d->listData.keys().isEmpty()) {
         kprWarning() << "property listData not available!";
         return false;
     }
@@ -110,14 +124,14 @@ QVariant KPropertyComboBoxEditor::value() const
         return QVariant();
 
     const int idx = currentIndex();
-    if (idx < 0 || idx >= (int)m_listData.keys().count()
-        || m_listData.names()[idx].toString() != currentText().trimmed())
+    if (idx < 0 || idx >= d->listData.keys().count()
+        || d->listData.names()[idx].toString() != currentText().trimmed())
     {
-        if (!m_options.extraValueAllowed || currentText().isEmpty())
+        if (!d->options.extraValueAllowed || currentText().isEmpty())
             return QVariant();
         return currentText().trimmed(); //trimmed 4 safety
     }
-    return m_listData.keys()[idx];
+    return d->listData.keys()[idx];
 }
 
 void KPropertyComboBoxEditor::setValue(const QVariant &value)
@@ -125,16 +139,16 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
     if (!listDataKeysAvailable())
         return;
 
-    if (!m_setValueEnabled)
+    if (!d->setValueEnabled)
         return;
-    const int idx = m_listData.keys().indexOf(value);
+    const int idx = d->listData.keys().indexOf(value);
 //    kprDebug() << "**********" << idx << "" << value.toString();
     if (idx >= 0 && idx < count()) {
         setCurrentIndex(idx);
     }
     else {
         if (idx < 0) {
-            if (m_options.extraValueAllowed) {
+            if (d->options.extraValueAllowed) {
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
@@ -163,21 +177,21 @@ void KPropertyComboBoxEditor::fillValues()
         return;
 
     int index = 0;
-    for (const QString &itemName : m_listData.namesAsStringList()) {
+    for (const QString &itemName : d->listData.namesAsStringList()) {
         addItem(itemName);
-        if (m_options.iconProvider) {
-            QIcon icon = m_options.iconProvider->icon(index);
+        if (d->options.iconProvider) {
+            QIcon icon = d->options.iconProvider->icon(index);
             setItemIcon(index, icon);
         }
         index++;
     }
-    QCompleter *comp = new QCompleter(m_listData.namesAsStringList());
+    QCompleter *comp = new QCompleter(d->listData.namesAsStringList());
     comp->setWidget(this);
 }
 
 void KPropertyComboBoxEditor::setListData(const KPropertyListData & listData)
 {
-    m_listData = listData;
+    d->listData = listData;
     fillValues();
 }
 
@@ -235,7 +249,7 @@ QWidget* KPropertyComboBoxDelegate::createEditor( int type, QWidget *parent,
     if (!property) {
         return nullptr;
     }
-    KPropertyComboBoxEditor::Options options;
+    KPropertyComboBoxEditorOptions options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
     KPropertyComboBoxEditor *cb = new KPropertyComboBoxEditor(*property->listData(), options, parent);
     return cb;

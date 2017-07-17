@@ -26,31 +26,35 @@
 
 #include <QComboBox>
 
+class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxEditorIconProviderInterface
+{
+public:
+    KPropertyComboBoxEditorIconProviderInterface() {}
+    virtual ~KPropertyComboBoxEditorIconProviderInterface() {}
+    virtual QIcon icon(int index) const = 0;
+    virtual KPropertyComboBoxEditorIconProviderInterface* clone() const = 0;
+};
+
+class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxEditorOptions
+{
+public:
+    KPropertyComboBoxEditorOptions();
+    KPropertyComboBoxEditorOptions(const KPropertyComboBoxEditorOptions& other);
+    ~KPropertyComboBoxEditorOptions();
+
+    KPropertyComboBoxEditorIconProviderInterface *iconProvider;
+    bool extraValueAllowed;
+};
+
 class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxEditor : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    class Options {
-    public:
-        class IconProviderInterface {
-        public:
-            IconProviderInterface() {}
-            virtual ~IconProviderInterface() {}
-            virtual QIcon icon(int index) const = 0;
-            virtual IconProviderInterface* clone() const = 0;
-        };
-        Options();
-        Options(const Options& other);
-        ~Options();
-
-        IconProviderInterface *iconProvider;
-        bool extraValueAllowed;
-    };
-
-    KPropertyComboBoxEditor(const KPropertyListData& listData, const Options& options,
-             QWidget *parent = nullptr);
+    KPropertyComboBoxEditor(const KPropertyListData &listData,
+                            const KPropertyComboBoxEditorOptions &options,
+                            QWidget *parent = nullptr);
 
     ~KPropertyComboBoxEditor() override;
 
@@ -78,9 +82,9 @@ protected:
 
     bool listDataKeysAvailable() const;
 
-    KPropertyListData m_listData;
-    bool m_setValueEnabled;
-    Options m_options;
+    Q_DISABLE_COPY(KPropertyComboBoxEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyComboBoxDelegate : public KPropertyEditorCreatorInterface,

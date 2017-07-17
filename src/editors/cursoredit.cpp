@@ -165,7 +165,8 @@ const char * const * const CursorListData::m_xpms[] =
 Q_GLOBAL_STATIC(CursorListData, s_cursorListData)
 
 //----------------------
-class CursorIconProvider : public KPropertyComboBoxEditor::Options::IconProviderInterface
+
+class CursorIconProvider : public KPropertyComboBoxEditorIconProviderInterface
 {
 public:
     explicit CursorIconProvider(QWidget* parent) : m_parent(parent) {}
@@ -173,7 +174,7 @@ public:
     {
           return s_cursorListData->pixmapForIndex(index, m_parent->palette());
     }
-    IconProviderInterface *clone() const override
+    KPropertyComboBoxEditorIconProviderInterface *clone() const override
     {
         return new CursorIconProvider(m_parent);
     }
@@ -182,9 +183,9 @@ public:
 
 //----------------------
 
-static KPropertyComboBoxEditor::Options initComboBoxOptions(QWidget* parent)
+static KPropertyComboBoxEditorOptions initComboBoxOptions(QWidget* parent)
 {
-    KPropertyComboBoxEditor::Options options;
+    KPropertyComboBoxEditorOptions options;
     options.iconProvider = new CursorIconProvider(parent);
     return options;
 }

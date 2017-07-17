@@ -197,7 +197,7 @@ bool KPropertyBoolEditor::eventFilter(QObject* watched, QEvent* e)
 
 //--------------------------------------------------
 
-class ThreeStateBoolIconProvider : public KPropertyComboBoxEditor::Options::IconProviderInterface
+class ThreeStateBoolIconProvider : public KPropertyComboBoxEditorIconProviderInterface
 {
 public:
     ThreeStateBoolIconProvider() {}
@@ -209,15 +209,15 @@ public:
               return g_boolEdit->noIcon;
           return g_boolEdit->noneIcon;
     }
-    IconProviderInterface* clone() const override
+    KPropertyComboBoxEditorIconProviderInterface* clone() const override
     {
         return new ThreeStateBoolIconProvider();
     }
 };
 
-static KPropertyComboBoxEditor::Options initThreeStateBoolOptions()
+static KPropertyComboBoxEditorOptions initThreeStateBoolOptions()
 {
-    KPropertyComboBoxEditor::Options options;
+    KPropertyComboBoxEditorOptions options;
     options.iconProvider = new ThreeStateBoolIconProvider();
     return options;
 }
