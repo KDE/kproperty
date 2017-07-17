@@ -4,6 +4,7 @@
 set(kpropertycore_LIB_SRCS
    KProperty.cpp
    KPropertySet.cpp
+   KPropertySetBuffer.cpp
    KPropertyFactory.cpp
    KPropertyCoreUtils.cpp
    kproperty_debug.cpp
@@ -217,6 +218,7 @@ ecm_generate_headers(kpropertycore_FORWARDING_HEADERS
     HEADER_NAMES
         KProperty
         KPropertySet
+        KPropertySetBuffer
         KPropertyFactory
 )
 

@@ -294,33 +294,4 @@ private:
 //! qDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
 KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set);
 
-/**
- * @brief A property set's buffer
- */
-class KPROPERTYCORE_EXPORT KPropertySetBuffer : public KPropertySet
-{
-    Q_OBJECT
-
-public:
-    KPropertySetBuffer();
-
-    explicit KPropertySetBuffer(const KPropertySet &set);
-
-    ~KPropertySetBuffer() override;
-
-    /*! Intersects with other KPropertySet.*/
-    virtual void intersect(const KPropertySet& set);
-
-protected Q_SLOTS:
-    void intersectedChanged(KPropertySet& set, KProperty& prop);
-    void intersectedReset(KPropertySet& set, KProperty& prop);
-
-private:
-    void init(const KPropertySet& set);
-
-    Q_DISABLE_COPY(KPropertySetBuffer)
-    class Private;
-    Private * const d;
-};
-
 #endif
