@@ -48,10 +48,6 @@ Q_SIGNALS:
 public Q_SLOTS:
     void setValue(const QVariant& value);
 
-//! @todo    virtual bool eventFilter(QObject *o, QEvent *e);
-/*    QLineEdit * lineEdit() const {
-        return KIntSpinBox::lineEdit();
-    }*/
 protected Q_SLOTS:
     void slotValueChanged(int value);
 
@@ -68,11 +64,6 @@ class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
 public:
     KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
     ~KPropertyDoubleSpinBox() override;
-
-//    virtual bool eventFilter(QObject *o, QEvent *e);
-/*    QLineEdit * lineEdit() const {
-        return QDoubleSpinBox::lineEdit();
-    }*/
 
 Q_SIGNALS:
     void commitData(QWidget* editor);
