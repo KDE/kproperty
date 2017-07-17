@@ -37,7 +37,7 @@ class KPROPERTYWIDGETS_EXPORT KPropertyIntSpinBox : public QSpinBox
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    KPropertyIntSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
+    KPropertyIntSpinBox(const KProperty& prop, QWidget *parent, int itemHeight);
     ~KPropertyIntSpinBox() override;
 
     QVariant value() const;
@@ -52,7 +52,9 @@ protected Q_SLOTS:
     void slotValueChanged(int value);
 
 private:
-    bool m_unsigned;
+    Q_DISABLE_COPY(KPropertyIntSpinBox)
+    class Private;
+    Private * const d;
 };
 
 //! Double editor

@@ -83,9 +83,20 @@ bool intRangeValue(const KProperty &property, QVariant *min, QVariant *max)
 
 } // namespace
 
-KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent, int itemHeight)
+class Q_DECL_HIDDEN KPropertyIntSpinBox::Private
+{
+public:
+    explicit Private(const KProperty& prop)
+        : isUnsigned(prop.type() == KProperty::UInt)
+    {
+    }
+
+    const bool isUnsigned;
+};
+
+KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty& prop, QWidget *parent, int itemHeight)
         : QSpinBox(parent)
-        , m_unsigned(prop->type() == KProperty::UInt)
+        , d(new Private(prop))
 {
     QLineEdit* le = findChild<QLineEdit*>();
     setContentsMargins(0,0,0,0);
@@ -100,10 +111,10 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
 
     QVariant minVal;
     QVariant maxVal;
-    if (intRangeValue(*prop, &minVal, &maxVal)) {
+    if (intRangeValue(prop, &minVal, &maxVal)) {
         setRange(minVal.toInt(), maxVal.toInt());
     }
-    const KPropertyUtilsPrivate::ValueOptionsHandler options(*prop);
+    const KPropertyUtilsPrivate::ValueOptionsHandler options(prop);
     if (!options.minValueText.isEmpty()) {
         setSpecialValueText(options.minValueText);
     }
@@ -118,19 +129,21 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty* prop, QWidget *parent,
 
 KPropertyIntSpinBox::~KPropertyIntSpinBox()
 {
+    delete d;
 }
 
 QVariant KPropertyIntSpinBox::value() const
 {
-    if (m_unsigned)
+    if (d->isUnsigned) {
         return uint(QSpinBox::value());
+    }
     return QSpinBox::value();
 }
 
 void KPropertyIntSpinBox::setValue(const QVariant& value)
 {
     int v( value.toInt() );
-    if (m_unsigned && v<0) {
+    if (d->isUnsigned && v < 0) {
         kprWarning() << "could not assign negative value" << v << "- assigning 0";
         v = 0;
     }
@@ -280,7 +293,7 @@ QWidget* KPropertyIntSpinBoxDelegate::createEditor( int type, QWidget *parent,
     if (!prop) {
         return nullptr;
     }
-    return new KPropertyIntSpinBox(prop, parent, option.rect.height() - 2);
+    return new KPropertyIntSpinBox(*prop, parent, option.rect.height() - 2);
 }
 
 //-----------------------
