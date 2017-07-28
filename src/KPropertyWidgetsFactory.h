@@ -114,10 +114,16 @@ class KPROPERTYWIDGETS_EXPORT KPropertyLabel : public QLabel
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 public:
-    KPropertyLabel(QWidget *parent, const KProperty *property, const KPropertyValueDisplayInterface *iface);
+    KPropertyLabel(QWidget *parent, const KProperty *property,
+                   const KPropertyValueDisplayInterface *iface);
+
+    ~KPropertyLabel() override;
+
     QVariant value() const;
+
 Q_SIGNALS:
     void commitData( QWidget * editor );
+
 public Q_SLOTS:
     void setValue(const QVariant& value);
 
@@ -125,9 +131,9 @@ protected:
     void paintEvent( QPaintEvent * event ) override;
 
 private:
-    const KProperty *m_property;
-    const KPropertyValueDisplayInterface *m_iface;
-    QVariant m_value;
+    Q_DISABLE_COPY(KPropertyLabel)
+    class Private;
+    Private * const d;
 };
 
 //! Creator returning editor

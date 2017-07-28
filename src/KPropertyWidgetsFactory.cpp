@@ -26,10 +26,27 @@
 #include "KPropertyUtils.h"
 #include "KPropertyUtils_p.h"
 
+class Q_DECL_HIDDEN KPropertyLabel::Private
+{
+public:
+    Private()
+    {
+    }
+    ~Private()
+    {
+    }
+
+    const KProperty *property;
+    const KPropertyValueDisplayInterface *iface;
+    QVariant value;
+};
+
 KPropertyLabel::KPropertyLabel(QWidget *parent, const KProperty *property,
                                const KPropertyValueDisplayInterface *iface)
-    : QLabel(parent), m_property(property), m_iface(iface)
+    : QLabel(parent), d(new Private)
 {
+    d->property = property;
+    d->iface = iface;
     setAutoFillBackground(true);
 
     KPropertyEditorView* view = nullptr;
@@ -44,15 +61,20 @@ KPropertyLabel::KPropertyLabel(QWidget *parent, const KProperty *property,
     setIndent(1);
 }
 
+KPropertyLabel::~KPropertyLabel()
+{
+    delete d;
+}
+
 QVariant KPropertyLabel::value() const
 {
-    return m_value;
+    return d->value;
 }
 
 void KPropertyLabel::setValue(const QVariant& value)
 {
-    m_value = value;
-    setText(m_iface->propertyValueToString(m_property, QLocale()));
+    d->value = value;
+    setText(d->iface->propertyValueToString(d->property, QLocale()));
 }
 
 void KPropertyLabel::paintEvent( QPaintEvent * event )
