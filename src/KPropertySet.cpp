@@ -245,58 +245,114 @@ static inline bool Iterator_propertyAndStringLessThan(
 
 //////////////////////////////////////////////
 
+class Q_DECL_HIDDEN KPropertySetIterator::Private
+{
+public:
+    explicit Private(KPropertySetIterator *iter) : q(iter)
+    {
+    }
+    Private(KPropertySetIterator *iter, const Private &other)
+    : q(iter)
+    {
+        copy(other);
+    }
+    ~Private()
+    {
+        delete selector;
+    }
+
+#define KPropertySetIteratorPrivateArgs(o) std::tie(o.set, o.iterator, o.end, o.selector, o.order, o.sorted)
+    void copy(const Private &other) {
+        KPropertySetIteratorPrivateArgs((*this)) = KPropertySetIteratorPrivateArgs(other);
+    }
+    bool operator==(const Private &other) const {
+        return KPropertySetIteratorPrivateArgs((*this)) == KPropertySetIteratorPrivateArgs(other);
+    }
+
+    void skipNotAcceptable()
+    {
+        if (!selector)
+            return;
+        //kprDebug() << "FROM:" << *current();
+        if (q->current() && !(*selector)( *q->current() )) {
+            // skip first items that not are acceptable by the selector
+            ++(*q);
+        }
+        //kprDebug() << "TO:" << *current();
+    }
+
+    const KPropertySet *set;
+    QList<KProperty*>::ConstIterator iterator;
+    QList<KProperty*>::ConstIterator end;
+    KPropertySelector *selector;
+    KPropertySetIterator::Order order;
+    QList<KProperty*> sorted; //!< for sorted order
+
+private:
+    KPropertySetIterator * const q;
+};
+
 KPropertySetIterator::KPropertySetIterator(const KPropertySet &set)
-    : m_set(&set)
-    , m_iterator(KPropertySetPrivate::d(&set)->listConstIterator())
-    , m_end(KPropertySetPrivate::d(&set)->listConstEnd() )
-    , m_selector(nullptr)
-    , m_order(KPropertySetIterator::Order::Insertion)
+    : d(new Private(this))
+{
+    d->set = &set;
+    d->iterator = KPropertySetPrivate::d(&set)->listConstIterator();
+    d->end = KPropertySetPrivate::d(&set)->listConstEnd();
+    d->selector = nullptr;
+    d->order = KPropertySetIterator::Order::Insertion;
+}
+
+KPropertySetIterator::KPropertySetIterator(const KPropertySet &set,
+                                           const KPropertySelector &selector)
+    : d(new Private(this))
+{
+    d->set = &set;
+    d->iterator = KPropertySetPrivate::d(&set)->listConstIterator();
+    d->end = KPropertySetPrivate::d(&set)->listConstEnd();
+    d->selector = selector.clone();
+    d->order = KPropertySetIterator::Order::Insertion;
+    d->skipNotAcceptable();
+}
+
+KPropertySetIterator::KPropertySetIterator(const KPropertySetIterator &set)
+    : d(new Private(this, *set.d))
 {
 }
 
-KPropertySetIterator::KPropertySetIterator(const KPropertySet &set, const KPropertySelector& selector)
-    : m_set(&set)
-    , m_iterator(KPropertySetPrivate::d(&set)->listConstIterator())
-    , m_end(KPropertySetPrivate::d(&set)->listConstEnd())
-    , m_selector( selector.clone() )
-    , m_order(KPropertySetIterator::Order::Insertion)
+KPropertySetIterator& KPropertySetIterator::operator=(const KPropertySetIterator &other)
 {
-    skipNotAcceptable();
+    if (this != &other) {
+        d->copy(*other.d);
+    }
+    return *this;
+}
+
+bool KPropertySetIterator::operator==(const KPropertySetIterator &other) const
+{
+    return *d == *other.d;
 }
 
 KPropertySetIterator::~KPropertySetIterator()
 {
-    delete m_selector;
-}
-
-void KPropertySetIterator::skipNotAcceptable()
-{
-    if (!m_selector)
-        return;
-    //kprDebug() << "FROM:" << *current();
-    if (current() && !(*m_selector)( *current() )) {
-        // skip first items that not are acceptable by the selector
-        ++(*this);
-    }
-    //kprDebug() << "TO:" << *current();
+    delete d;
 }
 
 void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
 {
-    if (m_order == order)
+    if (d->order == order)
         return;
-    m_order = order;
-    switch (m_order) {
+    d->order = order;
+    switch (d->order) {
     case KPropertySetIterator::Order::Alphabetical:
     case KPropertySetIterator::Order::AlphabeticalByName:
     {
         QList<Iterator_PropertyAndString> propertiesAndStrings;
-        m_iterator = KPropertySetPrivate::d(m_set)->listConstIterator();
-        m_end = KPropertySetPrivate::d(m_set)->listConstEnd();
-        for (; m_iterator!=m_end; ++m_iterator) {
-            KProperty *prop = *m_iterator;
+        d->iterator = KPropertySetPrivate::d(d->set)->listConstIterator();
+        d->end = KPropertySetPrivate::d(d->set)->listConstEnd();
+        for (; d->iterator!=d->end; ++d->iterator) {
+            KProperty *prop = *d->iterator;
             QString captionOrName;
-            if (m_order == KPropertySetIterator::Order::Alphabetical) {
+            if (d->order == KPropertySetIterator::Order::Alphabetical) {
                 captionOrName = prop->caption();
             }
             if (captionOrName.isEmpty()) {
@@ -306,35 +362,44 @@ void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
         }
         qSort(propertiesAndStrings.begin(), propertiesAndStrings.end(),
             Iterator_propertyAndStringLessThan);
-        m_sorted.clear();
+        d->sorted.clear();
         foreach (const Iterator_PropertyAndString& propertyAndString, propertiesAndStrings) {
-            m_sorted.append(propertyAndString.first);
+            d->sorted.append(propertyAndString.first);
         }
         // restart the iterator
-        m_iterator = m_sorted.constBegin();
-        m_end = m_sorted.constEnd();
+        d->iterator = d->sorted.constBegin();
+        d->end = d->sorted.constEnd();
         break;
     }
     default:
-        m_sorted.clear();
+        d->sorted.clear();
         // restart the iterator
-        m_iterator = KPropertySetPrivate::d(m_set)->listConstIterator();
-        m_end = KPropertySetPrivate::d(m_set)->listConstEnd();
+        d->iterator = KPropertySetPrivate::d(d->set)->listConstIterator();
+        d->end = KPropertySetPrivate::d(d->set)->listConstEnd();
     }
-    skipNotAcceptable();
+    d->skipNotAcceptable();
 }
 
-void
-KPropertySetIterator::operator ++()
+KPropertySetIterator::Order KPropertySetIterator::order() const
+{
+    return d->order;
+}
+
+KProperty* KPropertySetIterator::current() const
+{
+    return d->iterator == d->end ? nullptr : *d->iterator;
+}
+
+void KPropertySetIterator::operator ++()
 {
     while (true) {
-        ++m_iterator;
-        if (!m_selector)
+        ++d->iterator;
+        if (!d->selector)
             return;
         // selector exists
         if (!current()) // end encountered
             return;
-        if ((*m_selector)( *current() ))
+        if ((*d->selector)( *current() ))
             return;
     }
 }

@@ -69,7 +69,23 @@ public:
         Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
     KPropertySetIterator(const KPropertySet &set, const KPropertySelector& selector);
 
+    //! Copy constructor
+    //! @since 3.1
+    KPropertySetIterator(const KPropertySetIterator &set);
+
     ~KPropertySetIterator();
+
+    //! Assigns @a other to this KPropertySetIterator
+    //! @since 3.1
+    KPropertySetIterator& operator=(const KPropertySetIterator &other);
+
+    //! @return true if this iterator equals to @a other
+    //! @since 3.1
+    bool operator==(const KPropertySetIterator &other) const;
+
+    //! @return true if this iterator does not equal to @a other
+    //! @since 3.1
+    inline bool operator!=(const KPropertySetIterator &other) const { return !operator==(other); }
 
     //! Ordering options for properties
     /*! @see setOrder() */
@@ -83,25 +99,19 @@ public:
     void setOrder(Order order);
 
     //! @return order for properties.
-    Order order() const { return m_order; }
+    Order order() const;
 
-    void operator ++();
-    KProperty* operator *() const {
-        return current();
-    }
-    KProperty* current() const {
-        return m_iterator==m_end ? nullptr : *m_iterator;
-    }
+    void operator++();
+
+    inline KProperty* operator*() const { return current(); }
+
+    KProperty* current() const;
 
     friend class KPropertySet;
+
 private:
-    void skipNotAcceptable();
-    const KPropertySet *m_set;
-    QList<KProperty*>::ConstIterator m_iterator;
-    QList<KProperty*>::ConstIterator m_end;
-    KPropertySelector *m_selector;
-    Order m_order;
-    QList<KProperty*> m_sorted; //!< for sorted order
+    class Private;
+    Private * const d;
 };
 
 /*! \brief Set of properties
