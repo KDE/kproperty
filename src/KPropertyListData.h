@@ -26,7 +26,11 @@
 
 #include <QVariantList>
 
-/*! A data container for properties of list type. */
+/**
+ * @brief A data container for properties of list type.
+ *
+ * @since 3.1
+ */
 class KPROPERTYCORE_EXPORT KPropertyListData
 {
 public:
@@ -45,11 +49,11 @@ public:
     //! Assigns @a other to this KPropertyListData
     KPropertyListData& operator=(const KPropertyListData &other);
 
-    //! @return true if this data options equals to @a other
+    //! @return true if this KPropertyListData equals to @a other
     bool operator==(const KPropertyListData &other) const;
 
-    //! @return true if this data options does not equal to @a other
-    bool operator!=(const KPropertyListData &other) const { return !operator==(other); }
+    //! @return true if this KPropertyListData does not equal to @a other
+    inline bool operator!=(const KPropertyListData &other) const { return !operator==(other); }
 
     /**
      * @brief A list containing all possible keys for a property
