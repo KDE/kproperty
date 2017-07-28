@@ -40,14 +40,24 @@ KPropertyComboBoxEditorOptions::KPropertyComboBoxEditorOptions(
     const KPropertyComboBoxEditorOptions &other)
 {
     *this = other;
-    if (other.iconProvider)
-        iconProvider = other.iconProvider->clone();
 }
 
 KPropertyComboBoxEditorOptions::~KPropertyComboBoxEditorOptions()
 {
     delete iconProvider;
 }
+
+KPropertyComboBoxEditorOptions& KPropertyComboBoxEditorOptions::operator=(const KPropertyComboBoxEditorOptions &other)
+{
+    if (this != &other) {
+        if (other.iconProvider) {
+            iconProvider = other.iconProvider->clone();
+        }
+        extraValueAllowed = other.extraValueAllowed;
+    }
+    return *this;
+}
+
 
 class Q_DECL_HIDDEN KPropertyComboBoxEditor::Private
 {
