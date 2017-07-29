@@ -26,8 +26,16 @@
 
 #include <QLocale>
 
+class Q_DECL_HIDDEN KPropertyDateTimeEditor::Private
+{
+public:
+    Private()
+    {
+    }
+};
+
 KPropertyDateTimeEditor::KPropertyDateTimeEditor(const KProperty* prop, QWidget* parent)
-  : QDateTimeEdit(parent)
+  : QDateTimeEdit(parent), d(new Private)
 {
     setFrame(false);
     setCalendarPopup(true);
@@ -48,6 +56,7 @@ KPropertyDateTimeEditor::KPropertyDateTimeEditor(const KProperty* prop, QWidget*
 
 KPropertyDateTimeEditor::~KPropertyDateTimeEditor()
 {
+    delete d;
 }
 
 QVariant KPropertyDateTimeEditor::value() const

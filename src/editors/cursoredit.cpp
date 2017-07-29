@@ -190,8 +190,17 @@ static KPropertyComboBoxEditorOptions initComboBoxOptions(QWidget* parent)
     return options;
 }
 
+class Q_DECL_HIDDEN KPropertyCursorEditor::Private
+{
+public:
+    Private()
+    {
+    }
+};
+
 KPropertyCursorEditor::KPropertyCursorEditor(QWidget *parent)
-        : KPropertyComboBoxEditor(*s_cursorListData, initComboBoxOptions( this ), parent)
+        : KPropertyComboBoxEditor(*s_cursorListData, initComboBoxOptions( this ), parent),
+          d(new Private)
 {
     int paddingTop = 1;
     int paddingLeft = 2;
@@ -212,6 +221,7 @@ KPropertyCursorEditor::KPropertyCursorEditor(QWidget *parent)
 
 KPropertyCursorEditor::~KPropertyCursorEditor()
 {
+    delete d;
 }
 
 QCursor KPropertyCursorEditor::cursorValue() const

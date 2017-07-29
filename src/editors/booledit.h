@@ -78,6 +78,11 @@ public:
 
     QVariant value() const override;
     void setValue(const QVariant &value) override;
+
+private:
+    Q_DISABLE_COPY(KPropertyThreeStateBoolEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyBoolDelegate : public KPropertyEditorCreatorInterface,

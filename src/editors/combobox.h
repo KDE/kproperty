@@ -84,6 +84,7 @@ protected:
 
     bool listDataKeysAvailable() const;
 
+private:
     Q_DISABLE_COPY(KPropertyComboBoxEditor)
     class Private;
     Private * const d;

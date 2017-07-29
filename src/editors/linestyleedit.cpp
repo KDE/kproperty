@@ -26,8 +26,16 @@
 #include <QApplication>
 #include <QPen>
 
+class Q_DECL_HIDDEN KPropertyLineStyleComboEditor::Private
+{
+public:
+    Private()
+    {
+    }
+};
+
 KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
-    : KPropertyLineStyleSelector(parent)
+    : KPropertyLineStyleSelector(parent), d(new Private)
 {
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 
@@ -52,6 +60,7 @@ KPropertyLineStyleComboEditor::KPropertyLineStyleComboEditor(QWidget *parent)
 
 KPropertyLineStyleComboEditor::~KPropertyLineStyleComboEditor()
 {
+    delete d;
 }
 
 QVariant KPropertyLineStyleComboEditor::value() const

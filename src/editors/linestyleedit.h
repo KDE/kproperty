@@ -47,6 +47,11 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void slotValueChanged(int index);
+
+private:
+    Q_DISABLE_COPY(KPropertyLineStyleComboEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyLineStyleComboDelegate : public KPropertyEditorCreatorInterface,

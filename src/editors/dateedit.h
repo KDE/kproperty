@@ -48,6 +48,11 @@ protected:
 
 protected Q_SLOTS:
     void onDateChanged();
+
+private:
+    Q_DISABLE_COPY(KPropertyDateEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyDateDelegate : public KPropertyEditorCreatorInterface,

@@ -222,10 +222,16 @@ static KPropertyComboBoxEditorOptions initThreeStateBoolOptions()
     return options;
 }
 
-KPropertyThreeStateBoolEditor::KPropertyThreeStateBoolEditor(
-    const KPropertyListData& listData,
-    QWidget *parent)
-        : KPropertyComboBoxEditor(listData, initThreeStateBoolOptions(), parent)
+class Q_DECL_HIDDEN KPropertyThreeStateBoolEditor::Private
+{
+public:
+    Private() {
+    }
+};
+
+KPropertyThreeStateBoolEditor::KPropertyThreeStateBoolEditor(const KPropertyListData &listData,
+                                                             QWidget *parent)
+    : KPropertyComboBoxEditor(listData, initThreeStateBoolOptions(), parent), d(new Private)
 {
 //    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
 //    nullIcon.fill(Qt::transparent);
@@ -235,6 +241,7 @@ KPropertyThreeStateBoolEditor::KPropertyThreeStateBoolEditor(
 
 KPropertyThreeStateBoolEditor::~KPropertyThreeStateBoolEditor()
 {
+    delete d;
 }
 
 QVariant KPropertyThreeStateBoolEditor::value() const

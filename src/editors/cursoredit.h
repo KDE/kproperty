@@ -37,6 +37,11 @@ public:
 
 public Q_SLOTS:
     virtual void setCursorValue(const QCursor &value);
+
+private:
+    Q_DISABLE_COPY(KPropertyCursorEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyCursorDelegate : public KPropertyEditorCreatorInterface,
