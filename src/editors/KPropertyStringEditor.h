@@ -47,7 +47,9 @@ private Q_SLOTS:
     void slotTextChanged( const QString & text );
 
 private:
-    bool m_slotTextChangedEnabled;
+    Q_DISABLE_COPY(KPropertyStringEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyStringDelegate : public KPropertyEditorCreatorInterface,

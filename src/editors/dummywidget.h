@@ -43,7 +43,9 @@ protected Q_SLOTS:
     virtual void setReadOnlyInternal(bool readOnly);
 
 private:
-    QVariant  m_value;
+    Q_DISABLE_COPY(KPropertyDummyWidget)
+    class Private;
+    Private * const d;
 };
 
 #endif

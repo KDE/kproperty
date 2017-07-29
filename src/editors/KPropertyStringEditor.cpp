@@ -31,9 +31,17 @@ namespace {
     }
 }
 
+class Q_DECL_HIDDEN KPropertyStringEditor::Private
+{
+public:
+    Private() {
+    }
+    bool slotTextChangedEnabled = true;
+};
+
+
 KPropertyStringEditor::KPropertyStringEditor(QWidget *parent)
- : QLineEdit(parent)
- , m_slotTextChangedEnabled(true)
+ : QLineEdit(parent), d(new Private)
 {
     setFrame(false);
     setContentsMargins(0,1,0,0);
@@ -43,6 +51,7 @@ KPropertyStringEditor::KPropertyStringEditor(QWidget *parent)
 
 KPropertyStringEditor::~KPropertyStringEditor()
 {
+    delete d;
 }
 
 QString KPropertyStringEditor::value() const
@@ -52,9 +61,9 @@ QString KPropertyStringEditor::value() const
 
 void KPropertyStringEditor::setValue(const QString& value)
 {
-    m_slotTextChangedEnabled = false;
+    d->slotTextChangedEnabled = false;
     setText(value);
-    m_slotTextChangedEnabled = true;
+    d->slotTextChangedEnabled = true;
 /*    deselect();
     end(false);*/
 }
@@ -62,7 +71,7 @@ void KPropertyStringEditor::setValue(const QString& value)
 void KPropertyStringEditor::slotTextChanged( const QString & text )
 {
     Q_UNUSED(text)
-    if (!m_slotTextChangedEnabled)
+    if (!d->slotTextChangedEnabled)
         return;
     emit commitData(this);
 }

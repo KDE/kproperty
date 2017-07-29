@@ -49,9 +49,9 @@ protected Q_SLOTS:
     void  showEditor();
 
 private:
-    QLineEdit  *m_edit;
-    QStringList  m_list;
-    QPushButton *m_selectButton;
+    Q_DISABLE_COPY(KPropertyStringListEditor)
+    class Private;
+    Private * const d;
 };
 
 #endif

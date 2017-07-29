@@ -29,45 +29,57 @@
 
 #include "KProperty.h"
 
+class Q_DECL_HIDDEN KPropertyStringListEditor::Private
+{
+public:
+    Private() {
+    }
+    QLineEdit *edit;
+    QStringList list;
+    QPushButton *selectButton;
+};
+
 KPropertyStringListEditor::KPropertyStringListEditor(KProperty *property, QWidget *parent)
-        : Widget(property, parent)
+        : Widget(property, parent), d(new Private)
 {
     setHasBorders(false);
     QHBoxLayout *l = new QHBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);
 
-    m_edit = new QLineEdit(this);
-    m_edit->setReadOnly(true);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    l->addWidget(m_edit);
+    d->edit = new QLineEdit(this);
+    d->edit->setReadOnly(true);
+    d->edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->edit->setMinimumHeight(5);
+    l->addWidget(d->edit);
 
-    m_selectButton = new QPushButton(this);
-    Utils::setupDotDotDotButton(m_selectButton, tr("Select item"),
+    d->selectButton = new QPushButton(this);
+    Utils::setupDotDotDotButton(d->selectButton, tr("Select item"),
         tr("Selects one item"));
 
-    m_selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-    l->addWidget(m_selectButton);
-    setFocusWidget(m_selectButton);
+    d->selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    l->addWidget(d->selectButton);
+    setFocusWidget(d->selectButton);
 
-    connect(m_selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
+    connect(d->selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
 }
 
 KPropertyStringListEditor::~KPropertyStringListEditor()
-{}
+{
+    delete d;
+}
 
 QVariant
 KPropertyStringListEditor::value() const
 {
-    return m_list;
+    return d->list;
 }
 
 void
 KPropertyStringListEditor::setValue(const QVariant &value, bool emitChange)
 {
-    m_list = value.toStringList();
-    m_edit->setText(value.toStringList().join(", "));
+    d->list = value.toStringList();
+    d->edit->setText(value.toStringList().join(", "));
     if (emitChange)
         emit valueChanged(this);
 }
@@ -91,11 +103,11 @@ KPropertyStringListEditor::showEditor()
                                           &dialog, "editlist");
     // PORTING: Verify that widget was added to mainLayout:     dialog.setMainWidget(edit);
     // Add mainLayout->addWidget(edit); if necessary
-    edit->insertStringList(m_list);
+    edit->insertStringList(d->list);
 
     if (dialog.exec() == QDialog::Accepted) {
-        m_list = edit->items();
-        m_edit->setText(m_list.join(", "));
+        d->list = edit->items();
+        d->edit->setText(d->list.join(", "));
         emit valueChanged(this);
     }
 }
@@ -103,5 +115,5 @@ KPropertyStringListEditor::showEditor()
 void
 KPropertyStringListEditor::setReadOnlyInternal(bool readOnly)
 {
-    m_selectButton->setEnabled(!readOnly);
+    d->selectButton->setEnabled(!readOnly);
 }

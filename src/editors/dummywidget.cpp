@@ -22,23 +22,34 @@
 
 #include <QPainter>
 
+class Q_DECL_HIDDEN KPropertyDummyWidget::Private
+{
+public:
+    Private() {
+    }
+    QVariant value;
+};
+
 KPropertyDummyWidget::KPropertyDummyWidget(KProperty *property, QWidget *parent)
-        : Widget(property, parent)
-{}
+        : Widget(property, parent), d(new Private)
+{
+}
 
 KPropertyDummyWidget::~KPropertyDummyWidget()
-{}
+{
+    delete d;
+}
 
 QVariant
 KPropertyDummyWidget::value() const
 {
-    return m_value;
+    return d->value;
 }
 
 void
 KPropertyDummyWidget::setValue(const QVariant &value, bool emitChange)
 {
-    m_value = value;
+    d->value = value;
     if (emitChange)
         emit valueChanged(this);
 }

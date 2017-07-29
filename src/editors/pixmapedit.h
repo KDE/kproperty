@@ -60,15 +60,10 @@ protected Q_SLOTS:
     /*! Selects a new pixmap using "open" file dialog. Can be reimplemented. */
     virtual void selectPixmap();
 
-protected:
-    QLabel *m_edit;
-    QLabel *m_popup;
-    QPushButton *m_button;
-    KProperty *m_property;
-//! @todo    QVariant m_recentlyPainted;
-    QPixmap m_pixmap;
-    //! @todo QPixmap m_scaledPixmap
-    QPixmap m_previewPixmap;
+private:
+    Q_DISABLE_COPY(KPropertyPixmapEditor)
+    class Private;
+    Private * const d;
 };
 
 class KPROPERTYWIDGETS_EXPORT KPropertyPixmapDelegate : public KPropertyEditorCreatorInterface,

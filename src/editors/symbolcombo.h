@@ -49,8 +49,9 @@ protected Q_SLOTS:
     void  slotValueChanged(const QString &text);
 
 private:
-    QLineEdit  *m_edit;
-    QPushButton  *m_select;
+    Q_DISABLE_COPY(KPropertySymbolComboEditor)
+    class Private;
+    Private * const d;
 };
 
 #endif

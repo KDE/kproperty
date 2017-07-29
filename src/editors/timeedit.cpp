@@ -25,8 +25,15 @@
 
 #include <QLocale>
 
+class Q_DECL_HIDDEN KPropertyTimeEditor::Private
+{
+public:
+    Private() {
+    }
+};
+
 KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)
-  : QTimeEdit(parent)
+  : QTimeEdit(parent), d(new Private)
 {
     setFrame(false);
     setContentsMargins(0,1,0,0);
@@ -48,6 +55,7 @@ KPropertyTimeEditor::KPropertyTimeEditor(const KProperty* prop, QWidget* parent)
 
 KPropertyTimeEditor::~KPropertyTimeEditor()
 {
+    delete d;
 }
 
 QVariant KPropertyTimeEditor::value() const

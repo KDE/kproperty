@@ -26,37 +26,48 @@
 #include <QVariant>
 #include <QHBoxLayout>
 
+class Q_DECL_HIDDEN KPropertySymbolComboEditor::Private
+{
+public:
+    Private() {
+    }
+    QLineEdit *edit;
+    QPushButton *select;
+};
+
 KPropertySymbolComboEditor::KPropertySymbolComboEditor(KProperty *property, QWidget *parent)
-        : Widget(property, parent)
+        : Widget(property, parent), d(new Private)
 {
     setHasBorders(false);
     QHBoxLayout *l = new QHBoxLayout(this);
 
-    m_edit = new QLineEdit(this);
-    m_edit->setReadOnly(true);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    m_edit->setMaxLength(1);
-    l->addWidget(m_edit);
-    m_select = new QPushButton(this);
-    Utils::setupDotDotDotButton(m_select, tr("Select symbol"),
+    d->edit = new QLineEdit(this);
+    d->edit->setReadOnly(true);
+    d->edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->edit->setMinimumHeight(5);
+    d->edit->setMaxLength(1);
+    l->addWidget(d->edit);
+    d->select = new QPushButton(this);
+    Utils::setupDotDotDotButton(d->select, tr("Select symbol"),
         tr("Selects a symbol"));
-    m_select->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
-    m_select->setMinimumHeight(5);
-    l->addWidget(m_select);
+    d->select->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
+    d->select->setMinimumHeight(5);
+    l->addWidget(d->select);
 
-    connect(m_select, SIGNAL(clicked()), this, SLOT(selectChar()));
-    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
+    connect(d->select, SIGNAL(clicked()), this, SLOT(selectChar()));
+    connect(d->edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
 }
 
 KPropertySymbolComboEditor::~KPropertySymbolComboEditor()
-{}
+{
+    delete d;
+}
 
 QVariant
 KPropertySymbolComboEditor::value() const
 {
-    if (!(m_edit->text().isNull()))
-        return m_edit->text().at(0).unicode();
+    if (!(d->edit->text().isNull()))
+        return d->edit->text().at(0).unicode();
     else
         return 0;
 }
@@ -66,9 +77,9 @@ KPropertySymbolComboEditor::setValue(const QVariant &value, bool emitChange)
 {
     if (!(value.isNull()))
     {
-        m_edit->blockSignals(true);
-        m_edit->setText(QChar(value.toInt()));
-        m_edit->blockSignals(false);
+        d->edit->blockSignals(true);
+        d->edit->setText(QChar(value.toInt()));
+        d->edit->blockSignals(false);
         if (emitChange)
             emit valueChanged(this);
     }
@@ -95,11 +106,11 @@ KPropertySymbolComboEditor::selectChar()
 //PORTING: Verify that widget was added to mainLayout:     dialog.setMainWidget(select);
 // Add mainLayout->addWidget(select); if necessary
 
-    if (!(m_edit->text().isNull()))
-        select->setCurrentChar(m_edit->text().at(0));
+    if (!(d->edit->text().isNull()))
+        select->setCurrentChar(d->edit->text().at(0));
 
     if (dialog.exec() == QDialog::Accepted)
-        m_edit->setText(select->currentChar());
+        d->edit->setText(select->currentChar());
 }
 
 void
@@ -111,5 +122,5 @@ KPropertySymbolComboEditor::slotValueChanged(const QString&)
 void
 KPropertySymbolComboEditor::setReadOnlyInternal(bool readOnly)
 {
-    m_select->setEnabled(!readOnly);
+    d->select->setEnabled(!readOnly);
 }
