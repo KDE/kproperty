@@ -25,10 +25,10 @@
 
 #include <QByteArray>
 
-KPropertySetPrivate::KPropertySetPrivate(KPropertySet *set)
-    : q(set)
+KPropertySetPrivate::KPropertySetPrivate(KPropertySet *set, bool isOwnProperty)
+    : q(set), m_ownProperty(isOwnProperty)
 {
-    groupCaptions.insert("common", QObject::tr("General", "General properties"));
+    m_groupCaptions.insert("common", QObject::tr("General", "General properties"));
 }
 
 KPropertySetPrivate::~KPropertySetPrivate()
@@ -51,8 +51,8 @@ void KPropertySetPrivate::addProperty(KProperty *property, const QByteArray &gro
         addRelatedProperty(p, property);
     }
     else {
-        list.append(property);
-        hash.insert(property->name().toLower(), property);
+        m_list.append(property);
+        m_hash.insert(property->name().toLower(), property);
         if (property->isVisible()) {
             m_visiblePropertiesCount++;
         }
@@ -71,17 +71,17 @@ void KPropertySetPrivate::removeProperty(KProperty *property)
     if (!property)
         return;
 
-    if (!list.removeOne(property)) {
+    if (!m_list.removeOne(property)) {
         kprDebug() << "The property set does not contain property" << property;
         return;
     }
-    KProperty *p = hash.take(property->name().toLower());
+    KProperty *p = m_hash.take(property->name().toLower());
     if (p) {
         removeFromGroup(p);
         if (p->isVisible()) {
             m_visiblePropertiesCount--;
         }
-        if (ownProperty) {
+        if (m_ownProperty) {
             emit q->aboutToDeleteProperty(*q, *p);
             delete p;
         }
@@ -96,15 +96,15 @@ void KPropertySetPrivate::clear()
     m_informAboutClearing = nullptr;
     emit q->aboutToBeCleared();
     m_visiblePropertiesCount = 0;
-    qDeleteAll(propertiesOfGroup);
-    propertiesOfGroup.clear();
-    groupNames.clear();
-    groupForProperties.clear();
-    groupCaptions.clear();
-    groupIconNames.clear();
-    qDeleteAll(list);
-    list.clear();
-    hash.clear();
+    qDeleteAll(m_propertiesOfGroup);
+    m_propertiesOfGroup.clear();
+    m_groupNames.clear();
+    m_groupForProperties.clear();
+    m_groupCaptions.clear();
+    m_groupIconNames.clear();
+    qDeleteAll(m_list);
+    m_list.clear();
+    m_hash.clear();
 }
 
 void KPropertySetPrivate::copyAttributesFrom(const KPropertySetPrivate &other)
@@ -113,10 +113,10 @@ void KPropertySetPrivate::copyAttributesFrom(const KPropertySetPrivate &other)
     *this = other;
     q = origSet;
     // do not copy too deeply
-    list.clear();
-    hash.clear();
-    propertiesOfGroup.clear();
-    groupForProperties.clear();
+    m_list.clear();
+    m_hash.clear();
+    m_propertiesOfGroup.clear();
+    m_groupForProperties.clear();
     m_visiblePropertiesCount = 0;
     m_informAboutClearing = nullptr;
 }
@@ -148,11 +148,11 @@ void KPropertySetPrivate::addToGroup(const QByteArray &group, KProperty *propert
         kprWarning() << "Group" << group << "already contains property" << property->name();
         return;
     }
-    QList<QByteArray>* propertiesOfGroup = this->propertiesOfGroup.value(groupLower);
+    QList<QByteArray>* propertiesOfGroup = m_propertiesOfGroup.value(groupLower);
     if (!propertiesOfGroup) {
         propertiesOfGroup = new QList<QByteArray>();
-        this->propertiesOfGroup.insert(groupLower, propertiesOfGroup);
-        groupNames.append(groupLower);
+        m_propertiesOfGroup.insert(groupLower, propertiesOfGroup);
+        m_groupNames.append(groupLower);
     }
     propertiesOfGroup->append(property->name());
     addPropertyToGroup(property, groupLower);
@@ -167,16 +167,16 @@ void KPropertySetPrivate::removeFromGroup(KProperty *property)
     if (group.isEmpty()) {
         return;
     }
-    QList<QByteArray>* propertiesOfGroup = this->propertiesOfGroup.value(group);
+    QList<QByteArray>* propertiesOfGroup = m_propertiesOfGroup.value(group);
     if (propertiesOfGroup) {
         propertiesOfGroup->removeAt(propertiesOfGroup->indexOf(property->name()));
         if (propertiesOfGroup->isEmpty()) {
             //remove group as well
-            this->propertiesOfGroup.take(group);
+            m_propertiesOfGroup.take(group);
             delete propertiesOfGroup;
-            const int i = groupNames.indexOf(group);
+            const int i = m_groupNames.indexOf(group);
             if (i != -1) {
-                groupNames.removeAt(i);
+                m_groupNames.removeAt(i);
             }
         }
     }
@@ -185,7 +185,7 @@ void KPropertySetPrivate::removeFromGroup(KProperty *property)
 
 bool KPropertySetPrivate::hasGroups() const
 {
-    return groupNames.count() > 1 || (groupNames.count() == 1 && groupNames.first() != "common");
+    return m_groupNames.count() > 1 || (m_groupNames.count() == 1 && m_groupNames.first() != "common");
 }
 
 void KPropertySetPrivate::informAboutClearing(bool* cleared)
@@ -215,12 +215,20 @@ int KPropertySetPrivate::indexOfProperty(const KProperty *property) const
 
 int KPropertySetPrivate::indexOfPropertyInGroup(const KProperty *property) const
 {
-    const QByteArray group(groupForProperties.value(const_cast<KProperty *>(property)));
-    QList<QByteArray>* propertiesOfGroup = this->propertiesOfGroup.value(group);
+    const QByteArray group(m_groupForProperties.value(const_cast<KProperty *>(property)));
+    QList<QByteArray>* propertiesOfGroup = m_propertiesOfGroup.value(group);
     if (!propertiesOfGroup) {
         return -1;
     }
     return propertiesOfGroup->indexOf(property->name());
+}
+
+QString KPropertySetPrivate::groupCaption(const QByteArray &group) const
+{
+    const QString result(m_groupCaptions.value(group.toLower()));
+    if (!result.isEmpty())
+        return result;
+    return QLatin1String(group);
 }
 
 //////////////////////////////////////////////
@@ -408,15 +416,14 @@ void KPropertySetIterator::operator ++()
 
 KPropertySet::KPropertySet(QObject *parent)
         : QObject(parent)
-        , d(new KPropertySetPrivate(this))
+        , d(new KPropertySetPrivate(this, true))
 {
-    d->ownProperty = true;
 }
 
 
 KPropertySet::KPropertySet(const KPropertySet &set)
         : QObject(nullptr /* implicit sharing the parent is dangerous */)
-        , d(new KPropertySetPrivate(this))
+        , d(new KPropertySetPrivate(this, true))
 {
     setObjectName(set.objectName());
     *this = set;
@@ -424,9 +431,8 @@ KPropertySet::KPropertySet(const KPropertySet &set)
 
 KPropertySet::KPropertySet(bool propertyOwner)
         : QObject(nullptr)
-        , d(new KPropertySetPrivate(this))
+        , d(new KPropertySetPrivate(this, propertyOwner))
 {
-    d->ownProperty = propertyOwner;
 }
 
 KPropertySet::~KPropertySet()
@@ -479,42 +485,34 @@ QByteArray KPropertySet::groupNameForProperty(const KProperty &property) const
 
 QList<QByteArray> KPropertySet::groupNames() const
 {
-    return d->groupNames;
+    return d->groupNames();
 }
 
 QList<QByteArray> KPropertySet::propertyNamesForGroup(const QByteArray &group) const
 {
-    QList<QByteArray>* propertiesOfGroup = d->propertiesOfGroup.value(group);
+    QList<QByteArray>* propertiesOfGroup = d->propertyNamesForGroup(group);
     return propertiesOfGroup ? *propertiesOfGroup : QList<QByteArray>();
 }
 
-void
-KPropertySet::setGroupCaption(const QByteArray &group, const QString &caption)
+void KPropertySet::setGroupCaption(const QByteArray &group, const QString &caption)
 {
-    d->groupCaptions.insert(group.toLower(), caption);
+    d->setGroupCaption(group, caption);
 }
 
-QString
-KPropertySet::groupCaption(const QByteArray &group) const
+QString KPropertySet::groupCaption(const QByteArray &group) const
 {
-    const QString result(d->groupCaptions.value(group.toLower()));
-    if (!result.isEmpty())
-        return result;
-    return QLatin1String(group);
+    return d->groupCaption(group);
 }
 
-void
-KPropertySet::setGroupIconName(const QByteArray &group, const QString& iconName)
+void KPropertySet::setGroupIconName(const QByteArray &group, const QString& iconName)
 {
-    d->groupIconNames.insert(group.toLower(), iconName);
+    d->setGroupIconName(group, iconName);
 }
 
-QString
-KPropertySet::groupIconName(const QByteArray &group) const
+QString KPropertySet::groupIconName(const QByteArray &group) const
 {
-    return d->groupIconNames.value(group);
+    return d->groupIconName(group);
 }
-
 
 /////////////////////////////////////////////////////
 
@@ -644,16 +642,14 @@ KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KPropertySet &set)
     return dbg.space();
 }
 
-QByteArray
-KPropertySet::previousSelection() const
+QByteArray KPropertySet::previousSelection() const
 {
-    return d->prevSelection;
+    return d->previousSelection();
 }
 
-void
-KPropertySet::setPreviousSelection(const QByteArray &prevSelection)
+void KPropertySet::setPreviousSelection(const QByteArray &prevSelection)
 {
-    d->prevSelection = prevSelection;
+    d->setPreviousSelection(prevSelection);
 }
 
 QMap<QByteArray, QVariant> KPropertySet::propertyValues() const

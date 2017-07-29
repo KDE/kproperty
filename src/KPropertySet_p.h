@@ -28,7 +28,7 @@
 class KPROPERTYCORE_EXPORT KPropertySetPrivate
 {
 public:
-    explicit KPropertySetPrivate(KPropertySet *set);
+    explicit KPropertySetPrivate(KPropertySet *set, bool isOwnProperty);
 
     ~KPropertySetPrivate();
 
@@ -39,7 +39,7 @@ public:
     inline int visiblePropertiesCount() const { return m_visiblePropertiesCount; }
 
     inline KProperty* property(const QByteArray &name) const {
-        return hash.value(name.toLower());
+        return m_hash.value(name.toLower());
     }
 
     inline KProperty& propertyOrNull(const QByteArray &name) const
@@ -47,9 +47,9 @@ public:
         KProperty *p = property(name);
         if (p)
             return *p;
-        nonConstNull.setName(nullptr); //to ensure returned property is null
+        m_nonConstNull.setName(nullptr); //to ensure returned property is null
         kprWarning() << "PROPERTY" << name << "NOT FOUND";
-        return nonConstNull;
+        return m_nonConstNull;
     }
 
     void addProperty(KProperty *property, const QByteArray &group/*, bool updateSortingKey*/);
@@ -58,9 +58,9 @@ public:
 
     void clear();
 
-    inline int count() const { return list.count(); }
+    inline int count() const { return m_list.count(); }
 
-    inline bool isEmpty() const { return list.isEmpty(); }
+    inline bool isEmpty() const { return m_list.isEmpty(); }
 
     /*! @return @c true if there are groups explicitly defined.
      In this case groups are displayed by the property editor.
@@ -70,15 +70,20 @@ public:
     bool hasGroups() const;
 
     inline QByteArray groupForProperty(const KProperty *property) const {
-        return groupForProperties.value(const_cast<KProperty*>(property));
+        return m_groupForProperties.value(const_cast<KProperty*>(property));
+    }
+
+    inline void setGroupCaption(const QByteArray &group, const QString &caption)
+    {
+        m_groupCaptions.insert(group.toLower(), caption);
     }
 
     inline void addPropertyToGroup(KProperty *property, const QByteArray &groupLower) {
-        groupForProperties.insert(property, groupLower);
+        m_groupForProperties.insert(property, groupLower);
     }
 
     inline void removePropertyFromGroup(KProperty *property) {
-        groupForProperties.remove(property);
+        m_groupForProperties.remove(property);
     }
 
     //! Copy all attributes except complex ones
@@ -88,6 +93,11 @@ public:
     void copyPropertiesFrom(
         const QList<KProperty*>::ConstIterator& constBegin,
         const QList<KProperty*>::ConstIterator& constEnd, const KPropertySet & set);
+
+    QList<QByteArray> groupNames() const
+    {
+        return m_groupNames;
+    }
 
     /*! Add property to a group.*/
     void addToGroup(const QByteArray &group, KProperty *property);
@@ -103,11 +113,11 @@ public:
     void addRelatedProperty(KProperty *p1, KProperty *p2) const;
 
     inline QList<KProperty*>::ConstIterator listConstIterator() const {
-        return list.constBegin();
+        return m_list.constBegin();
     }
 
     inline QList<KProperty*>::ConstIterator listConstEnd() const {
-        return list.constEnd();
+        return m_list.constEnd();
     }
 
     /*! @return index of property @a property within its parent or group. */
@@ -116,28 +126,66 @@ public:
     /*! @return index of property @a property within its group. */
     int indexOfPropertyInGroup(const KProperty *property) const;
 
+    QString groupCaption(const QByteArray &group) const;
+
+    inline void setGroupIconName(const QByteArray &group, const QString& iconName)
+    {
+        m_groupIconNames.insert(group.toLower(), iconName);
+    }
+
+    inline QString groupIconName(const QByteArray &group) const
+    {
+        return m_groupIconNames.value(group);
+    }
+
+    inline QByteArray previousSelection() const
+    {
+        return m_prevSelection;
+    }
+
+    inline void setPreviousSelection(const QByteArray &prevSelection)
+    {
+        m_prevSelection = prevSelection;
+    }
+
+    inline QList<QByteArray> *propertyNamesForGroup(const QByteArray &group)
+    {
+        return m_propertiesOfGroup.value(group);
+    }
+
+    inline QByteArray groupName(int index) const
+    {
+        return m_groupNames.value(index);
+    }
+
+    inline int indexOfGroup(const QByteArray &group) const
+    {
+        return m_groupNames.indexOf(group);
+    }
+
+    bool readOnly = false;
+
+private:
     KPropertySet *q;
 
     //groups of properties:
     // list of group name: (list of property names)
-    QMap<QByteArray, QList<QByteArray>* > propertiesOfGroup;
-    QList<QByteArray>  groupNames;
-    QHash<QByteArray, QString>  groupCaptions;
-    QHash<QByteArray, QString>  groupIconNames;
+    QMap<QByteArray, QList<QByteArray>* > m_propertiesOfGroup;
+    QList<QByteArray> m_groupNames;
+    QHash<QByteArray, QString> m_groupCaptions;
+    QHash<QByteArray, QString> m_groupIconNames;
     // map of property: group
 
-    bool ownProperty;
-    bool readOnly = false;
-    QByteArray prevSelection;
+    bool m_ownProperty;
+    QByteArray m_prevSelection;
 
-    mutable KProperty nonConstNull;
+    mutable KProperty m_nonConstNull;
 
-private:
     //! A list of properties, preserving their order, owner of KProperty objects
-    QList<KProperty*> list;
+    QList<KProperty*> m_list;
     //! A hash of properties in form name -> property
-    QHash<QByteArray, KProperty*> hash;
-    QHash<KProperty*, QByteArray> groupForProperties;
+    QHash<QByteArray, KProperty*> m_hash;
+    QHash<KProperty*, QByteArray> m_groupForProperties;
     int m_visiblePropertiesCount = 0; //!< Cache for optimization,
                                        //!< used by @ref bool KPropertySet::hasVisibleProperties()
     //! Used in KPropertySetPrivate::informAboutClearing(bool&) to declare that the property wants

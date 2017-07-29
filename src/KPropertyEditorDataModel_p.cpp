@@ -85,8 +85,8 @@ void KPropertyEditorDataModel::collectIndices() const
 {
     d->indicesForNames.clear();
     if (d->groupsVisible) {
-        for (const QByteArray &groupName : d->set_d()->groupNames) {
-            const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+        for (const QByteArray &groupName : d->set_d()->groupNames()) {
+            const QList<QByteArray>* propertyNames = d->set_d()->propertyNamesForGroup(groupName);
             if (!propertyNames) {
                 continue;
             }
@@ -139,7 +139,7 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
     }
     if (col == 0) {
         if (prop == &d->groupItem) {
-            const QByteArray groupName(d->set_d()->groupNames.value(index.row()));
+            const QByteArray groupName(d->set_d()->groupName(index.row()));
             Q_ASSERT(!groupName.isEmpty());
             switch(role) {
             case Qt::DisplayRole:
@@ -223,8 +223,8 @@ QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelInd
     } else if (parentItem == &d->rootItem || parentItem == &d->groupItem) {
         // top level without groups or group level: return top-level visible property item
         if (d->groupsVisible && d->set_d()->hasGroups()) {
-            const QByteArray groupName(d->set_d()->groupNames.value(parent.row()));
-            const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+            const QByteArray groupName(d->set_d()->groupName(parent.row()));
+            const QList<QByteArray>* propertyNames = d->set_d()->propertyNamesForGroup(groupName);
             if (propertyNames) {
                 int visiblePropertiesForGroup = -1;
                 //! @todo sort?
@@ -282,7 +282,7 @@ QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
     if (d->groupsVisible && d->set_d()->hasGroups()) {
         // top-level property within a group: group item is the parent
         const QByteArray group(d->set_d()->groupForProperty(childItem));
-        const int indexOfGroup = d->set_d()->groupNames.indexOf(group);
+        const int indexOfGroup = d->set_d()->indexOfGroup(group);
         return createIndex(indexOfGroup, 0, &d->groupItem);
     }
     return QModelIndex();
@@ -293,13 +293,13 @@ int KPropertyEditorDataModel::rowCount(const QModelIndex &parent) const
     KProperty *parentItem = propertyForIndex(parent);
     if (parentItem == &d->rootItem) { // top level: return group count or top-level properties count
         if (d->groupsVisible && d->set_d()->hasGroups()) {
-            return d->set_d()->groupNames.count();
+            return d->set_d()->groupNames().count();
         }
         return d->set->count(VisiblePropertySelector()); // number of visible properties
     } else if (parentItem == &d->groupItem) { // group level: return property count within the group
-        const QByteArray groupName = d->set_d()->groupNames.value(parent.row());
+        const QByteArray groupName = d->set_d()->groupName(parent.row());
         Q_ASSERT(!groupName.isEmpty());
-        const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+        const QList<QByteArray>* propertyNames = d->set_d()->propertyNamesForGroup(groupName);
         Q_ASSERT(propertyNames);
         int visiblePropertiesForGroup = 0;
         for(const QByteArray &propertyName : *propertyNames) {
@@ -370,9 +370,9 @@ bool KPropertyEditorDataModel::hasChildren(const QModelIndex & parent) const
     if (parentItem == &d->rootItem) { // top level
         return d->set->hasVisibleProperties();
     } else if (parentItem == &d->groupItem) { // group level
-        const QByteArray groupName(d->set_d()->groupNames.value(parent.row()));
+        const QByteArray groupName(d->set_d()->groupName(parent.row()));
         Q_ASSERT(!groupName.isEmpty());
-        const QList<QByteArray>* propertyNames = d->set_d()->propertiesOfGroup.value(groupName);
+        const QList<QByteArray>* propertyNames = d->set_d()->propertyNamesForGroup(groupName);
         Q_ASSERT(propertyNames);
         for (const QByteArray &propertyName : *propertyNames) {
             if (d->set_d()->property(propertyName)->isVisible()) {
