@@ -44,7 +44,7 @@ public:
 
     KPropertyComboBoxEditorOptions& operator=(const KPropertyComboBoxEditorOptions &other);
 
-    KPropertyComboBoxEditorIconProviderInterface *iconProvider;
+    KPropertyComboBoxEditorIconProviderInterface *iconProvider = nullptr;
     bool extraValueAllowed;
 };
 

@@ -31,8 +31,7 @@
 #include <QGuiApplication>
 
 KPropertyComboBoxEditorOptions::KPropertyComboBoxEditorOptions()
- : iconProvider(nullptr)
- , extraValueAllowed(false)
+ : extraValueAllowed(false)
 {
 }
 
@@ -52,6 +51,9 @@ KPropertyComboBoxEditorOptions& KPropertyComboBoxEditorOptions::operator=(const 
     if (this != &other) {
         if (other.iconProvider) {
             iconProvider = other.iconProvider->clone();
+        } else {
+            delete iconProvider;
+            iconProvider = nullptr;
         }
         extraValueAllowed = other.extraValueAllowed;
     }
