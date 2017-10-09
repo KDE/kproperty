@@ -69,7 +69,6 @@ if(KPROPERTY_WIDGETS)
         #  editors/stringlistedit.cpp
         #  editors/symbolcombo.cpp
         editors/timeedit.cpp
-        #TODO  editors/urledit.cpp
 
         kproperty_debug.cpp # needed here too
         KPropertyWidgetsFactory.cpp

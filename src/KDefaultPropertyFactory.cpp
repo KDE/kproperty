@@ -20,8 +20,6 @@
 #include "KDefaultPropertyFactory.h"
 #include "KPropertyUtils_p.h"
 #include "config-kproperty.h"
-/*
-#include "customproperty.h"*/
 #include "editors/booledit.h"
 #include "editors/coloredit.h"
 #include "editors/combobox.h"
@@ -45,7 +43,6 @@
 // #include "symbolcombo.h"
 #include "editors/timeedit.h"
 #include "editors/KPropertyUrlEditor.h"
-// #include "urledit.h"
 
 KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyWidgetsFactory()

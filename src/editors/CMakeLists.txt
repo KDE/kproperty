@@ -12,16 +12,12 @@ set(KPROPERTY_EDITORS_HEADERS
         PixmapEdit
         PointEdit
         RectEdit
-        #TODO KPropertyRectFEditor
         SizeEdit
         SizePolicyEdit
         SpinBox
-        #TODO KPropertyStringEditor
         #StringListEdit
         #SymbolCombo
         TimeEdit
-        #TODO KPropertyUrlEditor
-        #TODO KPropertyGenericSelectionEditor
 )
 
 ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
