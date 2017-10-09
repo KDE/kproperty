@@ -32,6 +32,7 @@ ecm_generate_headers(kproperty_editors_FORWARDING_HEADERS
     HEADER_NAMES
         KPropertyGenericSelectionEditor
         KPropertyMultiLineStringEditor
+        KPropertyRectFEditor
         KPropertyStringEditor
         KPropertyUrlEditor
 )
