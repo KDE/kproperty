@@ -15,8 +15,7 @@ set(kpropertycore_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# TODO: see T3992, Split kproperty_qt into kpropertycore_qt & kpropertywidgets_qt
-ecm_create_qm_loader(kpropertycore_LIB_SRCS kproperty_qt)
+ecm_create_qm_loader(kpropertycore_LIB_SRCS kpropertycore_qt)
 
 add_library(KPropertyCore SHARED ${kpropertycore_LIB_SRCS})
 set_coinstallable_lib_version(KPropertyCore)
@@ -86,8 +85,7 @@ if(KPROPERTY_WIDGETS)
         Messages.sh
     )
 
-    # TODO: reenable once kproperty_qt has been split
-    # ecm_create_qm_loader(kpropertywidgets_LIB_SRCS kpropertywidgets_qt)
+     ecm_create_qm_loader(kpropertywidgets_LIB_SRCS kpropertywidgets_qt)
 
     set(kpropertywidgets_INCLUDE_DIRS
         ${CMAKE_CURRENT_BINARY_DIR}/editors
