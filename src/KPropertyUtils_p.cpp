@@ -188,14 +188,12 @@ bool registerIconsResource(const QString &privateName, const QString& path,
         *errorMessage = QString("Could not open icon resource file %1.").arg(path);
         *detailedErrorMessage = QString("Tried to find in %1.").arg(triedLocationsString);
 #else
-        //! @todo 3.1 Re-add translation
-        *errorMessage = /*QObject::tr*/ QString::fromLatin1(
+        *errorMessage = QObject::tr(
             "Could not open icon resource file \"%1\". "
             "Application will not start. "
             "Please check if it is properly installed.")
             .arg(QFileInfo(path).fileName());
-        //! @todo 3.1 Re-add translation
-        *detailedErrorMessage = QString::fromLatin1("Tried to find in %1.").arg(triedLocationsString);
+        *detailedErrorMessage = QObject::tr("Tried to find in %1.").arg(triedLocationsString);
 #endif
         return false;
     }
@@ -358,7 +356,7 @@ bool setupPrivateIconsResourceWithMessage(const QString &privateName, const QStr
 bool setupGlobalIconTheme()
 {
     if (0 != QIcon::themeName().compare(supportedIconTheme(), Qt::CaseInsensitive)) {
-        const QString message = QString::fromLatin1(
+        const QString message = QObject::tr(
             "\"%1\"  supports only \"%2\" icon theme but current system theme is \"%3\". "
             "Application's icon theme will be changed to \"%2\". "
             "Please consider adding support for other themes to %4.")
@@ -367,7 +365,7 @@ bool setupGlobalIconTheme()
         kprDebug() << qPrintable(message);
         if (!registerGlobalIconsResource()) {
             // don't fail, just warn
-            const QString message = QString::fromLatin1(
+            const QString message = QObject::tr(
                 "Failed to set icon theme to \"%1\". Icons in the application will be inconsistent. "
                 "Please install .rcc file(s) for the system theme.")
                 .arg(supportedIconTheme());
