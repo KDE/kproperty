@@ -108,7 +108,7 @@ void KPropertySetBuffer::intersectedChanged(KPropertySet& set, KProperty& prop)
 
     const QList<KProperty*> *props = prop.d->relatedProperties;
     for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it) {
-        (*it)->setValue(prop.value(), KProperty::DefaultValueOptions & ~KProperty::ValueOptions(KProperty::ValueOption::RememberOld));
+        (*it)->setValue(prop.value(), KProperty::ValueOption::IgnoreOld);
     }
 }
 
@@ -120,6 +120,6 @@ void KPropertySetBuffer::intersectedReset(KPropertySet& set, KProperty& prop)
 
     const QList<KProperty*> *props = prop.d->relatedProperties;
     for (QList<KProperty*>::ConstIterator it = props->constBegin(); it != props->constEnd(); ++it)  {
-        (*it)->setValue(prop.value(), KProperty::DefaultValueOptions & ~KProperty::ValueOptions(KProperty::ValueOption::RememberOld));
+        (*it)->setValue(prop.value(), KProperty::ValueOption::IgnoreOld);
     }
 }

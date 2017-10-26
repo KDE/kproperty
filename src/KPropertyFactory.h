@@ -39,9 +39,10 @@ public:
      It is called by @ref KProperty::setValue() when
      the property is composed.
     It is not necessary to modify the property value, it is done by KProperty.
-    @note When this method is called valueOptions should not have the KProperty::ValueOption::UseComposedProperty
-          flag set or else there will be infinite recursion. KProperty class makes sure this is the case
-          but custom property developers should take care about this too.
+    @note When this method is called valueOptions should have
+          the KProperty::ValueOption::IgnoreComposedProperty flag set or else there will be infinite
+          recursion. The KProperty class makes sure this is the case but developers of custom
+          properties should take special care about this.
     */
     virtual void setValue(KProperty *property, const QVariant &value, KProperty::ValueOptions valueOptions) = 0;
 

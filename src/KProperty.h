@@ -211,47 +211,38 @@ public:
     /*! \return the value of the property.*/
     QVariant value() const;
 
-    /*! Gets the previous property value.*/
+    /*! Returns the previous property value if it was set in setValue(). */
     QVariant oldValue() const;
 
-    //! Option for handling values
+    //! Options that influence how values are handled in setValue() and valueEqualsTo()
     //! @since 3.1
     enum class ValueOption {
-        None = 0,               //!< No options
-        RememberOld = 1,        //!< Remeber old value before setting a new one
-        UseComposedProperty = 2 //!< Use composed property when comparing values
+        None = 0,        //!< No options, that is 1. old value is remembered before setting a new one;
+                         //!< 2. composed properties are considered while comparing old and new value
+        IgnoreOld = 1,   //!< Do not remember the old value before setting a new one
+        IgnoreComposedProperty = 2 //!< Do not use composed property when comparing values
     };
     Q_DECLARE_FLAGS(ValueOptions, ValueOption)
 
-    //! Default value options, equal to ValueOption::RememberOld | ValueOption::UseComposedProperty
-    //! @since 3.1
-    static const ValueOptions DefaultValueOptions;
-
-    //! Sets value of the property to @a value
-    //! @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
-    void setValue(const QVariant &value, ValueOptions options = DefaultValueOptions);
-
     /**
-     * Sets value of the property
-     *
-     * @overload setValue(const QVariant&, ValueOptions valueOptions)
-     * @param value Value to set.
-     * @param changed Pointer to value that will be set to true if the value has been assigned. Can be @a nullptr.
-     * @param valueOptions Options to use when setting the value.
-     * @since 3.1
-     * @todo 4.0 BCI: replace with bool setValue(QVariant, ValueOptions)
+     * @brief Sets value of the property.
+     * @param value New value
+     * @param options Options for the value setting.
+     * @return @c true if the value has been changed and @c false if the @a value was the same
+     *         as previous one so it was not changed of if this property is null.
      */
-    void setValue(const QVariant &value, bool *changed, ValueOptions valueOptions = DefaultValueOptions);
+    bool setValue(const QVariant &value, ValueOptions options = ValueOptions());
 
     /**
      * @return true if value of this property is equal to specified value
      *
      * Takes type into account.
      * @param value Value to compare.
-     * @param valueOptions Options to use when comparing. Only the @c ValueOption::UseComposedProperty flag is used.
+     * @param valueOptions Options to use when comparing.
+     *                     Only the @c None and IgnoreComposedProperties are supported.
      * @since 3.1
      */
-    bool valueEqualsTo(const QVariant &value, ValueOptions valueOptions = ValueOption::UseComposedProperty) const;
+    bool valueEqualsTo(const QVariant &value, ValueOptions valueOptions = ValueOptions()) const;
 
     /*! Resets the value of the property to the old value.
      @see oldValue() */

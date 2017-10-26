@@ -111,7 +111,7 @@ bool KProperty::Private::valueDiffersInternal(const QVariant &otherValue, KPrope
         return static_cast<qlonglong>(value.toDouble() * factor) != static_cast<qlonglong>(otherValue.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         return false;
-    } else if (composed && (options & ValueOption::UseComposedProperty)) {
+    } else if (composed && !(options & ValueOption::IgnoreComposedProperty)) {
         return !composed->valuesEqual(value, otherValue);
     }
     else {
@@ -132,15 +132,14 @@ bool KProperty::Private::setValueInternal(const QVariant &newValue, KProperty::V
     }
 
     //2. Then change it, and store old value if necessary
-    if (valueOptions & KProperty::ValueOption::RememberOld) {
-        if (!changed) {
-            oldValue = value;
-        }
-        changed = true;
-    }
-    else {
+    if (valueOptions & KProperty::ValueOption::IgnoreOld) {
         oldValue = QVariant(); // clear old value
         changed = false;
+    } else {
+        if (!changed) {
+            oldValue = value;
+            changed = true;
+        }
     }
     if (parent) {
         parent->d->childValueChanged(q, newValue, valueOptions);
@@ -150,9 +149,9 @@ bool KProperty::Private::setValueInternal(const QVariant &newValue, KProperty::V
     if (composed && useComposedProperty) {
         prevValue = value; //???
         composed->setChildValueChangedEnabled(false);
-        composed->setValue(q, newValue,
-                           valueOptions & ~ValueOptions(ValueOption::UseComposedProperty) // avoid infinite recursion
-                           );
+        composed->setValue(
+            q, newValue, valueOptions | ValueOption::IgnoreComposedProperty // avoid infinite recursion
+        );
         composed->setChildValueChangedEnabled(true);
     }
     else {
@@ -261,15 +260,11 @@ void KProperty::Private::childValueChanged(KProperty *child, const QVariant &val
     }
     composed->childValueChangedInternal(
         child, value,
-        valueOptions & ~KProperty::ValueOptions(KProperty::ValueOption::UseComposedProperty) // avoid infinite recursion
+        valueOptions | KProperty::ValueOption::IgnoreComposedProperty // avoid infinite recursion
     );
 }
 
 /////////////////////////////////////////////////////////////////
-
-//static
-const KProperty::ValueOptions KProperty::DefaultValueOptions
-    = KProperty::ValueOptions(KProperty::ValueOption::RememberOld | KProperty::ValueOption::UseComposedProperty);
 
 KProperty::KProperty(const QByteArray &name, const QVariant &value,
                    const QString &caption, const QString &description,
@@ -287,7 +282,7 @@ KProperty::KProperty(const QByteArray &name, const QVariant &value,
 
     if (parent)
         parent->d->addChild(this);
-    setValue(value, DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
+    setValue(value, ValueOption::IgnoreOld);
 }
 
 KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
@@ -306,7 +301,7 @@ KProperty::KProperty(const QByteArray &name, KPropertyListData* listData,
 
     if (parent)
         parent->d->addChild(this);
-    setValue(value, KProperty::DefaultValueOptions & ~ValueOptions(ValueOption::RememberOld));
+    setValue(value, KProperty::ValueOption::IgnoreOld);
 }
 
 KProperty::KProperty()
@@ -407,17 +402,9 @@ KProperty::oldValue() const
     return d->oldValue;
 }
 
-void KProperty::setValue(const QVariant &value, ValueOptions options)
+bool KProperty::setValue(const QVariant &value, ValueOptions options)
 {
-    (void)d->setValueInternal(value, options);
-}
-
-void KProperty::setValue(const QVariant &value, bool *changed, ValueOptions options)
-{
-    const bool ch = d->setValueInternal(value, options);
-    if (changed) {
-        *changed = ch;
-    }
+    return d->setValueInternal(value, options);
 }
 
 void KProperty::setValue(const QVariant &value, bool doNotUseThisOverload, bool doNotUseThisOverload2)
@@ -440,7 +427,7 @@ KProperty::resetValue()
     if (d->set) {
         KPropertySetPrivate::d(d->set)->informAboutClearing(&cleared); //inform me about possibly clearing the property sets
     }
-    setValue(oldValue(), ValueOption::UseComposedProperty);
+    setValue(oldValue(), ValueOption::IgnoreOld);
     if (cleared)
         return; //property set has been cleared: no further actions make sense as 'this' is dead
 

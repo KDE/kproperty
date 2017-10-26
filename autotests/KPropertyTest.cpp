@@ -138,8 +138,7 @@ OK  KProperty::isNull() const
     KProperty::setStorable(bool)
     KProperty::setType(int)
     KProperty::setValueSyncPolicy(KProperty::ValueSyncPolicy)
-    KProperty::setValue(QVariant const&, bool*, QFlags<KProperty::ValueOption>)
-    KProperty::setValue(QVariant const&, bool, bool)
+    KProperty::setValue(QVariant const&, QFlags<KProperty::ValueOption>)
     KProperty::setVisible(bool)
     KProperty::type() const
     KProperty::valueEqualsTo(QVariant const&, QFlags<KProperty::ValueOption>) const
