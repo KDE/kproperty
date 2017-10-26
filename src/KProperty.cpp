@@ -477,7 +477,17 @@ KProperty::isNull() const
 bool
 KProperty::isModified() const
 {
-    return d->changed;
+    if (d->changed) {
+        return true;
+    }
+    if (d->children) {
+        for (const KProperty* p : *d->children) {
+            if (p->isModified()) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void

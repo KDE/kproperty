@@ -288,7 +288,11 @@ public:
     /*! \return true if this property is null. Property is null if it has empty name. */
     bool isNull() const;
 
-    //! \return true if this property value is changed.
+    /**
+     * @brief Return @c true if value of this property or value of any child property is modified.
+     *
+     * @see clearModifiedFlag()
+     */
     bool isModified() const;
 
     //! Clears "modified" flag, so isModified() will return false.
