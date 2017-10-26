@@ -227,6 +227,20 @@ public:
     //! @return property values for this set
     QMap<QByteArray, QVariant> propertyValues() const;
 
+    /**
+     * @brief Clears "modified" flag of all properties in this set, i.e. calls clearModifiedFlag() for each property.
+     * @since 3.1
+     * @see KProperty::clearModifiedFlag()
+     */
+    void clearModifiedFlags();
+
+    /**
+     * Returns @c true if at least one property in this set is modified, i.e. returns @c true for isModified()
+     * @since 3.1
+     * @see clearModifiedFlags() KProperty::isModified()
+     */
+    bool isModified() const;
+
 public Q_SLOTS:
     /*! Adds the property to the set, in the group.
      The property becomes owned by the set.

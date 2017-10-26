@@ -660,3 +660,20 @@ QMap<QByteArray, QVariant> KPropertySet::propertyValues() const
     }
     return result;
 }
+
+void KPropertySet::clearModifiedFlags()
+{
+    for (KPropertySetIterator it(*this); it.current(); ++it) {
+        it.current()->clearModifiedFlag();
+    }
+}
+
+bool KPropertySet::isModified() const
+{
+    for (KPropertySetIterator it(*this); it.current(); ++it) {
+        if (it.current()->isModified()) {
+            return true;
+        }
+    }
+    return false;
+}
