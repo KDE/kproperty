@@ -75,7 +75,7 @@ public:
     //! or invalid index if such property could not be found.
     QModelIndex indexForPropertyName(const QByteArray& propertyName) const;
 
-    //! @return a sibling for model index @a index and columnd @a column
+    //! @return a sibling for model index @a index and column @a column
     QModelIndex indexForColumn(const QModelIndex& index, int column) const;
 
     //! @return order for properties.
