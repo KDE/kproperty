@@ -295,7 +295,14 @@ public:
      */
     bool isModified() const;
 
-    //! Clears "modified" flag, so isModified() will return false.
+    /**
+     * @brief Clears the "modified" flag for this property and all its child properties.
+     *
+     * After calling this method isModified() returs false for the property and all child
+     * properties.
+     *
+     * @see isModified()
+     */
     void clearModifiedFlag();
 
     /*! \return true if the property is read-only when used in a property editor.

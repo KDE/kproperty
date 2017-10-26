@@ -494,6 +494,11 @@ void
 KProperty::clearModifiedFlag()
 {
     d->changed = false;
+    if (d->children) {
+        for (KProperty* p : *d->children) {
+            p->clearModifiedFlag();
+        }
+    }
 }
 
 bool
