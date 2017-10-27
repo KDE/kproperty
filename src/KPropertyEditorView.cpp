@@ -616,9 +616,7 @@ void KPropertyEditorView::acceptInput()
 
 void KPropertyEditorView::commitData( QWidget * editor )
 {
-    d->slotPropertyChangedEnabled = false;
     QAbstractItemView::commitData( editor );
-    d->slotPropertyChangedEnabled = true;
 }
 
 bool KPropertyEditorView::viewportEvent( QEvent * event )
@@ -703,10 +701,10 @@ void KPropertyEditorView::updateSubtree(const QModelIndex &index)
         return;
     }
     update(index);
-    QModelIndex valueIndex = d->model->indexForColumn(index, 1);
-    if (valueIndex.isValid()) {
-        update(valueIndex);
-    }
+    update(index.parent());
+    update(d->model->indexForColumn(index, 1));
+    update(d->model->indexForColumn(index.parent(), 1));
+
     KProperty *property = static_cast<KProperty*>(index.internalPointer());
     if (property->children()) {
         int row = 0;
