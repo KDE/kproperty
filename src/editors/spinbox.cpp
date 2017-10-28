@@ -115,8 +115,8 @@ KPropertyIntSpinBox::KPropertyIntSpinBox(const KProperty& prop, QWidget *parent,
         setRange(minVal.toInt(), maxVal.toInt());
     }
     const KPropertyUtilsPrivate::ValueOptionsHandler options(prop);
-    if (!options.minValueText.isEmpty()) {
-        setSpecialValueText(options.minValueText);
+    if (!options.minValueText.isNull()) {
+        setSpecialValueText(options.minValueText.toString());
     }
     if (!options.prefix.isEmpty()) {
         setPrefix(options.prefix + QLatin1Char(' '));
@@ -230,8 +230,8 @@ KPropertyDoubleSpinBox::KPropertyDoubleSpinBox(const KProperty* prop, QWidget *p
     //! @todo implement slider
     // bool slider = prop->option("slider", false).toBool();
     const KPropertyUtilsPrivate::ValueOptionsHandler options(*prop);
-    if (!options.minValueText.isEmpty()) {
-        setSpecialValueText(options.minValueText);
+    if (!options.minValueText.isNull()) {
+        setSpecialValueText(options.minValueText.toString());
     }
     if (!options.prefix.isEmpty()) {
         setPrefix(options.prefix + QLatin1Char(' '));
@@ -273,8 +273,10 @@ QString KPropertyIntSpinBoxDelegate::propertyValueToString(const KProperty* prop
     QVariant maxVal;
     const KPropertyUtilsPrivate::ValueOptionsHandler options(*prop);
     (void)intRangeValue(*prop, &minVal, &maxVal);
-    if (minVal.isValid() && minVal.toInt() == prop->value().toInt()) {
-        return options.minValueText;
+    if (minVal.isValid() && minVal.toInt() == prop->value().toInt()
+        && !options.minValueText.isNull())
+    {
+        return options.minValueText.toString();
     }
     return options.valueWithPrefixAndSuffix(valueToString(prop->value(), locale), locale);
 }
@@ -310,8 +312,10 @@ QString KPropertyDoubleSpinBoxDelegate::propertyValueToString(const KProperty* p
     QVariant maxVal;
     const KPropertyUtilsPrivate::ValueOptionsHandler options(*prop);
     (void)doubleRangeValue(*prop, &minVal, &maxVal);
-    if (minVal.isValid() && minVal.toDouble() == prop->value().toDouble()) {
-        return options.minValueText;
+    if (minVal.isValid() && minVal.toDouble() == prop->value().toDouble()
+        && !options.minValueText.isNull())
+    {
+        return options.minValueText.toString();
     }
     QString valueString;
     const QVariant precision = precisionValue(*prop);

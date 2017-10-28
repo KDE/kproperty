@@ -22,6 +22,7 @@
 
 #include <QPainter>
 #include <QString>
+#include <QVariant>
 
 class KProperty;
 
@@ -65,7 +66,7 @@ public:
     //! @return @a valueString value with prefix and suffix, if present
     QString valueWithPrefixAndSuffix(const QString &valueString, const QLocale &locale) const;
 
-    QString minValueText;
+    QVariant minValueText;
     QString prefix;
     QString suffix;
 };

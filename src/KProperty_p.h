@@ -42,9 +42,11 @@ public:
     //! @return a value for option @a name or null value if there is no such option set.
     inline QVariant option(const char* name, const QVariant& defaultValue) const
     {
-        if (options.contains(name))
-            return options[name];
-        return parent ? parent->option(name, defaultValue) : defaultValue;
+        QVariant result = options.value(name);
+        if (result.isNull()) {
+            result = parent ? parent->option(name, defaultValue) : defaultValue;
+        }
+        return result;
     }
 
     //! @return true if value of this property differs from @a otherValue

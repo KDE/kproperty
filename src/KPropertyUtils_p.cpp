@@ -380,7 +380,7 @@ bool setupGlobalIconTheme()
 
 ValueOptionsHandler::ValueOptionsHandler(const KProperty &property)
 {
-    minValueText = property.option("minValueText").toString();
+    minValueText = property.option("minValueText");
     prefix = property.option("prefix").toString().trimmed();
     suffix = property.option("suffix").toString().trimmed();
 }
