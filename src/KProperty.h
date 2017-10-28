@@ -353,7 +353,9 @@ public:
 
     /*! Sets value \a val for option \a name.
      Options are used to override default settings of individual properties.
-     This is most visible in property editor widget.
+     They are most visible in property editor widgets. Option is set if it is not null.
+     This means that empty string can be still a valid value.
+     To unset given option, call setOption() with a null QVariant value.
 
     Currently supported options are:
     <ul>
@@ -422,7 +424,8 @@ public:
     void setOption(const char* name, const QVariant& val);
 
     /*! @brief Returns value of given option
-     * If the option @a name is missing and parent property is present (see parent()),
+     * Option is set if returned value is not null.
+     * If there is no option for @a name in given property and parent property is present (see parent()),
      * parent property is checked. If the parent property offers the option, the value
      * is returned. If it is not present there, @a defaultValue value is returned.
      * Looking at parent property is available since 3.1.

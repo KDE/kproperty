@@ -551,7 +551,11 @@ KProperty::setStorable(bool storable)
 void
 KProperty::setOption(const char* name, const QVariant& val)
 {
-    d->options[name] = val;
+    if (val.isNull()) {
+        d->options.remove(name);
+    } else {
+        d->options[name] = val;
+    }
 }
 
 QVariant KProperty::option(const char* name, const QVariant& defaultValue) const
