@@ -36,12 +36,6 @@ QString KPropertySizeFDelegate::propertyValueToString(const KProperty *property,
 QString KPropertySizeFDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QSizeF s(value.toSizeF());
-    if (s.isNull()) {
-        if (locale.language() == QLocale::C) {
-            return QString();
-        }
-        return QObject::tr("None", "Null value");
-    }
     if (locale.language() == QLocale::C) {
         return QString::fromLatin1("%1x%2").arg(s.width()).arg(s.height());
     }

@@ -30,12 +30,6 @@ KPropertyPointDelegate::KPropertyPointDelegate()
 QString KPropertyPointDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QPoint p(value.toPoint());
-    if (p.isNull()) {
-        if (locale.language() == QLocale::C) {
-            return QString();
-        }
-        return QObject::tr("None", "Null value");
-    }
     if (locale.language() == QLocale::C) {
         return QString::fromLatin1("%1, %2").arg(p.x()).arg(p.y());
     }

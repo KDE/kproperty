@@ -28,12 +28,6 @@ KPropertySizeDelegate::KPropertySizeDelegate()
 QString KPropertySizeDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QSize s(value.toSize());
-    if (s.isNull()) {
-        if (locale.language() == QLocale::C) {
-            return QString();
-        }
-        return QObject::tr("None", "Null value");
-    }
     if (locale.language() == QLocale::C) {
         return QString::fromLatin1("%1x%2").arg(s.width()).arg(s.height());
     }

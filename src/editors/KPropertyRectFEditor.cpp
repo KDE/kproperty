@@ -36,12 +36,6 @@ QString KPropertyRectFDelegate::propertyValueToString(const KProperty *property,
 QString KPropertyRectFDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     const QRectF r(value.toRectF());
-    if (r.isNull()) {
-        if (locale.language() == QLocale::C) {
-            return QString();
-        }
-        return QObject::tr("None", "Null value");
-    }
     if (locale.language() == QLocale::C) {
         return QString::fromLatin1("%1, %2, %3x%4").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
     }
