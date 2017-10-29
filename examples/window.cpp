@@ -261,6 +261,7 @@ Window::Window()
     m_editorView = new KPropertyEditorView(this);
     lyr->addWidget(m_editorView);
     m_editorView->changeSet(&m_set);
+    m_editorView->resizeColumnToContents(0);
     lyr->addSpacing(lyr->spacing());
 
     QHBoxLayout *hlyr = new QHBoxLayout;
