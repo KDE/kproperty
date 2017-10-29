@@ -27,12 +27,33 @@
 #include <QByteArray>
 #include <QDebug>
 
+#include <cmath>
+#include <limits>
+
 #include "kpropertycore_export.h"
 
 class KComposedPropertyInterface;
 class KPropertyListData;
 class KPropertySet;
 class KPropertySetPrivate;
+
+/**
+ * @brief Minimum double value working precisely.
+ *
+ * @since 3.1
+ */
+#define KPROPERTY_MIN_PRECISE_DOUBLE (-pow(2, std::numeric_limits<double>::digits))
+
+/**
+ * @brief Minimum double value working precisely
+ *
+ * Editor for double values (spin box) has localized contents and its code supports just this maximum.
+ * For a 64-bit machine it's 2**53.
+ * See also https://phabricator.kde.org/D5419#inline-22329
+ *
+ * @since 3.1
+ */
+#define KPROPERTY_MAX_PRECISE_DOUBLE (pow(2, std::numeric_limits<double>::digits))
 
 /*! \brief The base class representing a single property
 
@@ -361,20 +382,32 @@ public:
     <ul>
     <li> min: value describing minimum value for properties of integer, double,
          date, date/time and time types. Default is 0 for double and unsigned integer types,
-         -INT_MAX for signed integer type. Defaults for date, date/time and time types are
-         specified in documentation of QDateEdit::minimumDate,
-         QDateTimeEdit::minimumDateTime and QTime::minimumTime, respectively.
-         The value is ignored if it is larger than the value of "max" option. </li>
+         -INT_MAX for signed integer type.
+         Defaults for date, date/time and time types are specified in documentation
+         of QDateEdit::minimumDate, QDateTimeEdit::minimumDateTime and QTime::minimumTime, respectively.
+         The value specified for this option is accepted if:
+         - it is not larger than the value of the "max" option
+         - it is not smaller than KPROPERTY_MIN_PRECISE_DOUBLE (for double type)
+         - it is not smaller than -INT_MAX (for integer type)
+         - it is not smaller than 0 (for unsigned integer type).
+         </li>
     <li> minValueText: user-visible translated string to be displayed in editor for integer,
          double, date, date/time and time types when the value is equal to the value of
          "min" option.
+         The value specified for this option is accepted if min option is supported for given type
+         and is specified.
          @see QAbstractSpinBox::specialValueText</li>
     <li> max: value describing minimum value for properties of integer type.
-         Default is pow(2, std::numeric_limits<double>::digits) for double type (2^53 on 64-bit
-         systems -- maximum precise value), and INT_MAX for integer type.
+         Default is KPROPERTY_MAX_PRECISE_DOUBLE for double type (maximum precise value)
+         and INT_MAX for integer type.
          Defaults for date, date/time and time types are specified in documentation
          of QDateEdit::maximumDate, QDateTimeEdit::maximumDateTime and QTime::maximumTime, respectively.
          The value is ignored if it is smaller than the value of "min" option. </li>
+         The value specified for this option is accepted if:
+         - it is not smaller than the value of the "min" option
+         - it is not larger than KPROPERTY_MAX_PRECISE_DOUBLE (for double type)
+         - it is not larger than INT_MAX (for integer and unsigned integer type).
+         </li>
     <li> precision: integer value >= 0 describing the number of decimals after the decimal
          point for double type. Default value is 2.
          @see QDoubleSpinBox::decimals</li>

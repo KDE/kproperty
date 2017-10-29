@@ -199,6 +199,59 @@ Window::Window()
         p->setOption("precision", 1);
     }
 
+//  Limits
+    if (addGroups) {
+        group = "LimitsGroup";
+        m_set.setGroupCaption(group, "Limits");
+    }
+    if (singleProperty.isEmpty() || singleProperty=="uint") {
+        m_set.addProperty(new KProperty("uint", 3, "Unsigned Int", QString(), KProperty::UInt), group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="uint+mintext") {
+        m_set.addProperty(p = new KProperty("uint+mintext", 0, "Unsigned Int\n+min.text", QString(), KProperty::UInt), group);
+        p->setOption("minValueText", "Minimum value");
+    }
+    if (singleProperty.isEmpty() || singleProperty=="limit0_10") {
+        m_set.addProperty(p = new KProperty("limit0_10", 9, "0..10", QString(), KProperty::UInt), group);
+        p->setOption("max", 10);
+    }
+    if (singleProperty.isEmpty() || singleProperty == "limit1_5+mintext") {
+        // This is a good test for fixing value out of range: "Could not assign value 9 larger than
+        // maximum 5 -- setting to 5" warning is displayed and 5 is assigned.
+        m_set.addProperty(p = new KProperty("limit1_5+mintext", 9, "1..5\n+mintext", QString(),
+                                            KProperty::UInt), group);
+        p->setOption("min", 1);
+        p->setOption("max", 5);
+        p->setOption("minValueText", "Minimum value");
+    }
+    if (singleProperty.isEmpty() || singleProperty=="negative-int") {
+        m_set.addProperty(p = new KProperty("negative-int", -2, "Negative Int", QString(), KProperty::Int), group);
+        p->setOption("max", -1);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="double-unlimited") {
+        m_set.addProperty(p = new KProperty("double-unlimited", -1.11, "Double unlimited"), group);
+        p->setOption("min", KPROPERTY_MIN_PRECISE_DOUBLE);
+        p->setOption("precision", 1);
+        p->setOption("step", 0.1);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="double-negative") {
+        m_set.addProperty(p = new KProperty("double-negative", -0.2, "Double negative"), group);
+        p->setOption("min", KPROPERTY_MIN_PRECISE_DOUBLE);
+        p->setOption("max", -0.1);
+        p->setOption("precision", 1);
+        p->setOption("step", 0.1);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="double-minus1-0+mintext") {
+        // This is a good test for fixing value out of range: "Could not assign value -9.0 smaller than
+        // minimum -1.0 -- setting to -1.0" warning is displayed and -1.0 is assigned.
+        m_set.addProperty(p = new KProperty("double-minus1-0+mintext", -9.0, "Double -1..0\n+mintext"), group);
+        p->setOption("min", -1.0);
+        p->setOption("max", 0.0);
+        p->setOption("precision", 1);
+        p->setOption("step", 0.1);
+        p->setOption("minValueText", "Minimum value");
+    }
+
 //  Appearance
     if (addGroups) {
         group = "AppearanceGroup";

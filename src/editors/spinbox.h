@@ -64,11 +64,14 @@ class KPROPERTYWIDGETS_EXPORT KPropertyDoubleSpinBox : public QDoubleSpinBox
     Q_PROPERTY(double value READ value WRITE setValue USER true)
 
 public:
-    KPropertyDoubleSpinBox(const KProperty* prop, QWidget *parent, int itemHeight);
+    KPropertyDoubleSpinBox(const KProperty &prop, QWidget *parent, int itemHeight);
     ~KPropertyDoubleSpinBox() override;
 
 Q_SIGNALS:
     void commitData(QWidget* editor);
+
+public Q_SLOTS:
+    void setValue(const QVariant& value);
 
 protected Q_SLOTS:
     void slotValueChanged(double value);
