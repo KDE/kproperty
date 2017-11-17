@@ -21,10 +21,5 @@ function find_files()
     done < CMakeLists.txt
 }
 
-function extract()
-{
-    $EXTRACT_TR_STRINGS `find_files ${1}` -o $podir/${1}_qt.pot
-}
-
-extract kpropertycore
-extract kpropertywidgets
+$EXTRACT_TR_STRINGS `find_files kpropertycore` -o $podir/kpropertycore_qt.pot
+$EXTRACT_TR_STRINGS `find_files kpropertywidgets` -o $podir/kpropertywidgets_qt.pot
