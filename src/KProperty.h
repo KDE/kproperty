@@ -428,19 +428,25 @@ public:
          @c false.</li>
     <li> extraValueAllowed: boolean value, if @c true the user is able to manually add extra
          values to a combobox.</li>
-    <li> fileMode: string value that describes what objects may select in the file dialog
-         of the url editor:
+    <li> fileMode: string value that describes types of objects that can be selected by the url
+         editor:
          <ul>
-         <li>"dirsOnly": only support and display directories;
-             @see QFileDialog::ShowDirsOnly QFileDialog::Directory</li>
-         <li>"existingFile": only allow to select one existing file;
-             @see QFileDialog::ExistingFile</li>
-         <li>Any other value: any file is supported, whether it exists or not
-             @see QFileDialog::AnyFile</li>
+         <li>"dirsOnly": only display and allow to select existing directories;
+             @see QFileDialog::getExistingDirectoryUrl()</li>
+         <li>"existingFile": only allow to select one existing file for opening, i.e. confirmation
+             of overwriting is not performed;
+             @see QFileDialog::getOpenFileUrl()</li>
+         <li>Any other value: any file is supported, whether it exists or not; if the file exists,
+             "confirmOverwrites" option is honored; this mode is the only one supporting non-file
+             protocols such as ftp or http; to use them user has to enter them explicitly,
+             file protocol is still the default
+             @see QFileDialog::getSaveFileUrl()</li>
          </ul>
+         @note Empty URLs are always allowed.
          </li>
-    <li> confirmOverwrites: boolean value, if @c true, user will be asked for confirmation
-         of file overwriting in the url editor. @c false by default.
+    <li> confirmOverwrites: boolean value supported by the url editor; if @c true and the "fileMode"
+         option is not equal to "existingFile" nor "dirsOnly" user will be asked for confirmation
+         of file overwriting if selected file exists. @c false by default.
          @note The line edit does not validate the content.</li>
     <li> multiLine: boolean value used for string type. If @c true, a multi-line
          QPlainTextEdit-based widget is used for editor; otherwise a single-line QLineEdit

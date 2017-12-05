@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2016-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,6 +48,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void selectButtonClicked() override;
+    void slotTextChanged(const QString &text);
 
 private:
     Q_DISABLE_COPY(KPropertyUrlEditor)

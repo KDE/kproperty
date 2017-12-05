@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2016-2017 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,17 +33,50 @@ public:
         , confirmOverwrites(property.option("confirmOverwrites", false).toBool())
     {
     }
+
+    bool isValid(const QUrl &url) const
+    {
+        if (url.isEmpty()) {
+            return true;
+        }
+        if (!url.isValid()) {
+            return false;
+        }
+        if (url.isLocalFile()) {
+            const QString path = url.toLocalFile();
+            QFileInfo info(path);
+            if (!info.isNativePath()) {
+                return false;
+            }
+            // @todo check for illegal characters -- https://stackoverflow.com/a/45282192
+            if (fileMode == "existingfile") {
+                //! @todo display error for false
+                return info.isFile() && info.exists();
+            } else if (fileMode == "dirsonly") {
+                //! @todo display error for false
+                return info.isDir() && info.exists();
+            }
+            // fileMode is "":
+            //! @todo support confirmOverwrites, display error
+            //if (info.exists()) {
+            //}
+        }
+        return true;
+    }
+
     QUrl value;
     QLineEdit *lineEdit;
     KPropertyUrlDelegate delegate;
     QByteArray fileMode;
     bool confirmOverwrites;
+    bool slotTextChangedEnabled = true;
 };
 
 KPropertyUrlEditor::KPropertyUrlEditor(const KProperty &property, QWidget *parent)
         : KPropertyGenericSelectionEditor(parent), d(new Private(property))
 {
     d->lineEdit = new QLineEdit;
+    connect(d->lineEdit, &QLineEdit::textChanged, this, &KPropertyUrlEditor::slotTextChanged);
     d->lineEdit->setClearButtonEnabled(true);
     setMainWidget(d->lineEdit);
 }
@@ -60,27 +93,42 @@ QUrl KPropertyUrlEditor::value() const
 void KPropertyUrlEditor::setValue(const QUrl &value)
 {
     d->value = value;
+    d->slotTextChangedEnabled = false;
     d->lineEdit->setText(d->delegate.valueToString(d->value, locale()));
+    d->slotTextChangedEnabled = true;
+}
+
+void KPropertyUrlEditor::slotTextChanged(const QString &text)
+{
+    if (!d->slotTextChangedEnabled) {
+        return;
+    }
+    const QUrl newUrl = QUrl::fromUserInput(text);
+    if (d->isValid(newUrl)) {
+        d->value = newUrl;
+        emit commitData(this);
+    }
 }
 
 void KPropertyUrlEditor::selectButtonClicked()
 {
     QUrl url;
     QFileDialog::Options options;
-    if (!d->confirmOverwrites) {
-        options |= QFileDialog::DontConfirmOverwrite;
-    }
     if (d->fileMode == "existingfile") {
-        url = QFileDialog::getSaveFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
+        url = QFileDialog::getOpenFileUrl(this, tr("Select Existing File"), d->value, QString(), nullptr, options);
     } else if (d->fileMode == "dirsonly") {
         options |= QFileDialog::ShowDirsOnly;
-        url = QFileDialog::getExistingDirectoryUrl(this, tr("Select Directory"), d->value, options);
+        url = QFileDialog::getExistingDirectoryUrl(this, tr("Select Existing Directory"), d->value, options);
     } else {
-        url = QFileDialog::getOpenFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
+        if (!d->confirmOverwrites) {
+            options |= QFileDialog::DontConfirmOverwrite;
+        }
+        url = QFileDialog::getSaveFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
     }
     //! @todo filters, more options, supportedSchemes, localFilesOnly?
-    if (!url.isEmpty()) {
+    if (!url.isEmpty() && d->isValid(url)) {
         setValue(url);
+        emit commitData(this);
     }
 }
 
@@ -97,10 +145,13 @@ QWidget* KPropertyUrlDelegate::createEditor(int type, QWidget *parent,
     return new KPropertyUrlEditor(prop ? *prop : KProperty(), parent);
 }
 
-QString KPropertyUrlDelegate::valueToString(const QVariant& value, const QLocale &locale) const
+QString KPropertyUrlDelegate::valueToString(const QVariant &value,
+                                            const QLocale &locale) const
 {
     const QUrl url(value.toUrl());
-    QString s(url.isLocalFile() ? url.toLocalFile() : value.toString());
+    const QString s(url.isLocalFile()
+                      ? QDir::toNativeSeparators(url.toLocalFile())
+                      : value.toString());
     if (locale.language() == QLocale::C) {
         return s;
     }

@@ -297,8 +297,7 @@ Window::Window()
         p->setOption("fileMode", "existingFile");
     }
     if (singleProperty.isEmpty() || singleProperty=="OverwriteFile") {
-        m_set.addProperty(p = new KProperty("OverwriteFile", QUrl::fromLocalFile(QDir::homePath()), "Overwrite\nFile"), group);
-        p->setOption("fileMode", "existingFile");
+        m_set.addProperty(p = new KProperty("OverwriteFile", QUrl::fromLocalFile(QDir::homePath()), "New File or\nOverwrite Existing"), group);
         p->setOption("confirmOverwrites", true);
     }
     if (singleProperty.isEmpty() || singleProperty=="Dir") {
