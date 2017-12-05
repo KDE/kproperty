@@ -188,6 +188,11 @@ bool registerIconsResource(const QString &privateName, const QString& path,
                        triedLocations.begin(), [](const QString &path) {
                          return QDir::toNativeSeparators(path);
                        });
+        {
+            std::list<QString> triedLocationsList(triedLocations.toStdList());
+            triedLocationsList.unique();
+            triedLocations = QStringList::fromStdList(triedLocationsList);
+        }
         const QString triedLocationsString = QLocale().createSeparatedList(triedLocations);
 #ifdef QT_ONLY
         *errorMessage = QString("Could not open icon resource file %1.").arg(path);
