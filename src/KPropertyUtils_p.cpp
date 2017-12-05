@@ -51,6 +51,8 @@
 #include <QIcon>
 #endif
 
+#include <algorithm>
+
 class QColor;
 class QWidget;
 
@@ -183,6 +185,10 @@ bool registerIconsResource(const QString &privateName, const QString& path,
             triedLocations.append(extraLocation);
         }
         triedLocations.append(correctStandardLocations(privateName, location, extraLocation));
+        std::transform(triedLocations.begin(), triedLocations.end(),
+                       triedLocations.begin(), [](const QString &path) {
+                         return QDir::toNativeSeparators(path);
+                       });
         const QString triedLocationsString = QLocale().createSeparatedList(triedLocations);
 #ifdef QT_ONLY
         *errorMessage = QString("Could not open icon resource file %1.").arg(path);
@@ -192,7 +198,7 @@ bool registerIconsResource(const QString &privateName, const QString& path,
             "Could not open icon resource file \"%1\". "
             "Application will not start. "
             "Please check if it is properly installed.")
-            .arg(QFileInfo(path).fileName());
+            .arg(QDir::toNativeSeparators(path));
         *detailedErrorMessage = QObject::tr("Tried to find in %1.").arg(triedLocationsString);
 #endif
         return false;
