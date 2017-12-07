@@ -48,7 +48,9 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void selectButtonClicked() override;
-    void slotTextChanged(const QString &text);
+
+protected:
+    bool eventFilter(QObject *o, QEvent *event) override;
 
 private:
     Q_DISABLE_COPY(KPropertyUrlEditor)
