@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,6 +70,8 @@ Window::Window()
     }
 
     /*  First, create a KPropertySet which will hold the properties.  */
+    connect(&m_set, &KPropertySet::propertyChanged, this, &Window::propertyChanged);
+
     KProperty *p = nullptr;
     m_set.setReadOnly(m_parser.isSet(m_roOption));
     QByteArray group;
@@ -312,8 +314,19 @@ Window::Window()
         p->setReadOnly(true);
     }
 
+    // Properties for testing tooltips
+    if (singleProperty.isEmpty() || singleProperty == "StaticToolTip") {
+        m_set.addProperty(new KProperty("StaticToolTip", "Some value", "Static Tooltip",
+          "This is a static tooltip based on value of KProperty::description()"), group);
+        m_set.addProperty(
+            m_dynamicToolTipProperty = new KProperty("DynamicToolTip", "Some dynamic value",
+                                                     "Dynamic Tooltip"), group);
+        propertyChanged(m_set, *m_dynamicToolTipProperty); // this updates description
+    }
+
     QVBoxLayout *lyr = new QVBoxLayout(this);
     m_editorView = new KPropertyEditorView(this);
+    m_editorView->setToolTipsVisible(true);
     lyr->addWidget(m_editorView);
     m_editorView->changeSet(&m_set);
     m_editorView->resizeColumnToContents(0);
@@ -340,6 +353,11 @@ Window::Window()
         showGroups->setEnabled(false);
     }
     hlyr->addWidget(showGroups);
+
+    QCheckBox *showToolTips = new QCheckBox("Show tooltips");
+    connect(showToolTips, &QCheckBox::toggled, m_editorView, &KPropertyEditorView::setToolTipsVisible);
+    showToolTips->setChecked(m_editorView->toolTipsVisible());
+    hlyr->addWidget(showToolTips);
 
     QCheckBox *readOnly = new QCheckBox("Read-only");
     connect(readOnly, &QCheckBox::toggled, &m_set, &KPropertySet::setReadOnly);
@@ -374,4 +392,14 @@ void Window::showGrid(int state)
 void Window::showFrame(int state)
 {
     m_editorView->setFrameStyle(state == Qt::Checked ? QFrame::Box : QFrame::NoFrame);
+}
+
+void Window::propertyChanged(KPropertySet& set, KProperty& property)
+{
+    Q_UNUSED(set)
+    if (&property == m_dynamicToolTipProperty) {
+        property.setDescription(QString::fromLatin1("This is a dynamic tooltip based on value of "
+                                                    "\"%1\" property which is currently \"%2\"")
+                                    .arg(property.caption(), property.value().toString()));
+    }
 }

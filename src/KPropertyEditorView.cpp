@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -256,8 +256,7 @@ class Q_DECL_HIDDEN KPropertyEditorView::Private
 {
 public:
     explicit Private(KPropertyEditorView *view)
-     : set(nullptr)
-     , model(nullptr)
+     : model(nullptr)
      , gridLineColor( KPropertyEditorView::defaultGridLineColor() )
      , valueSync(true)
      , slotPropertyChangedEnabled(true)
@@ -265,8 +264,11 @@ public:
     {
     }
 
-    //! Expands group and parent propertiey items if needed (based on settings)
+    //! Expands group and parent property items if needed (based on settings)
     void expandIfNeeded() {
+        if (!model) {
+            return;
+        }
         const int rowCount = model->rowCount();
         for (int row = 0; row < rowCount; row++) {
             expandChildItemsIfNeeded(model->index(row, 0));
@@ -275,6 +277,9 @@ public:
 
     //! Expands property child items in a subtree recursively if needed (based on settings)
     void expandChildItemsIfNeeded(const QModelIndex &parent) {
+        if (!model) {
+            return;
+        }
         const bool isGroupHeader(model->data(parent, KPropertyEditorDataModel::PropertyGroupRole).toBool());
         if (isGroupHeader) {
             if (groupItemsExpanded) {
@@ -292,7 +297,7 @@ public:
         }
     }
 
-    KPropertySet *set;
+    QPointer<KPropertySet> set;
     KPropertyEditorDataModel *model;
     ItemDelegate *itemDelegate;
     QColor gridLineColor;
@@ -300,6 +305,8 @@ public:
     bool slotPropertyChangedEnabled;
     bool childPropertyItemsExpanded = true;
     bool groupItemsExpanded = true;
+    bool groupsVisible = true;
+    bool toolTipsVisible = false;
 
 private:
     KPropertyEditorView * const q;
@@ -426,7 +433,7 @@ void KPropertyEditorView::changeSetInternal(KPropertySet *set, SetOptions option
         = (options & SetOption::AlphabeticalOrder)
             ? KPropertySetIterator::Order::Alphabetical
             : KPropertySetIterator::Order::Insertion;
-    d->model = d->set ? new KPropertyEditorDataModel(d->set, this, setOrder) : nullptr;
+    d->model = d->set ? new KPropertyEditorDataModel(this, setOrder) : nullptr;
     setModel( d->model );
     delete oldModel;
 
@@ -503,16 +510,18 @@ bool KPropertyEditorView::groupItemsExpanded() const
 
 bool KPropertyEditorView::groupsVisible() const
 {
-    return d->model->groupsVisible();
+    return d->groupsVisible;
 }
 
 void KPropertyEditorView::setGroupsVisible(bool set)
 {
-    if (d->model->groupsVisible() == set) {
+    if (d->groupsVisible == set) {
         return;
     }
-    d->model->setGroupsVisible(set);
-    d->expandIfNeeded();
+    if (d->model) {
+        d->model->updateGroupsVisibility();
+        d->expandIfNeeded();
+    }
     viewport()->update();
 }
 
@@ -546,6 +555,9 @@ void KPropertyEditorView::drawBranches( QPainter * painter, const QRect & rect, 
 
 void KPropertyEditorView::drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    if (!d->model) {
+        return;
+    }
     const KPropertyUtilsPrivate::PainterSaver saver(painter);
     const bool isGroupHeader(d->model->data(index, KPropertyEditorDataModel::PropertyGroupRole).toBool());
     QStyleOptionViewItem alteredOption(option);
@@ -566,7 +578,7 @@ void KPropertyEditorView::drawRow(QPainter *painter, const QStyleOptionViewItem 
 
 QRect KPropertyEditorView::revertButtonArea( const QModelIndex& index ) const
 {
-    if (index.column() != 0)
+    if (index.column() != 0 || !d->model)
         return QRect();
     QVariant modifiedVariant( d->model->data(index, KPropertyEditorDataModel::PropertyModifiedRole) );
     if (!modifiedVariant.isValid() || !modifiedVariant.toBool())
@@ -600,7 +612,7 @@ void KPropertyEditorView::mousePressEvent ( QMouseEvent * event )
 
 void KPropertyEditorView::undo()
 {
-    if (!d->set || d->set->isReadOnly())
+    if (!d->set || d->set->isReadOnly() || !d->model)
         return;
 
     KProperty *property = d->model->propertyForIndex(currentIndex());
@@ -642,7 +654,7 @@ QSize KPropertyEditorView::sizeHint() const
 
 KPropertySet* KPropertyEditorView::propertySet() const
 {
-    return d->model ? d->model->propertySet() : nullptr;
+    return d->set;
 }
 
 QColor KPropertyEditorView::gridLineColor() const
@@ -680,7 +692,7 @@ static QModelIndex findChildItem(const KProperty& property, const QModelIndex &p
 void KPropertyEditorView::slotPropertyChanged(KPropertySet& set, KProperty& property)
 {
     Q_UNUSED(set);
-    if (!d->slotPropertyChangedEnabled)
+    if (!d->slotPropertyChangedEnabled || !d->model)
         return;
     d->slotPropertyChangedEnabled = false;
     KProperty *realProperty = &property;
@@ -697,7 +709,7 @@ void KPropertyEditorView::slotPropertyChanged(KPropertySet& set, KProperty& prop
 
 void KPropertyEditorView::updateSubtree(const QModelIndex &index)
 {
-    if (!index.isValid()) {
+    if (!index.isValid() || !d->model) {
         return;
     }
     update(index);
@@ -719,4 +731,15 @@ void KPropertyEditorView::slotPropertyReset(KPropertySet& set, KProperty& proper
 {
 //! @todo OK?
     slotPropertyChanged(set, property);
+}
+
+
+bool KPropertyEditorView::toolTipsVisible() const
+{
+    return d->toolTipsVisible;
+}
+
+void KPropertyEditorView::setToolTipsVisible(bool set)
+{
+    d->toolTipsVisible = set;
 }

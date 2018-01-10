@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include <QModelIndex>
 
 class KProperty;
+class KPropertyEditorView;
 
 /*! @short A data model that integrates a KPropertySet object with the Qt's model/view API.
  @see KPropertyEditorView
@@ -36,8 +37,8 @@ class KPropertyEditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    //! Creates a new model. @a propertySet is required.
-    explicit KPropertyEditorDataModel(KPropertySet *propertySet, QObject *parent = nullptr,
+    //! Creates a new model. @a view and view->propertySet() are required.
+    explicit KPropertyEditorDataModel(KPropertyEditorView *view,
                                       KPropertySetIterator::Order order = KPropertySetIterator::Order::Insertion);
     ~KPropertyEditorDataModel() override;
 
@@ -84,19 +85,14 @@ public:
     //! Reimplemented for optimization.
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
-    /*! @return @c true if the property groups should be visible.
-     @see KPropertyEditorView::groupsVisible()
-     @since 3.1 */
-    bool groupsVisible() const;
-
 public Q_SLOTS:
     //! Sets order for properties.
     void setOrder(KPropertySetIterator::Order order);
 
-    /*! Shows the property groups if @a set is @c true.
+    /*! Updates visibility of property groups.
      @see KPropertyEditorView::setGroupsVisible(bool)
      @since 3.1 */
-    void setGroupsVisible(bool set);
+    void updateGroupsVisibility();
 
 private:
     //! Collects persistent indices for the model. They are dependent on groupping and sorting.

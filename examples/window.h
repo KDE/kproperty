@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,9 @@ protected Q_SLOTS:
     void showGrid(int state);
     void showFrame(int state);
 
+    //! Reaction on changed value of property
+    void propertyChanged(KPropertySet& set, KProperty& property);
+
 private:
     void parseCommandLine();
 
@@ -50,6 +53,7 @@ private:
     QCommandLineOption m_propertyOption;
     QCommandLineOption m_roOption;
     KPropertyEditorView *m_editorView;
+    KProperty *m_dynamicToolTipProperty;
 };
 
 #endif

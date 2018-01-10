@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -88,6 +88,18 @@ public:
      @since 3.1 */
     bool groupItemsExpanded() const;
 
+    /**
+     * Returns @c true if the property editor widget has enabled visibility of tooltips
+     *
+     * Tooltips are displayed over each property item, both the name and value column, and are
+     * equal to property descriptions (KProperty::description()). Tooltips are not displayed for
+     * items having empty descriptions.
+     *
+     * Tooltips visibility is disabled by default.
+     * @since 3.1
+     */
+    bool toolTipsVisible() const;
+
 public Q_SLOTS:
     /*! Populates the editor view with items for each property from the @a set set.
      Child items for composed properties are also created.
@@ -145,6 +157,14 @@ public Q_SLOTS:
      @note To expand all items use expandAll(). To collapse all items use collapseAll().
      @since 3.1 */
     void setGroupItemsExpanded(bool set);
+
+    /**
+     * If @a set is @c true tooltips are visible for property editor items
+     *
+     * See toolTipsVisible() for details.
+     * @since 3.1
+     */
+    void setToolTipsVisible(bool set);
 
 Q_SIGNALS:
     /*! Emitted when current property set has been changed. May be 0. */
