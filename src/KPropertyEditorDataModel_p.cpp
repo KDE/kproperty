@@ -89,6 +89,9 @@ static inline bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAn
 void KPropertyEditorDataModel::collectIndices() const
 {
     d->indicesForNames.clear();
+    if (!d->set()) {
+        return;
+    }
     if (d->view->groupsVisible()) {
         for (const QByteArray &groupName : d->set_d()->groupNames()) {
             const QList<QByteArray>* propertyNames = d->set_d()->propertyNamesForGroup(groupName);
@@ -379,6 +382,9 @@ KPropertySetIterator::Order KPropertyEditorDataModel::order() const
 
 bool KPropertyEditorDataModel::hasChildren(const QModelIndex & parent) const
 {
+    if (!d->set()) {
+        return false;
+    }
     KProperty *parentItem = propertyForIndex(parent);
     if (parentItem == &d->rootItem) { // top level
         return d->set()->hasVisibleProperties();
