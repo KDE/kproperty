@@ -153,7 +153,7 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
 
     if (!d->setValueEnabled)
         return;
-    const int idx = d->listData.keys().indexOf(value);
+    const int idx = d->listData.keys().isEmpty() ? -1 : d->listData.keys().indexOf(value);
 //    kprDebug() << "**********" << idx << "" << value.toString();
     if (idx >= 0 && idx < count()) {
         setCurrentIndex(idx);
@@ -177,9 +177,6 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
         }
         setItemText(currentIndex(), QString());
     }
-
-    if (value.isNull())
-        return;
 }
 
 void KPropertyComboBoxEditor::fillValues()
