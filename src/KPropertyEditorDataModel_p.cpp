@@ -137,9 +137,9 @@ int KPropertyEditorDataModel::columnCount(const QModelIndex &parent) const
 
 QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || !d->set()) {
         return QVariant();
-
+    }
     const int col = index.column();
     const KProperty *prop = propertyForIndex(index);
     switch (role) {
@@ -187,9 +187,9 @@ QVariant KPropertyEditorDataModel::data(const QModelIndex &index, int role) cons
 
 Qt::ItemFlags KPropertyEditorDataModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || !d->set()) {
         return Qt::ItemIsEnabled;
-
+    }
     const int col = index.column();
     Qt::ItemFlags f = Qt::ItemIsEnabled;
     const KProperty *prop = propertyForIndex(index);
@@ -227,7 +227,9 @@ QVariant KPropertyEditorDataModel::headerData(int section, Qt::Orientation orien
 
 QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (row < 0 || column < 0 || /*!parent.isValid() ||*/ (parent.isValid() && parent.column() != 0)) {
+    if (!d->set() || row < 0 || column < 0
+        || /*!parent.isValid() ||*/ (parent.isValid() && parent.column() != 0))
+    {
         return QModelIndex();
     }
 
@@ -280,7 +282,7 @@ QModelIndex KPropertyEditorDataModel::index(int row, int column, const QModelInd
 
 QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid()) {
+    if (!index.isValid() || !d->set()) {
         return QModelIndex();
     }
     const KProperty *childItem = propertyForIndex(index);
@@ -306,6 +308,9 @@ QModelIndex KPropertyEditorDataModel::parent(const QModelIndex &index) const
 
 int KPropertyEditorDataModel::rowCount(const QModelIndex &parent) const
 {
+    if (!d->set()) {
+        return 0;
+    }
     KProperty *parentItem = propertyForIndex(parent);
     if (parentItem == &d->rootItem) { // top level: return group count or top-level properties count
         if (d->view->groupsVisible() && d->set_d()->hasGroups()) {
