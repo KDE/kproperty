@@ -122,20 +122,29 @@ Window::Window()
         m_set.addProperty(new KProperty("DateTime", QDateTime::currentDateTime(), "Date/Time"), group);
     }
 
-    QStringList name_list({"My Item", "Other Item", "Third Item"}); //strings
+    QStringList name_list({"First Item", "Second Item", "Third Item"}); //strings
     if (singleProperty.isEmpty() || singleProperty=="List") {
-        const QStringList keys({"myitem", "otheritem", "3rditem"});
+        const QStringList keys({"1stitem", "2nditem", "3rditem"});
         KPropertyListData *listData = new KPropertyListData(keys, name_list);
-        m_set.addProperty(new KProperty("List", listData, "otheritem", "List"), group);
+        m_set.addProperty(new KProperty("List", listData, QVariant(keys[1]), "List"), group);
     }
 
+    QVariantList list_keys({1, 2, 3});
     if (singleProperty.isEmpty() || singleProperty=="List2") {
         // A valueFromList property matching strings with ints (could be any type supported by QVariant)
-        QVariantList keys({1, 2, 3});
         KPropertyListData *listData = new KPropertyListData;
-        listData->setKeys(keys);
+        listData->setKeys(list_keys);
         listData->setNamesAsStringList(name_list);
-        m_set.addProperty(new KProperty("List2", listData, 3, "List 2"), group);
+        m_set.addProperty(new KProperty("List2", listData, list_keys.last(), "List 2"), group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="EditableList") {
+        // A valueFromList property matching strings with ints (could be any type supported by QVariant)
+        KPropertyListData *listData = new KPropertyListData;
+        listData->setKeys(list_keys);
+        listData->setNamesAsStringList(name_list);
+        p = new KProperty("EditableList", listData, list_keys.first(), "Editable List");
+        p->setOption("extraValueAllowed", true);
+        m_set.addProperty(p, group);
     }
 
 //  Complex

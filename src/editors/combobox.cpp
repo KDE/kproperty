@@ -67,9 +67,14 @@ public:
     Private()
     {
     }
+    ~Private()
+    {
+        delete completer;
+    }
     KPropertyListData listData;
     bool setValueEnabled = true;
     KPropertyComboBoxEditorOptions options;
+    QCompleter *completer = nullptr;
 };
 
 KPropertyComboBoxEditor::KPropertyComboBoxEditor(const KPropertyListData &listData,
@@ -123,11 +128,7 @@ QString KPropertyComboBoxEditor::borderSheet(const QWidget *widget)
 
 bool KPropertyComboBoxEditor::listDataKeysAvailable() const
 {
-    if (d->listData.keys().isEmpty()) {
-        kprWarning() << "property listData not available!";
-        return false;
-    }
-    return true;
+    return !d->listData.keys().isEmpty();
 }
 
 QVariant KPropertyComboBoxEditor::value() const
@@ -148,9 +149,6 @@ QVariant KPropertyComboBoxEditor::value() const
 
 void KPropertyComboBoxEditor::setValue(const QVariant &value)
 {
-    if (!listDataKeysAvailable())
-        return;
-
     if (!d->setValueEnabled)
         return;
     const int idx = d->listData.keys().isEmpty() ? -1 : d->listData.keys().indexOf(value);
@@ -181,6 +179,7 @@ void KPropertyComboBoxEditor::setValue(const QVariant &value)
 
 void KPropertyComboBoxEditor::fillValues()
 {
+    delete d->completer;
     clear();
     if (!listDataKeysAvailable())
         return;
@@ -194,8 +193,10 @@ void KPropertyComboBoxEditor::fillValues()
         }
         index++;
     }
-    QCompleter *comp = new QCompleter(d->listData.namesAsStringList());
-    comp->setWidget(this);
+    if (isEditable()) {
+        d->completer = new QCompleter(d->listData.namesAsStringList());
+        d->completer->setWidget(this);
+    }
 }
 
 void KPropertyComboBoxEditor::setListData(const KPropertyListData & listData)
