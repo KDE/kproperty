@@ -53,7 +53,7 @@ private:
     QCommandLineOption m_propertyOption;
     QCommandLineOption m_roOption;
     KPropertyEditorView *m_editorView;
-    KProperty *m_dynamicToolTipProperty;
+    KProperty *m_dynamicToolTipProperty = nullptr;
 };
 
 #endif
