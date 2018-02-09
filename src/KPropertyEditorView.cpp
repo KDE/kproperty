@@ -244,7 +244,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
             qobject_cast<KPropertyEditorView*>(this->parent())->isValueSyncEnabled()))
     {
         QObject::connect(w, SIGNAL(commitData(QWidget*)),
-            this, SIGNAL(commitData(QWidget*)));
+            this, SIGNAL(commitData(QWidget*)), Qt::UniqueConnection);
     }
     m_currentEditor = w;
     return w;
