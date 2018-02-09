@@ -422,6 +422,9 @@ bool KProperty::valueEqualsTo(const QVariant &value, ValueOptions valueOptions) 
 void
 KProperty::resetValue()
 {
+    if (!d->changed) {
+        return;
+    }
     d->changed = false;
     bool cleared = false;
     if (d->set) {
