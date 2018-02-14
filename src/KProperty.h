@@ -148,13 +148,10 @@ public:
         Url = QVariant::Url,
 
         //predefined custom types
-        ValueFromList = 1000          /**<string value from a list*/,
-        Symbol                        /**<unicode symbol code*/,
-        FontName                      /**<font name, e.g. "times new roman"*/,
-        FileURL                       /**<url of a file*/,
-        PictureFileURL                /**<url of a pixmap*/,
-        DirectoryURL                  /**<url of a directory*/,
-        LineStyle                     /**<line style*/,
+        ValueFromList = 1000,         /**<string value from a list*/
+        Symbol,                       /**<unicode symbol code*/
+        FontName,                     /**<font name, e.g. "times new roman"*/
+        LineStyle,                    /**<line style*/
 
         UserDefined = 4000            /**<plugin defined properties should start here*/
     };
