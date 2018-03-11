@@ -192,6 +192,6 @@ KPropertyValueDisplayInterface::maxStringValueLength()
 KPropertyValueDisplayInterface::valueToLocalizedString(QVariant const&)
 */
 
-QTEST_MAIN(KPropertyTest)
+QTEST_GUILESS_MAIN(KPropertyTest)
 
 #include "KPropertyTest.moc"
