@@ -166,6 +166,6 @@ OK    KPropertySet::groupNameForProperty(const KProperty &property) const;
     KPropertySet::setReadOnly(bool)
 */
 
-QTEST_MAIN(KPropertySetTest)
+QTEST_GUILESS_MAIN(KPropertySetTest)
 
 #include "KPropertySetTest.moc"
