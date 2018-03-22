@@ -48,7 +48,7 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
  : KPropertyWidgetsFactory()
 {
     KPropertyUtilsPrivate::setupPrivateIconsResourceWithMessage(
-        QLatin1String(KPROPERTYWIDGETS_BASE_NAME_LOWER),
+        QString::fromLatin1("kproperty%1").arg(KPROPERTY_STABLE_VERSION_MAJOR),
         QString::fromLatin1("icons/kproperty_%1.rcc").arg(KPropertyUtilsPrivate::supportedIconTheme()), QtFatalMsg);
 
     addEditor( KProperty::Bool, new KPropertyBoolDelegate );
