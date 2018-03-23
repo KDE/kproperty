@@ -38,16 +38,9 @@ if(WIN32)
                         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
                         LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
                         ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
-    set(DATA_INSTALL_DIR "$ENV{APPDATA}")
-    STRING(REGEX REPLACE "\\\\" "/" DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
-    # Install own icons to CMAKE_INSTALL_FULL_ICONDIR (relative to bin/data/ on Windows) on Windows.
-    # We're consistent because icons from breeze-icons.git are installed there as well.
-    set(ICONS_INSTALL_DIR ${CMAKE_INSTALL_FULL_ICONDIR})
-else()
-    # On other OSes install own icons in app's data dir
-    set(ICONS_INSTALL_DIR
-        "${DATA_INSTALL_DIR}/kpropertywidgets${PROJECT_STABLE_VERSION_MAJOR}/icons")
 endif()
+
+set(ICONS_INSTALL_DIR "${DATA_INSTALL_DIR}/${PROJECT_NAME_LOWER}${PROJECT_STABLE_VERSION_MAJOR}/icons")
 
 # Adds a feature info using add_feature_info() with _NAME and _DESCRIPTION.
 # If _NAME is equal to _DEFAULT, shows this fact.
