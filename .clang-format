@@ -1,0 +1,30 @@
+---
+BasedOnStyle:  WebKit
+Language:        Cpp
+AlignAfterOpenBracket: true
+AlwaysBreakTemplateDeclarations: true
+AllowShortFunctionsOnASingleLine: Inline
+BreakBeforeBraces: Linux
+ColumnLimit: 100
+Standard:        Cpp11
+IndentWidth:     4
+TabWidth:        8
+UseTab:          Never
+PointerAlignment: Right
+SpacesInParentheses: false
+SpacesInAngles:  false
+SpaceInEmptyParentheses: false
+SpacesInCStyleCastParentheses: false
+SpaceAfterControlStatementKeyword: true
+SpaceBeforeAssignmentOperators: true
+ContinuationIndentWidth: 4
+IncludeCategories:
+  - Regex:           '^<boost/'
+    Priority:        1
+  - Regex:           '^<Q'
+    Priority:        2
+# Only for newer clang-format versions
+#MacroBlockBegin: BEGINTESTFUNCIMPL
+#MacroBlockEnd: ENDTESTFUNCIMPL
+...
+
