@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2008-2018 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2018 Dmitry Baryshev <dmitrymq@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #include "window.h"
 
 #include <KProperty>
+#include <KPropertyComposedUrl>
 #include <KPropertyListData>
 #include <KPropertyEditorView>
 
@@ -302,6 +304,20 @@ Window::Window()
     }
     if (singleProperty.isEmpty() || singleProperty=="Url") {
         m_set.addProperty(p = new KProperty("Url", QUrl("https://community.kde.org/KProperty"), "Url"), group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="RelativeComposedUrl") {
+        const KPropertyComposedUrl composedUrl(QUrl::fromLocalFile(QApplication::applicationDirPath()),
+                                               QLatin1String("data/icons/kproperty_breeze.rcc"));
+        p = new KProperty("RelativeComposedUrl", QVariant::fromValue(composedUrl), "ComposedUrl with\nrelative path",
+                          QString(), KProperty::ComposedUrl);
+        m_set.addProperty(p, group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="AbsoluteComposedUrl") {
+        const KPropertyComposedUrl composedUrl(QUrl::fromLocalFile(QApplication::applicationDirPath()),
+                                               QUrl("https://community.kde.org/KProperty"));
+        p = new KProperty("AbsoluteComposedUrl", QVariant::fromValue(composedUrl), "ComposedUrl with\nabsolute URL",
+                          QString(), KProperty::ComposedUrl);
+        m_set.addProperty(p, group);
     }
     if (singleProperty.isEmpty() || singleProperty=="ExistingFile") {
         m_set.addProperty(p = new KProperty("ExistingFile",
