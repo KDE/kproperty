@@ -3,6 +3,7 @@
 
 set(kpropertycore_LIB_SRCS
    KProperty.cpp
+   KPropertyComposedUrl.cpp
    KPropertyListData.cpp
    KPropertySet.cpp
    KPropertySetBuffer.cpp
@@ -60,10 +61,12 @@ if(KPROPERTY_WIDGETS)
         editors/sizefedit.cpp
         editors/sizepolicyedit.cpp
         editors/spinbox.cpp
+        editors/KPropertyComposedUrlEditor.cpp
         editors/KPropertyGenericSelectionEditor.cpp
         editors/KPropertyMultiLineStringEditor.cpp
         editors/KPropertyStringEditor.cpp
         editors/KPropertyUrlEditor.cpp
+        editors/KPropertyUrlEditor_p.cpp
         editors/linestyleedit.cpp
         #  editors/stringlistedit.cpp
         #  editors/symbolcombo.cpp
@@ -216,6 +219,7 @@ ecm_generate_headers(kpropertycore_FORWARDING_HEADERS
     ORIGINAL CAMELCASE
     HEADER_NAMES
         KProperty
+        KPropertyComposedUrl
         KPropertyListData
         KPropertySet
         KPropertySetBuffer

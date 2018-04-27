@@ -75,6 +75,7 @@ KDefaultPropertyFactory::KDefaultPropertyFactory()
     addEditor( KProperty::UInt, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
     addEditor( KProperty::ULongLong, new KPropertyIntSpinBoxDelegate ); //!< @todo add more specialized delegate
     addEditor( KProperty::Url, new KPropertyUrlDelegate );
+    addEditor( KProperty::ComposedUrl, new KPropertyUrlDelegate );
     addEditor( KProperty::ValueFromList, new KPropertyComboBoxDelegate );
 }
 
