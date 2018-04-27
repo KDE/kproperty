@@ -73,6 +73,7 @@ if(KPROPERTY_WIDGETS)
         KPropertyWidgetsFactory.cpp
         KPropertyWidgetsPluginManager.cpp
         KDefaultPropertyFactory.cpp
+        KPropertyEditorItemEvent.cpp
         KPropertyEditorView.cpp
         KPropertyEditorDataModel_p.cpp
         KPropertyUtils.cpp
@@ -243,6 +244,7 @@ if(KPROPERTY_WIDGETS)
             KPropertyWidgetsFactory
             KPropertyWidgetsPluginManager
             KPropertyUtils
+            KPropertyEditorItemEvent
             KPropertyEditorView
     )
 

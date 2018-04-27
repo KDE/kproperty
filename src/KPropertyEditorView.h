@@ -26,6 +26,7 @@
 
 class KProperty;
 class KPropertySet;
+class KPropertyEditorItemEvent;
 
 //! @brief A widget for editing properties
 class KPROPERTYWIDGETS_EXPORT KPropertyEditorView : public QTreeView
@@ -169,6 +170,17 @@ public Q_SLOTS:
 Q_SIGNALS:
     /*! Emitted when current property set has been changed. May be 0. */
     void propertySetChanged(KPropertySet *set);
+
+    /**
+     * Emitted when active property editor widget offers overriding of its editing behavior.
+     *
+     * See KPropertyEditorItemEvent for usage details.
+     *
+     * @note @a event is owned by the KPropertyEditorView object.
+     *
+     * @since 3.2
+     */
+    void handlePropertyEditorItemEvent(KPropertyEditorItemEvent *event);
 
 protected:
     bool viewportEvent(QEvent * event) override;

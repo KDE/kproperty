@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2016-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2016-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,9 @@
 */
 
 #include "KPropertyUrlEditor.h"
+#include "KPropertyEditorItemEvent.h"
+#include "KPropertyEditorView.h"
+#include "KPropertySet.h"
 #include "KPropertyUtils.h"
 
 #include <QFileDialog>
@@ -29,9 +32,11 @@
 class Q_DECL_HIDDEN KPropertyUrlEditor::Private
 {
 public:
-    Private(const KProperty &property)
+    Private(KPropertyUrlEditor *editor, const KProperty &property)
         : fileMode(property.option("fileMode").toByteArray().toLower())
         , confirmOverwrites(property.option("confirmOverwrites", false).toBool())
+        , propertyName(property.name())
+        , m_editor(editor)
     {
     }
 
@@ -116,16 +121,64 @@ public:
         return false;
     }
 
+    //! Get a new URL value either from a custom or the built-in dialog
+    QUrl getUrl()
+    {
+        QString caption;
+        if (fileMode == "existingfile") {
+            caption = QObject::tr("Select Existing File");
+        } else if (fileMode == "dirsonly") {
+            caption = QObject::tr("Select Existing Directory");
+        } else {
+            caption = QObject::tr("Select File");
+        }
+        // Try to obtain URL from a custom dialog
+        if (m_editor->parentWidget()) {
+            KPropertyEditorView *view
+                = qobject_cast<KPropertyEditorView *>(m_editor->parentWidget()->parentWidget());
+            KProperty *property = &view->propertySet()->property(propertyName);
+            if (property) {
+                QVariantMap parameters;
+                parameters[QStringLiteral("url")] = value;
+                parameters[QStringLiteral("caption")] = caption;
+                KPropertyEditorItemEvent event(*property, QStringLiteral("getOpenFileUrl"), parameters);
+                emit view->handlePropertyEditorItemEvent(&event);
+                if (event.hasResult()) {
+                    return event.result().toUrl();
+                }
+            }
+        }
+        // Use default dialogs
+        //! @todo filters, more options, supportedSchemes, localFilesOnly?
+        QFileDialog::Options options;
+        if (fileMode == "existingfile") {
+            return QFileDialog::getOpenFileUrl(m_editor, caption, value, QString(), nullptr, options);
+        } else if (fileMode == "dirsonly") {
+            options |= QFileDialog::ShowDirsOnly;
+            return QFileDialog::getExistingDirectoryUrl(m_editor, caption, value, options);
+        } else {
+            if (!confirmOverwrites) {
+                options |= QFileDialog::DontConfirmOverwrite;
+            }
+            return QFileDialog::getSaveFileUrl(m_editor, caption, value, QString(), nullptr, options);
+        }
+        return QUrl();
+    }
+
     QUrl value;
     QString savedText;
     QLineEdit *lineEdit;
     KPropertyUrlDelegate delegate;
     QByteArray fileMode;
     bool confirmOverwrites;
+    QByteArray propertyName;
+
+private:
+    KPropertyUrlEditor * const m_editor;
 };
 
 KPropertyUrlEditor::KPropertyUrlEditor(const KProperty &property, QWidget *parent)
-        : KPropertyGenericSelectionEditor(parent), d(new Private(property))
+        : KPropertyGenericSelectionEditor(parent), d(new Private(this, property))
 {
     d->lineEdit = new QLineEdit;
     d->lineEdit->setClearButtonEnabled(true);
@@ -151,20 +204,7 @@ void KPropertyUrlEditor::setValue(const QUrl &value)
 
 void KPropertyUrlEditor::selectButtonClicked()
 {
-    QUrl url;
-    QFileDialog::Options options;
-    if (d->fileMode == "existingfile") {
-        url = QFileDialog::getOpenFileUrl(this, tr("Select Existing File"), d->value, QString(), nullptr, options);
-    } else if (d->fileMode == "dirsonly") {
-        options |= QFileDialog::ShowDirsOnly;
-        url = QFileDialog::getExistingDirectoryUrl(this, tr("Select Existing Directory"), d->value, options);
-    } else {
-        if (!d->confirmOverwrites) {
-            options |= QFileDialog::DontConfirmOverwrite;
-        }
-        url = QFileDialog::getSaveFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
-    }
-    //! @todo filters, more options, supportedSchemes, localFilesOnly?
+    const QUrl url = d->getUrl();
     QString fixUpPath;
     if (!url.isEmpty() && d->isValid(url, &fixUpPath)) {
         setValue(url);
