@@ -4,7 +4,7 @@ find_package(ECM 1.8.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(SetKPropertyCMakePolicies NO_POLICY_SCOPE)
 
-project(KProperty VERSION 3.1.0) # Update this
+project(KProperty VERSION 3.2.0) # Update this
 
 # CMake
 include(CMakePackageConfigHelpers)
