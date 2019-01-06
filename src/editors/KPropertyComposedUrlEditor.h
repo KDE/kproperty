@@ -20,35 +20,38 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTYURLEDITOR_H
-#define KPROPERTYURLEDITOR_H
+#ifndef KPROPERTYCOMPOSEDURLEDITOR_H
+#define KPROPERTYCOMPOSEDURLEDITOR_H
 
 #include "KPropertyComposedUrl.h"
-#include "KPropertyWidgetsFactory.h"
 #include "KPropertyGenericSelectionEditor.h"
 
-#include <QUrl>
+#include <QScopedPointer>
 
+class KProperty;
 class KPropertyUrlEditorPrivate;
 
-//! Editor for Url type
-class KPROPERTYWIDGETS_EXPORT KPropertyUrlEditor : public KPropertyGenericSelectionEditor
+/**
+ * Editor for ComposedUrl type
+ *
+ * @since 3.2
+ */
+class KPROPERTYWIDGETS_EXPORT KPropertyComposedUrlEditor : public KPropertyGenericSelectionEditor
 {
-    Q_PROPERTY(QUrl value READ value WRITE setValue USER true)
+    Q_PROPERTY(KPropertyComposedUrl value READ value WRITE setValue USER true)
     Q_OBJECT
 
 public:
-    explicit KPropertyUrlEditor(const KProperty &property, QWidget *parent = nullptr);
+    explicit KPropertyComposedUrlEditor(const KProperty &property, QWidget *parent = nullptr);
+    ~KPropertyComposedUrlEditor() override;
 
-    ~KPropertyUrlEditor() override;
-
-    virtual QUrl value() const;
+    virtual KPropertyComposedUrl value() const;
 
 Q_SIGNALS:
     void commitData(QWidget * editor);
 
 public Q_SLOTS:
-    virtual void setValue(const QUrl &value);
+    virtual void setValue(const KPropertyComposedUrl &value);
 
 protected Q_SLOTS:
     void selectButtonClicked() override;
@@ -57,21 +60,8 @@ protected:
     bool eventFilter(QObject *o, QEvent *event) override;
 
 private:
-    Q_DISABLE_COPY(KPropertyUrlEditor)
+    Q_DISABLE_COPY(KPropertyComposedUrlEditor)
     QScopedPointer<KPropertyUrlEditorPrivate> const d;
 };
 
-//! Delegate for Url and ComposedUrl types
-class KPROPERTYWIDGETS_EXPORT KPropertyUrlDelegate : public KPropertyEditorCreatorInterface,
-                                                     public KPropertyValueDisplayInterface
-{
-public:
-    KPropertyUrlDelegate();
-
-    QWidget *createEditor(int type, QWidget *parent, const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const override;
-
-    QString valueToString(const QVariant &value, const QLocale &locale) const override;
-};
-
-#endif
+#endif // KPROPERTYCOMPOSEDURLEDITOR_H

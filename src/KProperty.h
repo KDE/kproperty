@@ -152,6 +152,7 @@ public:
         Symbol,                       /**<unicode symbol code*/
         FontName,                     /**<font name, e.g. "times new roman"*/
         LineStyle,                    /**<line style*/
+        ComposedUrl                   /**<composed URL @since 3.2 */,
 
         UserDefined = 4000            /**<plugin defined properties should start here*/
     };

@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2016-2017 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2016-2018 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2018 Dmitry Baryshev <dmitrymq@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,153 +21,43 @@
 */
 
 #include "KPropertyUrlEditor.h"
+#include "KPropertyComposedUrl.h"
+#include "KPropertyComposedUrlEditor.h"
+#include "KPropertyEditorView.h"
+#include "KPropertyUrlEditor_p.h"
 #include "KPropertyUtils.h"
+#include "kproperty_debug.h"
 
-#include <QFileDialog>
-#include <QKeyEvent>
+#include <QDir>
 #include <QLineEdit>
 
-class Q_DECL_HIDDEN KPropertyUrlEditor::Private
-{
-public:
-    Private(const KProperty &property)
-        : fileMode(property.option("fileMode").toByteArray().toLower())
-        , confirmOverwrites(property.option("confirmOverwrites", false).toBool())
-    {
-    }
-
-    QString fixUp(const QString &path) const
-    {
-        QString result = path;
-        if (path.endsWith(QLatin1Char('/'))
-#ifdef Q_OS_WIN
-        && path.length() > 3 // "C:" would not be a valid path on Windows
-#endif
-           )
-        {
-            result.chop(1);
-        }
-        return result;
-    }
-
-    //! @return @c true is @a url is valid for the property options
-    //! If path obtained from the URL needs fixing @a fixUpPath is set to fixed string, otherwise
-    //! it is set to empty string.
-    bool isValid(const QUrl &url, QString *fixUpPath) const
-    {
-        Q_ASSERT(fixUpPath);
-        fixUpPath->clear();
-        if (url.isEmpty()) {
-            return true;
-        }
-        if (!url.isValid()) {
-            return false;
-        }
-        if (!url.isLocalFile()) {
-            // Non-file protocols are only allowed for "" fileMode
-            return fileMode.isEmpty();
-        }
-        QString path = url.toLocalFile();
-        QFileInfo info(path);
-        if (!info.isNativePath()) {
-            return false;
-        }
-        //! @todo check for illegal characters -- https://stackoverflow.com/a/45282192
-        if (fileMode == "existingfile") {
-            //! @todo display error for false
-            return info.isFile() && info.exists();
-        } else if (fileMode == "dirsonly") {
-            //! @todo display error for false
-            if (info.isDir() && info.exists()) {
-                *fixUpPath = fixUp(path);
-            } else {
-                return false;
-            }
-        }
-        // fileMode is "":
-        //! @todo support confirmOverwrites, display error
-        //if (info.exists()) {
-        //}
-        return true;
-    }
-
-    //! @return URL based on text entered
-    QUrl urlFromText(const QString &text) const
-    {
-        //! @todo offer "workingDirectory" option so relative paths are supported
-        QString workingDirectory;
-        return QUrl::fromUserInput(text, workingDirectory, QUrl::AssumeLocalFile);
-    }
-
-    //! @return @c true if @a event is a key press event for Enter or Return key
-    bool enterPressed(QEvent *event) const
-    {
-        if (event->type() == QEvent::KeyPress) {
-            const int key = static_cast<QKeyEvent*>(event)->key();
-            switch (key) {
-            case Qt::Key_Enter:
-            case Qt::Key_Return:
-            case Qt::Key_Down:
-            case Qt::Key_Up:
-                return true;
-            default:
-                break;
-            }
-        }
-        return false;
-    }
-
-    QUrl value;
-    QString savedText;
-    QLineEdit *lineEdit;
-    KPropertyUrlDelegate delegate;
-    QByteArray fileMode;
-    bool confirmOverwrites;
-};
-
 KPropertyUrlEditor::KPropertyUrlEditor(const KProperty &property, QWidget *parent)
-        : KPropertyGenericSelectionEditor(parent), d(new Private(property))
+    : KPropertyGenericSelectionEditor(parent)
+    , d(new KPropertyUrlEditorPrivate(this, property))
 {
-    d->lineEdit = new QLineEdit;
-    d->lineEdit->setClearButtonEnabled(true);
     setMainWidget(d->lineEdit);
-    d->lineEdit->installEventFilter(this);
+    connect(d.data(), &KPropertyUrlEditorPrivate::commitData, this,
+            [this] { emit commitData(this); });
 }
 
-KPropertyUrlEditor::~KPropertyUrlEditor()
-{
-}
+KPropertyUrlEditor::~KPropertyUrlEditor() {}
 
 QUrl KPropertyUrlEditor::value() const
 {
-    return d->value;
+    return d->value.toUrl();
 }
 
 void KPropertyUrlEditor::setValue(const QUrl &value)
 {
-    d->value = value;
-    d->lineEdit->setText(d->delegate.valueToString(d->value, locale()));
-    d->savedText = d->lineEdit->text();
+    d->setValue(value);
+    const KPropertyUrlDelegate delegate;
+    d->updateLineEdit(delegate.valueToString(d->value, locale()));
 }
 
 void KPropertyUrlEditor::selectButtonClicked()
 {
-    QUrl url;
-    QFileDialog::Options options;
-    if (d->fileMode == "existingfile") {
-        url = QFileDialog::getOpenFileUrl(this, tr("Select Existing File"), d->value, QString(), nullptr, options);
-    } else if (d->fileMode == "dirsonly") {
-        options |= QFileDialog::ShowDirsOnly;
-        url = QFileDialog::getExistingDirectoryUrl(this, tr("Select Existing Directory"), d->value, options);
-    } else {
-        if (!d->confirmOverwrites) {
-            options |= QFileDialog::DontConfirmOverwrite;
-        }
-        url = QFileDialog::getSaveFileUrl(this, tr("Select File"), d->value, QString(), nullptr, options);
-    }
-    //! @todo filters, more options, supportedSchemes, localFilesOnly?
-    QString fixUpPath;
-    if (!url.isEmpty() && d->isValid(url, &fixUpPath)) {
+    QUrl url = d->getUrl();
+    if (url.isValid() && d->checkAndUpdate(&url)) {
         setValue(url);
         emit commitData(this);
     }
@@ -174,51 +65,66 @@ void KPropertyUrlEditor::selectButtonClicked()
 
 bool KPropertyUrlEditor::eventFilter(QObject *o, QEvent *event)
 {
-    if (o == d->lineEdit && (event->type() == QEvent::FocusOut || d->enterPressed(event))) {
-        if (d->savedText != d->lineEdit->text()) { // text changed since the recent setValue(): update
-            //! @todo offer "workingDirectory" option so relative paths are supported
-            QString workingDirectory;
-            QUrl newUrl = QUrl::fromUserInput(d->lineEdit->text(), workingDirectory, QUrl::AssumeLocalFile);
-            QString fixUpPath;
-            if (d->isValid(newUrl, &fixUpPath)) {
-                if (fixUpPath.isEmpty()) { // accept value as-is
-                    d->value = newUrl;
-                    d->savedText = d->lineEdit->text();
-                } else { // fixed up value, e.g. directory path has removed trailing slash
-                    d->value = QUrl::fromUserInput(fixUpPath, workingDirectory, QUrl::AssumeLocalFile);
-                    d->savedText = fixUpPath;
-                }
-                emit commitData(this);
-            } else { // invalid URL: revert text to last saved value which is valid, emit no change
-                d->lineEdit->setText(d->savedText);
-            }
-        }
-    }
+    d->processEvent(o, event);
     return KPropertyGenericSelectionEditor::eventFilter(o, event);
 }
 
 // ----
 
-KPropertyUrlDelegate::KPropertyUrlDelegate()
-{
-}
+KPropertyUrlDelegate::KPropertyUrlDelegate() {}
 
-QWidget* KPropertyUrlDelegate::createEditor(int type, QWidget *parent,
-    const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *KPropertyUrlDelegate::createEditor(int type, QWidget *parent,
+                                            const QStyleOptionViewItem &option,
+                                            const QModelIndex &index) const
 {
-    Q_UNUSED(type)
     Q_UNUSED(option)
+
     const KProperty *prop = KPropertyUtils::propertyForIndex(index);
-    return new KPropertyUrlEditor(prop ? *prop : KProperty(), parent);
+
+    if (type == KProperty::Url) {
+        return new KPropertyUrlEditor(prop ? *prop : KProperty(), parent);
+    } else if (type == KProperty::ComposedUrl) {
+        return new KPropertyComposedUrlEditor(prop ? *prop : KProperty(), parent);
+    }
+
+    return nullptr;
 }
 
-QString KPropertyUrlDelegate::valueToString(const QVariant &value,
-                                            const QLocale &locale) const
+QString KPropertyUrlDelegate::valueToString(const QVariant &value, const QLocale &locale) const
 {
-    const QUrl url(value.toUrl());
-    const QString s(url.isLocalFile()
-                      ? QDir::toNativeSeparators(url.toLocalFile())
-                      : value.toString());
+    QUrl url;
+
+    if (value.canConvert<QUrl>()) {
+        url = value.toUrl();
+    } else if (value.canConvert<KPropertyComposedUrl>()) {
+        const KPropertyComposedUrl composedUrl = value.value<KPropertyComposedUrl>();
+
+        if (composedUrl.isValid()) {
+            if (!composedUrl.relativePath().isEmpty()) {
+                QUrl urlWithPath;
+                urlWithPath.setPath(composedUrl.relativePath());
+                url = urlWithPath;
+            } else {
+                url = composedUrl.absoluteUrl();
+            }
+        } else {
+            return QString();
+        }
+    } else {
+        return QString();
+    }
+
+    QString s;
+
+    if (url.isLocalFile()) {
+        s = QDir::toNativeSeparators(url.toLocalFile());
+        // TODO this assumes local files only
+    } else if (url.isRelative()) {
+        s = QDir::toNativeSeparators(url.toString());
+    } else {
+        s = url.toString();
+    }
+
     if (locale.language() == QLocale::C) {
         return s;
     }
