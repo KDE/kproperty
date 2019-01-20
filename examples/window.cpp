@@ -268,7 +268,7 @@ Window::Window()
 //  Appearance
     if (addGroups) {
         group = "AppearanceGroup";
-        m_set.setGroupCaption(group, "Appearance Group");
+        m_set.setGroupCaption(group, "Appearance");
         m_set.setGroupIconName(group, "appearance");
     }
     if (singleProperty.isEmpty() || singleProperty=="Color") {
