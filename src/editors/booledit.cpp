@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2006-2016 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2018 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,50 +27,72 @@
 #include <QIcon>
 #include <QVariant>
 
-/*! @return name for state with index @a index,
- where 0 means true, 1 means false and 2 means none */
-static QString stateName(int index, const QLocale &locale, const KProperty* prop = nullptr)
+namespace {
+
+
+/**
+ * 3-state Index
+ */
+enum ThreeStateIndex {
+    TrueIndex,
+    FalseIndex,
+    NoneIndex
+};
+
+//! @return name for state with index @a index
+QString stateName(ThreeStateIndex index, const QLocale &locale, const KProperty* prop = nullptr)
 {
     QString stateNameString;
-    if (index == 0) {
+    switch (index) {
+    case TrueIndex:
         stateNameString = prop ? prop->option("yesName", QString()).toString() : QString();
         if (stateNameString.isEmpty()) {
-            return locale.language() == QLocale::C ? QString::fromLatin1("true")
-                                                   : QObject::tr("Yes", "Property value: Boolean state Yes");
+            stateNameString = locale.language() == QLocale::C
+                ? QString::fromLatin1("true")
+                : QObject::tr("Yes", "Property value: Boolean state Yes");
         }
-    }
-    else if (index == 1) {
+        break;
+    case FalseIndex:
         stateNameString = prop ? prop->option("noName", QString()).toString() : QString();
         if (stateNameString.isEmpty()) {
-            return locale.language() == QLocale::C ? QString::fromLatin1("false")
-                                                   : QObject::tr("No", "Property value: Boolean state No");
+            stateNameString = locale.language() == QLocale::C
+                ? QString::fromLatin1("false")
+                : QObject::tr("No", "Property value: Boolean state No");
         }
-    }
-    else {
+        break;
+    case NoneIndex:
         stateNameString = prop ? prop->option("3rdStateName", QString()).toString() : QString();
         if (stateNameString.isEmpty()) {
-            return locale.language() == QLocale::C ? QString::fromLatin1("null")
-                                                   : QObject::tr("None", "Property value: Boolean (3rd) undefined state None");
+            stateNameString = locale.language() == QLocale::C
+                ? QString::fromLatin1("null")
+                : QObject::tr("None", "Property value: Boolean (3rd) undefined state None");
         }
+        break;
     }
     return stateNameString;
 }
 
 //! Sets up @a data list data with keys and names for true, false, none values, respectively
-static void setupThreeStateListData(KPropertyListData *data, const KProperty* prop)
+void setupThreeStateListData(KPropertyListData *data, const KProperty* prop)
 {
     data->setKeys({ true, false, QVariant() });
-    data->setNamesAsStringList({ stateName(0, QLocale(), prop), stateName(1, QLocale(), prop),
-                                 stateName(2, QLocale(), prop) });
+    data->setNamesAsStringList({ stateName(TrueIndex, QLocale(), prop), stateName(FalseIndex, QLocale(), prop),
+                                 stateName(NoneIndex, QLocale(), prop) });
 }
 
-static int valueToIndex(const QVariant& value)
+/**
+ * Returns index for given value
+ *
+ * Assumes that support for 3-state is enabled.
+ */
+ThreeStateIndex valueToIndex(const QVariant& value)
 {
     if (value.isNull() || !value.isValid())
-        return 2;
+        return NoneIndex;
     else
-        return value.toBool() ? 0 : 1;
+        return value.toBool() ? TrueIndex : FalseIndex;
 }
+} // namespace
 
 //-------------------------
 
@@ -99,8 +121,8 @@ class Q_DECL_HIDDEN KPropertyBoolEditor::Private
 {
 public:
     Private(const KProperty *prop)
-     : yesText( stateName(0, QLocale(), prop) )
-     , noText( stateName(1, QLocale(), prop) )
+     : yesText( stateName(TrueIndex, QLocale(), prop) )
+     , noText( stateName(FalseIndex, QLocale(), prop) )
     {
     }
     QVariant value;
@@ -148,7 +170,7 @@ void KPropertyBoolEditor::draw(QPainter *p, const QRect &r, const QVariant &valu
     QIcon icon;
     QSize actualIconSize;
     QPoint textOffset;
-    if (valueToIndex(value) == 2) {
+    if (threeState && valueToIndex(value) == NoneIndex) {
         // draw icon for the 3rd state for Three-State editor
         icon = g_boolEdit->noneIcon;
         actualIconSize = g_boolEdit->yesIcon.actualSize(r.size());
@@ -164,13 +186,8 @@ void KPropertyBoolEditor::draw(QPainter *p, const QRect &r, const QVariant &valu
     r2.setLeft(r2.left() + 3);
     //r2.setTop(r2.top() + (r.height() - actualIconSize.height()) / 2);
 
-    if (!threeState && value.isNull()) {
-        // 2 states but null value
-        p->drawText(r2.translated(textOffset), Qt::AlignVCenter | Qt::AlignLeft, text);
-    } else {
-        icon.paint(p, r2, Qt::AlignVCenter | Qt::AlignLeft);
-        p->drawText(r2.translated(textOffset), Qt::AlignVCenter | Qt::AlignLeft, text);
-    }
+    icon.paint(p, r2, Qt::AlignVCenter | Qt::AlignLeft);
+    p->drawText(r2.translated(textOffset), Qt::AlignVCenter | Qt::AlignLeft, text);
 }
 
 void KPropertyBoolEditor::paintEvent( QPaintEvent * event )
@@ -203,11 +220,14 @@ public:
     ThreeStateBoolIconProvider() {}
     QIcon icon(int index) const override
     {
-          if (index == 0)
-              return g_boolEdit->yesIcon;
-          else if (index == 1)
-              return g_boolEdit->noIcon;
-          return g_boolEdit->noneIcon;
+        switch (index) {
+        case TrueIndex:
+            return g_boolEdit->yesIcon;
+        case FalseIndex:
+            return g_boolEdit->noIcon;
+        default:
+            return g_boolEdit->noneIcon;
+        }
     }
     KPropertyComboBoxEditorIconProviderInterface* clone() const override
     {
@@ -236,7 +256,7 @@ KPropertyThreeStateBoolEditor::KPropertyThreeStateBoolEditor(const KPropertyList
 //    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
 //    nullIcon.fill(Qt::transparent);
 //    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? tr("None") : thirdState.toString());
-    setCurrentIndex(2);
+    setCurrentIndex(NoneIndex);
 }
 
 KPropertyThreeStateBoolEditor::~KPropertyThreeStateBoolEditor()
@@ -247,11 +267,17 @@ KPropertyThreeStateBoolEditor::~KPropertyThreeStateBoolEditor()
 QVariant KPropertyThreeStateBoolEditor::value() const
 {
     // list items: true, false, NULL
-    const int idx = currentIndex();
-    if (idx == 0)
+    const int i = currentIndex();
+    const ThreeStateIndex index
+        = (i >= TrueIndex && i <= NoneIndex) ? static_cast<ThreeStateIndex>(i) : NoneIndex;
+    switch (index) {
+    case TrueIndex:
         return true;
-    else
-        return idx == 1 ? false : QVariant();
+    case FalseIndex:
+        return false;
+    default:
+        return QVariant();
+    }
 }
 
 /*void ThreeStateBoolEdit::setProperty(Property *prop)
@@ -310,7 +336,7 @@ void KPropertyBoolDelegate::paint( QPainter * painter,
 QString KPropertyBoolDelegate::propertyValueToString(const KProperty* prop, const QLocale &locale) const
 {
     if (prop->option("3State", false).toBool()) {
-        int listIndex = valueToIndex(prop->value());
+        const ThreeStateIndex listIndex = valueToIndex(prop->value());
         return stateName(listIndex, locale, prop);
     }
     if (prop->value().isNull() && !prop->option("nullName", QString()).toString().isEmpty()) {
@@ -322,5 +348,5 @@ QString KPropertyBoolDelegate::propertyValueToString(const KProperty* prop, cons
 QString KPropertyBoolDelegate::valueToString(const QVariant& value, const QLocale &locale) const
 {
     // assume 2-state
-    return stateName(value.toBool() ? 0 : 1, locale);
+    return stateName(value.toBool() ? TrueIndex : FalseIndex, locale);
 }
