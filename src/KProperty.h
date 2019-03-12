@@ -413,7 +413,9 @@ public:
          the user hits the up or down button of editor for double type. Default value is 0.01.
          @see QDoubleSpinBox::singleStep</li>
     <li> 3State: boolean value used for boolean type; if @c true, the editor becomes a combobox
-         (instead of checkable button) and accepts the third "null" state.</li>
+         (instead of checkable button) and accepts the third "null" state. Otherwise the boolean
+         type only accepts @c true and @c false values, anything other, including invalid and null
+         values, is converted to @c false.</li>
     <li> yesName: user-visible translated string used for boolean type (both 2- and 3-state)
          to visually represent the "true" value. If not present, tr("Yes") is used.</li>
     <li> noName: user-visible translated string used for boolean type (both 2- and 3-state)
