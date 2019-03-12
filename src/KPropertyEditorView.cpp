@@ -209,7 +209,12 @@ void ItemDelegate::paint(QPainter *painter,
 QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
-    return QItemDelegate::sizeHint(option, index) + QSize(0, 2);
+    QStyleOptionViewItem realOption(option);
+    if (index.column() == 0) {
+        // Measure for bold font because it might be used at any time if the property value is modified
+        realOption.font.setBold(true);
+    }
+    return QItemDelegate::sizeHint(realOption, index) + QSize(0, 2);
 }
 
 QWidget * ItemDelegate::createEditor(QWidget * parent,
