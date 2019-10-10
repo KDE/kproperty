@@ -307,6 +307,11 @@ KPropertyDoubleSpinBox::~KPropertyDoubleSpinBox()
     delete d;
 }
 
+void KPropertyDoubleSpinBox::resizeEvent( QResizeEvent * event )
+{
+    QDoubleSpinBox::resizeEvent(event);
+}
+
 void KPropertyDoubleSpinBox::setValue(const QVariant& value)
 {
     QVariant minVal;

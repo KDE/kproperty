@@ -77,6 +77,9 @@ protected Q_SLOTS:
     void slotValueChanged(double value);
 
 protected:
+    // keep this until the next ABI break
+    void resizeEvent( QResizeEvent * event ) override;
+
     Q_DISABLE_COPY(KPropertyDoubleSpinBox)
     class Private;
     Private * const d;
