@@ -48,7 +48,7 @@ protected Q_SLOTS:
     void slotValueChanged(const QColor&);
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
     Q_DISABLE_COPY(KPropertyColorComboEditor)

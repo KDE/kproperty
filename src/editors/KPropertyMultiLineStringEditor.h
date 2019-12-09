@@ -45,8 +45,8 @@ private Q_SLOTS:
     void slotTextChanged();
 
 protected:
-    bool eventFilter(QObject *o, QEvent *ev) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent * event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *o, QEvent *ev) override;
+    void paintEvent(QPaintEvent * event) override;
 
 private:
     Q_DISABLE_COPY(KPropertyMultiLineStringEditor)
