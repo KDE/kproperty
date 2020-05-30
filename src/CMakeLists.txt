@@ -265,27 +265,31 @@ if(KPROPERTY_WIDGETS)
 endif()
 
 if(BUILD_QCH)
-    kproperty_add_qch(
+    ecm_add_qch(
         KPropertyCore_QCH
         NAME KPropertyCore
         BASE_NAME ${KPROPERTYCORE_BASE_NAME}
         VERSION ${PROJECT_VERSION}
-        NAMESPACE org.kde.${KPROPERTYCORE_BASE_NAME}
+        ORG_DOMAIN org.kde.${KPROPERTYCORE_BASE_NAME}
         SOURCES
             Mainpage.dox
             ${kpropertycore_HEADERS}
         LINK_QCHS
             Qt5Core_QCH
+        INCLUDE_DIRS
+            ${CMAKE_CURRENT_BINARY_DIR}
+            ${kpropertycore_INCLUDE_DIRS}
         BLANK_MACROS
             KPROPERTYCORE_EXPORT
             KPROPERTYCORE_DEPRECATED
-        TAGFILE_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
-        QCH_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
+        TAGFILE_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+        QCH_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+        COMPONENT Devel
     )
     set(kpropertycore_qch_targets KPropertyCore_QCH)
 endif()
 
-kproperty_install_qch_export(
+ecm_install_qch_export(
     TARGETS ${kpropertycore_qch_targets}
     FILE KPropertyCoreQCHTargets.cmake
     DESTINATION "${CMAKECONFIG_CORE_INSTALL_DIR}"
@@ -297,12 +301,12 @@ if(KPROPERTY_WIDGETS)
         if(KPROPERTY_KF)
             set(_KF5WidgetsAddons_QCH KF5WidgetsAddons_QCH)
         endif()
-        kproperty_add_qch(
+        ecm_add_qch(
             KPropertyWidgets_QCH
             NAME KPropertyWidgets
             BASE_NAME ${KPROPERTYWIDGETS_BASE_NAME}
             VERSION ${PROJECT_VERSION}
-            NAMESPACE org.kde.${KPROPERTYWIDGETS_BASE_NAME}
+            ORG_DOMAIN org.kde.${KPROPERTYWIDGETS_BASE_NAME}
             SOURCES
                 ${kpropertywidgets_HEADERS}
                 ${kproperty_editors_HEADERS}
@@ -312,16 +316,20 @@ if(KPROPERTY_WIDGETS)
                 Qt5Widgets_QCH
                 KPropertyCore_QCH
                 ${_KF5WidgetsAddons_QCH}
+            INCLUDE_DIRS
+                ${CMAKE_CURRENT_BINARY_DIR}
+                ${kpropertywidgets_INCLUDE_DIRS}
             BLANK_MACROS
                 KPROPERTYWIDGETS_EXPORT
                 KPROPERTYWIDGETS_DEPRECATED
-            TAGFILE_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
-            QCH_INSTALL_DESTINATION ${KPROPERTY_QTQCH_FULL_INSTALL_DIR}
+            TAGFILE_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+            QCH_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+            COMPONENT Devel
         )
         set(kpropertywidgets_qch_targets KPropertyWidgets_QCH)
     endif()
 
-    kproperty_install_qch_export(
+    ecm_install_qch_export(
         TARGETS ${kpropertywidgets_qch_targets}
         FILE KPropertyWidgetsQCHTargets.cmake
         DESTINATION "${CMAKECONFIG_WIDGETS_INSTALL_DIR}"

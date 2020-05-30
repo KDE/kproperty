@@ -1,6 +1,8 @@
 set(KPROPERTY_GENERATE_PRI TRUE)
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
-find_package(ECM 1.8.0 REQUIRED NO_MODULE)
+
+set(REQUIRED_KF5_VERSION 5.36.0)
+find_package(ECM ${REQUIRED_KF5_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 include(SetKPropertyCMakePolicies NO_POLICY_SCOPE)
 
@@ -21,10 +23,10 @@ include(ECMSetupVersion)
 include(KDEInstallDirs)
 include(KDECMakeSettings NO_POLICY_SCOPE)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+include(ECMAddQch)
 
 # Own
 include(KPropertyAddIconsRccFile)
-include(KPropertyAddQCH)
 include(KPropertyMacros)
 
 simple_option(BUILD_QCH "Build API documentation in QCH format" OFF)
@@ -33,7 +35,6 @@ simple_option(KPROPERTY_KF "Build components depending on KDE Frameworks" ON)
 
 # Dependencies
 set(REQUIRED_QT_VERSION 5.4.0)
-set(REQUIRED_KF5_VERSION 5.16.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core)
 
