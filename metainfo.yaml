@@ -1,0 +1,24 @@
+# kapidox info
+description: KProperty is a property editing framework with editor widget similar to what is known from Qt Designer.
+#logo: TODO
+group: kexiframeworks
+type: functional
+
+platforms:
+    - name: Linux
+    - name: Windows
+#    - name: MacOSX
+#    - name: Android
+
+public_lib: true
+public_source_dirs:
+    - src
+# TODO: kapidox currently assumes: one product == one metainfo.yaml == one cmake config file
+# listing KPropertyWidgets as separate package in CMake's worldview needs changing kapidox first
+# -> https://bugs.kde.org/show_bug.cgi?id=410452
+#libraries:
+#    - cmake: KPropertyCore
+#cmakename: KPropertyCore
+
+maintainer:
+    - staniek
