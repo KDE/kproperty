@@ -13,11 +13,11 @@ Project maintainer: Jarosław Staniek <staniek@kde.org>
 *If you are reading this on GitHub, be aware that this is just a mirror.
 Our real code repository [is located here](https://invent.kde.org/libraries/kproperty).*
 
-# Building KProperty
+## Building KProperty
 
 KProperty uses the CMake build system.
 
-# Donate Money
+## Donate Money
 
 If you love KProperty, you can help developers to build new incredible features or
 enhance new ones. Thanks in advance for your generous donations.
