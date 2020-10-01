@@ -4,11 +4,11 @@ KProperty is a property editing framework with editor widget similar to what
 is known from Qt Designer. It is useful in applications such as IDEs where large
 amounts of properties are available for the user to edit.
 
-It is a part of the [KEXI project](http://www.kexi-project.org).
+It is a part of the [KEXI project](https://www.kexi-project.org).
 
-Home page: http://community.kde.org/KProperty
+**Home page:** https://community.kde.org/KProperty
 
-Project maintainer: Jarosław Staniek <staniek@kde.org>
+**Project maintainer:** Jarosław Staniek <staniek@kde.org>
 
 *If you are reading this on GitHub, be aware that this is just a mirror.
 Our real code repository [is located here](https://invent.kde.org/libraries/kproperty).*
@@ -16,6 +16,12 @@ Our real code repository [is located here](https://invent.kde.org/libraries/kpro
 ## Building KProperty
 
 KProperty uses the CMake build system.
+
+```
+mkdir build && cd build
+cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=~/.local/kde
+ninja
+```
 
 ## Donate Money
 
