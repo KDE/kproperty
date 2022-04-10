@@ -9,7 +9,7 @@ cmake_policy(SET CMP0053 NEW) # TODO remove, temporary fix for a bug in Qt 5.8's
                               # "Simplify variable reference and escape sequence evaluation"
 
 if(POLICY CMP0059) # Don’t treat DEFINITIONS as a built-in directory property.
-    cmake_policy(SET CMP0059 OLD)
+    cmake_policy(SET CMP0059 NEW)
 endif()
 if(POLICY CMP0063) # Honor visibility properties for all target types (since cmake 3.3)
     cmake_policy(SET CMP0063 NEW)
