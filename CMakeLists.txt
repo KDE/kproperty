@@ -13,6 +13,7 @@ include(CMakePackageConfigHelpers)
 include(GenerateExportHeader)
 
 # ECM
+include(ECMCoverageOption)
 if(KPROPERTY_GENERATE_PRI)
     include(ECMGeneratePriFile)
 endif()
