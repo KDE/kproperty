@@ -53,7 +53,7 @@ cat <<EOT > "$test_app_dir/CMakeLists.txt"
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 find_package(ECM 1.8.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH "$current_srcdir" "$srcdir/cmake/modules" \${ECM_MODULE_PATH} \${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH "$current_srcdir" "$srcdir/cmake/modules" \${ECM_MODULE_PATH})
 
 project(HeadersTest)
 include(HeadersTestInclude NO_POLICY_SCOPE)
