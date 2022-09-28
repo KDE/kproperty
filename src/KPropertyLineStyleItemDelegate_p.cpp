@@ -64,7 +64,8 @@ void KPropertyLineStyleItemDelegate::paintItem(QPainter *painter, const QPen &pe
 {
     const KPropertyUtilsPrivate::PainterSaver saver(painter);
     QPen pen(pen_);
-    pen.setBrush(option.state & QStyle::State_Selected ? option.palette.highlightedText() : option.palette.text());
+    pen.setBrush((option.state & QStyle::State_Selected)
+                 ? option.palette.highlightedText() : option.palette.text());
     if (pen.style() == Qt::NoPen) {
         pen.setWidth(0);
         pen.setStyle(Qt::SolidLine);
