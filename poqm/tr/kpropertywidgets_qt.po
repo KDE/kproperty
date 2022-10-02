@@ -1,0 +1,512 @@
+# Volkan Gezer <volkangezer@gmail.com>, 2021.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2022-07-01 20:09+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Qt-Contexts: true\n"
+"X-Generator: Lokalize 22.04.2\n"
+
+#: editors/3rdparty/KColorCombo.cpp:339
+msgctxt "KColorCombo|Custom color"
+msgid "Custom..."
+msgstr "Özel..."
+
+#: editors/booledit.cpp:52
+msgctxt "QObject|Property value: Boolean state Yes"
+msgid "Yes"
+msgstr "Evet"
+
+#: editors/booledit.cpp:60
+msgctxt "QObject|Property value: Boolean state No"
+msgid "No"
+msgstr "Hayır"
+
+#: editors/booledit.cpp:68
+msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+msgid "None"
+msgstr "Hiçbiri"
+
+#: editors/coloredit.cpp:36
+msgctxt "QObject|Invalid color"
+msgid "#invalid"
+msgstr "#geçersiz"
+
+#: editors/cursoredit.cpp:118
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "No cursor"
+msgstr "İmleç yok"
+
+#: editors/cursoredit.cpp:119
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Arrow"
+msgstr "Ok"
+
+#: editors/cursoredit.cpp:120
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Up arrow"
+msgstr "Yukarı ok"
+
+#: editors/cursoredit.cpp:121
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Cross"
+msgstr "Çapraz"
+
+#: editors/cursoredit.cpp:122
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Waiting"
+msgstr "Bekliyor"
+
+#: editors/cursoredit.cpp:123
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Text cursor"
+msgstr "Metin imleci"
+
+#: editors/cursoredit.cpp:124
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size vertical"
+msgstr "Dikey boyutlandır"
+
+#: editors/cursoredit.cpp:125
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size horizontal"
+msgstr "Yatay boyutlandır"
+
+#: editors/cursoredit.cpp:126
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size slash"
+msgstr "Dışa doğru boyutlandır"
+
+#: editors/cursoredit.cpp:127
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size backslash"
+msgstr "İçe doğru boyutlandır"
+
+#: editors/cursoredit.cpp:128
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size all"
+msgstr "Her yöne boyutlandır"
+
+#: editors/cursoredit.cpp:129
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split vertical"
+msgstr "Dikey olarak böl"
+
+#: editors/cursoredit.cpp:130
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split horizontal"
+msgstr "Yatay olarak böl"
+
+#: editors/cursoredit.cpp:131
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Pointing hand"
+msgstr "İşaret eden el"
+
+#: editors/cursoredit.cpp:132
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Forbidden"
+msgstr "Yasak"
+
+#: editors/cursoredit.cpp:133
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "What's this?"
+msgstr "Bu nedir?"
+
+#: editors/cursoredit.cpp:134
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Busy"
+msgstr "Meşgul"
+
+#: editors/cursoredit.cpp:135
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Open hand"
+msgstr "Açık el"
+
+#: editors/cursoredit.cpp:136
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Closed hand"
+msgstr "Kapalı el"
+
+#: editors/fontedit.cpp:49
+msgctxt "KPropertyFontEditRequester|"
+msgid "Click to select a font"
+msgstr "Bir yazıtipi seçmek için tıklayın"
+
+#: editors/fontedit.cpp:50
+msgctxt "KPropertyFontEditRequester|"
+msgid "Selects font"
+msgstr "Yazıtipi seçer"
+
+#: editors/fontedit.cpp:115 editors/fontedit.cpp:117
+msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+msgid "Abc"
+msgstr "Abc"
+
+#: editors/fontedit.cpp:140
+#, qt-format
+msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
+msgid "%1%2"
+msgstr "%1%2"
+
+#: editors/fontedit.cpp:143
+msgctxt "QObject|bold font"
+msgid "bold"
+msgstr "kalın"
+
+#: editors/fontedit.cpp:146
+msgctxt "QObject|italic font"
+msgid "italic"
+msgstr "yatık"
+
+#: editors/fontedit.cpp:149
+msgctxt "QObject|strikeout font"
+msgid "strikeout"
+msgstr "üzeri çizili"
+
+#: editors/fontedit.cpp:152
+msgctxt "QObject|underline font"
+msgid "underline"
+msgstr "altı çizili"
+
+#: editors/KPropertyGenericSelectionEditor.cpp:41
+msgctxt "KPropertyGenericSelectionEditor|... button"
+msgid "..."
+msgstr "..."
+
+#: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
+#, qt-format
+msgctxt "QObject|Rectangle"
+msgid "%1, %2, %3x%4"
+msgstr "%1, %2, %3x%4"
+
+#: editors/KPropertyRectFEditor.cpp:55 editors/pointedit.cpp:47
+#: editors/pointfedit.cpp:56 editors/rectedit.cpp:47
+msgctxt "QObject|Property: X coordinate"
+msgid "X"
+msgstr "X"
+
+#: editors/KPropertyRectFEditor.cpp:56 editors/pointedit.cpp:48
+#: editors/pointfedit.cpp:57 editors/rectedit.cpp:48
+msgctxt "QObject|Property: X coordinate"
+msgid "X Coordinate"
+msgstr "X Koordinatı"
+
+#: editors/KPropertyRectFEditor.cpp:58 editors/pointedit.cpp:50
+#: editors/pointfedit.cpp:59 editors/rectedit.cpp:50
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y"
+msgstr "Y"
+
+#: editors/KPropertyRectFEditor.cpp:59 editors/pointedit.cpp:51
+#: editors/pointfedit.cpp:60 editors/rectedit.cpp:51
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y Coordinate"
+msgstr "Y Koordinatı"
+
+#: editors/KPropertyRectFEditor.cpp:61 editors/KPropertyRectFEditor.cpp:62
+#: editors/rectedit.cpp:53 editors/rectedit.cpp:54
+msgctxt "QObject|Property: width of rectangle"
+msgid "Width"
+msgstr "Genişlik"
+
+#: editors/KPropertyRectFEditor.cpp:64 editors/KPropertyRectFEditor.cpp:65
+#: editors/rectedit.cpp:56 editors/rectedit.cpp:57
+msgctxt "QObject|Property: height of rectangle"
+msgid "Height"
+msgstr "Yükseklik"
+
+#: editors/KPropertyUrlEditor_p.cpp:182
+msgctxt "QObject|"
+msgid "Select Existing File"
+msgstr "Var Olan Dosyayı Seçin"
+
+#: editors/KPropertyUrlEditor_p.cpp:184
+msgctxt "QObject|"
+msgid "Select Existing Directory"
+msgstr "Var Olan Dizini Seçin"
+
+#: editors/KPropertyUrlEditor_p.cpp:186
+msgctxt "QObject|"
+msgid "Select File"
+msgstr "Dosya Seç"
+
+#: editors/pixmapedit.cpp:78
+msgctxt "KPropertyPixmapEditor|"
+msgid "Click to show image preview"
+msgstr "Görsel önizlemesini göstermek için tıklayın"
+
+#: editors/pixmapedit.cpp:86
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert image from file"
+msgstr "Dosyadan görsel ekle"
+
+#: editors/pixmapedit.cpp:87
+msgctxt "KPropertyPixmapEditor|"
+msgid "Inserts image from file"
+msgstr "Dosyadan görsel ekler"
+
+#: editors/pixmapedit.cpp:142
+#, qt-format
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert Image From File (for \"%1\" property)"
+msgstr "Dosyadan Görsel Ekle (\"%1\" özelliği için)"
+
+#: editors/pixmapedit.cpp:336
+msgctxt "QObject|No pixmap"
+msgid "None"
+msgstr "Hiçbiri"
+
+#: editors/pixmapedit.cpp:341
+#, qt-format
+msgctxt "QObject|"
+msgid "%1x%2px"
+msgstr "%1x%2px"
+
+#: editors/pointedit.cpp:36 editors/pointfedit.cpp:45
+#, qt-format
+msgctxt "QObject|Point"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: editors/sizeedit.cpp:34 editors/sizefedit.cpp:42
+#, qt-format
+msgctxt "QObject|Size"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: editors/sizeedit.cpp:45 editors/sizefedit.cpp:53
+msgctxt "QObject|"
+msgid "Width"
+msgstr "Genişlik"
+
+#: editors/sizeedit.cpp:47 editors/sizefedit.cpp:55
+msgctxt "QObject|"
+msgid "Height"
+msgstr "Yükseklik"
+
+#: editors/sizepolicyedit.cpp:57
+msgctxt "QObject|Size Policy"
+msgid "Fixed"
+msgstr "Sabit"
+
+#: editors/sizepolicyedit.cpp:58
+msgctxt "QObject|Size Policy"
+msgid "Minimum"
+msgstr "En Az"
+
+#: editors/sizepolicyedit.cpp:59
+msgctxt "QObject|Size Policy"
+msgid "Maximum"
+msgstr "En Çok"
+
+#: editors/sizepolicyedit.cpp:60
+msgctxt "QObject|Size Policy"
+msgid "Preferred"
+msgstr "Tercih Edilen"
+
+#: editors/sizepolicyedit.cpp:61
+msgctxt "QObject|Size Policy"
+msgid "Expanding"
+msgstr "Genişleyen"
+
+#: editors/sizepolicyedit.cpp:62
+msgctxt "QObject|Size Policy"
+msgid "Minimum Expanding"
+msgstr "En Az Genişleyen"
+
+#: editors/sizepolicyedit.cpp:63
+msgctxt "QObject|Size Policy"
+msgid "Ignored"
+msgstr "Yok Sayılmış"
+
+#: editors/sizepolicyedit.cpp:86
+#, qt-format
+msgctxt "QObject|Size Policy"
+msgid "%1, %2, %3, %4"
+msgstr "%1, %2, %3, %4"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Hor. Policy"
+msgstr "Yat. Politika"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Horizontal Policy"
+msgstr "Yatay Politika"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vert. Policy"
+msgstr "Dik. Politika"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vertical Policy"
+msgstr "Dikey Politika"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Hor. Stretch"
+msgstr "Yat. Esnetme"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Horizontal Stretch"
+msgstr "Yatay Esnetme"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vert. Stretch"
+msgstr "Dik. Esnetme"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vertical Stretch"
+msgstr "Dikey Esnetme"
+
+#: editors/utils.cpp:27
+msgctxt "QObject|Three dots for 'Insert image from file' button"
+msgid "..."
+msgstr "..."
+
+#: KPropertyEditorDataModel_p.cpp:220
+msgctxt "KPropertyEditorDataModel|Property name"
+msgid "Name"
+msgstr "Ad"
+
+#: KPropertyEditorDataModel_p.cpp:222
+msgctxt "KPropertyEditorDataModel|Property value"
+msgid "Value"
+msgstr "Değer"
+
+#: KPropertyEditorView.cpp:646
+msgctxt "KPropertyEditorView|"
+msgid "Undo changes"
+msgstr "Değişiklikleri geri al"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:40
+msgctxt "QObject|No Line"
+msgid "None"
+msgstr "Hiçbiri"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:41
+msgctxt "QObject|"
+msgid "Solid Line"
+msgstr "Düz Çizgi"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:42
+msgctxt "QObject|"
+msgid "Dash Line"
+msgstr "Kesikli Çizgi"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:43
+msgctxt "QObject|"
+msgid "Dot Line"
+msgstr "Noktalı Çizgi"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:44
+msgctxt "QObject|"
+msgid "Dash-Dot Line"
+msgstr "Kesik-Noktalı Çizgi"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:45
+msgctxt "QObject|"
+msgid "Dash-Dot-Dot Line"
+msgstr "Kesik-Nokta-Nokta Çizgi"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:46
+msgctxt "QObject|"
+msgid "Custom Dash Line"
+msgstr "Özel Kesik Çizgi"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Select item"
+#~ msgstr "Öge seç"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Selects one item"
+#~ msgstr "Bir öge seç"
+
+#~ msgctxt "KPropertyStringListEditor|Window title"
+#~ msgid "Edit List of Items"
+#~ msgstr "Öge Listesini Düzenle"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Contents of %1"
+#~ msgstr "%1 İçeriği"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Select symbol"
+#~ msgstr "Sembol seç"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Selects a symbol"
+#~ msgstr "Bir sembol seçer"
+
+#~ msgctxt "KPropertySymbolComboEditor|Window title"
+#~ msgid "Select Character"
+#~ msgstr "Karakter Seçin"
+
+#~ msgctxt "QObject|Truncated string"
+#~ msgid "%1..."
+#~ msgstr "%1..."
+
+#~ msgctxt "QObject|General properties"
+#~ msgid "General"
+#~ msgstr "Genel"
+
+#~ msgctxt "QObject|<value> <suffix>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgctxt "QObject|<prefix> <value>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgctxt "QObject|Null value"
+#~ msgid "None"
+#~ msgstr "Hiçbiri"
+
+#~ msgctxt "QObject|"
+#~ msgid "Millimeters (mm)"
+#~ msgstr "Milimetre (mm)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Centimeters (cm)"
+#~ msgstr "Santimetre (cm)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Decimeters (dm)"
+#~ msgstr "Desimetre (dm)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Inches (in)"
+#~ msgstr "İnç (in)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Pica (pi)"
+#~ msgstr "Pica (pi)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Cicero (cc)"
+#~ msgstr "Cicero (cc)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Points (pt)"
+#~ msgstr "Nokta (pt)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Pixels (px)"
+#~ msgstr "Piksel (px)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Unsupported unit"
+#~ msgstr "Desteklenmeyen birim"

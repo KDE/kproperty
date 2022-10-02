@@ -1,0 +1,333 @@
+# giovanni <g.sora@tiscali.it>, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2017-04-18 14:01+0100\n"
+"Last-Translator: giovanni <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: KPropertyFactory.cpp:148
+#, qt-format
+msgctxt "QObject|Truncated string"
+msgid "%1..."
+msgstr "%1..."
+
+#: KPropertySet.cpp:31
+msgctxt "QObject|General properties"
+msgid "General"
+msgstr "General"
+
+#~ msgctxt "KColorCombo|Custom color"
+#~ msgid "Custom..."
+#~ msgstr "Personalisa..."
+
+#~ msgctxt "QObject|Property value: Boolean state Yes"
+#~ msgid "Yes"
+#~ msgstr "Si"
+
+#~ msgctxt "QObject|Property value: Boolean state No"
+#~ msgid "No"
+#~ msgstr "No"
+
+#~ msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+#~ msgid "None"
+#~ msgstr "Necun"
+
+#~ msgctxt "QObject|Invalid color"
+#~ msgid "#invalid"
+#~ msgstr "#Invalide"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "No cursor"
+#~ msgstr "Nulle cursor"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Arrow"
+#~ msgstr "Flecha"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Up arrow"
+#~ msgstr "Flecha in alto"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Cross"
+#~ msgstr "Cruce"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Waiting"
+#~ msgstr "Expectante"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Text cursor"
+#~ msgstr "Cursor de texto"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size vertical"
+#~ msgstr "Dimensiona vertical"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size horizontal"
+#~ msgstr "Dimensiona horizontal"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size slash"
+#~ msgstr "Dimensiona barra oblique"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size backslash"
+#~ msgstr "Dimensiona barra oblique inverse"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size all"
+#~ msgstr "Dimensiona toto"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Split vertical"
+#~ msgstr "Divide verticalmente"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Split horizontal"
+#~ msgstr "Divide horizontalmente "
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Pointing hand"
+#~ msgstr "Mano punctante"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Forbidden"
+#~ msgstr "Prohibite "
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "What's this?"
+#~ msgstr "Que es isto?"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Busy"
+#~ msgstr "Occupate"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Open hand"
+#~ msgstr "Mano aperite"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Closed hand"
+#~ msgstr "Mano claudite"
+
+#~ msgctxt "KPropertyFontEditRequester|"
+#~ msgid "Click to select a font"
+#~ msgstr "Tu pressa per selectionar un font"
+
+#~ msgctxt "KPropertyFontEditRequester|"
+#~ msgid "Selects font"
+#~ msgstr "Selige fonts"
+
+#~ msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+#~ msgid "Abc"
+#~ msgstr "Abc"
+
+#~ msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
+#~ msgid "%1%2"
+#~ msgstr "%1%2"
+
+#~ msgctxt "QObject|bold font"
+#~ msgid "bold"
+#~ msgstr "Grasse"
+
+#~ msgctxt "QObject|italic font"
+#~ msgid "italic"
+#~ msgstr "Italic"
+
+#~ msgctxt "QObject|strikeout font"
+#~ msgid "strikeout"
+#~ msgstr "Strikeout"
+
+#~ msgctxt "QObject|underline font"
+#~ msgid "underline"
+#~ msgstr "Sublinea"
+
+#~ msgctxt "KPropertyGenericSelectionEditor|... button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "QObject|Rectangle"
+#~ msgid "%1, %2, %3x%4"
+#~ msgstr "%1, %2, %3x%4"
+
+#~ msgctxt "QObject|Property: X coordinate"
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgctxt "QObject|Property: Y coordinate"
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgctxt "QObject|Property: width of rectangle"
+#~ msgid "Width"
+#~ msgstr "Largessa"
+
+#~ msgctxt "QObject|Property: height of rectangle"
+#~ msgid "Height"
+#~ msgstr "Altessa"
+
+#~ msgctxt "KPropertyUrlEditor|"
+#~ msgid "Select File"
+#~ msgstr "Selige File"
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Click to show image preview"
+#~ msgstr "Pulsa pro monstrar le vista preliminari de imagine"
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Insert image from file"
+#~ msgstr "Inserta imagine ex file"
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Inserts image from file"
+#~ msgstr "Inserta imagine ex file"
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Insert Image From File (for \"%1\" property)"
+#~ msgstr "Inserta Imagine ex File (pro \"%1\" proprietate)"
+
+#~ msgctxt "QObject|No pixmap"
+#~ msgid "None"
+#~ msgstr "Necun"
+
+#~ msgctxt "QObject|"
+#~ msgid "%1x%2px"
+#~ msgstr "%1x%2px"
+
+#~ msgctxt "QObject|Point"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgctxt "QObject|Size"
+#~ msgid "%1x%2"
+#~ msgstr "%1x%2"
+
+#~ msgctxt "QObject|"
+#~ msgid "Width"
+#~ msgstr "Largessa"
+
+#~ msgctxt "QObject|"
+#~ msgid "Height"
+#~ msgstr "Altessa"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Fixed"
+#~ msgstr "Fixate"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Minimum"
+#~ msgstr "Minime"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Maximum"
+#~ msgstr "Maxime"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Preferred"
+#~ msgstr "Preferite"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Expanding"
+#~ msgstr "Expansion"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Minimum Expanding"
+#~ msgstr "Minime expansion"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Ignored"
+#~ msgstr "Ignorate"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "%1, %2, %3, %4"
+#~ msgstr "%1, %2, %3, %4"
+
+#~ msgctxt "QObject|"
+#~ msgid "Hor. Policy"
+#~ msgstr "Politica Hor."
+
+#~ msgctxt "QObject|"
+#~ msgid "Horizontal Policy"
+#~ msgstr "Politica vert."
+
+#~ msgctxt "QObject|"
+#~ msgid "Vert. Policy"
+#~ msgstr "Politica vert."
+
+#~ msgctxt "QObject|"
+#~ msgid "Vertical Policy"
+#~ msgstr "Politica vertical"
+
+#~ msgctxt "QObject|"
+#~ msgid "Hor. Stretch"
+#~ msgstr "Extension Hor."
+
+#~ msgctxt "QObject|"
+#~ msgid "Horizontal Stretch"
+#~ msgstr "Extension horizontal"
+
+#~ msgctxt "QObject|"
+#~ msgid "Vert. Stretch"
+#~ msgstr "Extension Vert."
+
+#~ msgctxt "QObject|"
+#~ msgid "Vertical Stretch"
+#~ msgstr "Extension vertica"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Select item"
+#~ msgstr "Selectiona elemento"
+
+#~ msgctxt "KPropertyStringListEditor|Window title"
+#~ msgid "Edit List of Items"
+#~ msgstr "Modifica lista de elementos"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Contents of %1"
+#~ msgstr "Contentos de %1"
+
+#~ msgctxt "KPropertySymbolComboEditor|Window title"
+#~ msgid "Select Character"
+#~ msgstr "Selige character"
+
+#~ msgctxt "QObject|Three dots for 'Insert image from file' button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "KPropertyEditorDataModel|Property name"
+#~ msgid "Name"
+#~ msgstr "Nomine"
+
+#~ msgctxt "KPropertyEditorDataModel|Property value"
+#~ msgid "Value"
+#~ msgstr "Valor"
+
+#~ msgctxt "KPropertyEditorView|"
+#~ msgid "Undo changes"
+#~ msgstr "Annulla modificationes"
+
+#~ msgctxt "QObject|No Line"
+#~ msgid "None"
+#~ msgstr "Necun"
+
+#~ msgctxt "QObject|<value> <suffix>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgctxt "QObject|<prefix> <value>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgctxt "QObject|Null value"
+#~ msgid "None"
+#~ msgstr "Necun"

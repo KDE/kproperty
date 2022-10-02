@@ -1,0 +1,429 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"PO-Revision-Date: 2022-09-20 01:56\n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kproperty/kpropertywidgets_qt.pot\n"
+"X-Crowdin-File-ID: 6500\n"
+
+#: editors/3rdparty/KColorCombo.cpp:339
+msgctxt "KColorCombo|Custom color"
+msgid "Custom..."
+msgstr "自定义..."
+
+#: editors/booledit.cpp:52
+msgctxt "QObject|Property value: Boolean state Yes"
+msgid "Yes"
+msgstr "是"
+
+#: editors/booledit.cpp:60
+msgctxt "QObject|Property value: Boolean state No"
+msgid "No"
+msgstr "否"
+
+#: editors/booledit.cpp:68
+msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+msgid "None"
+msgstr "无"
+
+#: editors/coloredit.cpp:36
+msgctxt "QObject|Invalid color"
+msgid "#invalid"
+msgstr "#无效"
+
+#: editors/cursoredit.cpp:118
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "No cursor"
+msgstr "无光标"
+
+#: editors/cursoredit.cpp:119
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Arrow"
+msgstr "箭头"
+
+#: editors/cursoredit.cpp:120
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Up arrow"
+msgstr "上箭头"
+
+#: editors/cursoredit.cpp:121
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Cross"
+msgstr "十字"
+
+#: editors/cursoredit.cpp:122
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Waiting"
+msgstr "等待"
+
+#: editors/cursoredit.cpp:123
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Text cursor"
+msgstr "文本光标"
+
+#: editors/cursoredit.cpp:124
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size vertical"
+msgstr "垂直大小"
+
+#: editors/cursoredit.cpp:125
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size horizontal"
+msgstr "水平大小"
+
+#: editors/cursoredit.cpp:126
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size slash"
+msgstr "斜线大小"
+
+#: editors/cursoredit.cpp:127
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size backslash"
+msgstr "反斜线大小"
+
+#: editors/cursoredit.cpp:128
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size all"
+msgstr "整体大小"
+
+#: editors/cursoredit.cpp:129
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split vertical"
+msgstr "垂直拆分"
+
+#: editors/cursoredit.cpp:130
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split horizontal"
+msgstr "水平拆分"
+
+#: editors/cursoredit.cpp:131
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Pointing hand"
+msgstr "手掌指向"
+
+#: editors/cursoredit.cpp:132
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Forbidden"
+msgstr "禁止"
+
+#: editors/cursoredit.cpp:133
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "What's this?"
+msgstr "这是什么？"
+
+#: editors/cursoredit.cpp:134
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Busy"
+msgstr "忙碌"
+
+#: editors/cursoredit.cpp:135
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Open hand"
+msgstr "手掌打开"
+
+#: editors/cursoredit.cpp:136
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Closed hand"
+msgstr "手掌握紧"
+
+#: editors/fontedit.cpp:49
+msgctxt "KPropertyFontEditRequester|"
+msgid "Click to select a font"
+msgstr "点击选择字体"
+
+#: editors/fontedit.cpp:50
+msgctxt "KPropertyFontEditRequester|"
+msgid "Selects font"
+msgstr "选择字体"
+
+#: editors/fontedit.cpp:115 editors/fontedit.cpp:117
+msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+msgid "Abc"
+msgstr "Abc"
+
+#: editors/fontedit.cpp:140
+#, qt-format
+msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
+msgid "%1%2"
+msgstr "%1%2"
+
+#: editors/fontedit.cpp:143
+msgctxt "QObject|bold font"
+msgid "bold"
+msgstr "粗体"
+
+#: editors/fontedit.cpp:146
+msgctxt "QObject|italic font"
+msgid "italic"
+msgstr "斜体"
+
+#: editors/fontedit.cpp:149
+msgctxt "QObject|strikeout font"
+msgid "strikeout"
+msgstr "删除线"
+
+#: editors/fontedit.cpp:152
+msgctxt "QObject|underline font"
+msgid "underline"
+msgstr "下划线"
+
+#: editors/KPropertyGenericSelectionEditor.cpp:41
+msgctxt "KPropertyGenericSelectionEditor|... button"
+msgid "..."
+msgstr "..."
+
+#: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
+#, qt-format
+msgctxt "QObject|Rectangle"
+msgid "%1, %2, %3x%4"
+msgstr "%1, %2, %3x%4"
+
+#: editors/KPropertyRectFEditor.cpp:55 editors/pointedit.cpp:47
+#: editors/pointfedit.cpp:56 editors/rectedit.cpp:47
+msgctxt "QObject|Property: X coordinate"
+msgid "X"
+msgstr "X"
+
+#: editors/KPropertyRectFEditor.cpp:56 editors/pointedit.cpp:48
+#: editors/pointfedit.cpp:57 editors/rectedit.cpp:48
+msgctxt "QObject|Property: X coordinate"
+msgid "X Coordinate"
+msgstr "X 坐标"
+
+#: editors/KPropertyRectFEditor.cpp:58 editors/pointedit.cpp:50
+#: editors/pointfedit.cpp:59 editors/rectedit.cpp:50
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y"
+msgstr "N"
+
+#: editors/KPropertyRectFEditor.cpp:59 editors/pointedit.cpp:51
+#: editors/pointfedit.cpp:60 editors/rectedit.cpp:51
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y Coordinate"
+msgstr "Y 坐标"
+
+#: editors/KPropertyRectFEditor.cpp:61 editors/KPropertyRectFEditor.cpp:62
+#: editors/rectedit.cpp:53 editors/rectedit.cpp:54
+msgctxt "QObject|Property: width of rectangle"
+msgid "Width"
+msgstr "宽度"
+
+#: editors/KPropertyRectFEditor.cpp:64 editors/KPropertyRectFEditor.cpp:65
+#: editors/rectedit.cpp:56 editors/rectedit.cpp:57
+msgctxt "QObject|Property: height of rectangle"
+msgid "Height"
+msgstr "高度"
+
+#: editors/KPropertyUrlEditor_p.cpp:182
+msgctxt "QObject|"
+msgid "Select Existing File"
+msgstr "选择已有文件"
+
+#: editors/KPropertyUrlEditor_p.cpp:184
+msgctxt "QObject|"
+msgid "Select Existing Directory"
+msgstr "选择已有目录"
+
+#: editors/KPropertyUrlEditor_p.cpp:186
+msgctxt "QObject|"
+msgid "Select File"
+msgstr "选择文件"
+
+#: editors/pixmapedit.cpp:78
+msgctxt "KPropertyPixmapEditor|"
+msgid "Click to show image preview"
+msgstr "点击显示图像预览"
+
+#: editors/pixmapedit.cpp:86
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert image from file"
+msgstr "从文件插入图像"
+
+#: editors/pixmapedit.cpp:87
+msgctxt "KPropertyPixmapEditor|"
+msgid "Inserts image from file"
+msgstr "从文件插入图像"
+
+#: editors/pixmapedit.cpp:142
+#, qt-format
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert Image From File (for \"%1\" property)"
+msgstr "从文件插入图像 (对“%1”属性)"
+
+#: editors/pixmapedit.cpp:336
+msgctxt "QObject|No pixmap"
+msgid "None"
+msgstr "未分组"
+
+#: editors/pixmapedit.cpp:341
+#, qt-format
+msgctxt "QObject|"
+msgid "%1x%2px"
+msgstr "%1x%2px"
+
+#: editors/pointedit.cpp:36 editors/pointfedit.cpp:45
+#, qt-format
+msgctxt "QObject|Point"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: editors/sizeedit.cpp:34 editors/sizefedit.cpp:42
+#, qt-format
+msgctxt "QObject|Size"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: editors/sizeedit.cpp:45 editors/sizefedit.cpp:53
+msgctxt "QObject|"
+msgid "Width"
+msgstr "宽度"
+
+#: editors/sizeedit.cpp:47 editors/sizefedit.cpp:55
+msgctxt "QObject|"
+msgid "Height"
+msgstr "高度"
+
+#: editors/sizepolicyedit.cpp:57
+msgctxt "QObject|Size Policy"
+msgid "Fixed"
+msgstr "固定"
+
+#: editors/sizepolicyedit.cpp:58
+msgctxt "QObject|Size Policy"
+msgid "Minimum"
+msgstr "最小"
+
+#: editors/sizepolicyedit.cpp:59
+msgctxt "QObject|Size Policy"
+msgid "Maximum"
+msgstr "最大"
+
+#: editors/sizepolicyedit.cpp:60
+msgctxt "QObject|Size Policy"
+msgid "Preferred"
+msgstr "首选"
+
+#: editors/sizepolicyedit.cpp:61
+msgctxt "QObject|Size Policy"
+msgid "Expanding"
+msgstr "展开"
+
+#: editors/sizepolicyedit.cpp:62
+msgctxt "QObject|Size Policy"
+msgid "Minimum Expanding"
+msgstr "最小展开"
+
+#: editors/sizepolicyedit.cpp:63
+msgctxt "QObject|Size Policy"
+msgid "Ignored"
+msgstr "忽略"
+
+#: editors/sizepolicyedit.cpp:86
+#, qt-format
+msgctxt "QObject|Size Policy"
+msgid "%1, %2, %3, %4"
+msgstr "%1, %2, %3, %4"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Hor. Policy"
+msgstr "水平策略"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Horizontal Policy"
+msgstr "水平策略"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vert. Policy"
+msgstr "垂直策略"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vertical Policy"
+msgstr "垂直策略"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Hor. Stretch"
+msgstr "水平拉伸"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Horizontal Stretch"
+msgstr "水平拉伸"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vert. Stretch"
+msgstr "垂直拉伸"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vertical Stretch"
+msgstr "垂直拉伸"
+
+#: editors/utils.cpp:27
+msgctxt "QObject|Three dots for 'Insert image from file' button"
+msgid "..."
+msgstr "..."
+
+#: KPropertyEditorDataModel_p.cpp:220
+msgctxt "KPropertyEditorDataModel|Property name"
+msgid "Name"
+msgstr "名称"
+
+#: KPropertyEditorDataModel_p.cpp:222
+msgctxt "KPropertyEditorDataModel|Property value"
+msgid "Value"
+msgstr "值"
+
+#: KPropertyEditorView.cpp:646
+msgctxt "KPropertyEditorView|"
+msgid "Undo changes"
+msgstr "撤销更改"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:40
+msgctxt "QObject|No Line"
+msgid "None"
+msgstr "无"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:41
+msgctxt "QObject|"
+msgid "Solid Line"
+msgstr "实线"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:42
+msgctxt "QObject|"
+msgid "Dash Line"
+msgstr "虚线"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:43
+msgctxt "QObject|"
+msgid "Dot Line"
+msgstr "点线"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:44
+msgctxt "QObject|"
+msgid "Dash-Dot Line"
+msgstr "点虚相间线"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:45
+msgctxt "QObject|"
+msgid "Dash-Dot-Dot Line"
+msgstr "双点虚相间线"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:46
+msgctxt "QObject|"
+msgid "Custom Dash Line"
+msgstr "自定义虚线"

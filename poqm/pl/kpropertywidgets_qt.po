@@ -1,0 +1,542 @@
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2015, 2016, 2017, 2018, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2019-01-20 06:40+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 19.03.70\n"
+
+#: editors/3rdparty/KColorCombo.cpp:339
+msgctxt "KColorCombo|Custom color"
+msgid "Custom..."
+msgstr "Własne..."
+
+#: editors/booledit.cpp:52
+msgctxt "QObject|Property value: Boolean state Yes"
+msgid "Yes"
+msgstr "Tak"
+
+#: editors/booledit.cpp:60
+msgctxt "QObject|Property value: Boolean state No"
+msgid "No"
+msgstr "Nie"
+
+#: editors/booledit.cpp:68
+msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+msgid "None"
+msgstr "Brak"
+
+#: editors/coloredit.cpp:36
+msgctxt "QObject|Invalid color"
+msgid "#invalid"
+msgstr "#nieprawidłowa"
+
+#: editors/cursoredit.cpp:118
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "No cursor"
+msgstr "Brak wskaźnika"
+
+#: editors/cursoredit.cpp:119
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Arrow"
+msgstr "Strzałka"
+
+#: editors/cursoredit.cpp:120
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Up arrow"
+msgstr "Strzałka w górę"
+
+#: editors/cursoredit.cpp:121
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Cross"
+msgstr "Krzyżyk"
+
+#: editors/cursoredit.cpp:122
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Waiting"
+msgstr "Oczekiwanie"
+
+#: editors/cursoredit.cpp:123
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Text cursor"
+msgstr "Kursor tekstowy"
+
+#: editors/cursoredit.cpp:124
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size vertical"
+msgstr "Rozmiar pionowy"
+
+#: editors/cursoredit.cpp:125
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size horizontal"
+msgstr "Rozmiar poziomy"
+
+#: editors/cursoredit.cpp:126
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size slash"
+msgstr "Rozmiar ukośnie"
+
+#: editors/cursoredit.cpp:127
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size backslash"
+msgstr "Rozmiar ukośnie wst."
+
+#: editors/cursoredit.cpp:128
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size all"
+msgstr "Rozmiar cały"
+
+#: editors/cursoredit.cpp:129
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split vertical"
+msgstr "Podziel w pionie"
+
+#: editors/cursoredit.cpp:130
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split horizontal"
+msgstr "Podziel w poziomie"
+
+#: editors/cursoredit.cpp:131
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Pointing hand"
+msgstr "Ręka wskazująca"
+
+#: editors/cursoredit.cpp:132
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Forbidden"
+msgstr "Zabronione"
+
+#: editors/cursoredit.cpp:133
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "What's this?"
+msgstr "Co to jest?"
+
+#: editors/cursoredit.cpp:134
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Busy"
+msgstr "Zajęty"
+
+#: editors/cursoredit.cpp:135
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Open hand"
+msgstr "Otwarta ręka"
+
+#: editors/cursoredit.cpp:136
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Closed hand"
+msgstr "Zamknięta ręka"
+
+#: editors/fontedit.cpp:49
+msgctxt "KPropertyFontEditRequester|"
+msgid "Click to select a font"
+msgstr "Naciśnij, aby wybrać czcionkę"
+
+#: editors/fontedit.cpp:50
+msgctxt "KPropertyFontEditRequester|"
+msgid "Selects font"
+msgstr "Wybiera czcionkę"
+
+#: editors/fontedit.cpp:115 editors/fontedit.cpp:117
+msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+msgid "Abc"
+msgstr "Abc"
+
+#: editors/fontedit.cpp:140
+#, qt-format
+msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
+msgid "%1%2"
+msgstr "%1%2"
+
+#: editors/fontedit.cpp:143
+msgctxt "QObject|bold font"
+msgid "bold"
+msgstr "pogrubiony"
+
+#: editors/fontedit.cpp:146
+msgctxt "QObject|italic font"
+msgid "italic"
+msgstr "pochylony"
+
+#: editors/fontedit.cpp:149
+msgctxt "QObject|strikeout font"
+msgid "strikeout"
+msgstr "przekreślony"
+
+#: editors/fontedit.cpp:152
+msgctxt "QObject|underline font"
+msgid "underline"
+msgstr "podkreślony"
+
+#: editors/KPropertyGenericSelectionEditor.cpp:41
+msgctxt "KPropertyGenericSelectionEditor|... button"
+msgid "..."
+msgstr "..."
+
+#: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
+#, qt-format
+msgctxt "QObject|Rectangle"
+msgid "%1, %2, %3x%4"
+msgstr "%1, %2, %3x%4"
+
+#: editors/KPropertyRectFEditor.cpp:55 editors/pointedit.cpp:47
+#: editors/pointfedit.cpp:56 editors/rectedit.cpp:47
+msgctxt "QObject|Property: X coordinate"
+msgid "X"
+msgstr "X"
+
+#: editors/KPropertyRectFEditor.cpp:56 editors/pointedit.cpp:48
+#: editors/pointfedit.cpp:57 editors/rectedit.cpp:48
+msgctxt "QObject|Property: X coordinate"
+msgid "X Coordinate"
+msgstr "Współrzędna X"
+
+#: editors/KPropertyRectFEditor.cpp:58 editors/pointedit.cpp:50
+#: editors/pointfedit.cpp:59 editors/rectedit.cpp:50
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y"
+msgstr "Y"
+
+#: editors/KPropertyRectFEditor.cpp:59 editors/pointedit.cpp:51
+#: editors/pointfedit.cpp:60 editors/rectedit.cpp:51
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y Coordinate"
+msgstr "Współrzędna Y"
+
+#: editors/KPropertyRectFEditor.cpp:61 editors/KPropertyRectFEditor.cpp:62
+#: editors/rectedit.cpp:53 editors/rectedit.cpp:54
+msgctxt "QObject|Property: width of rectangle"
+msgid "Width"
+msgstr "Szerokość"
+
+#: editors/KPropertyRectFEditor.cpp:64 editors/KPropertyRectFEditor.cpp:65
+#: editors/rectedit.cpp:56 editors/rectedit.cpp:57
+msgctxt "QObject|Property: height of rectangle"
+msgid "Height"
+msgstr "Wysokość"
+
+#: editors/KPropertyUrlEditor_p.cpp:182
+msgctxt "QObject|"
+msgid "Select Existing File"
+msgstr "Wybierz istniejący plik"
+
+#: editors/KPropertyUrlEditor_p.cpp:184
+msgctxt "QObject|"
+msgid "Select Existing Directory"
+msgstr "Wybierz istniejący katalog"
+
+#: editors/KPropertyUrlEditor_p.cpp:186
+msgctxt "QObject|"
+msgid "Select File"
+msgstr "Wybierz plik"
+
+#: editors/pixmapedit.cpp:78
+msgctxt "KPropertyPixmapEditor|"
+msgid "Click to show image preview"
+msgstr "Naciśnij, aby pokazać podgląd"
+
+#: editors/pixmapedit.cpp:86
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert image from file"
+msgstr "Wstaw obraz z pliku"
+
+#: editors/pixmapedit.cpp:87
+msgctxt "KPropertyPixmapEditor|"
+msgid "Inserts image from file"
+msgstr "Wstawia obraz z pliku"
+
+#: editors/pixmapedit.cpp:142
+#, qt-format
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert Image From File (for \"%1\" property)"
+msgstr "Wstaw obraz z pliku (dla właściwości \"%1\")"
+
+#: editors/pixmapedit.cpp:336
+msgctxt "QObject|No pixmap"
+msgid "None"
+msgstr "Brak"
+
+#: editors/pixmapedit.cpp:341
+#, qt-format
+msgctxt "QObject|"
+msgid "%1x%2px"
+msgstr "%1x%2px"
+
+#: editors/pointedit.cpp:36 editors/pointfedit.cpp:45
+#, qt-format
+msgctxt "QObject|Point"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: editors/sizeedit.cpp:34 editors/sizefedit.cpp:42
+#, qt-format
+msgctxt "QObject|Size"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: editors/sizeedit.cpp:45 editors/sizefedit.cpp:53
+msgctxt "QObject|"
+msgid "Width"
+msgstr "Szerokość"
+
+#: editors/sizeedit.cpp:47 editors/sizefedit.cpp:55
+msgctxt "QObject|"
+msgid "Height"
+msgstr "Wysokość"
+
+#: editors/sizepolicyedit.cpp:57
+msgctxt "QObject|Size Policy"
+msgid "Fixed"
+msgstr "Stała"
+
+#: editors/sizepolicyedit.cpp:58
+msgctxt "QObject|Size Policy"
+msgid "Minimum"
+msgstr "Minimum"
+
+#: editors/sizepolicyedit.cpp:59
+msgctxt "QObject|Size Policy"
+msgid "Maximum"
+msgstr "Maksimum"
+
+#: editors/sizepolicyedit.cpp:60
+msgctxt "QObject|Size Policy"
+msgid "Preferred"
+msgstr "Zalecana"
+
+#: editors/sizepolicyedit.cpp:61
+msgctxt "QObject|Size Policy"
+msgid "Expanding"
+msgstr "Rozszerzalny"
+
+#: editors/sizepolicyedit.cpp:62
+msgctxt "QObject|Size Policy"
+msgid "Minimum Expanding"
+msgstr "Min. rozszerzalny"
+
+#: editors/sizepolicyedit.cpp:63
+msgctxt "QObject|Size Policy"
+msgid "Ignored"
+msgstr "Pomijany"
+
+#: editors/sizepolicyedit.cpp:86
+#, qt-format
+msgctxt "QObject|Size Policy"
+msgid "%1, %2, %3, %4"
+msgstr "%1, %2, %3, %4"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Hor. Policy"
+msgstr "Zasady poz."
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Horizontal Policy"
+msgstr "Zasady w poziomie"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vert. Policy"
+msgstr "Zasady pion."
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vertical Policy"
+msgstr "Zasady w pionie"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Hor. Stretch"
+msgstr "Poz. rozciągn."
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Horizontal Stretch"
+msgstr "Poziome rozciągnięcie"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vert. Stretch"
+msgstr "Pion. rozciągn."
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vertical Stretch"
+msgstr "Pionowe rozciągniecie"
+
+#: editors/utils.cpp:27
+msgctxt "QObject|Three dots for 'Insert image from file' button"
+msgid "..."
+msgstr "..."
+
+#: KPropertyEditorDataModel_p.cpp:220
+msgctxt "KPropertyEditorDataModel|Property name"
+msgid "Name"
+msgstr "Nazwa"
+
+#: KPropertyEditorDataModel_p.cpp:222
+msgctxt "KPropertyEditorDataModel|Property value"
+msgid "Value"
+msgstr "Wartość"
+
+#: KPropertyEditorView.cpp:646
+msgctxt "KPropertyEditorView|"
+msgid "Undo changes"
+msgstr "Wycofaj zmiany"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:40
+msgctxt "QObject|No Line"
+msgid "None"
+msgstr "Brak"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:41
+msgctxt "QObject|"
+msgid "Solid Line"
+msgstr "Linia ciągła"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:42
+msgctxt "QObject|"
+msgid "Dash Line"
+msgstr "Linia kreskowana"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:43
+msgctxt "QObject|"
+msgid "Dot Line"
+msgstr "Linia kropkowana "
+
+#: KPropertyLineStyleItemDelegate_p.cpp:44
+msgctxt "QObject|"
+msgid "Dash-Dot Line"
+msgstr "Linia kreska-kropka"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:45
+msgctxt "QObject|"
+msgid "Dash-Dot-Dot Line"
+msgstr "Linia kreska-kropka-kropka"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:46
+msgctxt "QObject|"
+msgid "Custom Dash Line"
+msgstr "Własna linia kreskowana"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Select item"
+#~ msgstr "Zaznacz element"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Selects one item"
+#~ msgstr "Zaznacza jeden element"
+
+#~ msgctxt "KPropertyStringListEditor|Window title"
+#~ msgid "Edit List of Items"
+#~ msgstr "Edytuj listę elementów"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Contents of %1"
+#~ msgstr "Zawartość %1"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Select symbol"
+#~ msgstr "Zaznacz symbol"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Selects a symbol"
+#~ msgstr "Zaznacza symbol"
+
+#~ msgctxt "KPropertySymbolComboEditor|Window title"
+#~ msgid "Select Character"
+#~ msgstr "Zaznacz znak"
+
+#~ msgctxt "QObject|Truncated string"
+#~ msgid "%1..."
+#~ msgstr "%1..."
+
+#~ msgctxt "QObject|General properties"
+#~ msgid "General"
+#~ msgstr "Ogólne"
+
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Could not open icon resource file \"%1\". Application will not start. "
+#~ "Please check if it is properly installed."
+#~ msgstr ""
+#~ "Nie można otworzyć pliku ikony \"%1\". Aplikacja nie zostanie "
+#~ "uruchomiona. Sprawdź czy została ona właściwie wgrana."
+
+#~ msgctxt "QObject|"
+#~ msgid "Tried to find in %1."
+#~ msgstr "Próbowano znaleźć w %1."
+
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "\"%1\"  supports only \"%2\" icon theme but current system theme is "
+#~ "\"%3\". Application's icon theme will be changed to \"%2\". Please "
+#~ "consider adding support for other themes to %4."
+#~ msgstr ""
+#~ "\"%1\"  obsługuje tylko zestaw ikon \"%2\", lecz obecny zestaw ikon w "
+#~ "systemie to \"%3\". Zestaw ikon dla aplikacji zostanie zmieniony \"%2\". "
+#~ "Rozważ dodanie obsługi dla innych zestawów ikon w %4."
+
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to set icon theme to \"%1\". Icons in the application will be "
+#~ "inconsistent. Please install .rcc file(s) for the system theme."
+#~ msgstr ""
+#~ "Nie udało się ustawić zestawu ikon na \"%1\". Ikony w aplikacji będą "
+#~ "niespójne. Wgraj plik(i) .rcc w twoim systemie."
+
+#~ msgctxt "QObject|<value> <suffix>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgctxt "QObject|<prefix> <value>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgctxt "QObject|Null value"
+#~ msgid "None"
+#~ msgstr "Brak"
+
+#~ msgctxt "QObject|"
+#~ msgid "Millimeters (mm)"
+#~ msgstr "Milimetry (mm)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Centimeters (cm)"
+#~ msgstr "Centymetry (cm)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Decimeters (dm)"
+#~ msgstr "Decymetry (dm)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Inches (in)"
+#~ msgstr "Cale (in)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Pica (pi)"
+#~ msgstr "Pica (pi)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Cicero (cc)"
+#~ msgstr "Cycero (cc)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Points (pt)"
+#~ msgstr "Punkty (pt)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Pixels (px)"
+#~ msgstr "Piksele (px)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Unsupported unit"
+#~ msgstr "Nieobsługiwana jednostka"

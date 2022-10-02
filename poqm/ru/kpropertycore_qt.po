@@ -1,0 +1,449 @@
+#
+# Nick Shaforostoff <shafff@ukr.net>, 2006.
+# Alexander Potashev <aspotashev@gmail.com>, 2010, 2015.
+# Yuri Efremov <yur.arh@gmail.com>, 2011.
+# Georgiy Syptchenko <superzhook@gmail.com>, 2014.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: koproperty\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2015-02-23 06:14+0000\n"
+"PO-Revision-Date: 2020-05-10 15:35+0300\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Qt-Contexts: true\n"
+
+#: KPropertyFactory.cpp:148
+#, qt-format
+msgctxt "QObject|Truncated string"
+msgid "%1..."
+msgstr "%1..."
+
+#: KPropertySet.cpp:31
+msgctxt "QObject|General properties"
+msgid "General"
+msgstr "Основное"
+
+#~ msgctxt "QObject|Property value: Boolean state Yes"
+#~ msgid "Yes"
+#~ msgstr "Да"
+
+#~ msgctxt "QObject|Property value: Boolean state No"
+#~ msgid "No"
+#~ msgstr "Нет"
+
+#~ msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+#~ msgid "None"
+#~ msgstr "Не определено"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "No cursor"
+#~ msgstr "Без курсора"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Arrow"
+#~ msgstr "Стрелка"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Up arrow"
+#~ msgstr "Стрелка вверх"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Cross"
+#~ msgstr "Крест"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Waiting"
+#~ msgstr "Ожидание"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Text cursor"
+#~ msgstr "Текстовый указатель"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size vertical"
+#~ msgstr "Изменение высоты"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size horizontal"
+#~ msgstr "Изменение ширины"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size slash"
+#~ msgstr "Изменение размера 1"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size backslash"
+#~ msgstr "Изменение размера 2"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size all"
+#~ msgstr "Изменение размера"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Split vertical"
+#~ msgstr "Вертикальное разделение"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Split horizontal"
+#~ msgstr "Горизонтальное разделение"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Pointing hand"
+#~ msgstr "Указывающая рука"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Forbidden"
+#~ msgstr "Запрещено"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "What's this?"
+#~ msgstr "Что это?"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Busy"
+#~ msgstr "Занятость"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Open hand"
+#~ msgstr "Разжатая рука"
+
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Closed hand"
+#~ msgstr "Сжатая рука"
+
+# BUGME: please remove "Click to" --aspotashev
+#~ msgctxt "KPropertyFontEditRequester|"
+#~ msgid "Click to select a font"
+#~ msgstr "Выбрать шрифт"
+
+#~ msgctxt "KPropertyFontEditRequester|"
+#~ msgid "Selects font"
+#~ msgstr "Открывает диалог выбора шрифта."
+
+#~ msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+#~ msgid "Abc"
+#~ msgstr "Абв"
+
+#, fuzzy
+#~| msgctxt "QObject|Three dots for 'Insert image from file' button"
+#~| msgid "..."
+#~ msgctxt "KPropertyGenericSelectionEditor|... button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "QObject|Property: X coordinate"
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgctxt "QObject|Property: X coordinate"
+#~ msgid "X Coordinate"
+#~ msgstr "Координата по горизонтали"
+
+#~ msgctxt "QObject|Property: Y coordinate"
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgctxt "QObject|Property: Y coordinate"
+#~ msgid "Y Coordinate"
+#~ msgstr "Координата по вертикали"
+
+#~ msgctxt "QObject|Property: width of rectangle"
+#~ msgid "Width"
+#~ msgstr "Ширина"
+
+#~ msgctxt "QObject|Property: height of rectangle"
+#~ msgid "Height"
+#~ msgstr "Высота"
+
+#, fuzzy
+#~| msgctxt "KPropertySymbolComboEditor|"
+#~| msgid "Select symbol"
+#~ msgctxt "KPropertyUrlEditor|"
+#~ msgid "Select File"
+#~ msgstr "Выбрать символ"
+
+#, fuzzy
+#~| msgctxt "KPropertySymbolComboEditor|Window title"
+#~| msgid "Select Character"
+#~ msgctxt "KPropertyUrlEditor|"
+#~ msgid "Select Directory"
+#~ msgstr "Выбор символа"
+
+# BUGME: please remove "Click to" --aspotashev
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Click to show image preview"
+#~ msgstr "Предварительный просмотр изображения"
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Insert image from file"
+#~ msgstr "Вставить изображение из файла"
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Inserts image from file"
+#~ msgstr "Открывает окно выбора файла изображения."
+
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Insert Image From File (for \"%1\" property)"
+#~ msgstr "Вставка изображения из файла (для свойства «%1»)"
+
+#, fuzzy
+#~| msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+#~| msgid "None"
+#~ msgctxt "QObject|No pixmap"
+#~ msgid "None"
+#~ msgstr "Не определено"
+
+#, fuzzy
+#~| msgctxt "QObject|Font family and size, e.g. Arial, 2pt"
+#~| msgid "%1, %2pt"
+#~ msgctxt "QObject|Point"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2 пт"
+
+#~ msgctxt "QObject|"
+#~ msgid "Width"
+#~ msgstr "Ширина"
+
+#~ msgctxt "QObject|"
+#~ msgid "Height"
+#~ msgstr "Высота"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Fixed"
+#~ msgstr "Фиксированный"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Minimum"
+#~ msgstr "Минимальный"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Maximum"
+#~ msgstr "Максимальный"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Preferred"
+#~ msgstr "Предпочитаемый"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Expanding"
+#~ msgstr "Расширяемый"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Minimum Expanding"
+#~ msgstr "Минимально расширяемый"
+
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Ignored"
+#~ msgstr "Игнорируется"
+
+#~ msgctxt "QObject|"
+#~ msgid "Hor. Policy"
+#~ msgstr "Гор. размер"
+
+#~ msgctxt "QObject|"
+#~ msgid "Horizontal Policy"
+#~ msgstr "Выбор горизонтального размера"
+
+#~ msgctxt "QObject|"
+#~ msgid "Vert. Policy"
+#~ msgstr "Верт. размер"
+
+#~ msgctxt "QObject|"
+#~ msgid "Vertical Policy"
+#~ msgstr "Выбор вертикального размера"
+
+#~ msgctxt "QObject|"
+#~ msgid "Hor. Stretch"
+#~ msgstr "Гор. растяжение"
+
+#~ msgctxt "QObject|"
+#~ msgid "Horizontal Stretch"
+#~ msgstr "Горизонтальное растяжение"
+
+#~ msgctxt "QObject|"
+#~ msgid "Vert. Stretch"
+#~ msgstr "Верт. растяжение"
+
+#~ msgctxt "QObject|"
+#~ msgid "Vertical Stretch"
+#~ msgstr "Вертикальное растяжение"
+
+#~ msgctxt "KPropertyStringListEditor|Window title"
+#~ msgid "Edit List of Items"
+#~ msgstr "Редактирование списка"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Contents of %1"
+#~ msgstr "Содержимое %1"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Select symbol"
+#~ msgstr "Выбрать символ"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Selects a symbol"
+#~ msgstr "Открывает диалог выбора символа."
+
+#~ msgctxt "KPropertySymbolComboEditor|Window title"
+#~ msgid "Select Character"
+#~ msgstr "Выбор символа"
+
+#~ msgctxt "QObject|Three dots for 'Insert image from file' button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "KPropertyEditorDataModel|Property name"
+#~ msgid "Name"
+#~ msgstr "Название"
+
+#~ msgctxt "KPropertyEditorDataModel|Property value"
+#~ msgid "Value"
+#~ msgstr "Значение"
+
+#~ msgctxt "KPropertyEditorView|"
+#~ msgid "Undo changes"
+#~ msgstr "Отменить изменения"
+
+#, fuzzy
+#~| msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+#~| msgid "None"
+#~ msgctxt "QObject|No Line"
+#~ msgid "None"
+#~ msgstr "Не определено"
+
+#, fuzzy
+#~| msgctxt "QObject|<text> <unit>"
+#~| msgid "%1 %2"
+#~ msgctxt "QObject|<value> <suffix>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#, fuzzy
+#~| msgctxt "QObject|<text> <unit>"
+#~| msgid "%1 %2"
+#~ msgctxt "QObject|<prefix> <value>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#, fuzzy
+#~| msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+#~| msgid "None"
+#~ msgctxt "QObject|Null value"
+#~ msgid "None"
+#~ msgstr "Не определено"
+
+#~ msgctxt "QObject|"
+#~ msgid "Millimeters (mm)"
+#~ msgstr "Миллиметры (мм)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Centimeters (cm)"
+#~ msgstr "Сантиметры (см)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Decimeters (dm)"
+#~ msgstr "Дециметры (дм)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Inches (in)"
+#~ msgstr "Дюймы (дм)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Pica (pi)"
+#~ msgstr "Пика (pi)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Cicero (cc)"
+#~ msgstr "Цицеро (cc)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Points (pt)"
+#~ msgstr "Пункты (пт)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Pixels (px)"
+#~ msgstr "Пикселы (пикс.)"
+
+#~ msgctxt "QObject|"
+#~ msgid "Unsupported unit"
+#~ msgstr "Неподдерживаемая единица измерения"
+
+#~ msgctxt "Property name"
+#~ msgid "Name"
+#~ msgstr "Имя"
+
+#~ msgctxt "Property value"
+#~ msgid "Value"
+#~ msgstr "Значение"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "Three dots for 'Insert image from file' button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Width"
+#~ msgctxt "Property: width of rectangle"
+#~ msgid "Width"
+#~ msgstr "Ширина"
+
+#, fuzzy
+#~| msgid "Height"
+#~ msgctxt "Property: height of rectangle"
+#~ msgid "Height"
+#~ msgstr "Высота"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Николай Шафоростов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "shafff@ukr.net"
+
+#~ msgid "Change font"
+#~ msgstr "Выбрать шрифт"
+
+#, fuzzy
+#~| msgid "Change font"
+#~ msgid "Changes font"
+#~ msgstr "Выбрать шрифт"
+
+#, fuzzy
+#~| msgid "Horz. Size Type"
+#~ msgctxt "Size Policy, in short"
+#~ msgid "Horz. Size Type"
+#~ msgstr "Тип горизонтального размера"
+
+#, fuzzy
+#~| msgid "Vert. Size Type"
+#~ msgctxt "Size Policy, in short"
+#~ msgid "Vert. Size Type"
+#~ msgstr "Тип вертикального размера"
+
+#~ msgctxt "Mouse Cursor Shape"
+#~ msgid "I"
+#~ msgstr "I"
+
+#~ msgid ""
+#~ "Position: %1, %2\n"
+#~ "Size: %3 x %4"
+#~ msgstr ""
+#~ "Положение: %1, %2\n"
+#~ "Размер: %3 x %4"
+
+#~ msgid "Bold"
+#~ msgstr "Полужирный"

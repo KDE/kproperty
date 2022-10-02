@@ -1,0 +1,431 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+# Shinjo Park <kde@peremen.name>, 2019, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2020-03-30 01:33+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: editors/3rdparty/KColorCombo.cpp:339
+msgctxt "KColorCombo|Custom color"
+msgid "Custom..."
+msgstr "사용자 정의..."
+
+#: editors/booledit.cpp:52
+msgctxt "QObject|Property value: Boolean state Yes"
+msgid "Yes"
+msgstr "예"
+
+#: editors/booledit.cpp:60
+msgctxt "QObject|Property value: Boolean state No"
+msgid "No"
+msgstr "아니요"
+
+#: editors/booledit.cpp:68
+msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+msgid "None"
+msgstr "없음"
+
+#: editors/coloredit.cpp:36
+msgctxt "QObject|Invalid color"
+msgid "#invalid"
+msgstr "#인식 불가"
+
+#: editors/cursoredit.cpp:118
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "No cursor"
+msgstr "커서 없음"
+
+#: editors/cursoredit.cpp:119
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Arrow"
+msgstr "화살표"
+
+#: editors/cursoredit.cpp:120
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Up arrow"
+msgstr "위쪽 화살표"
+
+#: editors/cursoredit.cpp:121
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Cross"
+msgstr "격자"
+
+#: editors/cursoredit.cpp:122
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Waiting"
+msgstr "기다리는 중"
+
+#: editors/cursoredit.cpp:123
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Text cursor"
+msgstr "텍스트 커서"
+
+#: editors/cursoredit.cpp:124
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size vertical"
+msgstr "세로 크기"
+
+#: editors/cursoredit.cpp:125
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size horizontal"
+msgstr "가로 크기"
+
+#: editors/cursoredit.cpp:126
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size slash"
+msgstr "/ 크기"
+
+#: editors/cursoredit.cpp:127
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size backslash"
+msgstr "\\ 크기"
+
+#: editors/cursoredit.cpp:128
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Size all"
+msgstr "전체 크기"
+
+#: editors/cursoredit.cpp:129
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split vertical"
+msgstr "수직 분할"
+
+#: editors/cursoredit.cpp:130
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Split horizontal"
+msgstr "수평 분할"
+
+#: editors/cursoredit.cpp:131
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Pointing hand"
+msgstr "가리키는 손"
+
+#: editors/cursoredit.cpp:132
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Forbidden"
+msgstr "금지됨"
+
+#: editors/cursoredit.cpp:133
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "What's this?"
+msgstr "이것에 대한 설명"
+
+#: editors/cursoredit.cpp:134
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Busy"
+msgstr "바쁨"
+
+#: editors/cursoredit.cpp:135
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Open hand"
+msgstr "열린 손"
+
+#: editors/cursoredit.cpp:136
+msgctxt "QObject|Mouse Cursor Shape"
+msgid "Closed hand"
+msgstr "닫힌 손"
+
+#: editors/fontedit.cpp:49
+msgctxt "KPropertyFontEditRequester|"
+msgid "Click to select a font"
+msgstr "클릭하여 글꼴 선택"
+
+#: editors/fontedit.cpp:50
+msgctxt "KPropertyFontEditRequester|"
+msgid "Selects font"
+msgstr "글꼴 선택"
+
+#: editors/fontedit.cpp:115 editors/fontedit.cpp:117
+msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+msgid "Abc"
+msgstr "ㄱㄴㄷ"
+
+#: editors/fontedit.cpp:140
+#, qt-format
+msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
+msgid "%1%2"
+msgstr "%1 %2"
+
+#: editors/fontedit.cpp:143
+msgctxt "QObject|bold font"
+msgid "bold"
+msgstr "굵게"
+
+#: editors/fontedit.cpp:146
+msgctxt "QObject|italic font"
+msgid "italic"
+msgstr "이탤릭"
+
+#: editors/fontedit.cpp:149
+msgctxt "QObject|strikeout font"
+msgid "strikeout"
+msgstr "취소선"
+
+#: editors/fontedit.cpp:152
+msgctxt "QObject|underline font"
+msgid "underline"
+msgstr "밑줄"
+
+#: editors/KPropertyGenericSelectionEditor.cpp:41
+msgctxt "KPropertyGenericSelectionEditor|... button"
+msgid "..."
+msgstr "..."
+
+#: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
+#, qt-format
+msgctxt "QObject|Rectangle"
+msgid "%1, %2, %3x%4"
+msgstr "%1, %2, %3x%4"
+
+#: editors/KPropertyRectFEditor.cpp:55 editors/pointedit.cpp:47
+#: editors/pointfedit.cpp:56 editors/rectedit.cpp:47
+msgctxt "QObject|Property: X coordinate"
+msgid "X"
+msgstr "X"
+
+#: editors/KPropertyRectFEditor.cpp:56 editors/pointedit.cpp:48
+#: editors/pointfedit.cpp:57 editors/rectedit.cpp:48
+msgctxt "QObject|Property: X coordinate"
+msgid "X Coordinate"
+msgstr "X 좌표"
+
+#: editors/KPropertyRectFEditor.cpp:58 editors/pointedit.cpp:50
+#: editors/pointfedit.cpp:59 editors/rectedit.cpp:50
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y"
+msgstr "Y"
+
+#: editors/KPropertyRectFEditor.cpp:59 editors/pointedit.cpp:51
+#: editors/pointfedit.cpp:60 editors/rectedit.cpp:51
+msgctxt "QObject|Property: Y coordinate"
+msgid "Y Coordinate"
+msgstr "Y 좌표"
+
+#: editors/KPropertyRectFEditor.cpp:61 editors/KPropertyRectFEditor.cpp:62
+#: editors/rectedit.cpp:53 editors/rectedit.cpp:54
+msgctxt "QObject|Property: width of rectangle"
+msgid "Width"
+msgstr "너비"
+
+#: editors/KPropertyRectFEditor.cpp:64 editors/KPropertyRectFEditor.cpp:65
+#: editors/rectedit.cpp:56 editors/rectedit.cpp:57
+msgctxt "QObject|Property: height of rectangle"
+msgid "Height"
+msgstr "높이"
+
+#: editors/KPropertyUrlEditor_p.cpp:182
+msgctxt "QObject|"
+msgid "Select Existing File"
+msgstr "기존 파일 선택"
+
+#: editors/KPropertyUrlEditor_p.cpp:184
+msgctxt "QObject|"
+msgid "Select Existing Directory"
+msgstr "기존 디렉터리 선택"
+
+#: editors/KPropertyUrlEditor_p.cpp:186
+msgctxt "QObject|"
+msgid "Select File"
+msgstr "파일 선택"
+
+#: editors/pixmapedit.cpp:78
+msgctxt "KPropertyPixmapEditor|"
+msgid "Click to show image preview"
+msgstr "그림을 미리 보려면 클릭하십시오"
+
+#: editors/pixmapedit.cpp:86
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert image from file"
+msgstr "파일에서 그림 삽입"
+
+#: editors/pixmapedit.cpp:87
+msgctxt "KPropertyPixmapEditor|"
+msgid "Inserts image from file"
+msgstr "파일에서 그림 삽입"
+
+#: editors/pixmapedit.cpp:142
+#, qt-format
+msgctxt "KPropertyPixmapEditor|"
+msgid "Insert Image From File (for \"%1\" property)"
+msgstr "파일에서 그림 삽입 (\"%1\" 속성)"
+
+#: editors/pixmapedit.cpp:336
+msgctxt "QObject|No pixmap"
+msgid "None"
+msgstr "없음"
+
+#: editors/pixmapedit.cpp:341
+#, qt-format
+msgctxt "QObject|"
+msgid "%1x%2px"
+msgstr "%1x%2 px"
+
+#: editors/pointedit.cpp:36 editors/pointfedit.cpp:45
+#, qt-format
+msgctxt "QObject|Point"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: editors/sizeedit.cpp:34 editors/sizefedit.cpp:42
+#, qt-format
+msgctxt "QObject|Size"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: editors/sizeedit.cpp:45 editors/sizefedit.cpp:53
+msgctxt "QObject|"
+msgid "Width"
+msgstr "너비"
+
+#: editors/sizeedit.cpp:47 editors/sizefedit.cpp:55
+msgctxt "QObject|"
+msgid "Height"
+msgstr "높이"
+
+#: editors/sizepolicyedit.cpp:57
+msgctxt "QObject|Size Policy"
+msgid "Fixed"
+msgstr "고정됨"
+
+#: editors/sizepolicyedit.cpp:58
+msgctxt "QObject|Size Policy"
+msgid "Minimum"
+msgstr "최소"
+
+#: editors/sizepolicyedit.cpp:59
+msgctxt "QObject|Size Policy"
+msgid "Maximum"
+msgstr "최대"
+
+#: editors/sizepolicyedit.cpp:60
+msgctxt "QObject|Size Policy"
+msgid "Preferred"
+msgstr "선호됨"
+
+#: editors/sizepolicyedit.cpp:61
+msgctxt "QObject|Size Policy"
+msgid "Expanding"
+msgstr "확장"
+
+#: editors/sizepolicyedit.cpp:62
+msgctxt "QObject|Size Policy"
+msgid "Minimum Expanding"
+msgstr "최소 확장"
+
+#: editors/sizepolicyedit.cpp:63
+msgctxt "QObject|Size Policy"
+msgid "Ignored"
+msgstr "무시됨"
+
+#: editors/sizepolicyedit.cpp:86
+#, qt-format
+msgctxt "QObject|Size Policy"
+msgid "%1, %2, %3, %4"
+msgstr "%1, %2, %3, %4"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Hor. Policy"
+msgstr "수평 정책"
+
+#: editors/sizepolicyedit.cpp:105
+msgctxt "QObject|"
+msgid "Horizontal Policy"
+msgstr "수평 정책"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vert. Policy"
+msgstr "수직 정책"
+
+#: editors/sizepolicyedit.cpp:108
+msgctxt "QObject|"
+msgid "Vertical Policy"
+msgstr "수직 정책"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Hor. Stretch"
+msgstr "수평 확장"
+
+#: editors/sizepolicyedit.cpp:111
+msgctxt "QObject|"
+msgid "Horizontal Stretch"
+msgstr "수평 확장"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vert. Stretch"
+msgstr "수직 확장"
+
+#: editors/sizepolicyedit.cpp:114
+msgctxt "QObject|"
+msgid "Vertical Stretch"
+msgstr "수직 확장"
+
+#: editors/utils.cpp:27
+msgctxt "QObject|Three dots for 'Insert image from file' button"
+msgid "..."
+msgstr "..."
+
+#: KPropertyEditorDataModel_p.cpp:220
+msgctxt "KPropertyEditorDataModel|Property name"
+msgid "Name"
+msgstr "이름"
+
+#: KPropertyEditorDataModel_p.cpp:222
+msgctxt "KPropertyEditorDataModel|Property value"
+msgid "Value"
+msgstr "값"
+
+#: KPropertyEditorView.cpp:646
+msgctxt "KPropertyEditorView|"
+msgid "Undo changes"
+msgstr "변경 사항 취소"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:40
+msgctxt "QObject|No Line"
+msgid "None"
+msgstr "없음"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:41
+msgctxt "QObject|"
+msgid "Solid Line"
+msgstr "실선"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:42
+msgctxt "QObject|"
+msgid "Dash Line"
+msgstr "대시 선"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:43
+msgctxt "QObject|"
+msgid "Dot Line"
+msgstr "점선"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:44
+msgctxt "QObject|"
+msgid "Dash-Dot Line"
+msgstr "대시-점 선"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:45
+msgctxt "QObject|"
+msgid "Dash-Dot-Dot Line"
+msgstr "대시-점-점 선"
+
+#: KPropertyLineStyleItemDelegate_p.cpp:46
+msgctxt "QObject|"
+msgid "Custom Dash Line"
+msgstr "사용자 정의 대시 선"
