@@ -368,8 +368,8 @@ void KPropertySetIterator::setOrder(KPropertySetIterator::Order order)
             }
             propertiesAndStrings.append( qMakePair(prop, captionOrName) );
         }
-        qSort(propertiesAndStrings.begin(), propertiesAndStrings.end(),
-            Iterator_propertyAndStringLessThan);
+        std::sort(propertiesAndStrings.begin(), propertiesAndStrings.end(),
+                  Iterator_propertyAndStringLessThan);
         d->sorted.clear();
         foreach (const Iterator_PropertyAndString& propertyAndString, propertiesAndStrings) {
             d->sorted.append(propertyAndString.first);

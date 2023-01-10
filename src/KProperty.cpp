@@ -172,7 +172,7 @@ void KProperty::Private::addChild(KProperty *prop)
         return;
     }
 
-    if (!children || qFind(children->begin(), children->end(), prop) == children->end()) { // not in our list
+    if (!children || std::find(children->begin(), children->end(), prop) == children->end()) { // not in our list
         if (!children) {
             children = new QList<KProperty*>();
         }
@@ -738,7 +738,7 @@ KPROPERTYCORE_EXPORT QDebug operator<<(QDebug dbg, const KProperty &p)
     if (p.hasOptions()) {
         dbg.nospace() << " OPTIONS(" << p.d->options.count() << "): [";
         QList<QByteArray> optionKeys( p.d->options.keys() );
-        qSort(optionKeys);
+        std::sort(optionKeys.begin(), optionKeys.end());
         bool first = true;
         foreach (const QByteArray& key, optionKeys) {
             if (first) {
