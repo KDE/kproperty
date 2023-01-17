@@ -232,7 +232,7 @@ msgstr "Alçària"
 #: editors/KPropertyUrlEditor_p.cpp:182
 msgctxt "QObject|"
 msgid "Select Existing File"
-msgstr "Seleccioneu el fitxer existent"
+msgstr "Seleccioneu un fitxer existent"
 
 #: editors/KPropertyUrlEditor_p.cpp:184
 msgctxt "QObject|"
@@ -242,7 +242,7 @@ msgstr "Seleccioneu el directori existent"
 #: editors/KPropertyUrlEditor_p.cpp:186
 msgctxt "QObject|"
 msgid "Select File"
-msgstr "Seleccioneu el fitxer"
+msgstr "Seleccioneu un fitxer"
 
 #: editors/pixmapedit.cpp:78
 msgctxt "KPropertyPixmapEditor|"
