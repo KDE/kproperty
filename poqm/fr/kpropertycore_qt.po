@@ -1,0 +1,466 @@
+# Simon Depiets <sdepiets@gmail.com>, 2017, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kproperty_qt\n"
+"PO-Revision-Date: 2017-08-22 10:58+0800\n"
+"Last-Translator: Simon Depiets <sdepiets@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Qt-Contexts: true\n"
+
+#: KPropertyFactory.cpp:148
+#, qt-format
+msgctxt "QObject|Truncated string"
+msgid "%1..."
+msgstr "%1..."
+
+#: KPropertySet.cpp:31
+msgctxt "QObject|General properties"
+msgid "General"
+msgstr "Général"
+
+#, fuzzy
+#~ msgctxt "KColorCombo|Custom color"
+#~ msgid "Custom..."
+#~ msgstr "Personnalisée..."
+
+#, fuzzy
+#~ msgctxt "QObject|Property value: Boolean state Yes"
+#~ msgid "Yes"
+#~ msgstr "Oui"
+
+#, fuzzy
+#~ msgctxt "QObject|Property value: Boolean state No"
+#~ msgid "No"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgctxt "QObject|Invalid color"
+#~ msgid "#invalid"
+#~ msgstr "#non-valable"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "No cursor"
+#~ msgstr "Pas de curseur"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Arrow"
+#~ msgstr "Flèche"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Up arrow"
+#~ msgstr "Flèche vers le haut"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Cross"
+#~ msgstr "Croix"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Waiting"
+#~ msgstr "En attente"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Text cursor"
+#~ msgstr "Curseur de texte"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size vertical"
+#~ msgstr "Redimensionnement vertical"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size horizontal"
+#~ msgstr "Redimensionnement horizontal"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size slash"
+#~ msgstr "Redimensionnement barre oblique"
+
+# | msgid "Backspace"
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size backslash"
+#~ msgstr "Redimensionnement barre oblique inverse"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Size all"
+#~ msgstr "Redimensionnement complet"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Split vertical"
+#~ msgstr "Division verticale"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Split horizontal"
+#~ msgstr "Division horizontale"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Pointing hand"
+#~ msgstr "&Pointeur"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Forbidden"
+#~ msgstr "Interdit"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "What's this?"
+#~ msgstr "Qu'est-ce que c'est ?"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Busy"
+#~ msgstr "Occupé(e)"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Open hand"
+#~ msgstr "Main ouverte"
+
+#, fuzzy
+#~ msgctxt "QObject|Mouse Cursor Shape"
+#~ msgid "Closed hand"
+#~ msgstr "Main fermée"
+
+#, fuzzy
+#~ msgctxt "KPropertyFontEditRequester|"
+#~ msgid "Click to select a font"
+#~ msgstr "Cliquez pour choisir une police"
+
+#, fuzzy
+#~ msgctxt "KPropertyFontEditRequester|"
+#~ msgid "Selects font"
+#~ msgstr "Sélectionne une police"
+
+#, fuzzy
+#~ msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
+#~ msgid "Abc"
+#~ msgstr "Abc"
+
+#, fuzzy
+#~ msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
+#~ msgid "%1%2"
+#~ msgstr "%1%2"
+
+#, fuzzy
+#~ msgctxt "QObject|bold font"
+#~ msgid "bold"
+#~ msgstr "gras"
+
+#, fuzzy
+#~ msgctxt "QObject|italic font"
+#~ msgid "italic"
+#~ msgstr "italique"
+
+#, fuzzy
+#~ msgctxt "QObject|strikeout font"
+#~ msgid "strikeout"
+#~ msgstr "barré"
+
+#, fuzzy
+#~ msgctxt "QObject|underline font"
+#~ msgid "underline"
+#~ msgstr "souligné"
+
+#, fuzzy
+#~ msgctxt "KPropertyGenericSelectionEditor|... button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "QObject|Null value"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgctxt "QObject|Rectangle"
+#~ msgid "%1, %2, %3x%4"
+#~ msgstr "%1, %2, %3x%4"
+
+#, fuzzy
+#~ msgctxt "QObject|Property: X coordinate"
+#~ msgid "X"
+#~ msgstr "X"
+
+#, fuzzy
+#~ msgctxt "QObject|Property: X coordinate"
+#~ msgid "X Coordinate"
+#~ msgstr "Abscisse"
+
+#, fuzzy
+#~ msgctxt "QObject|Property: Y coordinate"
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#, fuzzy
+#~ msgctxt "QObject|Property: Y coordinate"
+#~ msgid "Y Coordinate"
+#~ msgstr "Ordonnée"
+
+#, fuzzy
+#~ msgctxt "QObject|Property: width of rectangle"
+#~ msgid "Width"
+#~ msgstr "Largeur"
+
+#, fuzzy
+#~ msgctxt "QObject|Property: height of rectangle"
+#~ msgid "Height"
+#~ msgstr "Hauteur"
+
+#, fuzzy
+#~ msgctxt "KPropertyUrlEditor|"
+#~ msgid "Select File"
+#~ msgstr "Sélectionner un fichier"
+
+#, fuzzy
+#~ msgctxt "KPropertyUrlEditor|"
+#~ msgid "Select Directory"
+#~ msgstr "Sélectionner un dossier"
+
+#, fuzzy
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Click to show image preview"
+#~ msgstr "Cliquez pour afficher la vue magnifiée."
+
+#, fuzzy
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Insert image from file"
+#~ msgstr "Insérer une image depuis un fichier"
+
+#, fuzzy
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Inserts image from file"
+#~ msgstr "Insère une image depuis un fichier"
+
+#, fuzzy
+#~ msgctxt "KPropertyPixmapEditor|"
+#~ msgid "Insert Image From File (for \"%1\" property)"
+#~ msgstr "Insérer une image depuis un fichier (pour la propriété « %1 »)"
+
+#, fuzzy
+#~ msgctxt "QObject|No pixmap"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "%1x%2px"
+#~ msgstr "%1x%2px"
+
+#, fuzzy
+#~ msgctxt "QObject|Point"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#, fuzzy
+#~ msgctxt "QObject|Size"
+#~ msgid "%1x%2"
+#~ msgstr "%1x%2"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Width"
+#~ msgstr "Largeur"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Height"
+#~ msgstr "Hauteur"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Fixed"
+#~ msgstr "Fixe"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Minimum"
+#~ msgstr "Minimum"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Maximum"
+#~ msgstr "Maximum"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Preferred"
+#~ msgstr "Préférée"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Expanding"
+#~ msgstr "Développer"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Minimum Expanding"
+#~ msgstr "Développement minimum :"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "Ignored"
+#~ msgstr "Ignoré"
+
+#, fuzzy
+#~ msgctxt "QObject|Size Policy"
+#~ msgid "%1, %2, %3, %4"
+#~ msgstr "%1, %2, %3, %4"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Hor. Policy"
+#~ msgstr "Politique hor."
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Horizontal Policy"
+#~ msgstr "Politique horizontale"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Vert. Policy"
+#~ msgstr "Politique vert."
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Vertical Policy"
+#~ msgstr "Politique verticale"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Hor. Stretch"
+#~ msgstr "Étirement hor."
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Horizontal Stretch"
+#~ msgstr "Étirement horizontal"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Vert. Stretch"
+#~ msgstr "Étirement vert."
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Vertical Stretch"
+#~ msgstr "Étirement vertical"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Select item"
+#~ msgstr "Sélectionner l'élément"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Selects one item"
+#~ msgstr "Sélectionne un élément"
+
+#~ msgctxt "KPropertyStringListEditor|Window title"
+#~ msgid "Edit List of Items"
+#~ msgstr "Modifier la liste d'éléments"
+
+#~ msgctxt "KPropertyStringListEditor|"
+#~ msgid "Contents of %1"
+#~ msgstr "Contenus de %1"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Select symbol"
+#~ msgstr "Sélectionner un symbole"
+
+#~ msgctxt "KPropertySymbolComboEditor|"
+#~ msgid "Selects a symbol"
+#~ msgstr "Sélectionne un symbole"
+
+#~ msgctxt "KPropertySymbolComboEditor|Window title"
+#~ msgid "Select Character"
+#~ msgstr "Sélectionner un caractère"
+
+#, fuzzy
+#~ msgctxt "QObject|Three dots for 'Insert image from file' button"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgctxt "KPropertyEditorDataModel|Property name"
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#, fuzzy
+#~ msgctxt "KPropertyEditorDataModel|Property value"
+#~ msgid "Value"
+#~ msgstr "Valeur"
+
+#, fuzzy
+#~ msgctxt "KPropertyEditorView|"
+#~ msgid "Undo changes"
+#~ msgstr "Annuler les modifications"
+
+#, fuzzy
+#~ msgctxt "QObject|No Line"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Solid Line"
+#~ msgstr "Ligne pleine"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Dash Line"
+#~ msgstr "Ligne en tirets"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Dot Line"
+#~ msgstr "Ligne pointillée"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Dash-Dot Line"
+#~ msgstr "Ligne tiret-point"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Dash-Dot-Dot Line"
+#~ msgstr "Ligne tiret-point-point"
+
+#, fuzzy
+#~ msgctxt "QObject|"
+#~ msgid "Custom Dash Line"
+#~ msgstr "Ligne en tirets personnalisés"
+
+#, fuzzy
+#~ msgctxt "QObject|<value> <suffix>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#, fuzzy
+#~ msgctxt "QObject|<prefix> <value>"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
