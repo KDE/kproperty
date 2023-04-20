@@ -239,7 +239,7 @@ msgstr "Selige File"
 #: editors/pixmapedit.cpp:78
 msgctxt "KPropertyPixmapEditor|"
 msgid "Click to show image preview"
-msgstr "Pulsa pro monstrar le vista preliminari de imagine"
+msgstr "Pulsa pro monstrar le vista preliminar de imagine"
 
 #: editors/pixmapedit.cpp:86
 msgctxt "KPropertyPixmapEditor|"

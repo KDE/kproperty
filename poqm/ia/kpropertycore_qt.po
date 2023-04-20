@@ -182,7 +182,7 @@ msgstr "General"
 
 #~ msgctxt "KPropertyPixmapEditor|"
 #~ msgid "Click to show image preview"
-#~ msgstr "Pulsa pro monstrar le vista preliminari de imagine"
+#~ msgstr "Pulsa pro monstrar le vista preliminar de imagine"
 
 #~ msgctxt "KPropertyPixmapEditor|"
 #~ msgid "Insert image from file"
