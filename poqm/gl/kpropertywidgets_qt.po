@@ -1,16 +1,17 @@
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2018.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2018, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2019-01-15 21:09+0100\n"
+"PO-Revision-Date: 2023-04-23 06:32+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Qt-Contexts: true\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
@@ -334,7 +335,7 @@ msgstr "%1, %2, %3, %4"
 #: editors/sizepolicyedit.cpp:105
 msgctxt "QObject|"
 msgid "Hor. Policy"
-msgstr "Regra de horz."
+msgstr "Regra horizontal"
 
 #: editors/sizepolicyedit.cpp:105
 msgctxt "QObject|"
@@ -354,7 +355,7 @@ msgstr "Regra de verticalidade"
 #: editors/sizepolicyedit.cpp:111
 msgctxt "QObject|"
 msgid "Hor. Stretch"
-msgstr "Estiramento horiz."
+msgstr "Estiramento horizontal"
 
 #: editors/sizepolicyedit.cpp:111
 msgctxt "QObject|"
