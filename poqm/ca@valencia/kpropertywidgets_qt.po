@@ -1,15 +1,15 @@
 # Translation of kpropertywidgets_qt.po to Catalan (Valencian)
-# Copyright (C) 2015-2021 This_file_is_part_of_KDE
+# Copyright (C) 2015-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2021.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2021, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2016, 2017, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kproperty\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"PO-Revision-Date: 2021-10-10 12:24+0200\n"
+"PO-Revision-Date: 2023-08-08 14:36+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
 msgctxt "KColorCombo|Custom color"
@@ -339,6 +339,7 @@ msgctxt "QObject|Size Policy"
 msgid "%1, %2, %3, %4"
 msgstr "%1, %2, %3, %4"
 
+# skip-rule: punctuation-period-no
 #: editors/sizepolicyedit.cpp:105
 msgctxt "QObject|"
 msgid "Hor. Policy"
@@ -349,6 +350,7 @@ msgctxt "QObject|"
 msgid "Horizontal Policy"
 msgstr "Política horitzontal"
 
+# skip-rule: punctuation-period-no
 #: editors/sizepolicyedit.cpp:108
 msgctxt "QObject|"
 msgid "Vert. Policy"
@@ -359,6 +361,7 @@ msgctxt "QObject|"
 msgid "Vertical Policy"
 msgstr "Política vertical"
 
+# skip-rule: punctuation-period-no
 #: editors/sizepolicyedit.cpp:111
 msgctxt "QObject|"
 msgid "Hor. Stretch"
@@ -369,6 +372,7 @@ msgctxt "QObject|"
 msgid "Horizontal Stretch"
 msgstr "Ampliació horitzontal"
 
+# skip-rule: punctuation-period-no
 #: editors/sizepolicyedit.cpp:114
 msgctxt "QObject|"
 msgid "Vert. Stretch"
