@@ -129,18 +129,6 @@ macro(add_unfinished_features_option)
                 "Include unfinished features (useful for testing but may confuse end-user)" OFF)
 endmacro()
 
-# Adds commands that generate ${_filename}${PROJECT_STABLE_VERSION_MAJOR}.pc file
-# out of ${_filename}.pc.cmake file and installs the .pc file to ${LIB_INSTALL_DIR}/pkgconfig.
-# These commands are not executed for WIN32.
-# ${CMAKE_SOURCE_DIR}/${_filename}.pc.cmake should exist.
-macro(add_pc_file _filename)
-  if (NOT WIN32)
-    set(_name ${_filename}${PROJECT_STABLE_VERSION_MAJOR})
-    configure_file(${CMAKE_SOURCE_DIR}/${_filename}.pc.cmake ${CMAKE_BINARY_DIR}/${_name}.pc @ONLY)
-    install(FILES ${CMAKE_BINARY_DIR}/${_name}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-  endif()
-endmacro()
-
 # Sets detailed version information for library co-installability.
 # - adds PROJECT_STABLE_VERSION_MAJOR to the lib name
 # - sets VERSION to PROJECT_STABLE_VERSION_MAJOR.PROJECT_STABLE_VERSION_MINOR.PROJECT_STABLE_VERSION_PATCH
