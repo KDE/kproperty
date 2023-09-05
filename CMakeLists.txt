@@ -51,8 +51,6 @@ if(KPROPERTY_WIDGETS)
 endif()
 
 add_unfinished_features_option()
-add_pc_file(KPropertyCore)
-add_pc_file(KPropertyWidgets)
 
 add_subdirectory(src)
 
