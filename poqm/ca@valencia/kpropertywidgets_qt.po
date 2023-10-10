@@ -237,7 +237,7 @@ msgstr "Seleccioneu un fitxer existent"
 #: editors/KPropertyUrlEditor_p.cpp:184
 msgctxt "QObject|"
 msgid "Select Existing Directory"
-msgstr "Seleccioneu el directori existent"
+msgstr "Seleccioneu un directori existent"
 
 #: editors/KPropertyUrlEditor_p.cpp:186
 msgctxt "QObject|"
