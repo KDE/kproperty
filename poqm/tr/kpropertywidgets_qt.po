@@ -1,9 +1,9 @@
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2022-07-01 20:09+0300\n"
+"PO-Revision-Date: 2023-11-26 01:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Qt-Contexts: true\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
 msgctxt "KColorCombo|Custom color"
@@ -184,7 +184,7 @@ msgstr "..."
 #, qt-format
 msgctxt "QObject|Rectangle"
 msgid "%1, %2, %3x%4"
-msgstr "%1, %2, %3x%4"
+msgstr "%1, %2, %3 x %4"
 
 #: editors/KPropertyRectFEditor.cpp:55 editors/pointedit.cpp:47
 #: editors/pointfedit.cpp:56 editors/rectedit.cpp:47
