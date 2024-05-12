@@ -24,7 +24,7 @@ msgstr ""
 #: editors/3rdparty/KColorCombo.cpp:339
 msgctxt "KColorCombo|Custom color"
 msgid "Custom..."
-msgstr "Personalitzat..."
+msgstr "Personalitzat…"
 
 #: editors/booledit.cpp:52
 msgctxt "QObject|Property value: Boolean state Yes"
@@ -185,7 +185,7 @@ msgstr "subratllada"
 #: editors/KPropertyGenericSelectionEditor.cpp:41
 msgctxt "KPropertyGenericSelectionEditor|... button"
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
 #, qt-format
@@ -386,7 +386,7 @@ msgstr "Ampliació vertical"
 #: editors/utils.cpp:27
 msgctxt "QObject|Three dots for 'Insert image from file' button"
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: KPropertyEditorDataModel_p.cpp:220
 msgctxt "KPropertyEditorDataModel|Property name"

@@ -25,7 +25,7 @@ msgstr ""
 #, qt-format
 msgctxt "QObject|Truncated string"
 msgid "%1..."
-msgstr "%1..."
+msgstr "%1…"
 
 #: KPropertySet.cpp:31
 msgctxt "QObject|General properties"
