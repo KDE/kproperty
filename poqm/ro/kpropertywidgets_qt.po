@@ -1,23 +1,23 @@
-# Sergiu Bivol <sergiu@cip.md>, 2020.
+# Sergiu Bivol <sergiu@cip.md>, 2020, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2020-09-15 00:05+0100\n"
+"PO-Revision-Date: 2024-06-09 14:52+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
-"Language-Team: Romanian\n"
+"Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 21.12.3\n"
 "X-Qt-Contexts: true\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
 msgctxt "KColorCombo|Custom color"
 msgid "Custom..."
-msgstr "Personalizat..."
+msgstr "Personalizată…"
 
 #: editors/booledit.cpp:52
 msgctxt "QObject|Property value: Boolean state Yes"
@@ -32,7 +32,7 @@ msgstr "Nu"
 #: editors/booledit.cpp:68
 msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
 msgid "None"
-msgstr ""
+msgstr "Niciuna"
 
 #: editors/coloredit.cpp:36
 msgctxt "QObject|Invalid color"
@@ -97,17 +97,17 @@ msgstr ""
 #: editors/cursoredit.cpp:129
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Split vertical"
-msgstr ""
+msgstr "Desparte pe verticală"
 
 #: editors/cursoredit.cpp:130
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Split horizontal"
-msgstr ""
+msgstr "Desparte pe orizontală"
 
 #: editors/cursoredit.cpp:131
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Pointing hand"
-msgstr ""
+msgstr "Mână arătătoare"
 
 #: editors/cursoredit.cpp:132
 msgctxt "QObject|Mouse Cursor Shape"
@@ -142,7 +142,7 @@ msgstr "Apăsați pentru a alege un font"
 #: editors/fontedit.cpp:50
 msgctxt "KPropertyFontEditRequester|"
 msgid "Selects font"
-msgstr ""
+msgstr "Alege fontul"
 
 #: editors/fontedit.cpp:115 editors/fontedit.cpp:117
 msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
@@ -178,7 +178,7 @@ msgstr "subliniat"
 #: editors/KPropertyGenericSelectionEditor.cpp:41
 msgctxt "KPropertyGenericSelectionEditor|... button"
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
 #, qt-format
@@ -415,14 +415,14 @@ msgstr "Linie punctată"
 #: KPropertyLineStyleItemDelegate_p.cpp:44
 msgctxt "QObject|"
 msgid "Dash-Dot Line"
-msgstr ""
+msgstr "Linie minus-punct"
 
 #: KPropertyLineStyleItemDelegate_p.cpp:45
 msgctxt "QObject|"
 msgid "Dash-Dot-Dot Line"
-msgstr ""
+msgstr "Linie minus-punct-punct"
 
 #: KPropertyLineStyleItemDelegate_p.cpp:46
 msgctxt "QObject|"
 msgid "Custom Dash Line"
-msgstr ""
+msgstr "Linie personalizată"
