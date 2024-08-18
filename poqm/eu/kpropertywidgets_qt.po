@@ -4,12 +4,12 @@
 # KDE euskaratzeko proiektuko arduraduna <xalba@euskalnet.net>
 #
 # Translators:
-# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2020.
+# SPDX-FileCopyrightText: 2020, 2024 Iñigo Salvador Azurmendi <xalba@euskalnet.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2020-03-23 18:24+0100\n"
-"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
+"PO-Revision-Date: 2024-08-17 23:54+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Qt-Contexts: true\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
 msgctxt "KColorCombo|Custom color"
 msgid "Custom..."
-msgstr "Norberak finkatu..."
+msgstr "Neurrira..."
 
 #: editors/booledit.cpp:52
 msgctxt "QObject|Property value: Boolean state Yes"
@@ -430,4 +430,4 @@ msgstr "Marra-puntu-puntu lerroa"
 #: KPropertyLineStyleItemDelegate_p.cpp:46
 msgctxt "QObject|"
 msgid "Custom Dash Line"
-msgstr "Norberak finkatu lerro etena"
+msgstr "Neurrira finkatu lerro etena"
