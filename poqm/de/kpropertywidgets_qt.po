@@ -2,7 +2,7 @@
 # Frederik Schwarzer <schwarzer@kde.org>, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kpropertywidgets_qt\n"
 "PO-Revision-Date: 2018-05-18 13:36+0100\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
