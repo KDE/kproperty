@@ -149,7 +149,7 @@ msgstr "Cliqueu per a seleccionar un tipus de lletra"
 #: editors/fontedit.cpp:50
 msgctxt "KPropertyFontEditRequester|"
 msgid "Selects font"
-msgstr "Selecciona el tipus de lletra"
+msgstr "Tria el tipus de lletra"
 
 #: editors/fontedit.cpp:115 editors/fontedit.cpp:117
 msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
@@ -232,17 +232,17 @@ msgstr "Alçària"
 #: editors/KPropertyUrlEditor_p.cpp:182
 msgctxt "QObject|"
 msgid "Select Existing File"
-msgstr "Seleccioneu un fitxer existent"
+msgstr "Trieu un fitxer existent"
 
 #: editors/KPropertyUrlEditor_p.cpp:184
 msgctxt "QObject|"
 msgid "Select Existing Directory"
-msgstr "Seleccioneu un directori existent"
+msgstr "Trieu un directori existent"
 
 #: editors/KPropertyUrlEditor_p.cpp:186
 msgctxt "QObject|"
 msgid "Select File"
-msgstr "Seleccioneu un fitxer"
+msgstr "Trieu un fitxer"
 
 #: editors/pixmapedit.cpp:78
 msgctxt "KPropertyPixmapEditor|"
