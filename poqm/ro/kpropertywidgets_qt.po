@@ -1,8 +1,8 @@
-# Sergiu Bivol <sergiu@cip.md>, 2020, 2024.
+# SPDX-FileCopyrightText: 2020, 2024, 2025 Sergiu Bivol <sergiu@cip.md>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2024-06-09 14:52+0100\n"
+"PO-Revision-Date: 2025-10-19 22:58+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Qt-Contexts: true\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
@@ -72,27 +72,27 @@ msgstr "Cursor textual"
 #: editors/cursoredit.cpp:124
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Size vertical"
-msgstr ""
+msgstr "Dimensiune vertical"
 
 #: editors/cursoredit.cpp:125
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Size horizontal"
-msgstr ""
+msgstr "Dimensiune orizontal"
 
 #: editors/cursoredit.cpp:126
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Size slash"
-msgstr ""
+msgstr "Dimensiune oblic spre dreapta"
 
 #: editors/cursoredit.cpp:127
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Size backslash"
-msgstr ""
+msgstr "Dimensiune oblic spre stânga"
 
 #: editors/cursoredit.cpp:128
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Size all"
-msgstr ""
+msgstr "Dimensiune toate"
 
 #: editors/cursoredit.cpp:129
 msgctxt "QObject|Mouse Cursor Shape"
@@ -314,12 +314,12 @@ msgstr "Preferată"
 #: editors/sizepolicyedit.cpp:61
 msgctxt "QObject|Size Policy"
 msgid "Expanding"
-msgstr ""
+msgstr "Expandabilă"
 
 #: editors/sizepolicyedit.cpp:62
 msgctxt "QObject|Size Policy"
 msgid "Minimum Expanding"
-msgstr ""
+msgstr "Minim expandabilă"
 
 #: editors/sizepolicyedit.cpp:63
 msgctxt "QObject|Size Policy"
