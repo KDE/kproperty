@@ -1,14 +1,17 @@
+# SPDX-FileCopyrightText: 2026 charlotte <altronic25@protonmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kpropertywidgets_qt\n"
-"Language-Team: Irish Translation Team <gaeilge-gnulinux@lists.sourceforge."
-"net>\n"
+"PO-Revision-Date: 2026-03-04 22:46+0000\n"
+"Last-Translator: charlotte <altronic25@protonmail.com>\n"
+"Language-Team: Irish\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
 "3 : 4\n"
+"X-Generator: Lokalize 25.12.2\n"
 "X-Qt-Contexts: true\n"
 
 #: editors/3rdparty/KColorCombo.cpp:339
@@ -19,17 +22,17 @@ msgstr ""
 #: editors/booledit.cpp:52
 msgctxt "QObject|Property value: Boolean state Yes"
 msgid "Yes"
-msgstr ""
+msgstr "Tá"
 
 #: editors/booledit.cpp:60
 msgctxt "QObject|Property value: Boolean state No"
 msgid "No"
-msgstr ""
+msgstr "Níl"
 
 #: editors/booledit.cpp:68
 msgctxt "QObject|Property value: Boolean (3rd) undefined state None"
 msgid "None"
-msgstr ""
+msgstr "Neamhní"
 
 #: editors/coloredit.cpp:36
 msgctxt "QObject|Invalid color"
@@ -144,13 +147,13 @@ msgstr ""
 #: editors/fontedit.cpp:115 editors/fontedit.cpp:117
 msgctxt "QObject|Font sample for property editor item, typically \"Abc\""
 msgid "Abc"
-msgstr ""
+msgstr "Abc"
 
 #: editors/fontedit.cpp:140
 #, qt-format
 msgctxt "QObject|<fontsize><unit>, e.g. 12pt"
 msgid "%1%2"
-msgstr ""
+msgstr "%1%2"
 
 #: editors/fontedit.cpp:143
 msgctxt "QObject|bold font"
@@ -175,19 +178,19 @@ msgstr ""
 #: editors/KPropertyGenericSelectionEditor.cpp:41
 msgctxt "KPropertyGenericSelectionEditor|... button"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: editors/KPropertyRectFEditor.cpp:42 editors/rectedit.cpp:34
 #, qt-format
 msgctxt "QObject|Rectangle"
 msgid "%1, %2, %3x%4"
-msgstr ""
+msgstr "%1, %2, %3x%4"
 
 #: editors/KPropertyRectFEditor.cpp:55 editors/pointedit.cpp:47
 #: editors/pointfedit.cpp:56 editors/rectedit.cpp:47
 msgctxt "QObject|Property: X coordinate"
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: editors/KPropertyRectFEditor.cpp:56 editors/pointedit.cpp:48
 #: editors/pointfedit.cpp:57 editors/rectedit.cpp:48
@@ -199,7 +202,7 @@ msgstr ""
 #: editors/pointfedit.cpp:59 editors/rectedit.cpp:50
 msgctxt "QObject|Property: Y coordinate"
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: editors/KPropertyRectFEditor.cpp:59 editors/pointedit.cpp:51
 #: editors/pointfedit.cpp:60 editors/rectedit.cpp:51
@@ -258,25 +261,25 @@ msgstr ""
 #: editors/pixmapedit.cpp:336
 msgctxt "QObject|No pixmap"
 msgid "None"
-msgstr ""
+msgstr "Neamhní"
 
 #: editors/pixmapedit.cpp:341
 #, qt-format
 msgctxt "QObject|"
 msgid "%1x%2px"
-msgstr ""
+msgstr "%1x%2px"
 
 #: editors/pointedit.cpp:36 editors/pointfedit.cpp:45
 #, qt-format
 msgctxt "QObject|Point"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: editors/sizeedit.cpp:34 editors/sizefedit.cpp:42
 #, qt-format
 msgctxt "QObject|Size"
 msgid "%1x%2"
-msgstr ""
+msgstr "%1x%2"
 
 #: editors/sizeedit.cpp:45 editors/sizefedit.cpp:53
 msgctxt "QObject|"
@@ -327,7 +330,7 @@ msgstr ""
 #, qt-format
 msgctxt "QObject|Size Policy"
 msgid "%1, %2, %3, %4"
-msgstr ""
+msgstr "%1, %2, %3, %4"
 
 #: editors/sizepolicyedit.cpp:105
 msgctxt "QObject|"
@@ -372,12 +375,12 @@ msgstr ""
 #: editors/utils.cpp:27
 msgctxt "QObject|Three dots for 'Insert image from file' button"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: KPropertyEditorDataModel_p.cpp:220
 msgctxt "KPropertyEditorDataModel|Property name"
 msgid "Name"
-msgstr ""
+msgstr "Ainm"
 
 #: KPropertyEditorDataModel_p.cpp:222
 msgctxt "KPropertyEditorDataModel|Property value"
@@ -392,7 +395,7 @@ msgstr ""
 #: KPropertyLineStyleItemDelegate_p.cpp:40
 msgctxt "QObject|No Line"
 msgid "None"
-msgstr ""
+msgstr "Neamhní"
 
 #: KPropertyLineStyleItemDelegate_p.cpp:41
 msgctxt "QObject|"
