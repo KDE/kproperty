@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2025-10-06 18:53+0400\n"
+"PO-Revision-Date: 2026-03-24 11:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -72,7 +72,7 @@ msgstr "مؤشّر نصّي"
 #: editors/cursoredit.cpp:124
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Size vertical"
-msgstr "غيّر الحجم رأسيًّا"
+msgstr "غيّر الحجم عموديًا"
 
 #: editors/cursoredit.cpp:125
 msgctxt "QObject|Mouse Cursor Shape"
@@ -97,7 +97,7 @@ msgstr "غيّر الحجم كلّه"
 #: editors/cursoredit.cpp:129
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Split vertical"
-msgstr "اقسم رأسيًّا"
+msgstr "اقسم عموديًا"
 
 #: editors/cursoredit.cpp:130
 msgctxt "QObject|Mouse Cursor Shape"
@@ -345,12 +345,12 @@ msgstr "السياسة الأفقيّة"
 #: editors/sizepolicyedit.cpp:108
 msgctxt "QObject|"
 msgid "Vert. Policy"
-msgstr "السياسة الرأسيّة"
+msgstr "السياسة العموديّة"
 
 #: editors/sizepolicyedit.cpp:108
 msgctxt "QObject|"
 msgid "Vertical Policy"
-msgstr "السياسة الرأسيّة"
+msgstr "السياسة العموديّة"
 
 #: editors/sizepolicyedit.cpp:111
 msgctxt "QObject|"
@@ -365,12 +365,12 @@ msgstr "توسيع أفقيّ"
 #: editors/sizepolicyedit.cpp:114
 msgctxt "QObject|"
 msgid "Vert. Stretch"
-msgstr "توسيع رأسيّ"
+msgstr "توسيع عموديّ"
 
 #: editors/sizepolicyedit.cpp:114
 msgctxt "QObject|"
 msgid "Vertical Stretch"
-msgstr "توسيع رأسيّ"
+msgstr "توسيع عموديّ"
 
 #: editors/utils.cpp:27
 msgctxt "QObject|Three dots for 'Insert image from file' button"
