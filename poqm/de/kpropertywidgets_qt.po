@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015, 2017, 2018 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2015, 2017-2018 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2016 Frederik Schwarzer <schwarzer@kde.org>
 msgid ""
 msgstr ""
