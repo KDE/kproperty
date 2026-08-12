@@ -102,7 +102,7 @@ msgstr "اقسم عموديًا"
 #: editors/cursoredit.cpp:130
 msgctxt "QObject|Mouse Cursor Shape"
 msgid "Split horizontal"
-msgstr "اقسم أفقياً"
+msgstr "اقسم أفقيًا"
 
 #: editors/cursoredit.cpp:131
 msgctxt "QObject|Mouse Cursor Shape"
@@ -230,7 +230,7 @@ msgstr "اختر ملفًّا موجودًا"
 #: editors/KPropertyUrlEditor_p.cpp:184
 msgctxt "QObject|"
 msgid "Select Existing Directory"
-msgstr "اختر دليلاً موجودًا"
+msgstr "اختر دليلًا موجودًا"
 
 #: editors/KPropertyUrlEditor_p.cpp:186
 msgctxt "QObject|"
