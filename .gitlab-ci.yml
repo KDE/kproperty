@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: None
 # SPDX-License-Identifier: CC0-1.0
-
-include:
-  - project: sysadmin/ci-utilities
-    file:
-      - /gitlab-templates/linux.yml
+build:
+    image: storage.kde.org/vm-images/alpine-qt611-arm64
+    script:
+        - echo Hello
